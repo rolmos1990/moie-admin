@@ -21,6 +21,7 @@ const CustomerEdit = (props) => {
     const { getStates, states } = props;
     const { getMunicipalities,municipalities } = props;
     const [ state, setState ] = useState(null);
+    const [ municipality, setMunicipality ] = useState(null);
 
     const [ statesOptions, setStates ] = useState([]);
     const [ municipalitiesOptions, setMunicipalities ] = useState([]);
@@ -33,19 +34,25 @@ const CustomerEdit = (props) => {
             getCustomer(props.match.params.id);
         }
         getStates();
-    },[getStates, getCustomer]);
+    },[]);
 
+    //cargar la información del cliente
     useEffect(() => {
-            if(municipalities && municipalities.length > 0) {
-                setMunicipalities(municipalities.map(item => ({
-                    label: item.name,
-                    value: item.id
-                })));
-            } else {
-                setMunicipalities([]);
-            }
-    },[municipalities]);
+        if(customer.id) {
+            setCustomerData(customer);
 
+            //definir estado por defecto
+            const defaultState = customer.state?.id || null;
+            setState(defaultState);
+
+            //definir municipalidad por defecto
+            const defaultMunicipality = customer.municipality?.id || null;
+            setMunicipality(defaultMunicipality);
+
+        }
+    },[customer]);
+
+    //cargar estados
     useEffect(() => {
         if(states && states.length > 0) {
             const itemsConverter = item => ({
@@ -53,27 +60,34 @@ const CustomerEdit = (props) => {
                 value: item.id
             });
             setStates(states.map(itemsConverter));
-            setState(itemsConverter[0]);
         } else {
             setStates([]);
         }
     },[states]);
 
+    //cargar municipios
     useEffect(() => {
-        if(customer.id) {
-            setCustomerData(customer);
+        if(municipalities && municipalities.length > 0) {
+            const itemsConverter = item => ({
+                label: item.name,
+                value: item.id
+            });
+            setMunicipalities(municipalities.map(itemsConverter));
+        } else {
+            setMunicipalities([]);
         }
-    },[customer]);
+    },[municipalities]);
 
     useEffect(() => {
         if(state != null) {
             const conditions = new Conditionals.Condition;
-            conditions.add('state', state.value);
+            conditions.add('state', state);
             getMunicipalities(conditions.all());
         }
     },[state]);
 
     const handleValidSubmit = (event, values) => {
+            values = filteredValues(values);
             if(!customerData) {
                 props.registerCustomer(values, props.history)
             } else {
@@ -81,9 +95,15 @@ const CustomerEdit = (props) => {
             }
     }
 
+    const filteredValues = (values) => {
+        values.state = values.state?.value;
+        values.municipality = values.municipality?.value;
+        return values;
+    }
+
     function handleSelectDepartment(option) {
         getMunicipalities(option.value);
-        setState(option);
+        setState(option.value);
     }
 
     return (
@@ -155,7 +175,7 @@ const CustomerEdit = (props) => {
                                 <div className="mb-3">
                                     <Label htmlFor="validationCustom04">Departamento</Label>
                                     <InputSearchField
-                                        defaultValue={customerData.state}
+                                        defaultValue={state}
                                         name={"state"}
                                         placeholder={"Indique un departamento"}
                                         options={statesOptions}
@@ -168,18 +188,22 @@ const CustomerEdit = (props) => {
                                 <div className="mb-3">
                                     <Label htmlFor="validationCustom03">Municipio</Label>
                                     <InputSearchField
-                                        defaultValue={customerData.state}
+                                        defaultValue={municipality}
                                         name={"municipality"}
                                         placeholder={"Indique un municipio"}
                                         options={municipalitiesOptions}
                                         required
-                                        dependency={state}
                                     />
                                 </div>
                             </Col>
                         </Row>
                         <div className="mb-3">
-                            <AvField className="form-check-input" type="checkbox" name="hasNotification" label="Recibe notificaciones" />
+                            <AvField
+                                checked={customerData.hasNotification ? true : false}
+                                className="form-check-input"
+                                type="checkbox"
+                                name="hasNotification"
+                                label="Recibe notificaciones" />
                         </div>
                         <Button color="primary" type="submit">
                             Guardar

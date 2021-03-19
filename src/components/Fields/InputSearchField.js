@@ -8,15 +8,18 @@ import './style.scss';
 
 const InputSearchField = (props) => {
     const [ selected, setSelected ] = useState(null);
+    const {defaultValue, options} = props;
 
     useEffect(() => {
-        if(props.defaultValue !== undefined) {
-            setSelected(props.defaultValue);
+        if(options.length > 0) {
+            if(defaultValue) {
+                const selected = options.filter(item => item.value === defaultValue)[0];
+                setSelected(selected);
+            } else {
+                setSelected(null);
+            }
         }
-    }, props.defaultValue)
-    useEffect(() => {
-        setSelected(null);
-    }, props.options);
+    }, [options, defaultValue]);
 
     return (
     <AvSearchInput
@@ -43,16 +46,11 @@ InputSearchField.propTypes = {
     name: PropTypes.string,
     placeholder: PropTypes.string,
     onChange: PropTypes.func,
-    options: PropTypes.array
+    options: PropTypes.array,
+    defaultValue: PropTypes.any
 };
 
 class AvSearchInput extends AvBaseInput {
-    constructor(props) {
-        super(props);
-        this.state = {
-            selected: null
-        };
-    }
     render() {
         const { name, value, onChange, validate, options, placeholder, helpMessage } = this.props;
         const validation = this.context.FormCtrl.getInputState(this.props.name);
