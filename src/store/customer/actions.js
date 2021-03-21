@@ -10,17 +10,28 @@ import {
     GET_CUSTOMERS_FAILED,
     UPDATE_CUSTOMER,
     UPDATE_CUSTOMER_SUCCESS,
-    UPDATE_CUSTOMER_FAILED
+    UPDATE_CUSTOMER_FAILED,
+    DELETE_CUSTOMER,
+    DELETE_CUSTOMER_SUCCESS,
+    DELETE_CUSTOMER_FAILED
 } from "./actionTypes"
-import {GET_USERS, GET_USERS_SUCCESS} from "../contacts/actionTypes";
 
-export const getCustomers = () => ({
-    type: GET_CUSTOMERS
+export const getCustomers = (conditional, limit, offset) => ({
+    type: GET_CUSTOMERS,
+    conditional: conditional,
+    limit: limit,
+    offset: offset
 })
 
-export const getCustomersSuccess = customers => ({
+export const getCustomersSuccess = (customers, meta) => ({
     type: GET_CUSTOMERS_SUCCESS,
+    meta: meta,
     payload: customers,
+})
+
+export const getCustomersFail = error => ({
+    type: GET_CUSTOMERS_FAILED,
+    payload: error,
 })
 
 export const getCustomer = id => ({
@@ -28,10 +39,6 @@ export const getCustomer = id => ({
     id
 })
 
-export const getCustomersFail = error => ({
-    type: GET_CUSTOMERS_FAILED,
-    payload: error,
-})
 
 export const getCustomerSuccess = customer => ({
     type: GET_CUSTOMER_SUCCESS,
@@ -86,3 +93,17 @@ export const updateCustomerFail = error => {
         payload: error,
     }
 }
+
+export const deleteCustomer = (id, history) => ({
+    type: DELETE_CUSTOMER,
+    payload: { id, history}
+})
+
+export const deleteCustomerSuccess = () => ({
+    type: DELETE_CUSTOMER_SUCCESS
+})
+
+export const deleteCustomerFailed = error => ({
+    type: DELETE_CUSTOMER_FAILED,
+    payload: error,
+})

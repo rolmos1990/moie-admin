@@ -1,15 +1,10 @@
 import React from "react"
-import {
-    DropdownToggle,
-    UncontrolledDropdown,
-    DropdownMenu,
-    DropdownItem,
-} from "reactstrap"
 import { Link } from "react-router-dom"
 import {ConverterCustomerStatus} from "../customer_status";
-import {Tooltip} from "@material-ui/core";
+import {Button, Tooltip} from "@material-ui/core";
+import {STATUS_COLORS, StatusField} from "../../../components/StatusField";
 
-const customerListColumns = () => [
+const customerListColumns = (onDelete = false) => [
     {
         text: "Nombre",
         dataField: "name",
@@ -52,7 +47,9 @@ const customerListColumns = () => [
         dataField: "status",
         sort: true,
         formatter: (cellContent, item) => (
-            <span className="badge rounded-pill bg-soft-danger font-size-12 p-2">{ConverterCustomerStatus(item.status)}</span>
+            <StatusField color={item.status === true ? STATUS_COLORS.SUCCESS : STATUS_COLORS.DANGER}>
+                {ConverterCustomerStatus(item.status)}
+            </StatusField>
         ),
     },
     {
@@ -64,9 +61,13 @@ const customerListColumns = () => [
                 <li className="list-inline-item">
                     <Link to={`/customer/${item.id}`} className="px-2 text-primary"><i className="uil uil-pen font-size-18"></i></Link>
                 </li>
-                <li className="list-inline-item">
-                    <Link to="#" className="px-2 text-danger"><i className="uil uil-trash-alt font-size-18"></i></Link>
-                </li>
+                {onDelete && (
+                    <li className="list-inline-item">
+                        <button size="small" className="btn btn-sm text-danger" onClick={() => onDelete(item.id)}>
+                            <i className="uil uil-trash-alt font-size-18"></i>
+                        </button>
+                    </li>
+                )}
             </ul>
         ),
     },

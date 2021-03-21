@@ -1,7 +1,7 @@
 import {all, call, fork, put, takeEvery} from "redux-saga/effects"
 
 //Account Redux states
-import {GET_CUSTOMERS, GET_CUSTOMER, REGISTER_CUSTOMER, UPDATE_CUSTOMER} from "./actionTypes"
+import {GET_CUSTOMERS, GET_CUSTOMER, REGISTER_CUSTOMER, UPDATE_CUSTOMER, DELETE_CUSTOMER} from "./actionTypes"
 import {
     getCustomersSuccess,
     registerCustomerSuccess,
@@ -9,15 +9,18 @@ import {
     getCustomerSuccess,
     getCustomerFail,
     registerCustomerFail,
-    updateCustomerSuccess, updateCustomerFail
+    updateCustomerSuccess, updateCustomerFail, deleteCustomerSuccess, deleteCustomerFailed
 } from "./actions"
 
 //Include Both Helper File with needed methods
 import {
     registerCustomer,
     updateCustomer,
-    fetchCustomer
+    fetchCustomer,
+    fetchCustomersApi,
+    deleteCustomerApi
 } from "../../helpers/backend_helper"
+import Conditionals from "../../common/conditionals";
 
 function* fetchCustomerById({ id }) {
     try {
@@ -29,10 +32,14 @@ function* fetchCustomerById({ id }) {
 }
 
 
-function* fetchCustomers() {
+function* fetchCustomers({conditional, limit, offset}) {
     try {
-        const response = yield call(fetchCustomer)
-        yield put(getCustomersSuccess(response.data))
+
+        const cond = Conditionals.getConditionalFormat(conditional);
+        const query = Conditionals.buildHttpGetQuery(cond, limit, offset);
+
+        const response = yield call(fetchCustomersApi, query)
+        yield put(getCustomersSuccess(response.data, response.meta));
     } catch (error) {
         yield put(getCustomersFail(error))
     }
@@ -63,11 +70,24 @@ function* customerUpdate({ payload: { id, customer, history } }) {
     }
 }
 
+function* customerDelete({ payload: { id, history } }) {
+    try {
+        yield call(deleteCustomerApi, id)
+        yield put(deleteCustomerSuccess(id))
+        history.push("/customers")
+
+    } catch (error) {
+        console.log("error", error);
+        yield put(deleteCustomerFailed(error))
+    }
+}
+
 export function* watchCustomer() {
     yield takeEvery(REGISTER_CUSTOMER, customerRegister);
     yield takeEvery(UPDATE_CUSTOMER, customerUpdate);
     yield takeEvery(GET_CUSTOMERS, fetchCustomers);
     yield takeEvery(GET_CUSTOMER, fetchCustomerById);
+    yield takeEvery(DELETE_CUSTOMER, customerDelete);
 }
 
 function* customerSaga() {

@@ -1,18 +1,28 @@
 import {
+    DELETE_CUSTOMER,
+    DELETE_CUSTOMER_FAILED,
+    DELETE_CUSTOMER_SUCCESS,
     GET_CUSTOMER_FAILED,
     GET_CUSTOMER_SUCCESS,
     REGISTER_CUSTOMER,
+    REGISTER_CUSTOMER_FAILED,
     REGISTER_CUSTOMER_SUCCESS,
+    UPDATE_CUSTOMER,
+    UPDATE_CUSTOMER_FAILED,
+    UPDATE_CUSTOMER_SUCCESS,
+    GET_CUSTOMERS_FAILED,
+    GET_CUSTOMERS_SUCCESS
+
 } from "./actionTypes"
-import {GET_USER_PROFILE_SUCCESS, GET_USERS_FAIL, GET_USERS_SUCCESS} from "../contacts/actionTypes";
-import {GET_CUSTOMERS_FAIL, GET_CUSTOMERS_SUCCESS} from "../e-commerce/actionTypes";
 import {GET_CUSTOMER, GET_CUSTOMERS} from "../../helpers/url_helper";
 
 const initialState = {
     error: "",
     loading: false,
+    meta: {},
     customers: [],
-    customer: {}
+    customer: {},
+    refresh: false
 }
 
 const customer = (state = initialState, action) => {
@@ -22,17 +32,18 @@ const customer = (state = initialState, action) => {
                 ...state,
                 loading: true,
             }
-        case GET_CUSTOMERS_FAIL:
+        case GET_CUSTOMERS_FAILED:
             return {
                 ...state,
                 error: action.payload,
-                loading: false,
+                loading: true,
             }
 
         case GET_CUSTOMERS_SUCCESS:
             return {
                 ...state,
                 customers: action.payload,
+                meta: action.meta,
                 loading: false,
             }
         case GET_CUSTOMER:
@@ -58,7 +69,50 @@ const customer = (state = initialState, action) => {
         case REGISTER_CUSTOMER_SUCCESS:
             state = {
                 ...state,
+                loading: false,
+            }
+            break
+        case REGISTER_CUSTOMER_FAILED:
+            state = {
+                ...state,
+                loading: false,
+            }
+            break
+        case UPDATE_CUSTOMER:
+            state = {
+                ...state,
                 loading: true,
+            }
+            break
+        case UPDATE_CUSTOMER_SUCCESS:
+            state = {
+                ...state,
+                loading: false,
+            }
+            break
+        case UPDATE_CUSTOMER_FAILED:
+            state = {
+                ...state,
+                loading: false,
+            }
+            break
+        case DELETE_CUSTOMER:
+            state = {
+                ...state,
+                loading: true,
+            }
+            break
+        case DELETE_CUSTOMER_SUCCESS:
+            state = {
+                ...state,
+                loading: false,
+                refresh: !state.refresh
+            }
+            break
+        case DELETE_CUSTOMER_FAILED:
+            state = {
+                ...state,
+                loading: false,
             }
             break
         default:

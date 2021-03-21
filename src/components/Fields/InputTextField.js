@@ -16,7 +16,6 @@ const TextField = (props) => (
                 required: { value: props.required ? true : false , errorMessage: messages.required }
             }
         }
-        id={props.id}
     />
 )
 
@@ -42,7 +41,6 @@ const EmailField = (props) => (
                     errorMessage: messages.required },
                 email: { value: true, errorMessage: messages.email_invalid } }
         }
-        id={props.id}
     />
 )
 

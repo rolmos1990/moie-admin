@@ -11,37 +11,19 @@ import Profile from "./auth/profile/reducer"
 
 // Dashboard
 import Customer from "./customer/reducer"
+import Product from "./product/reducer"
 import Location from "./location/reducer"
-
-//Calendar
-import calendar from "./calendar/reducer"
-
-//E-commerce
-import ecommerce from "./e-commerce/reducer"
-
-//chat
-import chat from "./chat/reducer"
-
-//invoices
-import invoices from "./invoices/reducer"
-
-//contacts
-import contacts from "./contacts/reducer"
 
 const rootReducer = combineReducers({
   // public
   Layout,
   Login,
   Customer,
+  Product,
   Location,
   Account,
   ForgetPassword,
-  Profile,
-  calendar,
-  chat,
-  ecommerce,
-  invoices,
-  contacts,
+  Profile
 })
 
 export default rootReducer

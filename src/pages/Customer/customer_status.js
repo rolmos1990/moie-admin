@@ -1,3 +1,5 @@
+import React from "react";
+
 export const CUSTOMER_STATUS = {
     ACTIVE: true,
     INACTIVE: false

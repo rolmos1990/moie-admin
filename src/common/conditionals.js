@@ -6,10 +6,11 @@
 function getConditionalFormat(options) {
     if(options && options.length > 0){
         let conditions = options.map(item => {
-            if(!item.value2) {
+            if(!item.moreValues) {
                 return (item.field + item.operator + item.value)
             } else {
-                return (item.field + item.operator + item.value + "::" + item.value2)
+                item.moreValues = item.moreValues.join("::");
+                return (item.field + item.operator + item.value + "::" + item.moreValues)
             }
         });
         conditions = conditions.join("|");
@@ -27,7 +28,7 @@ function buildHttpGetQuery(cond = null, limit = null, offset = null){
     if(limit){
         data.limit = limit;
     }
-    if(offset){
+    if(offset || offset == 0){
         data.offset = offset;
     }
 
@@ -35,13 +36,21 @@ function buildHttpGetQuery(cond = null, limit = null, offset = null){
     return searchParams;
 }
 
+/* recibe field, value, operador y en caso de tener 2 o mas valores moreValues (Array) */
 class Condition {
     condition = [];
-    add(field, value, operator = null){
+    add(field, value, operator = null, moreValues = []){
         if(operator === null){
             this.condition.push({field, value, operator: "::"});
+        } else if(moreValues.length > 0){
+            this.condition.push({field, value, operator, moreValues});
         } else {
-            this.condition.push({field, value, operator});
+            if([OPERATORS.TRUE, OPERATORS.FALSE].includes(operator)){
+                this.condition.push({field, value:"", operator});
+            }
+            else {
+                this.condition.push({field, value, operator});
+            }
         }
     }
     all(){
@@ -52,6 +61,22 @@ class Condition {
 const OPERATORS = {
     EQUAL: '::',
     LK: '$lk',
+    NULL: '$null',
+    NOT_NULL: '$nnull',
+    TRUE: '$true',
+    FALSE: '$false',
+    NOT_EMPTY: '$nempty',
+    EMPTY: '$empty',
+    NOT_LIKE: '$nlk',
+    LIKE: '$lk',
+    NOT_BETWEEN: '$nbt',
+    BETWEEN: '$bt',
+    LESS_THAN_OR_EQUAL: '$lte',
+    LESS_THAN: '$lt',
+    GREATER_THAN_OR_EQUAL: '$gte',
+    GREATER_THAN: '$gt',
+    NOT_IN: '$nin',
+    IN: '$in'
 };
 
 const Conditionals = {

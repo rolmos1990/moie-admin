@@ -11,13 +11,11 @@ const InputSearchField = (props) => {
     const {defaultValue, options} = props;
 
     useEffect(() => {
-        if(options.length > 0) {
-            if(defaultValue) {
-                const selected = options.filter(item => item.value === defaultValue)[0];
-                setSelected(selected);
-            } else {
-                setSelected(null);
-            }
+        if(options && options.length > 0) {
+                const selected = options.filter(item => item.value === defaultValue);
+                if(selected && selected.length > 0) {
+                    setSelected(selected[0]);
+                }
         }
     }, [options, defaultValue]);
 
@@ -28,6 +26,7 @@ const InputSearchField = (props) => {
                 required: { value: props.required ? true : false, errorMessage: messages.required }
             }
         }
+        isSearchable={props.isSearchable}
         name={props.name}
         value={selected}
         placeholder={props.placeholder}
@@ -47,12 +46,13 @@ InputSearchField.propTypes = {
     placeholder: PropTypes.string,
     onChange: PropTypes.func,
     options: PropTypes.array,
-    defaultValue: PropTypes.any
+    defaultValue: PropTypes.any,
+    isSearchable: PropTypes.bool
 };
 
 class AvSearchInput extends AvBaseInput {
     render() {
-        const { name, value, onChange, validate, options, placeholder, helpMessage } = this.props;
+        const { name, value, onChange, validate, options, placeholder, helpMessage,isSearchable } = this.props;
         const validation = this.context.FormCtrl.getInputState(this.props.name);
         const feedback = validation.errorMessage ? (<div className="invalid-feedback" style={{display: "block"}}>{validation.errorMessage}</div>) : null;
         const help = helpMessage ? (<FormText>{helpMessage}</FormText>) : null;
@@ -70,6 +70,7 @@ class AvSearchInput extends AvBaseInput {
                 onChange={onChange}
                 options={options || []}
                 classNamePrefix="select2-selection"
+                isSearchable={isSearchable || false}
             />
                 </div>
                 {feedback}

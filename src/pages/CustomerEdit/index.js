@@ -1,17 +1,16 @@
 import React, { useState, useEffect } from "react"
-import {CardBody, Col, Container, InputGroupText, Label, Row} from "reactstrap"
+import {CardBody, Col, Container, Label, Row, Spinner} from "reactstrap"
 import { AvForm, AvField } from "availity-reactstrap-validation"
-import Select from "react-select"
 import {Button, Card} from "@material-ui/core";
 import { withRouter, Link } from "react-router-dom"
 import {connect} from "react-redux";
 import {apiError} from "../../store/auth/login/actions";
 import PropTypes from "prop-types";
 import {getCustomer, registerCustomer, updateCustomer} from "../../store/customer/actions";
-import {TextField, EmailField} from "../../components/Fields/InputTextField";
-import InputSearchField from "../../components/Fields/InputSearchField";
 import {getMunicipalities, getStates} from "../../store/location/actions";
 import Conditionals from "../../common/conditionals";
+import { FieldSwitch, FieldText, FieldEmail, FieldSelect } from "../../components/Fields";
+import Breadcrumb from "../../components/Common/Breadcrumb";
 
 const CustomerEdit = (props) => {
     const {getCustomer, customer } = props;
@@ -25,20 +24,20 @@ const CustomerEdit = (props) => {
 
     const [ statesOptions, setStates ] = useState([]);
     const [ municipalitiesOptions, setMunicipalities ] = useState([]);
-
+    const isEdit = props.match.params.id;
 
 
     //carga inicial
     useEffect(() => {
-        if(props.match.params.id && getCustomer){
+        if(isEdit && getCustomer){
             getCustomer(props.match.params.id);
         }
         getStates();
-    },[]);
+    },[getCustomer]);
 
     //cargar la información del cliente
     useEffect(() => {
-        if(customer.id) {
+        if(customer.id && isEdit) {
             setCustomerData(customer);
 
             //definir estado por defecto
@@ -88,7 +87,7 @@ const CustomerEdit = (props) => {
 
     const handleValidSubmit = (event, values) => {
             values = filteredValues(values);
-            if(!customerData) {
+            if(!isEdit) {
                 props.registerCustomer(values, props.history)
             } else {
                 props.updateCustomer(props.match.params.id, values, props.history)
@@ -98,6 +97,8 @@ const CustomerEdit = (props) => {
     const filteredValues = (values) => {
         values.state = values.state?.value;
         values.municipality = values.municipality?.value;
+        values.status = values._status;
+        delete values._status;
         return values;
     }
 
@@ -105,33 +106,46 @@ const CustomerEdit = (props) => {
         getMunicipalities(option.value);
         setState(option.value);
     }
-
     return (
         <React.Fragment>
             <div className="page-content">
                 <Container fluid>
-                    <h3>
-                        Cliente
-                    </h3>
+                    <Breadcrumb hasBack path="/customers" title={customerData.name} breadcrumbItem={"Cliente"} />
+
+                    <AvForm className="needs-validation"
+                            onValidSubmit={(e, v) => {
+                                handleValidSubmit(e, v)
+                            }}>
                     <Row>
                         <Col xl="8">
                             <Card>
                                 <CardBody>
-                                    <AvForm className="needs-validation"
-                                            onValidSubmit={(e, v) => {
-                                                handleValidSubmit(e, v)
-                                             }}>
+                                    <div className={"mt-1 mb-5"} style={{ position: "relative" }}>
+                                        <div className={"float-end"}>
+                                            <Row>
+                                                <Col>
+                                                    ¿Activo?
+                                                </Col>
+                                                <Col>
+                                                <FieldSwitch
+                                                    defaultValue={customerData.status}
+                                                    name={"_status"}
+                                                />
+                                                </Col>
+                                            </Row>
+                                        </div>
+                                    </div>
                         <Row>
                             <Col md="6">
                                 <div className="mb-3">
                                     <Label htmlFor="field_name">Nombre</Label>
-                                    <TextField name={"name"} value={customerData.name} required id={"field_name"}/>
+                                    <FieldText name={"name"} value={customerData.name} required id={"field_name"}/>
                                 </div>
                             </Col>
                             <Col md="6">
                                 <div className="mb-3">
                                     <Label htmlFor="validationCustom02">Email</Label>
-                                    <EmailField
+                                    <FieldEmail
                                     name={"email"}
                                     value={customerData.email}
                                     required />
@@ -174,25 +188,27 @@ const CustomerEdit = (props) => {
                             <Col md="6">
                                 <div className="mb-3">
                                     <Label htmlFor="validationCustom04">Departamento</Label>
-                                    <InputSearchField
+                                    <FieldSelect
                                         defaultValue={state}
                                         name={"state"}
                                         placeholder={"Indique un departamento"}
                                         options={statesOptions}
                                         required
                                         onChange={handleSelectDepartment}
+                                        isSearchable
                                     />
                                 </div>
                             </Col>
                             <Col md="6">
                                 <div className="mb-3">
                                     <Label htmlFor="validationCustom03">Municipio</Label>
-                                    <InputSearchField
+                                    <FieldSelect
                                         defaultValue={municipality}
                                         name={"municipality"}
                                         placeholder={"Indique un municipio"}
                                         options={municipalitiesOptions}
                                         required
+                                        isSearchable
                                     />
                                 </div>
                             </Col>
@@ -206,14 +222,14 @@ const CustomerEdit = (props) => {
                                 label="Recibe notificaciones" />
                         </div>
                         <Button color="primary" type="submit">
+                            {props.loading && <Spinner size="sm" className="m-1" color="primary" />}
                             Guardar
                         </Button>
-                    </AvForm>
                                 </CardBody>
                             </Card>
                         </Col>
                     </Row>
-
+                    </AvForm>
                 </Container>
             </div>
         </React.Fragment>
@@ -221,9 +237,9 @@ const CustomerEdit = (props) => {
 }
 
 const mapStateToProps = state => {
-    const { error, customer } = state.Customer
+    const { error, customer,loading } = state.Customer
     const { states, municipalities } = state.Location
-    return { error, customer, states, municipalities }
+    return { error, customer, states, municipalities, loading }
 }
 
 export default withRouter(

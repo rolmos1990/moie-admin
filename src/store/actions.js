@@ -8,21 +8,7 @@ export * from "./auth/profile/actions"
 
 // Dashboard
 export * from "./customer/actions"
+export * from "./product/actions"
 
 //System
 export * from "./location/actions"
-
-//Calendar
-export * from "./calendar/actions"
-
-//chat
-export * from "./chat/actions"
-
-//Ecommerce
-export * from "./e-commerce/actions"
-
-//invoices
-export * from "./invoices/actions"
-
-// contacts
-export * from "./contacts/actions"

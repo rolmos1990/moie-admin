@@ -1,20 +1,19 @@
 import React from "react"
 import { Container } from "reactstrap"
-import CustomersList from "./CustomerList/customers-list";
 import Breadcrumb from "../../components/Common/Breadcrumb";
-import {CustomerFilter} from "./CustomerFilter";
-const Customer = () => {
+import ProductList from "./ProductList/products-list";
+const Product = () => {
 
     return (
         <React.Fragment>
             <div className="page-content">
                 <Container fluid>
-                    <Breadcrumb path="/customers" title={null} breadcrumbItem="Clientes" />
-                    <CustomersList />
+                    <Breadcrumb path="/products" title={null} breadcrumbItem="Productos" />
+                    <ProductList />
                 </Container>
             </div>
         </React.Fragment>
     )
 }
 
-export default Customer
+export default Product
