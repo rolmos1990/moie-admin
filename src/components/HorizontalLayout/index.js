@@ -48,7 +48,8 @@ class Layout extends Component {
 
     this.props.changeLayout("horizontal")
     if (this.props.topbarTheme) {
-      this.props.changeTopbarTheme(this.props.topbarTheme)
+      //TODO -- revisar cambio de color this.props.topbarTheme
+      this.props.changeTopbarTheme("colored")
     }
     if (this.props.layoutWidth) {
       this.props.changeLayoutWidth(this.props.layoutWidth)
