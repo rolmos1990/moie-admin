@@ -21,6 +21,7 @@ const userRoutes = [
   { path: "/products", component: Product },
   { path: "/customer/:id", component: CustomerEdit },
   { path: "/customer", component: CustomerEdit },
+  { path: "/product", component: ProductEdit },
   { path: "/product/:id", component: ProductEdit },
 
   // //profile

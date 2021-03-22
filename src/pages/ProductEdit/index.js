@@ -21,6 +21,9 @@ const ProductEdit = (props) => {
     const [isOpenWebConfig, setIsOpenWebConfig] = useState(false);
     const toggleWebConfig = () => setIsOpenWebConfig(!isOpenWebConfig);
 
+    const [isOpenInventary, setIsOpenInventary] = useState(false);
+    const toggleInventary = () => setIsOpenInventary(!isOpenInventary);
+
     const [selectedFiles, setselectedFiles] = useState([])
 
     const {getProducts, product } = props;
@@ -58,6 +61,8 @@ const ProductEdit = (props) => {
             <div className="page-content">
                 <Container fluid>
                     <Breadcrumb hasBack path="/products" title={productData.name} breadcrumbItem={"Producto"} />
+                    <Row>
+                    <Col md={8}>
                     <Row>
                         <AvForm className="needs-validation"
                                 onValidSubmit={(e, v) => {
@@ -192,7 +197,7 @@ const ProductEdit = (props) => {
                                                                 <div className="mb-3">
                                                                     <i className="display-4 text-muted uil uil-cloud-upload"></i>
                                                                 </div>
-                                                                <h4>Drop files here or click to upload.</h4>
+                                                                <h4>Suelta los archivos aquí para subirlos.</h4>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -245,7 +250,7 @@ const ProductEdit = (props) => {
                                             <div className="me-3">
                                                 <div className="avatar-xs">
                                                     <div className="avatar-title rounded-circle bg-soft-primary text-primary">
-                                                        02
+                                                        03
                                                     </div>
                                                 </div>
                                             </div>
@@ -276,19 +281,86 @@ const ProductEdit = (props) => {
                                             </Row>
                                     </div>
                                 </Collapse>
-                                <Row>
-                                    <div className={"float-start m-3"}>
+                            </Card>
+
+                            <Card>
+                                <Link to="#" className="text-dark collapsed" onClick={toggleInventary}>
+                                    <div className="p-4">
+
+                                        <Media className="d-flex align-items-center">
+                                            <div className="me-3">
+                                                <div className="avatar-xs">
+                                                    <div className="avatar-title rounded-circle bg-soft-primary text-primary">
+                                                        03
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div className="flex-1 overflow-hidden">
+                                                <h5 className="font-size-16 mb-1">Inventario</h5>
+                                                <p className="text-muted text-truncate mb-0">Agregue existencia a su producto.</p>
+                                            </div>
+                                            <i className="mdi mdi-chevron-up accor-down-icon font-size-24"></i>
+                                        </Media>
+
+                                    </div>
+                                </Link>
+                                <Collapse isOpen={isOpenInventary}>
+                                    <div className="p-4 border-top">
+                                        <Row>
+                                            <Col md="6">
+                                                <div className="mb-3">
+                                                    <Label className="control-label">Tallas</Label>
+                                                    <FieldSelect name={"category"} options={[]} />
+                                                </div>
+                                            </Col>
+                                        </Row>
+                                        <hr />
+                                        <p>Ingrese color y tallas para el producto.</p>
+                                        <div className={"table-responsive"}>
+                                            <table>
+                                                <tr>
+                                                    <th>Ingrese Color</th>
+                                                    <th>S</th>
+                                                    <th>M</th>
+                                                    <th>L</th>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <input type={"text"} />
+                                                    </td>
+                                                    <td><select>
+                                                        <option>1</option>
+                                                        </select>
+                                                    </td>
+                                                    <td><select>
+                                                        <option>2</option>
+                                                    </select>
+                                                    </td>
+                                                    <td><select>
+                                                        <option>3</option>
+                                                    </select>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </Collapse>
+                            </Card>
+
+                            <Row>
+                                <div className={"float-start m-3"}>
                                     <Button color="primary" type="submit">
                                         {props.loading && <Spinner size="sm" className="m-1" color="primary" />}
                                         Guardar
                                     </Button>
-                                    </div>
-                                </Row>
-                            </Card>
+                                </div>
+                            </Row>
                         </Col>
                         </AvForm>
                     </Row>
-                </Container>
+                    </Col>
+                    </Row>
+                    </Container>
             </div>
         </React.Fragment>
     );

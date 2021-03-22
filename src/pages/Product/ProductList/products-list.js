@@ -128,7 +128,7 @@ const ProductList = props => {
         <Row className="mb-2">
             <Col md={6}>
                 <div className="mb-3">
-                    <Link to="#" className="btn btn-primary waves-effect waves-light"><i className="mdi mdi-plus me-2"></i> Nuevo Producto</Link>
+                    <Link to="/product" className="btn btn-primary waves-effect waves-light"><i className="mdi mdi-plus me-2"></i> Nuevo Producto</Link>
                 </div>
             </Col>
 
