@@ -2,7 +2,20 @@ import CardProduct from './cardProduct';
 import { map } from "lodash"
 import {Col, Row} from "reactstrap";
 import {Link} from "react-router-dom";
+import PropTypes from "prop-types";
+import {DEFAULT_PAGE_LIMIT} from "../../../common/pagination";
+import {deleteCustomer, getCustomers} from "../../../store/customer/actions";
+import {connect} from "react-redux";
+import {getProducts} from "../../../store/product/actions";
+import {useEffect} from "react";
 const ProductList = props => {
+
+    const { refresh, onGetProducts } = props;
+
+    useEffect(() => {
+        onGetProducts();
+    }, [refresh])
+
     const cardProducts = [
         {
             id: 1,
@@ -152,4 +165,24 @@ const ProductList = props => {
 
 }
 
-export default ProductList;
+ProductList.propTypes = {
+    onGetProducts: PropTypes.func,
+    products: PropTypes.array,
+    meta: PropTypes.object,
+    loading: PropTypes.bool,
+    refresh: PropTypes.bool,
+}
+
+const mapStateToProps = state => {
+    const { products, loading, meta, refresh } = state.Product
+    return { products, loading, meta, refresh }
+}
+
+const mapDispatchToProps = dispatch => ({
+    onGetProducts: (conditional = null, limit= DEFAULT_PAGE_LIMIT, page) => dispatch(getProducts(conditional, limit, page))
+})
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(ProductList);

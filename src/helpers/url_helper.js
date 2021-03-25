@@ -13,6 +13,11 @@ export const POST_CUSTOMER = "/customer"
 export const GET_CUSTOMER = "/customer"
 export const PUT_CUSTOMER = "/customer"
 
+//PRODUCT
+export const POST_PRODUCT = "/product"
+export const GET_PRODUCT = "/product"
+export const PUT_PRODUCT = "/product"
+
 //LOCATIONS
 export const GET_STATES = "/state"
 export const GET_MUNICIPALITIES = "/municipality"

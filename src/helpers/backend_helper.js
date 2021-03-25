@@ -14,8 +14,11 @@ const fetchCustomer = data => get((data && data.id) ? `${url.GET_CUSTOMER}/${dat
 const deleteCustomerApi = (id) => del(`${url.PUT_CUSTOMER}/${id}`);
 
 //products
-const fetchProductsApi = data => get(url.GET_PRODUCTS, {}, data);
-
+const fetchProductsApi = data => get(url.GET_PRODUCT, {}, data);
+const fetchProductApi = data => get((data && data.id) ? `${url.GET_PRODUCT}/${data.id}` : url.GET_PRODUCT, data);
+const registerProductApi = data => post(url.POST_PRODUCT, data);
+const updateProductApi = (id, data) => put(`${url.PUT_PRODUCT}/${id}`, data);
+//const deleteProductApi = (id) => del(`${url.DELETE_PRODUCT}/${id}`);
 
 //locations
 const fetchStates = data => get(url.GET_STATES, {}, data);
@@ -32,5 +35,8 @@ export {
     deleteCustomerApi,
     fetchProductsApi,
     fetchStates,
-    fetchMunicipalities
+    fetchMunicipalities,
+    fetchProductApi,
+    registerProductApi,
+    updateProductApi
 }
