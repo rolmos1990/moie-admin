@@ -21,14 +21,15 @@ const InputDateField = (props) => {
     const {defaultValue, options} = props;
 
     useEffect(() => {
-        if(options && options.length > 0) {
+        /*if(options && options.length > 0) {
             if(defaultValue) {
                 const selected = options.filter(item => item.value === defaultValue)[0];
                 setSelected(selected);
             } else {
                 setSelected(null);
             }
-        }
+        }*/
+        setSelected(defaultValue ? defaultValue: null);
     }, [options, defaultValue]);
 
     return (

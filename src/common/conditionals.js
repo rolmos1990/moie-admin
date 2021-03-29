@@ -4,9 +4,9 @@
 
 /* recibe un arreglo de objetos y lo transforma en una condicion */
 function getConditionalFormat(options) {
-    if(options && options.length > 0){
+    if (options && options.length > 0) {
         let conditions = options.map(item => {
-            if(!item.moreValues) {
+            if (!item.moreValues) {
                 return (item.field + item.operator + item.value)
             } else {
                 item.moreValues = item.moreValues.join("::");
@@ -20,15 +20,15 @@ function getConditionalFormat(options) {
 }
 
 /* Construye un formato valido para las peticiones GET (URL) */
-function buildHttpGetQuery(cond = null, limit = null, offset = null){
+function buildHttpGetQuery(cond = null, limit = null, offset = null) {
     const data = {};
-    if(cond){
+    if (cond) {
         data.conditional = cond;
     }
-    if(limit){
+    if (limit) {
         data.limit = limit;
     }
-    if(offset || offset == 0){
+    if (offset || offset == 0) {
         data.offset = offset;
     }
 
@@ -36,24 +36,29 @@ function buildHttpGetQuery(cond = null, limit = null, offset = null){
     return searchParams;
 }
 
+function buildCondition(field, value, operator = null, moreValues = []) {
+    let condition;
+    if (operator === null) {
+        condition = {field, value, operator: "::"};
+    } else if (moreValues.length > 0) {
+        condition = {field, value, operator, moreValues};
+    } else {
+        if ([OPERATORS.TRUE, OPERATORS.FALSE].includes(operator)) {
+            condition = {field, value: "", operator};
+        } else {
+            condition = {field, value, operator};
+        }
+    }
+    return condition;
+}
+
 /* recibe field, value, operador y en caso de tener 2 o mas valores moreValues (Array) */
 class Condition {
     condition = [];
-    add(field, value, operator = null, moreValues = []){
-        if(operator === null){
-            this.condition.push({field, value, operator: "::"});
-        } else if(moreValues.length > 0){
-            this.condition.push({field, value, operator, moreValues});
-        } else {
-            if([OPERATORS.TRUE, OPERATORS.FALSE].includes(operator)){
-                this.condition.push({field, value:"", operator});
-            }
-            else {
-                this.condition.push({field, value, operator});
-            }
-        }
+    add(field, value, operator = null, moreValues = []) {
+        this.condition.push(buildCondition(field, value, operator, moreValues))
     }
-    all(){
+    all() {
         return this.condition;
     }
 }
@@ -83,7 +88,8 @@ const Conditionals = {
     Condition,
     buildHttpGetQuery,
     getConditionalFormat,
-    OPERATORS
+    OPERATORS,
+    buildCondition
 };
 
 export default Conditionals;

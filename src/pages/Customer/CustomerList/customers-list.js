@@ -50,7 +50,7 @@ const CustomersList = props => {
 
     const onFilterAction = (condition) => {
         setConditional(condition);
-        onGetCustomers(condition);
+        onGetCustomers(condition, DEFAULT_PAGE_LIMIT, 0);
     }
     const onConfirmDelete = (id) => {
         onDeleteCustomer(id);

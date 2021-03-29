@@ -10,7 +10,8 @@ import {Button as ButtonMaterial} from "@material-ui/core";
 
 export const CustomerFilter = (props) => {
 
-    const [filters, setFilters] = useState([])
+    const form = React.createRef();
+    const [filters, setFilters] = useState({isMayorist: null, _status: null, createdAt:null})
 
     if(!props.isActive){
         return false;
@@ -37,12 +38,8 @@ export const CustomerFilter = (props) => {
             if (email) {
                 conditions.add('email', email, Conditionals.OPERATORS.EQUAL);
             }
-            if (isMayorist && isMayorist.value !== null) {
-                if(isMayorist.value) {
-                    conditions.add('isMayorist', null, Conditionals.OPERATORS.TRUE);
-                } else {
-                    conditions.add('isMayorist', null, Conditionals.OPERATORS.FALSE);
-                }
+            if (yesNoOptions.filter(o => o.value !== null).map(o => o.value).includes(isMayorist.value)) {
+                    conditions.add('isMayorist', null, isMayorist.value ? Conditionals.OPERATORS.TRUE : Conditionals.OPERATORS.FALSE);
             }
             if (createdAt) {
                 if(moment(createdAt[0]).isSame(moment(createdAt[1]))){
@@ -59,7 +56,8 @@ export const CustomerFilter = (props) => {
                     );
                 }
             }
-            if (_status !== undefined && _status.value !== null){
+
+            if (ActiveInactive.filter(o => o.value !== null).map(o => o.value).includes(_status.value)){
                 conditions.add('status', null,
                     _status.value ?
                     Conditionals.OPERATORS.TRUE :
@@ -69,9 +67,10 @@ export const CustomerFilter = (props) => {
         }
     }
     const cleanFilters = () => {
-        setFilters([]);
+        setFilters({isMayorist: null, _status: null, createdAt:null});
         const conditions = new Conditionals.Condition;
         props.onSubmit(conditions.all());
+        form && form.current && form.current.reset();
     }
     return (<div className="col-md-4">
                 <Card>
@@ -89,7 +88,8 @@ export const CustomerFilter = (props) => {
                         <AvForm className="needs-validation"
                                 onValidSubmit={(e, v) => {
                                     handleValidSubmit(e, v)
-                                }}>
+                                }}
+                                ref={form}>
                             <Row>
                                 <Col md="12">
                                     <div className="mb-3">
@@ -123,6 +123,11 @@ export const CustomerFilter = (props) => {
                                         <FieldDate
                                             name={"createdAt"}
                                             mode={DATE_MODES.RANGE}
+                                            defaultValue={filters.createdAt}
+                                            onChange={(e)=> {
+                                                let newVar = {...filters, createdAt:e};
+                                                setFilters(newVar )
+                                            }}
                                         />
                                     </div>
                                 </Col>
@@ -132,6 +137,7 @@ export const CustomerFilter = (props) => {
                                         <FieldSelect
                                             name={"_status"}
                                             options={ActiveInactive}
+                                            defaultValue={filters._status}
                                         />
                                     </div>
                                 </Col>

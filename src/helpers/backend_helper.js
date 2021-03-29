@@ -21,9 +21,17 @@ const updateProductApi = (id, data) => put(`${url.PUT_PRODUCT}/${id}`, data);
 //const deleteProductApi = (id) => del(`${url.DELETE_PRODUCT}/${id}`);
 
 //locations
-const fetchStates = data => get(url.GET_STATES, {}, data);
+const fetchStatesApi = data => get(url.STATES, {}, data);
+const fetchStateApi = (id) => get(`${url.STATES}/${id}`,{});
+const registerStateApi = data => post(url.STATES, data);
+const updateStateApi = (id, data) => put(`${url.STATES}/${id}`, data);
+const deleteStateApi = (id) => del(`${url.STATES}/${id}`);
 
-const fetchMunicipalities = data => get(url.GET_MUNICIPALITIES, {}, data);
+const fetchMunicipalitiesApi = data => get(url.MUNICIPALITIES, {}, data);
+const fetchMunicipalityApi = (id) => get(`${url.MUNICIPALITIES}/${id}`,{});
+const registerMunicipalityApi = data => post(url.MUNICIPALITIES, data);
+const updateMunicipalityApi = (id, data) => put(`${url.MUNICIPALITIES}/${id}`, data);
+const deleteMunicipalityApi = (id) => del(`${url.MUNICIPALITIES}/${id}`);
 
 
 export {
@@ -34,8 +42,19 @@ export {
     fetchCustomersApi,
     deleteCustomerApi,
     fetchProductsApi,
-    fetchStates,
-    fetchMunicipalities,
+
+    fetchStatesApi,
+    fetchStateApi,
+    updateStateApi,
+    registerStateApi,
+    deleteStateApi,
+
+    fetchMunicipalitiesApi,
+    fetchMunicipalityApi,
+    updateMunicipalityApi,
+    registerMunicipalityApi,
+    deleteMunicipalityApi,
+
     fetchProductApi,
     registerProductApi,
     updateProductApi

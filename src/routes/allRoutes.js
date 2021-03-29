@@ -14,6 +14,11 @@ import ForgetPwd from "../pages/Authentication/ForgetPassword"
 import UserProfile from "../pages/Authentication/user-profile"
 import Product from "../pages/Product";
 import ProductEdit from "../pages/ProductEdit";
+//Estates
+import States from "../pages/State";
+import StateEdit from "../pages/StateEdit";
+import Municipalities from "../pages/Municipality";
+import MunicipalityEdit from "../pages/MunicipalityEdit";
 
 const userRoutes = [
   { path: "/dashboard", component: Dashboard },
@@ -23,6 +28,12 @@ const userRoutes = [
   { path: "/customer", component: CustomerEdit },
   { path: "/product", component: ProductEdit },
   { path: "/product/:id", component: ProductEdit },
+  { path: "/states", component: States },
+  { path: "/state", component: StateEdit },
+  { path: "/state/:id", component: StateEdit },
+  { path: "/municipalities", component: Municipalities },
+  { path: "/municipality", component: MunicipalityEdit },
+  { path: "/municipality/:id", component: MunicipalityEdit },
 
   // //profile
   { path: "/profile", component: UserProfile },

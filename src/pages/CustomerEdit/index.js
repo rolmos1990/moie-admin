@@ -243,7 +243,7 @@ const mapStateToProps = state => {
 }
 
 export default withRouter(
-    connect(mapStateToProps, { apiError, registerCustomer,updateCustomer, getCustomer, getStates, getMunicipalities})(CustomerEdit)
+    connect(mapStateToProps, { apiError, registerCustomer, updateCustomer, getCustomer, getStates, getMunicipalities})(CustomerEdit)
 )
 
 CustomerEdit.propTypes = {

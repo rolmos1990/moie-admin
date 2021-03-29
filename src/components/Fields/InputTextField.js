@@ -13,7 +13,9 @@ const TextField = (props) => (
         className="form-control"
         validate={
             {
-                required: { value: props.required ? true : false , errorMessage: messages.required }
+                required: { value: props.required ? true : false, errorMessage: messages.required },
+                minLength: { value: props.minLength ? props.minLength: 0, errorMessage: messages.minLength.replace("{length}", props.minLength)},
+                maxLength: { value: props.maxLength ? props.maxLength: 255, errorMessage: messages.maxLength.replace("{length}", props.maxLength)}
             }
         }
     />
@@ -24,7 +26,9 @@ TextField.propTypes = {
     value: PropTypes.string,
     placeholder: PropTypes.string,
     type: PropTypes.string,
-    required: PropTypes.bool
+    required: PropTypes.bool,
+    minLength: PropTypes.number,
+    maxLength: PropTypes.number,
 }
 
 const EmailField = (props) => (

@@ -19,8 +19,8 @@ export const GET_PRODUCT = "/product"
 export const PUT_PRODUCT = "/product"
 
 //LOCATIONS
-export const GET_STATES = "/state"
-export const GET_MUNICIPALITIES = "/municipality"
+export const STATES = "/state"
+export const MUNICIPALITIES = "/municipality"
 
 //PROFILE
 export const POST_EDIT_JWT_PROFILE = "/post-jwt-profile"
