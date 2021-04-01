@@ -19,6 +19,8 @@ import States from "../pages/State";
 import StateEdit from "../pages/StateEdit";
 import Municipalities from "../pages/Municipality";
 import MunicipalityEdit from "../pages/MunicipalityEdit";
+import Categories from "../pages/Category";
+import CategoryEdit from "../pages/CategoryEdit";
 
 const userRoutes = [
   { path: "/dashboard", component: Dashboard },
@@ -28,6 +30,9 @@ const userRoutes = [
   { path: "/customer", component: CustomerEdit },
   { path: "/product", component: ProductEdit },
   { path: "/product/:id", component: ProductEdit },
+  { path: "/categories", component: Categories },
+  { path: "/category", component: CategoryEdit },
+  { path: "/category/:id", component: CategoryEdit },
   { path: "/states", component: States },
   { path: "/state", component: StateEdit },
   { path: "/state/:id", component: StateEdit },

@@ -19,10 +19,10 @@ export const getProducts = (conditional, limit, offset) => ({
     offset: offset
 })
 
-export const getProductsSuccess = (customers, meta) => ({
+export const getProductsSuccess = (data, meta) => ({
     type: GET_PRODUCTS_SUCCESS,
     meta: meta,
-    payload: customers,
+    payload: data,
 })
 
 export const getProductsFailed = error => ({
@@ -35,9 +35,9 @@ export const getProduct = id => ({
     id
 })
 
-export const getProductSuccess = product => ({
+export const getProductSuccess = data => ({
     type: GET_PRODUCT_SUCCESS,
-    payload: product,
+    payload: data,
 })
 
 export const getProductFailed = error => ({
@@ -45,39 +45,39 @@ export const getProductFailed = error => ({
     payload: error,
 })
 
-export const registerProduct = (product, history) => {
+export const registerProduct = (data, history) => {
     return {
         type: REGISTER_PRODUCT,
-        payload: { product, history },
+        payload: { data, history },
     }
 }
 
-export const registerProductSuccess = product => {
+export const registerProductSuccess = data => {
     return {
         type: REGISTER_PRODUCT_SUCCESS,
-        payload: product,
+        payload: data,
     }
 }
 
 
-export const registerProductFailed = product => {
+export const registerProductFailed = data => {
     return {
         type: REGISTER_PRODUCT_FAILED,
-        payload: product,
+        payload: data,
     }
 }
 
-export const updateProduct = (id, product, history) => {
+export const updateProduct = (id, data, history) => {
     return {
         type: UPDATE_PRODUCT,
-        payload: { id, product, history },
+        payload: { id, data, history },
     }
 }
 
-export const updateProductSuccess = product => {
+export const updateProductSuccess = data => {
     return {
         type: UPDATE_PRODUCT_SUCCESS,
-        payload: product,
+        payload: data,
     }
 }
 

@@ -6,44 +6,44 @@ import {withRouter, Link} from "react-router-dom"
 import {connect} from "react-redux";
 import {apiError} from "../../store/auth/login/actions";
 import PropTypes from "prop-types";
-import {getState, registerState, updateState} from "../../store/location/actions";
+import {getCategory, registerCategory, updateCategory} from "../../store/category/actions";
 import {FieldSwitch, FieldText} from "../../components/Fields";
 import Breadcrumb from "../../components/Common/Breadcrumb";
 import {STATUS} from "../../common/constants";
 
-const StateEdit = (props) => {
-    const {getState, estado} = props;
-    const [estadoData, setEstadoData] = useState({_status:STATUS.ACTIVE});
+const CategoryEdit = (props) => {
+    const {getCategory, category} = props;
+    const [categoryData, setCategory] = useState({_status:STATUS.ACTIVE});
     const isEdit = props.match.params.id;
 
     //carga inicial
     useEffect(() => {
-        if (isEdit && getState) {
-            getState(props.match.params.id);
+        if (isEdit && getCategory) {
+            getCategory(props.match.params.id);
         }
-    }, [getState]);
+    }, [getCategory]);
 
     //cargar la información del cliente
     useEffect(() => {
-        if (estado.id && isEdit) {
-            setEstadoData({...estado, _status:estado.status});
+        if (category.id && isEdit) {
+            setCategory({...category, _status:category.status});
         }
-    }, [estado]);
+    }, [category]);
 
     const handleValidSubmit = (event, values) => {
-        const data = Object.assign({},values, {status:values._status});
+        const data = {...values, status:values._status};
         delete data._status;
         if (!isEdit) {
-            props.registerState(data, props.history)
+            props.registerCategory(data, props.history)
         } else {
-            props.updateState(props.match.params.id, data, props.history)
+            props.updateCategory(props.match.params.id, data, props.history)
         }
     }
     return (
         <React.Fragment>
             <div className="page-content">
                 <Container fluid>
-                    <Breadcrumb hasBack path="/states" title={estadoData.name} breadcrumbItem={"Estado"}/>
+                    <Breadcrumb hasBack path="/categories" title={categoryData.name} breadcrumbItem={"Category"}/>
 
                     <AvForm className="needs-validation" autoComplete="off"
                             onValidSubmit={(e, v) => {
@@ -60,7 +60,7 @@ const StateEdit = (props) => {
                                                         ¿Activo?
                                                     </Col>
                                                     <Col>
-                                                        <FieldSwitch defaultValue={estadoData._status} name={"_status"} />
+                                                        <FieldSwitch defaultValue={categoryData._status} name={"_status"} />
                                                     </Col>
                                                 </Row>
                                             </div>
@@ -72,37 +72,9 @@ const StateEdit = (props) => {
                                                     <FieldText
                                                         id={"field_name"}
                                                         name={"name"}
-                                                        value={estadoData.name}
+                                                        value={categoryData.name}
                                                         minLength={3}
                                                         maxLength={255}
-                                                        required
-                                                    />
-                                                </div>
-                                            </Col>
-                                        </Row>
-                                        <Row>
-                                            <Col md="6">
-                                                <div className="mb-3">
-                                                    <Label htmlFor="field_name">Código DIAN <span className="text-danger">*</span></Label>
-                                                    <FieldText
-                                                        id={"field_dianCode"}
-                                                        name={"dianCode"}
-                                                        value={estadoData.dianCode}
-                                                        minLength={3}
-                                                        maxLength={10}
-                                                        required
-                                                        />
-                                                </div>
-                                            </Col>
-                                            <Col md="6">
-                                                <div className="mb-3">
-                                                    <Label htmlFor="field_name">Código ISO <span className="text-danger">*</span></Label>
-                                                    <FieldText
-                                                        id={"field_isoCode"}
-                                                        name={"isoCode"}
-                                                        value={estadoData.isoCode}
-                                                        minLength={3}
-                                                        maxLength={5}
                                                         required
                                                     />
                                                 </div>
@@ -124,15 +96,15 @@ const StateEdit = (props) => {
 }
 
 const mapStateToProps = state => {
-    const {error, loading} = state.Location
-    return {error, estado: state.Location.state, loading}
+    const {error, category, loading} = state.Category
+    return {error, category, loading}
 }
 
 export default withRouter(
-    connect(mapStateToProps, {apiError, registerState, updateState, getState})(StateEdit)
+    connect(mapStateToProps, {apiError, registerCategory, updateCategory, getCategory})(CategoryEdit)
 )
 
-StateEdit.propTypes = {
+CategoryEdit.propTypes = {
     error: PropTypes.any,
     history: PropTypes.object
 }

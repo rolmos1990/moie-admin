@@ -1,58 +1,58 @@
 import {all, call, fork, put, takeEvery} from "redux-saga/effects"
 
 //Account Redux states
-import {GET_PRODUCTS, GET_PRODUCT, REGISTER_PRODUCT, UPDATE_PRODUCT} from "./actionTypes"
+import {GET_SIZES, GET_SIZE, REGISTER_SIZE, UPDATE_SIZE} from "./actionTypes"
 
 import {
-    getProductsSuccess,
-    getProductsFailed,
-    registerProductSuccess,
-    getProductSuccess,
-    getProductFailed,
-    registerProductFailed,
-    updateProductSuccess,
-    updateProductFail
+    getSizesSuccess,
+    getSizesFailed,
+    registerSizeSuccess,
+    getSizeSuccess,
+    getSizeFailed,
+    registerSizeFailed,
+    updateSizeSuccess,
+    updateSizeFail
 } from "./actions"
 
 import {
-    registerProductApi,
-    updateProductApi,
-    fetchProductApi,
-    fetchProductsApi
+    registerSizeApi,
+    updateSizeApi,
+    fetchSizeApi,
+    fetchSizesApi
 } from "../../helpers/backend_helper"
 
 import Conditionals from "../../common/conditionals";
 
 /**
  * *  Configuración de CRUD Saga (Realizar configuración para cada uno de las replicas)
-*/
+ */
 
-const ACTION_NAME_LIST      =   GET_PRODUCTS;
-const ACTION_NAME_GET       =   GET_PRODUCT;
-const ACTION_NAME_CREATE    =   REGISTER_PRODUCT;
-const ACTION_NAME_UPDATE    =   UPDATE_PRODUCT;
+const ACTION_NAME_LIST      =   GET_SIZES;
+const ACTION_NAME_GET       =   GET_SIZE;
+const ACTION_NAME_CREATE    =   REGISTER_SIZE;
+const ACTION_NAME_UPDATE    =   UPDATE_SIZE;
 
-const LIST_API_REQUEST      =   fetchProductsApi;
-const GET_API_REQUEST       =   fetchProductApi;
-const POST_API_REQUEST      =   registerProductApi;
-const PUT_API_REQUEST       =   updateProductApi;
+const LIST_API_REQUEST      =   fetchSizesApi;
+const GET_API_REQUEST       =   fetchSizeApi;
+const POST_API_REQUEST      =   registerSizeApi;
+const PUT_API_REQUEST       =   updateSizeApi;
 
 //actions
-const LIST_SUCCESS_ACTION   =   getProductsSuccess;
-const LIST_FAILED_ACTION    =   getProductsFailed;
-const GET_SUCCESS_ACTION    =   getProductSuccess;
-const GET_FAILED_ACTION     =   getProductFailed;
-const CREATE_SUCCESS_ACTION =   registerProductSuccess;
-const CREATE_FAILED_ACTION  =   registerProductFailed;
-const UPDATE_SUCCESS_ACTION =   updateProductSuccess;
-const UPDATE_FAILED_ACTION  =   updateProductFail;
+const LIST_SUCCESS_ACTION   =   getSizesSuccess;
+const LIST_FAILED_ACTION    =   getSizesFailed;
+const GET_SUCCESS_ACTION    =   getSizeSuccess;
+const GET_FAILED_ACTION     =   getSizeFailed;
+const CREATE_SUCCESS_ACTION =   registerSizeSuccess;
+const CREATE_FAILED_ACTION  =   registerSizeFailed;
+const UPDATE_SUCCESS_ACTION =   updateSizeSuccess;
+const UPDATE_FAILED_ACTION  =   updateSizeFail;
 
 
-const LIST_URL = "/products";
+const LIST_URL = "/sizes";
 
 function* get({ id }) {
     try {
-        const response = yield call(GET_API_REQUEST, { id });
+        const response = yield call(GET_API_REQUEST,  id );
         yield put(GET_SUCCESS_ACTION(response))
     } catch (error) {
         yield put(GET_FAILED_ACTION(error))
@@ -95,15 +95,15 @@ function* update({ payload: { id, data, history } }) {
     }
 }
 
-export function* watchProduct() {
+export function* watchSize() {
     yield takeEvery(ACTION_NAME_CREATE, register);
     yield takeEvery(ACTION_NAME_UPDATE, update);
     yield takeEvery(ACTION_NAME_LIST, fetch);
     yield takeEvery(ACTION_NAME_GET, get)
 }
 
-function* productSaga() {
-    yield all([fork(watchProduct)])
+function* sizeSaga() {
+    yield all([fork(watchSize)])
 }
 
-export default productSaga
+export default sizeSaga

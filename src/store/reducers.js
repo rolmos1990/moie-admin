@@ -13,6 +13,8 @@ import Profile from "./auth/profile/reducer"
 import Customer from "./customer/reducer"
 import Product from "./product/reducer"
 import Location from "./location/reducer"
+import Category from "./category/reducer"
+import Sizes from "./sizes/reducer"
 
 const rootReducer = combineReducers({
   // public
@@ -20,6 +22,8 @@ const rootReducer = combineReducers({
   Login,
   Customer,
   Product,
+  Category,
+  Sizes,
   Location,
   Account,
   ForgetPassword,

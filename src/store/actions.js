@@ -9,6 +9,8 @@ export * from "./auth/profile/actions"
 // Dashboard
 export * from "./customer/actions"
 export * from "./product/actions"
+export * from "./category/actions"
+export * from "./sizes/actions"
 
 //System
 export * from "./location/actions"

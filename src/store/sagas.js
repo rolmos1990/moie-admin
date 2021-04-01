@@ -7,6 +7,8 @@ import ForgetSaga from "./auth/forgetpwd/saga"
 import ProfileSaga from "./auth/profile/saga"
 import CustomerSaga from "./customer/saga"
 import ProductSaga from "./product/saga"
+import CategorySaga from "./category/saga"
+import SizeSaga from "./sizes/saga"
 import LocationSaga from "./location/saga"
 import LayoutSaga from "./layout/saga"
 
@@ -18,6 +20,8 @@ export default function* rootSaga() {
     ProfileSaga(),
     CustomerSaga(),
     ProductSaga(),
+    CategorySaga(),
+    SizeSaga(),
     LocationSaga(),
     ForgetSaga(),
     fork(LayoutSaga)

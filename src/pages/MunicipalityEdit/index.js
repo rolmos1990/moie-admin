@@ -30,7 +30,7 @@ const MunicipalityEdit = (props) => {
     //cargar la información del municipio
     useEffect(() => {
         if (municipality.id && isEdit) {
-            setMunicipalityData(municipality);
+            setMunicipalityData({...municipality, _status:municipality.status});
 
             const defaultMunicipality = municipality.state?.id || null;
             setMunicipalityDefault(defaultMunicipality);
@@ -47,7 +47,7 @@ const MunicipalityEdit = (props) => {
     }, [states]);
 
     const handleValidSubmit = (event, values) => {
-        const data = Object.assign({}, values, {status: values._status, state: values.state.value});
+        const data = {...values, status: values._status, state: values.state.value};
         delete data._status;
         if (!isEdit) {
             props.registerMunicipality(data, props.history)

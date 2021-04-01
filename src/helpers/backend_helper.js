@@ -20,6 +20,18 @@ const registerProductApi = data => post(url.POST_PRODUCT, data);
 const updateProductApi = (id, data) => put(`${url.PUT_PRODUCT}/${id}`, data);
 //const deleteProductApi = (id) => del(`${url.DELETE_PRODUCT}/${id}`);
 
+//Categories
+const fetchCategoriesApi = data => get(url.CATEGORY, {}, data);
+const fetchCategoryApi = (id) => get(`${url.CATEGORY}/${id}`,{});
+const registerCategoryApi = data => post(url.CATEGORY, data);
+const updateCategoryApi = (id, data) => put(`${url.CATEGORY}/${id}`, data);
+
+//Categories
+const fetchSizesApi = data => get(url.SIZE, {}, data);
+const fetchSizeApi = (id) => get(`${url.SIZE}/${id}`,{});
+const registerSizeApi = data => post(url.SIZE, data);
+const updateSizeApi = (id, data) => put(`${url.SIZE}/${id}`, data);
+
 //locations
 const fetchStatesApi = data => get(url.STATES, {}, data);
 const fetchStateApi = (id) => get(`${url.STATES}/${id}`,{});
@@ -57,5 +69,15 @@ export {
 
     fetchProductApi,
     registerProductApi,
-    updateProductApi
+    updateProductApi,
+
+    fetchCategoriesApi,
+    fetchCategoryApi,
+    registerCategoryApi,
+    updateCategoryApi,
+
+    fetchSizesApi,
+    fetchSizeApi,
+    registerSizeApi,
+    updateSizeApi,
 }

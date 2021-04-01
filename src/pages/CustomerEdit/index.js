@@ -112,7 +112,7 @@ const CustomerEdit = (props) => {
                 <Container fluid>
                     <Breadcrumb hasBack path="/customers" title={customerData.name} breadcrumbItem={"Cliente"} />
 
-                    <AvForm className="needs-validation"
+                    <AvForm className="needs-validation" autoComplete="off"
                             onValidSubmit={(e, v) => {
                                 handleValidSubmit(e, v)
                             }}>

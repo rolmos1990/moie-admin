@@ -18,6 +18,9 @@ export const POST_PRODUCT = "/product"
 export const GET_PRODUCT = "/product"
 export const PUT_PRODUCT = "/product"
 
+export const CATEGORY = "/category"
+export const SIZE = "/size"
+
 //LOCATIONS
 export const STATES = "/state"
 export const MUNICIPALITIES = "/municipality"

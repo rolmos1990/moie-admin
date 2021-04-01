@@ -15,6 +15,12 @@ export const statesToOptions = (states) => {
         value: item.id
     }));
 }
+export const arrayToOptions = (array) => {
+    return array.map(item => ({
+        label: item.name,
+        value: item.id
+    }));
+}
 export const normalizeColumnsList = (columns) => {
     return columns.map(r =>({text: r.text, dataField: r.dataField, sort: r.sort, formatter: r.formatter}));
 }
