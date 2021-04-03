@@ -14,25 +14,33 @@ const CardProduct = props => {
                     <CardBody>
                         <Media className="d-flex">
                             <div className="avatar-sm me-4">
-                <span
-                    className={
-                        "avatar-title rounded-circle bg-soft-" +
-                        product.color +
-                        " primary text-" +
-                        product.color +
-                        " font-size-16"
-                    }
-                >
-                      {nameIcon}
-                    </span>
+                                <span className={
+                                        "avatar-title rounded-circle bg-soft-" +
+                                        product.color +
+                                        " primary text-" +
+                                        product.color +
+                                        " font-size-16"
+                                    }
+                                >
+                                  {nameIcon}
+                                </span>
                             </div>
                             <Media body className="flex-1 align-self-center">
-                                <div className="border-bottom pb-1">
-                                    <h5 className="text-truncate font-size-16 mb-1"><Link to="#" className="text-dark">{product.name}</Link></h5>
-                                    <p className="text-muted">
-                                        <i className="uil-box me-2"></i> Ref: {product.reference} <br />
-                                    </p>
-                                </div>
+                                <Row className="border-bottom pb-1">
+                                    <Col xs={10} >
+
+                                            <h5 className="text-truncate font-size-16 mb-1"><Link to="#" className="text-dark">{product.name}</Link></h5>
+                                            <p className="text-muted">
+                                                <i className="uil-box me-2"> </i> Ref: {product.reference} <br />
+                                            </p>
+
+                                    </Col>
+                                    <Col xs={2}>
+                                        <Link to={`/product/${product.id}`} className="px-2 text-primary">
+                                            <i className="uil uil-pen font-size-18"> </i>
+                                        </Link>
+                                    </Col>
+                                </Row>
                                 <Row>
                                     <div className="col-4">
                                         <div className="mt-3">

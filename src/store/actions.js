@@ -11,6 +11,9 @@ export * from "./customer/actions"
 export * from "./product/actions"
 export * from "./category/actions"
 export * from "./sizes/actions"
+export * from "./productImages/actions"
+export * from "./productSize/actions"
+export * from "./fieldOptions/actions"
 
 //System
 export * from "./location/actions"

@@ -54,7 +54,6 @@ const MunicipalityList = props => {
             }
             return col;
         });
-        console.log(setColumns)
         setColumns(cols);
     }, [states])*/
 

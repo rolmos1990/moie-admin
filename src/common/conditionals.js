@@ -65,7 +65,6 @@ class Condition {
 
 const OPERATORS = {
     EQUAL: '::',
-    LK: '$lk',
     NULL: '$null',
     NOT_NULL: '$nnull',
     TRUE: '$true',

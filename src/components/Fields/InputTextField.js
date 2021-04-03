@@ -9,6 +9,8 @@ const TextField = (props) => (
         name={props.name}
         value={props.value}
         placeholder={props.placeholder}
+        onChange={props.onChange ? props.onChange : null}
+        onBlur={props.onBlur ? props.onBlur : null}
         type={props.type ? props.type : "text"}
         className="form-control"
         validate={
@@ -29,6 +31,30 @@ TextField.propTypes = {
     required: PropTypes.bool,
     minLength: PropTypes.number,
     maxLength: PropTypes.number,
+}
+const NumberField = (props) => (
+    <AvField
+        id ={props.id}
+        name={props.name}
+        value={props.value}
+        placeholder={props.placeholder}
+        onChange={props.onChange ? props.onChange : null}
+        type={"number"}
+        className="form-control"
+        validate={
+            {
+                required: { value: props.required ? true : false, errorMessage: messages.required },
+                number: { value: true},
+            }
+        }
+    />
+)
+
+NumberField.propTypes = {
+    name: PropTypes.string,
+    value: PropTypes.number,
+    placeholder: PropTypes.string,
+    required: PropTypes.bool
 }
 
 const EmailField = (props) => (
@@ -58,5 +84,6 @@ EmailField.propTypes = {
 
 export {
     TextField,
+    NumberField,
     EmailField
 };

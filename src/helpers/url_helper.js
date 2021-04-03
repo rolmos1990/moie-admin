@@ -20,10 +20,14 @@ export const PUT_PRODUCT = "/product"
 
 export const CATEGORY = "/category"
 export const SIZE = "/size"
+export const PRODUCT_SIZE = "/productSize"
+export const PRODUCT_IMAGES = "/changeProductImage"
+export const FIELD_OPTIONS = "/fieldOptions"
 
 //LOCATIONS
 export const STATES = "/state"
 export const MUNICIPALITIES = "/municipality"
+export const DELIVERY_LOCALITY = "/deliveryLocality"
 
 //PROFILE
 export const POST_EDIT_JWT_PROFILE = "/post-jwt-profile"

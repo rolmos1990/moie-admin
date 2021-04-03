@@ -15,3 +15,7 @@ export const STATUS_OPTIONS = [
 export const isValidOption = (options, option) => {
     return options.filter(o => o.value !== null).map(o => o.value).includes(option);
 };
+
+export const isValidObject = (object) => {
+    return undefined !== object && null !== object;
+};
