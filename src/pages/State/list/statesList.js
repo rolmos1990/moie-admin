@@ -1,22 +1,20 @@
 import React, {useEffect, useState} from "react"
 import PropTypes from "prop-types"
 import {connect} from "react-redux"
-import {Card, CardBody, Col, Row, Spinner} from "reactstrap"
-import paginationFactory, {
-    PaginationListStandalone,
-    PaginationProvider,
-} from "react-bootstrap-table2-paginator"
+import {Card, CardBody, Col, Row} from "reactstrap"
+import paginationFactory, {PaginationListStandalone, PaginationProvider,} from "react-bootstrap-table2-paginator"
 import ToolkitProvider, {Search} from "react-bootstrap-table2-toolkit"
 import BootstrapTable from "react-bootstrap-table-next"
 
 import {Link} from "react-router-dom"
 import {Button, Tooltip} from "@material-ui/core";
 import {DEFAULT_PAGE_LIMIT} from "../../../common/pagination";
-import {ConfirmationModal, ConfirmationModalAction} from "../../../components/Modal/ConfirmationModal";
+import {ConfirmationModalAction} from "../../../components/Modal/ConfirmationModal";
 import {deleteState, getStates} from "../../../store/location/actions";
 import statesColumns from "./statesColumn";
 import {TableFilter} from "../../../components/TableFilter";
 import {normalizeColumnsList} from "../../../common/converters";
+import NoDataIndication from "../../../components/Common/NoDataIndication";
 
 const StatesList = props => {
     const {states, meta, onGetStates, onDeleteState, loading, refresh} = props;
@@ -72,16 +70,6 @@ const StatesList = props => {
         mode: "checkbox",
         clickToSelect: true,
     };
-
-    const NoDataIndication = () => (
-        <div className="spinner">
-            <div className="rect1"/>
-            <div className="rect2"/>
-            <div className="rect3"/>
-            <div className="rect4"/>
-            <div className="rect5"/>
-        </div>
-    );
 
     return (
         <Row>

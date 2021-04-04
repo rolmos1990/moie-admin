@@ -21,6 +21,9 @@ export const arrayToOptions = (array) => {
         value: item.id
     }));
 }
+export const getEmptyOptions = () => {
+    return {label: '-', value: null};
+}
 export const normalizeColumnsList = (columns) => {
     return columns.map(r =>({text: r.text, dataField: r.dataField, sort: r.sort, formatter: r.formatter}));
 }

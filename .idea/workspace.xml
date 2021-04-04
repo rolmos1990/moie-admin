@@ -1,0 +1,264 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="ce74cd48-931a-4969-a0ae-7a2ff9cce7cd" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/dataSources.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/moie-admin.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/scss/custom/pages/_common.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/Common/NoDataIndication.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/Fields/InputAsyncSearchField.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/helpers/service.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/pages/Product/ProductList/productColumn.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../moie-core/moie-core.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.env" beforeDir="false" afterPath="$PROJECT_DIR$/.env" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.eslintcache" beforeDir="false" afterPath="$PROJECT_DIR$/.eslintcache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/moie-admin.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/common/converters.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/common/converters.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/common/utils.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/common/utils.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Fields/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Fields/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/StatusField/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/StatusField/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/TableFilter/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/TableFilter/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/helpers/backend_helper.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/helpers/backend_helper.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/Product/ProductList/products-list.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Product/ProductList/products-list.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/State/list/statesList.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/State/list/statesList.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../moie-core/ormconfig.json" beforeDir="false" afterPath="$PROJECT_DIR$/../moie-core/ormconfig.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../moie-core/src/controllers/parsers/product.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../moie-core/src/controllers/parsers/product.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../moie-core/src/controllers/parsers/productImage.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../moie-core/src/controllers/parsers/productImage.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../moie-core/src/controllers/productImage.controller.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../moie-core/src/controllers/productImage.controller.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../moie-core/src/controllers/productSize.controller.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../moie-core/src/controllers/productSize.controller.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../moie-core/src/models/DeliveryLocality.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../moie-core/src/models/DeliveryLocality.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../moie-core/src/models/FieldOption.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../moie-core/src/models/FieldOption.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../moie-core/src/models/ProductImage.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../moie-core/src/models/ProductImage.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../moie-core/src/seeds/deliveryLocality.seed.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../moie-core/src/seeds/deliveryLocality.seed.ts" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ChangesViewManager">
+    <option name="groupingKeys">
+      <option value="repository" />
+    </option>
+  </component>
+  <component name="ComposerSettings">
+    <execution />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitSEFilterConfiguration">
+    <file-type-list>
+      <filtered-out-file-type name="LOCAL_BRANCH" />
+      <filtered-out-file-type name="REMOTE_BRANCH" />
+      <filtered-out-file-type name="TAG" />
+      <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
+    </file-type-list>
+  </component>
+  <component name="ProjectId" id="1qMJoZKIdz4ZX8fiJyX6T0rgEm9" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="DatabaseDriversLRU" value="mysql" />
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="aspect.path.notification.shown" value="true" />
+    <property name="js.last.introduce.type" value="CONST" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/helpers" />
+    <property name="nodejs_package_manager_path" value="yarn" />
+    <property name="settings.editor.selected.configurable" value="database.main" />
+    <property name="ts.external.directory.path" value="$PROJECT_DIR$/../moie-core/node_modules/typescript/lib" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/helpers" />
+      <recent name="$PROJECT_DIR$/src/components/Fields" />
+      <recent name="$PROJECT_DIR$/src/assets/scss/custom/pages" />
+      <recent name="$PROJECT_DIR$/src/components/Common" />
+      <recent name="$PROJECT_DIR$/src/pages/Product/ProductList" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/../moie-core" />
+      <recent name="$PROJECT_DIR$/src/pages/StateEdit" />
+    </key>
+  </component>
+  <component name="RunManager" selected="npm.Start Admin">
+    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
+      <option name="arquillianRunConfiguration">
+        <value>
+          <option name="containerStateName" value="" />
+        </value>
+      </option>
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Start Core" type="NodeJSConfigurationType" working-dir="$PROJECT_DIR$/../moie-core">
+      <method v="2" />
+    </configuration>
+    <configuration name="Migration run" type="js.build_tools.npm">
+      <package-json value="$PROJECT_DIR$/../moie-core/package.json" />
+      <command value="run" />
+      <scripts>
+        <script value="typeorm:run" />
+      </scripts>
+      <node-interpreter value="$USER_HOME$/.nvm/versions/node/v12.21.0/bin/node" />
+      <package-manager value="$USER_HOME$/.nvm/versions/node/v12.21.0/lib/node_modules/npm" />
+      <envs>
+        <env name="HOST" value="http://localhost" />
+        <env name="DB_PASSWORD" value="root" />
+        <env name="DB_HOST" value="localhost" />
+        <env name="DB_PORT" value="3306" />
+      </envs>
+      <method v="2">
+        <option name="NpmBeforeRunTask" enabled="true">
+          <package-json value="$PROJECT_DIR$/../moie-core/package.json" />
+          <command value="run" />
+          <scripts>
+            <script value="typeorm:migrate" />
+          </scripts>
+          <node-interpreter value="$USER_HOME$/.nvm/versions/node/v12.21.0/bin/node" />
+          <package-manager value="npm" />
+          <envs>
+            <env name="HOST" value="http://localhost" />
+            <env name="DB_PASSWORD" value="root" />
+            <env name="DB_HOST" value="localhost" />
+          </envs>
+        </option>
+      </method>
+    </configuration>
+    <configuration name="Start Admin" type="js.build_tools.npm">
+      <package-json value="$PROJECT_DIR$/package.json" />
+      <command value="run" />
+      <scripts>
+        <script value="start" />
+      </scripts>
+      <node-interpreter value="$USER_HOME$/.nvm/versions/node/v10.22.0/bin/node" />
+      <package-manager value="npm" />
+      <envs />
+      <method v="2" />
+    </configuration>
+    <configuration name="Start core" type="js.build_tools.npm">
+      <package-json value="$PROJECT_DIR$/../moie-core/package.json" />
+      <command value="start" />
+      <node-interpreter value="project" />
+      <package-manager value="$USER_HOME$/.nvm/versions/node/v12.21.0/lib/node_modules/npm" />
+      <envs>
+        <env name="HOST" value="http://localhost" />
+        <env name="PORT" value="18210" />
+        <env name="DB_PASSWORD" value="root" />
+        <env name="DB_HOST" value="localhost" />
+        <env name="SEED_DB" value="false" />
+      </envs>
+      <method v="2" />
+    </configuration>
+    <list>
+      <item itemvalue="Node.js.Start Core" />
+      <item itemvalue="npm.Start core" />
+      <item itemvalue="npm.Migration run" />
+      <item itemvalue="npm.Start Admin" />
+      <item itemvalue="Node.js.env" />
+    </list>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="ce74cd48-931a-4969-a0ae-7a2ff9cce7cd" name="Default Changelist" comment="" />
+      <created>1616883704666</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1616883704666</updated>
+      <workItem from="1616883707415" duration="4393000" />
+      <workItem from="1616895051201" duration="963000" />
+      <workItem from="1616897043072" duration="1761000" />
+      <workItem from="1616900690897" duration="1317000" />
+      <workItem from="1616902105458" duration="42265000" />
+      <workItem from="1617161749134" duration="11481000" />
+      <workItem from="1617242097636" duration="14314000" />
+      <workItem from="1617293180664" duration="40583000" />
+      <workItem from="1617465701791" duration="39649000" />
+    </task>
+    <task id="LOCAL-00001" summary="Se agrega crud de Estados y Municipios, Filtro comun para las tablas, ajuste es pagina de customers">
+      <created>1616989487196</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1616989487196</updated>
+    </task>
+    <task id="LOCAL-00002" summary="products - wip">
+      <created>1617256180666</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1617256180666</updated>
+    </task>
+    <task id="LOCAL-00003" summary="add: product sizes (wip)">
+      <created>1617483190383</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1617483190383</updated>
+    </task>
+    <task id="LOCAL-00004" summary="add: product images (wip)">
+      <created>1617502228055</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1617502228055</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="oldMeFiltersMigrated" value="true" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
+    <option name="CHECK_NEW_TODO" value="false" />
+    <MESSAGE value="Se agrega crud de Estados y Municipios, Filtro comun para las tablas, ajuste es pagina de customers" />
+    <MESSAGE value="products - wip" />
+    <MESSAGE value="add: product sizes (wip)" />
+    <MESSAGE value="add: product images (wip)" />
+    <option name="LAST_COMMIT_MESSAGE" value="add: product images (wip)" />
+    <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/src/pages/Customer/CustomerFilter/index.js</url>
+          <line>163</line>
+          <option name="timeStamp" value="3" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/src/pages/ProductEdit/ProductSize.js</url>
+          <line>55</line>
+          <properties lambdaOrdinal="-1" />
+          <option name="timeStamp" value="29" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+</project>

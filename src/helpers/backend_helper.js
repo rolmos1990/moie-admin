@@ -70,8 +70,11 @@ const registerMunicipalityApi = data => post(url.MUNICIPALITIES, data);
 const updateMunicipalityApi = (id, data) => put(`${url.MUNICIPALITIES}/${id}`, data);
 const deleteMunicipalityApi = (id) => del(`${url.MUNICIPALITIES}/${id}`);
 
+const fetchDataApi = (urlStr, data) => get(urlStr, {}, data);
 
 export {
+    fetchDataApi,
+
     postLogin,
     registerCustomer,
     updateCustomer,

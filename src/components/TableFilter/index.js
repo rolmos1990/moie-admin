@@ -1,11 +1,11 @@
-import React, {useState} from "react";
+import React from "react";
 import {Button, Card, CardBody, Col, Label, Row} from "reactstrap";
 import {AvForm} from "availity-reactstrap-validation";
 import PropTypes from "prop-types";
 import {Button as ButtonMaterial} from "@material-ui/core";
 import Conditionals from "../../common/conditionals";
-import {FieldEmail, FieldText, FieldSelect, FieldDate} from "../Fields";
-import {isValidOption} from "../../common/utils";
+import {FieldAsyncSelect, FieldNumber, FieldSelect, FieldText} from "../Fields";
+import {isValidOption, isValidString} from "../../common/utils";
 
 export const TableFilter = (props) => {
     const {fields} = props;
@@ -36,15 +36,34 @@ export const TableFilter = (props) => {
                             operator = filter.filterCondition ? filter.filterCondition : Conditionals.OPERATORS.LIKE;
                             conditions.add(fieldName, value, operator);
                         }
-                        if (filter.filterType === "select" && isValidOption(filter.filterOptions, value.value)) {
-                            operator = filter.filterCondition ? filter.filterCondition : value.value ? Conditionals.OPERATORS.TRUE : Conditionals.OPERATORS.FALSE;
+                        if (filter.filterType === "select" && isValidOption(filter.filterOptions, value.value)) {//for status
+                            operator = resolveOperator(filter, (value.value ? Conditionals.OPERATORS.TRUE : Conditionals.OPERATORS.FALSE));
                             conditions.add(fieldName, null, operator);
+                        }
+                        if (filter.filterType === "asyncSelect" && value.value) {
+                            operator = resolveOperator(filter, Conditionals.OPERATORS.EQUAL);
+                            conditions.add(fieldName, value.value, operator);
+                        }
+                        if (filter.filterType === "number" && isValidString(value)) {
+
+                            if (fieldName.includes("numberA_")) {
+                                operator = resolveOperator(filter, Conditionals.OPERATORS.GREATER_THAN_OR_EQUAL);
+                                conditions.add(fieldName.replace("numberA_"), value, operator);
+
+                            } else if (fieldName.includes("numberB_")) {
+                                operator = resolveOperator(filter, Conditionals.OPERATORS.LESS_THAN);
+                                conditions.add(fieldName.replace("numberB_"), value, operator);
+                            }
                         }
                     }
                 });
 
             props.onSubmit(conditions.all());
         }
+    }
+
+    const resolveOperator = (filter, defaultOperator) => {
+        return  filter.filterCondition ? filter.filterCondition : defaultOperator;
     }
 
     const cleanFilters = () => {
@@ -73,29 +92,67 @@ export const TableFilter = (props) => {
                         ref={form}>
                     <Row>
                         {fields.filter(f => f.filter).map((field, idx) => (
-                           <>
-                               {field.filterType === 'text' && (
-                                   <Col md="12" key={idx}>
-                                       <div className="mb-3">
-                                           <Label htmlFor={"_"+field.dataField}>{field.text}</Label>
-                                           <FieldText name={"_"+field.dataField}
-                                                      defaultValue={field.filterDefaultOption}/>
-                                       </div>
-                                   </Col>
-                               )}
-                               {field.filterType === 'select' && (
-                                   <Col md="12" key={idx}>
-                                       <div className="mb-3">
-                                           <Label htmlFor={"_"+field.dataField}>{field.text}</Label>
-                                           <FieldSelect
-                                               name={"_"+field.dataField}
-                                               options={field.filterOptions}
-                                               defaultValue={field.filterDefaultOption}
-                                           />
-                                       </div>
-                                   </Col>
-                               )}
-                           </>
+                            <>
+                                {field.filterType === 'text' && (
+                                    <Col md="12" key={idx}>
+                                        <div className="mb-3">
+                                            <Label htmlFor={"_" + field.dataField}>{field.text}</Label>
+                                            <FieldText name={"_" + field.dataField}
+                                                       defaultValue={field.filterDefaultOption}
+                                                       placeholder={field.text}/>
+                                        </div>
+                                    </Col>
+                                )}
+                                {field.filterType === 'number' && (
+                                    <>
+                                        <Col md="12" key={idx}>
+                                            <div className="mb-3">
+                                                <Label htmlFor={"_" + field.dataField}>{field.text}</Label>
+                                                <Row>
+                                                    <Col xs="6">
+                                                        <FieldNumber name={"_numberA_" + field.dataField}
+                                                                     defaultValue={field.filterDefaultOption}
+                                                                     placeholder="Desde"
+                                                        />
+                                                    </Col>
+                                                    <Col xs="6">
+                                                        <FieldNumber name={"_numberB_" + field.dataField}
+                                                                     defaultValue={field.filterDefaultOption}
+                                                                     placeholder="Hasta"
+                                                        />
+                                                    </Col>
+                                                </Row>
+                                            </div>
+                                        </Col>
+                                    </>
+                                )}
+                                {field.filterType === 'select' && (
+                                    <Col md="12" key={idx}>
+                                        <div className="mb-3">
+                                            <Label htmlFor={"_" + field.dataField}>{field.text}</Label>
+                                            <FieldSelect
+                                                name={"_" + field.dataField}
+                                                options={field.filterOptions}
+                                                defaultValue={field.filterDefaultOption}
+                                                placeholder={field.text}
+                                            />
+                                        </div>
+                                    </Col>
+                                )}
+                                {field.filterType === 'asyncSelect' && (
+                                    <Col md="12" key={idx}>
+                                        <div className="mb-3">
+                                            <Label htmlFor={"_" + field.dataField}>{field.text}</Label>
+                                            <FieldAsyncSelect
+                                                name={"_" + field.dataField}
+                                                urlStr={field.urlStr}
+                                                placeholder={field.text}
+                                                defaultValue={field.filterDefaultOption}
+                                            />
+                                        </div>
+                                    </Col>
+                                )}
+                            </>
                         ))}
                         <Col md={"12"}>
                             <div className={"float-end"}>
@@ -105,7 +162,7 @@ export const TableFilter = (props) => {
                             </div>
                             <div className={"float-end ml-5"}>
                                 <Button type="button"
-                                        onClick={cleanFilters.bind(this)}
+                                        onClick={cleanFilters}
                                         color="default"
                                         className="btn-sm btn-rounded waves-effect waves-light">
                                     Limpiar

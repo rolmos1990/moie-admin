@@ -1,11 +1,11 @@
 import PropTypes from 'prop-types'
 import React from "react"
 
-import { Switch, BrowserRouter as Router } from "react-router-dom"
-import { connect } from "react-redux"
+import {BrowserRouter as Router, Switch} from "react-router-dom"
+import {connect} from "react-redux"
 
 // Import Routes all
-import { userRoutes, authRoutes } from "./routes/allRoutes"
+import {authRoutes, userRoutes} from "./routes/allRoutes"
 
 // Import all middleware
 import Authmiddleware from "./routes/middleware/Authmiddleware"
@@ -17,6 +17,7 @@ import NonAuthLayout from "./components/NonAuthLayout"
 
 // Import scss
 import "./assets/scss/theme.scss"
+import "./assets/scss/custom/pages/_common.scss"
 
 
 //import fakeBackend from "./helpers/AuthType/fakeBackend"

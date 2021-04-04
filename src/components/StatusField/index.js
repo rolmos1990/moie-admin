@@ -9,12 +9,9 @@ export const StatusField = (props) => {
     switch(props.color){
         case STATUS_COLORS.DANGER:
             return <span className="badge rounded-pill bg-soft-danger font-size-12 p-2">{props.children}</span>
-            break;
         case STATUS_COLORS.SUCCESS:
             return <span className="badge rounded-pill bg-soft-success font-size-12 p-2">{props.children}</span>
-            break;
         default:
             return '';
-            break;
     }
 }
