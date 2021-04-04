@@ -1,25 +1,20 @@
 import {all, call, fork, put, takeEvery} from "redux-saga/effects"
 
 //Account Redux states
-import {GET_PRODUCT_IMAGES, GET_PRODUCT_IMAGE, REGISTER_PRODUCT_IMAGE, UPDATE_PRODUCT_IMAGE} from "./actionTypes"
+import {GET_PRODUCT_IMAGE, GET_PRODUCT_IMAGES, REGISTER_PRODUCT_IMAGE, UPDATE_PRODUCT_IMAGE} from "./actionTypes"
 
 import {
-    getProductImagesSuccess,
-    getProductImagesFailed,
-    registerProductImageSuccess,
-    getProductImageSuccess,
     getProductImageFailed,
+    getProductImagesFailed,
+    getProductImagesSuccess,
+    getProductImageSuccess,
     registerProductImageFailed,
-    updateProductImageSuccess,
-    updateProductImageFail
+    registerProductImageSuccess,
+    updateProductImageFail,
+    updateProductImageSuccess
 } from "./actions"
 
-import {
-    registerProductImageApi,
-    updateProductImageApi,
-    fetchProductImageApi,
-    fetchProductImagesApi
-} from "../../helpers/backend_helper"
+import {fetchProductImageApi, fetchProductImagesApi, registerProductImageApi, updateProductImageApi} from "../../helpers/backend_helper"
 
 import Conditionals from "../../common/conditionals";
 
@@ -88,7 +83,7 @@ function* update({ payload: { id, data, history } }) {
     try {
         const response = yield call(PUT_API_REQUEST, id, data)
         yield put(UPDATE_SUCCESS_ACTION(response))
-        history.push(LIST_URL)
+        history.post(LIST_URL)
 
     } catch (error) {
         yield put(UPDATE_FAILED_ACTION(error))

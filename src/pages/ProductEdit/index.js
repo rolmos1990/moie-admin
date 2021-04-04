@@ -6,14 +6,14 @@ import {connect} from "react-redux";
 import PropTypes from "prop-types";
 import {getProduct, registerProduct, updateProduct} from "../../store/product/actions";
 import {AvForm} from "availity-reactstrap-validation";
-import {FieldSelect, FieldSwitch, FieldText, FieldNumber} from '../../components/Fields';
+import {FieldNumber, FieldSelect, FieldSwitch, FieldText} from '../../components/Fields';
 import {Button, Card} from "@material-ui/core";
-import Dropzone from "react-dropzone"
 import {getCategories} from "../../store/category/actions";
 import {getSizes} from "../../store/sizes/actions";
 import {arrayToOptions} from "../../common/converters";
 import {STATUS} from "../../common/constants";
-import SizeTemplateProduct from "./SizeTemplateProduct";
+import ProductSize from "./ProductSize";
+import ProductImage from "./ProductImage";
 
 const ProductEdit = (props) => {
 
@@ -29,7 +29,7 @@ const ProductEdit = (props) => {
     const [isOpenInventary, setIsOpenInventary] = useState(false);
     const toggleInventary = () => setIsOpenInventary(!isOpenInventary);
 
-    const [selectedFiles, setselectedFiles] = useState([])
+
 
     const {getProduct, registerProduct, updateProduct, product, getCategories, categories, getSizes, sizes} = props;
     const [productData, setProductData] = useState({_status: STATUS.ACTIVE, sizeModelList: []});
@@ -39,6 +39,7 @@ const ProductEdit = (props) => {
 
     const [materialsList, setMaterialsList] = useState([{value: 1, label: 'Terciopelo'}, {value: 2, label: 'Seda'}, {value: 2, label: 'Algodon'}, {value: 3, label: 'Polyester'}]);
     const [materialDefault, setMaterialDefault] = useState({});
+    const [publication, setPublication] = useState({_status: "true"});
 
     const [sizesList, setSizesList] = useState([]);
     const [sizeDefault, setSizeDefault] = useState({});
@@ -97,7 +98,7 @@ const ProductEdit = (props) => {
         const data = {
             ...values,
             category: values.category.value,
-            material: values.material.label,
+            // material: values.material.label,
             size: values.size.value,
             status: 1,
             price: Number.parseFloat(values.price),
@@ -111,26 +112,7 @@ const ProductEdit = (props) => {
         }
     }
 
-    function handleAcceptedFiles(files) {
-        files.map(file =>
-            Object.assign(file, {
-                preview: URL.createObjectURL(file),
-                formattedSize: formatBytes(file.size)
-            })
-        )
 
-        setselectedFiles(files)
-    }
-
-    function formatBytes(bytes, decimals = 2) {
-        if (bytes === 0) return "0 Bytes"
-        const k = 1024
-        const dm = decimals < 0 ? 0 : decimals
-        const sizes = ["Bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"]
-
-        const i = Math.floor(Math.log(bytes) / Math.log(k))
-        return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + " " + sizes[i]
-    }
 
 
     return (
@@ -190,7 +172,7 @@ const ProductEdit = (props) => {
                                                         />
                                                     </div>
                                                 </Col>
-                                                <Col lg="4">
+                                                <Col lg="6">
                                                     <div className="mb-3">
                                                         <Label htmlFor="field_preference">Marca de Producto</Label>
                                                         <FieldText
@@ -203,7 +185,7 @@ const ProductEdit = (props) => {
                                                     </div>
                                                 </Col>
 
-                                                <Col lg="4">
+                                                <Col lg="3">
                                                     <div className="mb-3">
                                                         <Label htmlFor="cost">Costo <span className="text-danger">*</span></Label>
                                                         <FieldNumber
@@ -215,7 +197,7 @@ const ProductEdit = (props) => {
                                                     </div>
                                                 </Col>
 
-                                                <Col lg="4">
+                                                <Col lg="3">
                                                     <div className="mb-3">
                                                         <Label htmlFor="price">Precio <span className="text-danger">*</span></Label>
                                                         <FieldNumber
@@ -243,13 +225,21 @@ const ProductEdit = (props) => {
                                                 <Col md="6">
                                                     <div className="mb-3">
                                                         <Label className="control-label">Material</Label>
+                                                        <FieldText
+                                                            id={"field_material"}
+                                                            name={"material"}
+                                                            value={productData.material}
+                                                            minLength={3}
+                                                            maxLength={255}
+                                                        />
+                                                        {/*//TODO descomentar cuando este colgado del servicio
                                                         <FieldSelect
                                                             id={"field_material"}
                                                             name={"material"}
                                                             options={materialsList}
                                                             defaultValue={materialDefault}
                                                             isSearchable
-                                                        />
+                                                        />*/}
                                                     </div>
                                                 </Col>
                                             </Row>
@@ -322,65 +312,7 @@ const ProductEdit = (props) => {
                                     </div>
                                 </Link>
                                 <Collapse isOpen={isOpenDropImages}>
-                                    <div className="p-4 border-top">
-                                        <Dropzone
-                                            onDrop={acceptedFiles => {
-                                                handleAcceptedFiles(acceptedFiles)
-                                            }}
-                                        >
-                                            {({getRootProps, getInputProps}) => (
-                                                <div className="dropzone">
-                                                    <div
-                                                        className="dz-message needsclick"
-                                                        {...getRootProps()}
-                                                    >
-                                                        <input {...getInputProps()} />
-                                                        <div className="dz-message needsclick">
-                                                            <div className="mb-3">
-                                                                <i className="display-4 text-muted uil uil-cloud-upload"></i>
-                                                            </div>
-                                                            <h4>Suelta los archivos aquí para subirlos.</h4>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            )}
-                                        </Dropzone>
-                                        <div className="dropzone-previews mt-3" id="file-previews">
-                                            {selectedFiles.map((f, i) => {
-                                                return (
-                                                    <Card
-                                                        className="mt-1 mb-0 shadow-none border dz-processing dz-image-preview dz-success dz-complete"
-                                                        key={i + "-file"}
-                                                    >
-                                                        <div className="p-2">
-                                                            <Row className="align-items-center">
-                                                                <Col className="col-auto">
-                                                                    <img
-                                                                        data-dz-thumbnail=""
-                                                                        height="80"
-                                                                        className="avatar-sm rounded bg-light"
-                                                                        alt={f.name}
-                                                                        src={f.preview}
-                                                                    />
-                                                                </Col>
-                                                                <Col>
-                                                                    <Link
-                                                                        to="#"
-                                                                        className="text-muted font-weight-bold"
-                                                                    >
-                                                                        {f.name}
-                                                                    </Link>
-                                                                    <p className="mb-0">
-                                                                        <strong>{f.formattedSize}</strong>
-                                                                    </p>
-                                                                </Col>
-                                                            </Row>
-                                                        </div>
-                                                    </Card>
-                                                )
-                                            })}
-                                        </div>
-                                    </div>
+                                    <ProductImage product={product}/>
                                 </Collapse>
                             </Card>
                         </Col>
@@ -404,7 +336,7 @@ const ProductEdit = (props) => {
                                                 <h5 className="font-size-16 mb-1">Publicación</h5>
                                                 <p className="text-muted text-truncate mb-0">Configuraciones para la publicación en la Página Web.</p>
                                             </div>
-                                            <i className="mdi mdi-chevron-up accor-down-icon font-size-24"></i>
+                                            <i className="mdi mdi-chevron-up accor-down-icon font-size-24"> </i>
                                         </Media>
 
                                     </div>
@@ -419,7 +351,7 @@ const ProductEdit = (props) => {
                                                 <Col lg={6}>
                                                     <div className="mb-3">
                                                         <Label htmlFor="productname">Publicación Activa</Label>
-                                                        <FieldSwitch name={"publish"}/>
+                                                        <FieldSwitch name={"_status"} value={publication._status}/>
                                                     </div>
                                                 </Col>
                                                 <Col lg={6}>
@@ -465,7 +397,7 @@ const ProductEdit = (props) => {
                                             <div className={"table-responsive"}>
                                                 <h4>{productData.size ? productData.size.name : ''}</h4>
                                                 <p>Ingrese color y tallas para el producto.</p>
-                                                <SizeTemplateProduct template={productData.size} product={productData}/>
+                                                <ProductSize template={productData.size} product={productData}/>
                                             </div>
                                         )}
                                     </div>

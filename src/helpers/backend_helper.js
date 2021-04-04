@@ -1,5 +1,5 @@
 // Login Method
-import {get, post, put, del, postList} from "./api_helper";
+import {del, get, post, put} from "./api_helper";
 import * as url from "./url_helper";
 
 const postLogin = data => post(url.POST_LOGIN, data);
@@ -41,9 +41,9 @@ const updateProductSizeListApi = (productId, data) => post(`${url.PRODUCT_SIZE}/
 
 //Product images
 const fetchProductImagesApi = data => get(url.PRODUCT_IMAGES, {}, data);
-const fetchProductImageApi = (id) => get(`${url.PRODUCT_IMAGES}/${id}`,{});
+const fetchProductImageApi = (productId) => get(`${url.PRODUCT_IMAGES}/${productId}`,{});
 const registerProductImageApi = data => post(url.PRODUCT_IMAGES, data);
-const updateProductImageApi = (id, data) => put(`${url.PRODUCT_IMAGES}/${id}`, data);
+const updateProductImageApi = (productId, data) => put(`${url.PRODUCT_IMAGES}/${productId}`, data);
 
 //FieldOptions
 const fetchFieldOptionsApi = data => get(url.FIELD_OPTIONS, {}, data);

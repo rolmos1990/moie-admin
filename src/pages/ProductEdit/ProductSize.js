@@ -1,19 +1,15 @@
 import React, {useEffect, useState} from "react"
 import PropTypes from 'prop-types'
-import {Card, Col, Row, CardBody, Media, Label, Spinner, Container} from "reactstrap"
-import {FieldSelect, FieldText} from "../../components/Fields";
+import {Col, Row, Spinner} from "reactstrap"
+import {FieldText} from "../../components/Fields";
 import {map} from "lodash";
 import {Button} from "@material-ui/core";
-import {DEFAULT_PAGE_LIMIT} from "../../common/pagination";
-import {getProductSizes, registerProductSize, updateProductSize, updateProductSizeList} from "../../store/productSize/actions";
+import {getProductSizes, updateProductSizeList} from "../../store/productSize/actions";
 import {connect} from "react-redux";
 import Conditionals from "../../common/conditionals";
 import {AvForm} from "availity-reactstrap-validation";
-import {deleteState} from "../../store/location/actions";
-import {isValidObject} from "../../common/utils";
-import messages from "../../components/Fields/messages";
 
-const SizeTemplateProduct = props => {
+const ProductSize = props => {
     const {product, template, onGetProductSizes, productSizes, refresh} = props
     const [productSizesList, setProductSizesList] = useState([]);
     const [selectValues, setSelectValues] = useState([]);
@@ -208,7 +204,7 @@ const SizeTemplateProduct = props => {
     )
 }
 
-SizeTemplateProduct.propTypes = {
+ProductSize.propTypes = {
     product: PropTypes.object,
     productSizes: PropTypes.array,
     onGetProductSizes: PropTypes.func,
@@ -233,5 +229,5 @@ const mapDispatchToProps = dispatch => ({
 export default connect(
     mapStateToProps,
     mapDispatchToProps
-)(SizeTemplateProduct)
+)(ProductSize)
 
