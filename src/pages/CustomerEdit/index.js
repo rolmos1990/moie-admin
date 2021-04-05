@@ -1,15 +1,15 @@
-import React, {useState, useEffect} from "react"
+import React, {useEffect, useState} from "react"
 import {CardBody, Col, Container, Label, Row, Spinner} from "reactstrap"
-import {AvForm, AvField} from "availity-reactstrap-validation"
+import {AvField, AvForm} from "availity-reactstrap-validation"
 import {Button, Card} from "@material-ui/core";
-import {withRouter, Link} from "react-router-dom"
+import {withRouter} from "react-router-dom"
 import {connect} from "react-redux";
 import {apiError} from "../../store/auth/login/actions";
 import PropTypes from "prop-types";
 import {getCustomer, registerCustomer, updateCustomer} from "../../store/customer/actions";
 import {getMunicipalities, getStates} from "../../store/location/actions";
 import Conditionals from "../../common/conditionals";
-import {FieldSwitch, FieldText, FieldEmail, FieldSelect, FieldPhone} from "../../components/Fields";
+import {FieldEmail, FieldPhone, FieldSelect, FieldSwitch, FieldText} from "../../components/Fields";
 import Breadcrumb from "../../components/Common/Breadcrumb";
 import {STATUS} from "../../common/constants";
 
@@ -221,6 +221,7 @@ const CustomerEdit = (props) => {
                                         <hr/>
                                         {customerData.temporalAddress && (
                                             <Row>
+                                                <p className="alert alert-warning" >Este cliente tiene una dirección de una versión anterior, es recomendable que por favor agregue la dirección en la parte superior.</p>
                                                 <Col md="12">
                                                     <div className="mb-3">
                                                         <h4>Dirección temporal</h4>
