@@ -4,8 +4,8 @@ import {STATUS_COLORS, StatusField} from "../../../components/StatusField";
 import {ConverterStatus} from "../../../common/converters";
 import {STATUS} from "../../../common/constants";
 import Conditionals from "../../../common/conditionals";
-import {priceFormat, STATUS_OPTIONS} from "../../../common/utils";
-import {CATEGORY} from "../../../helpers/url_helper";
+import {priceFormat, STATUS_OPTIONS, YES_NO_OPTIONS} from "../../../common/utils";
+import {CATEGORY, SIZE} from "../../../helpers/url_helper";
 import {Tooltip} from "@material-ui/core";
 
 const badgeStyles = {minWidth: '30px', margin: '2px'}
@@ -95,6 +95,25 @@ const productColumns = (onDelete = false) => [
                 <span className="mb-0 badge bg-success p-2" title='Disponible' style={badgeStyles}>23</span>
             </>
         ),
+    },
+    {
+        text: "Talla",
+        dataField: "size",
+        sort: true,
+        hidden: true,
+        filter: true,
+        filterType: "asyncSelect",
+        urlStr: SIZE,
+    },
+    {
+        text: "Publicado",
+        dataField: "published",
+        sort: true,
+        hidden: true,
+        filter: true,
+        filterType: "select",
+        filterOptions: YES_NO_OPTIONS,
+        filterDefaultOption: YES_NO_OPTIONS[0]
     },
     {
         text: "Estado",

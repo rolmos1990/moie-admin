@@ -31,7 +31,7 @@ const ProductPublish = props => {
                         <Col lg={6}>
                             <div className="mb-3">
                                 <Label htmlFor="productpublished">Publicación Activa</Label>
-                                <FieldSwitch name={"published"} value={productData.published}/>
+                                <FieldSwitch name={"published"} defaultValue={productData.published}/>
                             </div>
                         </Col>
                         <Col lg={6}>
