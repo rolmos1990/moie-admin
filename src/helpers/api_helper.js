@@ -6,7 +6,7 @@ const token = accessToken;
 
 //apply base url for axios
 /*const API_URL = "http://localhost:18210";*/
-const API_URL = "http://54.226.170.69/18210";
+const API_URL = "http://54.226.170.69:18210";
 
 const axiosApi = axios.create({
   baseURL: API_URL,
