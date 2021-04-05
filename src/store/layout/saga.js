@@ -50,7 +50,7 @@ function manageBodyClass(cssClass, action = "toggle") {
 function* changeLayout({ payload: layout }) {
   try {
     if (layout === "horizontal") {
-      yield put(changeTopbarThemeAction("dark"))
+      //yield put(changeTopbarThemeAction("dark"))//theme is set as initialValues in reduce
       document.body.removeAttribute("data-sidebar")
       document.body.removeAttribute("data-sidebar-size")
     } else {
