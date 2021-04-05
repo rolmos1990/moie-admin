@@ -226,9 +226,9 @@ const Navbar = props => {
                         <Link to="/categories" className="dropdown-item">
                           {props.t("Categorias")}
                         </Link>
-                        <Link to="#" className="dropdown-item">
+                        {/*<Link to="#" className="dropdown-item">
                           {props.t("Proveedores")}
-                        </Link>
+                        </Link>*/}
                       </div>
                     </div>
 

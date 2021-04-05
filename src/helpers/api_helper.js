@@ -4,8 +4,11 @@ import accessToken from "./jwt-token-access/accessToken";
 //pass new generated access token here
 const token = accessToken;
 
+export const baseImagePath = "http://lucymodas.com/";
+export const baseImagePathNew = "http://54.226.170.69/";
+
 //apply base url for axios
-/*const API_URL = "http://localhost:18210";*/
+//const API_URL = "http://localhost:18210";
 const API_URL = "http://54.226.170.69:18210";
 
 const axiosApi = axios.create({

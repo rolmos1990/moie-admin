@@ -16,8 +16,6 @@ const groups = [
     {group: 'Derecha', groupId: 3}
 ];
 
-const baseImagePath = "http://lucymodas.com/";
-
 const ProductImage = props => {
     const {product, onGetProductImage, productImages, refresh} = props
     const [productImageList, setProductImageList] = useState(false);
@@ -35,7 +33,7 @@ const ProductImage = props => {
                     console.log(imgData)
                     if(imgData){
                         // f.groupId = imgData.group;
-                        f.file.preview = `${baseImagePath}${getImageByQuality(imgData, 'hight')}`
+                        f.file.preview = `${getImageByQuality(imgData, 'hight')}`
                         f.file.name = imgData.filename;
                     }
                 }

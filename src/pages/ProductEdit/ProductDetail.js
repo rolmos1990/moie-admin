@@ -28,10 +28,6 @@ const ProductDetail = (props) => {
         }
     }, [product]);
 
-    const baseImagePath = "http://lucymodas.com/";
-
-
-
     return productData.id ? (
         <React.Fragment>
             <div className="page-content">
@@ -49,7 +45,7 @@ const ProductDetail = (props) => {
                                                 <div key={key}
                                                      className={`cursor-pointer nav-link ${imgSelected === key ? 'custom-active' : ''}`}
                                                      onClick={() => (setImgSelected(key))}>
-                                                    <Images src={`${baseImagePath}${getImageByQuality(img, 'small')}`}
+                                                    <Images src={`${getImageByQuality(img, 'small')}`}
                                                             alt={img.filename}
                                                             className="img-fluid mx-auto d-block tab-img rounded"/>
                                                 </div>
@@ -67,10 +63,10 @@ const ProductDetail = (props) => {
                                             {map(productData.productImage, (img, key) => (
                                                 <div className={`tab-pane fade ${imgSelected === key ? 'show active bg-white border-1' : ''}`} id={`product-${key}`} role="tabpanel">
                                                     <div className="product-img">
-                                                        <Images src={`${baseImagePath}${getImageByQuality(img, 'hight')}`}
+                                                        <Images src={`${getImageByQuality(img, 'hight')}`}
                                                                 alt={img.filename}
                                                                 className="img-fluid mx-auto d-block"
-                                                                data-zoom={`${baseImagePath}${img.path}`}/>
+                                                                data-zoom={`${img.path}`}/>
                                                     </div>
                                                 </div>
                                             ))}

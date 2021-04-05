@@ -136,7 +136,6 @@ const CategoryList = props => {
                                                 <Col xl="12">
                                                     <div className="table-responsive mb-4">
                                                         <BootstrapTable
-                                                            selectRow={selectRowProp}
                                                             remote
                                                             responsive
                                                             loading={true}

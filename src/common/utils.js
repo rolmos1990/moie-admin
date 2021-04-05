@@ -1,6 +1,7 @@
 import {BOOLEAN_STRING} from "./constants";
 import React from "react";
 import moment from "moment";
+import {baseImagePath, baseImagePathNew} from "../helpers/api_helper";
 
 export const BOOLEAN_STRING_OPTIONS = [
     {label: '-', value: null},
@@ -68,9 +69,11 @@ export const formatDateToServer =(date) =>{
 }
 
 export const getImageByQuality = (imgData, quality) => {
+    const path = imgData.path && imgData.path.includes('uploads') ? baseImagePathNew : baseImagePath;
+
     let result = imgData.path;
     if (!imgData.thumbs) {
-        return result;
+        return `${path}${result}`;
     }
     try {
         const thumbs = JSON.parse(imgData.thumbs);
@@ -80,7 +83,7 @@ export const getImageByQuality = (imgData, quality) => {
     } catch (e) {
         console.log(e);
     }
-    return result;
+    return `${path}${result}`;
 }
 
 export const getErrorMessage = (error) => {
