@@ -1,4 +1,4 @@
-import {Card, CardBody, Col, Container, Row} from "reactstrap";
+import {Card, CardBody, Col, Row} from "reactstrap";
 import {Link} from "react-router-dom";
 import PropTypes from "prop-types";
 import {DEFAULT_PAGE_LIMIT} from "../../../common/pagination";
@@ -206,7 +206,7 @@ const ProductList = props => {
             title: "Agregados en esta semana",
             value: 265,
             decimal: 0,
-            prefix: "$",
+            prefix: "",
             suffix: "",
             charttype: "radialBar",
             chartheight: 45,

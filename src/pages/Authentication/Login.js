@@ -1,29 +1,27 @@
 import PropTypes from 'prop-types'
-import React, { useEffect } from "react"
+import React, {useEffect} from "react"
 
-import { Row, Col, Alert, Container ,CardBody,Card} from "reactstrap"
+import {Alert, Card, CardBody, Col, Container, Row, Spinner} from "reactstrap"
 
 // Redux
-import { connect } from "react-redux"
-import { withRouter, Link } from "react-router-dom"
+import {connect} from "react-redux"
+import {Link, withRouter} from "react-router-dom"
 
 // availity-reactstrap-validation
-import { AvForm, AvField } from "availity-reactstrap-validation"
+import {AvField, AvForm} from "availity-reactstrap-validation"
 
 //Social Media Imports
-import { GoogleLogin } from "react-google-login"
 // import TwitterLogin from "react-twitter-auth"
-import FacebookLogin from "react-facebook-login/dist/facebook-login-render-props"
 
 // actions
-import { loginUser, apiError, socialLogin } from "../../store/actions"
+import {apiError, loginUser, socialLogin} from "../../store/actions"
 
 // import images
 import logo from "../../assets/images/logo-dark.png"
 import logolight from "../../assets/images/logo-light.png"
 
 //Import config
-import { facebook, google } from "../../config"
+import {facebook, google} from "../../config"
 
 const Login = (props) => {
    // handleValidSubmit
@@ -158,77 +156,10 @@ const Login = (props) => {
                           className="btn btn-primary w-100 waves-effect waves-light"
                           type="submit"
                         >
+                          {props.loading && <Spinner size="sm" className="m-1" color="white"/>}
                           Log In
                         </button>
                       </div>
-
-{/*
-                      <div className="mt-4 text-center">
-                        <h5 className="font-size-14 mb-3">Sign in with</h5>
-
-                        <ul className="list-inline">
-                          <li className="list-inline-item">
-                            <FacebookLogin
-                              appId={facebook.APP_ID}
-                              autoLoad={false}
-                              callback={facebookResponse}
-                              render={renderProps => (
-                                <Link
-                                to="#"
-                                  className="social-list-item bg-primary text-white border-primary"
-                                  onClick={renderProps.onClick}
-                                >
-                                  <i className="mdi mdi-facebook" />
-                                </Link>
-                              )}
-                            />
-                          </li>
-                          <li className="list-inline-item">
-                            <TwitterLogin
-                              loginUrl={
-                                "http://localhost:4000/api/v1/auth/twitter"
-                              }
-                              onSuccess={this.twitterResponse}
-                              onFailure={this.onFailure}
-                              requestTokenUrl={
-                                "http://localhost:4000/api/v1/auth/twitter/revers"
-                              }
-                              showIcon={false}
-                              tag={"div"}
-                            >
-                              <a
-                                href=""
-                                className="social-list-item bg-info text-white border-info"
-                              >
-                                <i className="mdi mdi-twitter"/>
-                              </a>
-                            </TwitterLogin>
-                          </li>
-                          <li className="list-inline-item">
-                            <GoogleLogin
-                              clientId={google.CLIENT_ID}
-                              render={renderProps => (
-                                <Link
-                                to="#"
-                                  className="social-list-item bg-danger text-white border-danger"
-                                  onClick={renderProps.onClick}
-                                >
-                                  <i className="mdi mdi-google" />
-                                </Link>
-                              )}
-                              onSuccess={googleResponse}
-                              onFailure={() => {}}
-                            />
-                          </li>
-                        </ul>
-                      </div>
-
-*/}
-
-
-{/*                      <div className="mt-4 text-center">
-                        <p className="mb-0">Don't have an account ? <a href="/register" className="fw-medium text-primary"> Signup now </a> </p>
-                      </div>*/}
 
                     </AvForm>
 
@@ -250,8 +181,8 @@ const Login = (props) => {
 }
 
 const mapStateToProps = state => {
-  const { error } = state.Login
-  return { error }
+  const { error, loading } = state.Login
+  return { error, loading }
 }
 
 export default withRouter(

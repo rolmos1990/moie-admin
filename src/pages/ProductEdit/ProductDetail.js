@@ -112,7 +112,7 @@ const ProductDetail = (props) => {
                                             <span className="p-1">{priceFormat(productData.cost, "", true)}</span>
                                         </Col>
                                         <Col md={12}>
-                                            <label>Pecio: </label>
+                                            <label>Precio: </label>
                                             <span className="p-1">{priceFormat(productData.price, "", true)}</span>
                                         </Col>
                                     </Col>

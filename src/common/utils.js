@@ -82,3 +82,11 @@ export const getImageByQuality = (imgData, quality) => {
     }
     return result;
 }
+
+export const getErrorMessage = (error) => {
+    if (error.response) {
+        return error.response.data?.error || "Se ha producido un error";
+    } else {
+        return "Se ha producido un error";
+    }
+}

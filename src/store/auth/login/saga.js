@@ -1,15 +1,14 @@
-import { call, put, takeEvery, takeLatest } from "redux-saga/effects"
+import {call, put, takeEvery, takeLatest} from "redux-saga/effects"
 
 // Login Redux States
-import { LOGIN_USER, LOGOUT_USER, SOCIAL_LOGIN } from "./actionTypes"
-import { apiError, loginSuccess, logoutUserSuccess } from "./actions"
+import {LOGIN_USER, LOGOUT_USER, SOCIAL_LOGIN} from "./actionTypes"
+import {apiError, loginSuccess, logoutUserSuccess} from "./actions"
 
 //Include Both Helper File with needed methods
-import { getFirebaseBackend } from "../../../helpers/firebase_helper"
-import {
-  postSocialLogin,
-} from "../../../helpers/fakebackend_helper"
+import {getFirebaseBackend} from "../../../helpers/firebase_helper"
+import {postSocialLogin,} from "../../../helpers/fakebackend_helper"
 import {postLogin} from "../../../helpers/backend_helper";
+import {getErrorMessage} from "../../../common/utils";
 
 const fireBaseBackend = getFirebaseBackend()
 
@@ -23,8 +22,9 @@ function* loginUser({ payload: { user, history } }) {
       yield put(loginSuccess(response));
     history.push("/dashboard")
   } catch (error) {
-    console.log("LOG ERROR", error);
-    yield put(apiError(error))
+    const message = getErrorMessage(error);
+    console.log(message);
+    yield put(apiError(message));
   }
 }
 

@@ -6,10 +6,19 @@ import {STATUS} from "../../../common/constants";
 import Conditionals from "../../../common/conditionals";
 import {priceFormat, STATUS_OPTIONS} from "../../../common/utils";
 import {CATEGORY} from "../../../helpers/url_helper";
+import {Tooltip} from "@material-ui/core";
 
 const badgeStyles = {minWidth: '30px', margin: '2px'}
 
 const productColumns = (onDelete = false) => [
+    {
+        text: "Referencia",
+        dataField: "reference",
+        sort: false,
+        filter: true,
+        filterType: "text",
+        filterCondition: Conditionals.OPERATORS.LIKE,
+    },
     {
         text: "Nombre",
         dataField: "name",
@@ -17,7 +26,12 @@ const productColumns = (onDelete = false) => [
         formatter: (cellContent, item) => (
             <div className="field-br" style={{width:'350px'}}>
                 <Link to={`/product/detail/${item.id}`} className="text-body">
-                    <small>{item.name}</small>
+                    <small>{item.name} </small>
+                    {item.published == false && (
+                        <Tooltip placement="bottom" title="Producto no publicado" aria-label="add" >
+                            <i className={"mdi mdi-alert-octagram-outline font-size-18 mr-1 text-warning"}> </i>
+                        </Tooltip>
+                    )}
                 </Link>
             </div>
         ),

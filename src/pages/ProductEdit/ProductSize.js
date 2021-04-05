@@ -21,7 +21,7 @@ const ProductSize = props => {
     }, [product])
 
     useEffect(() => {
-        if (productSizes && productSizes.length > 0) {
+        if (productSizes && productSizes.length) {
             setProductSizesList(parseList(productSizes));
         }else{
             setProductSizesList([]);
