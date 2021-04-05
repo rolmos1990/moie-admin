@@ -73,7 +73,7 @@ const ProductSize = props => {
     }
     const parseList = (list) => {
         let map = {};
-        list.map(ps => {
+        list.filter(ps => null !== ps).map(ps => {
             const key = ps.color.replace(/\s/g, '');
             let mapElement = map[key];
             if (!mapElement) {
@@ -130,7 +130,7 @@ const ProductSize = props => {
                                 <thead>
                                 <tr>
                                     <th>Color</th>
-                                    {map(template.sizes, (size, key) => (
+                                    {map(template?.sizes, (size, key) => (
                                         <th key={'th_' + key} className="text-center">{size}</th>
                                     ))}
                                     <th>Borrar</th>
@@ -158,7 +158,7 @@ const ProductSize = props => {
                                                     id={"select_" + k1 + '_' + k2}
                                                     name={"select_" + k1 + '_' + k2}
                                                     value={model.sizes[size]}
-                                                    defaultValue={parseDefaultValue(model, size)}
+                                                    // defaultValue={parseDefaultValue(model, size)}
                                                     onChange={(e) => handleChangeSizes(k1, size, e.target.value, model)}
                                                     className="form-control"
                                                 >

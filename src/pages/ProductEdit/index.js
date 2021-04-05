@@ -14,6 +14,7 @@ import {arrayToOptions} from "../../common/converters";
 import {STATUS} from "../../common/constants";
 import ProductSize from "./ProductSize";
 import ProductImage from "./ProductImage";
+import ProductPublish from "./ProductPublish";
 
 const ProductEdit = (props) => {
 
@@ -112,14 +113,12 @@ const ProductEdit = (props) => {
         }
     }
 
-
-
-
     return (
         <React.Fragment>
             <div className="page-content">
                 <Container fluid>
                     <Breadcrumb hasBack path="/products" title={productData.name} breadcrumbItem={"Producto"}/>
+
                     <Row>
                         <Col md={12}>
                             <Card id={'main-data'}>
@@ -148,7 +147,7 @@ const ProductEdit = (props) => {
                                             }}>
                                         <div className="p-4 border-top">
                                             <Row>
-                                                <Col lg="6">
+                                                <Col lg="12">
                                                     <div className="mb-3">
                                                         <Label htmlFor="field_name">Nombre de Producto <span className="text-danger">*</span></Label>
                                                         <FieldText
@@ -174,11 +173,23 @@ const ProductEdit = (props) => {
                                                 </Col>
                                                 <Col lg="6">
                                                     <div className="mb-3">
-                                                        <Label htmlFor="field_preference">Marca de Producto</Label>
+                                                        <Label htmlFor="field_preference">Referencia</Label>
                                                         <FieldText
                                                             id={"field_preference"}
                                                             name={"reference"}
                                                             value={productData.reference}
+                                                            minLength={3}
+                                                            maxLength={255}
+                                                        />
+                                                    </div>
+                                                </Col>
+                                                <Col lg="6">
+                                                    <div className="mb-3">
+                                                        <Label htmlFor="field_brand">Marca de Producto</Label>
+                                                        <FieldText
+                                                            id={"field_brand"}
+                                                            name={"brand"}
+                                                            value={productData.brand}
                                                             minLength={3}
                                                             maxLength={255}
                                                         />
@@ -209,7 +220,7 @@ const ProductEdit = (props) => {
                                                 </Col>
                                             </Row>
                                             <Row>
-                                                <Col md="6">
+                                                <Col md="4">
                                                     <div className="mb-3">
                                                         <Label className="control-label">Categoria <span className="text-danger">*</span></Label>
                                                         <FieldSelect
@@ -222,7 +233,7 @@ const ProductEdit = (props) => {
                                                         />
                                                     </div>
                                                 </Col>
-                                                <Col md="6">
+                                                <Col md="4">
                                                     <div className="mb-3">
                                                         <Label className="control-label">Material</Label>
                                                         <FieldText
@@ -242,9 +253,7 @@ const ProductEdit = (props) => {
                                                         />*/}
                                                     </div>
                                                 </Col>
-                                            </Row>
-                                            <Row>
-                                                <Col md="6">
+                                                <Col md="4">
                                                     <div className="mb-0">
                                                         <Label className="control-label">Tallas</Label>
                                                         <FieldSelect
@@ -259,7 +268,9 @@ const ProductEdit = (props) => {
                                                         />
                                                     </div>
                                                 </Col>
-                                                <Col md="6">
+                                            </Row>
+                                            <Row>
+                                                <Col md="12">
                                                     <div className="mb-0">
                                                         <Label htmlFor="description">Descripción</Label>
                                                         <FieldText
@@ -290,7 +301,7 @@ const ProductEdit = (props) => {
 
                     <Row>
                         <Col md={12}>
-                            <Card id={'images'} className="mt-2">
+                            <Card id={'images'} className="mt-2 disabled">
                                 <Link to="#" className="text-dark collapsed" onClick={toggleDropImages}>
                                     <div className="p-4">
 
@@ -342,27 +353,10 @@ const ProductEdit = (props) => {
                                     </div>
                                 </Link>
                                 <Collapse isOpen={isOpenWebConfig}>
-                                    <AvForm className="needs-validation" autoComplete="off"
-                                            onValidSubmit={(e, v) => {
-                                                handleValidSubmit(e, v)
-                                            }}>
-                                        <div className="p-4 border-top">
-                                            <Row>
-                                                <Col lg={6}>
-                                                    <div className="mb-3">
-                                                        <Label htmlFor="productname">Publicación Activa</Label>
-                                                        <FieldSwitch name={"_status"} value={publication._status}/>
-                                                    </div>
-                                                </Col>
-                                                <Col lg={6}>
-                                                    <div className="mb-3">
-                                                        <Label htmlFor="productname">Descuento especial</Label>
-                                                        <FieldText name={"discount"}/>
-                                                    </div>
-                                                </Col>
-                                            </Row>
-                                        </div>
-                                    </AvForm>
+                                    {productData.id && (
+                                        <ProductPublish product={product} />
+                                    )}
+
                                 </Collapse>
                             </Card>
                         </Col>
@@ -393,12 +387,12 @@ const ProductEdit = (props) => {
                                 </Link>
                                 <Collapse isOpen={isOpenInventary}>
                                     <div className="p-4 border-top">
-                                        {productData.id && (
-                                            <div className={"table-responsive"}>
+                                        {(productData.id && productData.size) && (
+                                            <>
                                                 <h4>{productData.size ? productData.size.name : ''}</h4>
                                                 <p>Ingrese color y tallas para el producto.</p>
                                                 <ProductSize template={productData.size} product={productData}/>
-                                            </div>
+                                            </>
                                         )}
                                     </div>
                                 </Collapse>

@@ -15,11 +15,11 @@ const productColumns = (onDelete = false) => [
         dataField: "name",
         sort: true,
         formatter: (cellContent, item) => (
-            <>
-                <Link to="#" className="text-body">
-                    {item.name}
+            <div className="field-br" style={{width:'350px'}}>
+                <Link to={`/product/detail/${item.id}`} className="text-body">
+                    <small>{item.name}</small>
                 </Link>
-            </>
+            </div>
         ),
         filter: true,
         filterType: "text",
@@ -60,9 +60,11 @@ const productColumns = (onDelete = false) => [
         dataField: "category",
         sort: true,
         formatter: (cellContent, item) => (
-            <Link to={`/category/${item.category.id}`} className="text-body">
-                {item.category.name}
-            </Link>
+            <div className="field-br" style={{width:'230px'}}>
+                <Link to={`/category/${item.category?.id}`} className="text-body">
+                    {item.category?.name}
+                </Link>
+            </div>
         ),
         filter: true,
         filterType: "asyncSelect",

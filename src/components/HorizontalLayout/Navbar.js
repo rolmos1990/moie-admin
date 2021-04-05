@@ -97,7 +97,7 @@ const Navbar = props => {
                       to="/products"
                   >
                     <i className="uil-box me-2"></i>
-                    {" "}{props.t("Products")}
+                    {" "}{props.t("Productos")}
                   </Link>
                 </li>
 
@@ -107,7 +107,7 @@ const Navbar = props => {
                       to="/customers"
                   >
                     <i className="uil-users-alt me-2"></i>
-                    {" "}{props.t("Customers")}
+                    {" "}{props.t("Clientes")}
                   </Link>
                 </li>
 
@@ -117,7 +117,7 @@ const Navbar = props => {
                       to="/orders"
                   >
                     <i className="uil-shopping-cart-alt me-2"></i>
-                    {" "}{props.t("Orders")}
+                    {" "}{props.t("Ordenes")}
                   </Link>
                 </li>
 
@@ -127,7 +127,7 @@ const Navbar = props => {
                       to="/bills"
                   >
                     <i className="uil-bill me-2"></i>
-                    {" "}{props.t("Bills")}
+                    {" "}{props.t("Facturación")}
                   </Link>
                 </li>
 
@@ -137,7 +137,7 @@ const Navbar = props => {
                       to="/reports"
                   >
                     <i className="uil-graph-bar me-2"></i>
-                    {" "}{props.t("Reports")}
+                    {" "}{props.t("Reportes")}
                   </Link>
                 </li>
 
@@ -151,7 +151,7 @@ const Navbar = props => {
                       }}
                   >
                     <i className="uil-cog me-2"></i>
-                    {props.t("System")} <div className="arrow-down"></div>
+                    {props.t("Sistema")} <div className="arrow-down"></div>
                   </Link>
                   <div className={classname("dropdown-menu", { show: extra })}>
 
@@ -164,14 +164,14 @@ const Navbar = props => {
                             setauth(!auth)
                           }}
                       >
-                        {props.t("Authentication")}{" "}
+                        {props.t("Autenticación")}{" "}
                         <div className="arrow-down"></div>
                       </Link>
                       <div
                           className={classname("dropdown-menu", { show: auth })}
                       >
                         <Link to="#" className="dropdown-item">
-                          {props.t("Users")}
+                          {props.t("Usuarios")}
                         </Link>
                         <Link to="#" className="dropdown-item">
                           {props.t("Roles")}
@@ -188,7 +188,7 @@ const Navbar = props => {
                             setutility(!utility)
                           }}
                       >
-                        {props.t("Localities")} <div className="arrow-down"></div>
+                        {props.t("Localidades")} <div className="arrow-down"></div>
                       </Link>
                       <div
                           className={classname("dropdown-menu", {
@@ -196,13 +196,13 @@ const Navbar = props => {
                           })}
                       >
                         <Link to="#" className="dropdown-item">
-                          {props.t("Delivery Localities")}
+                          {props.t("Localidades de entrega")}
                         </Link>
                         <Link to="/states" className="dropdown-item">
-                          {props.t("States")}
+                          {props.t("Estados")}
                         </Link>
                         <Link to="/municipalities" className="dropdown-item">
-                          {props.t("Municipalities")}
+                          {props.t("Municipios")}
                         </Link>
                       </div>
                     </div>
@@ -216,7 +216,7 @@ const Navbar = props => {
                             setutility(!utility)
                           }}
                       >
-                        {props.t("Products")} <div className="arrow-down"></div>
+                        {props.t("Productos")} <div className="arrow-down"></div>
                       </Link>
                       <div
                           className={classname("dropdown-menu", {
@@ -224,10 +224,10 @@ const Navbar = props => {
                           })}
                       >
                         <Link to="/categories" className="dropdown-item">
-                          {props.t("Categories")}
+                          {props.t("Categorias")}
                         </Link>
                         <Link to="#" className="dropdown-item">
-                          {props.t("Providers")}
+                          {props.t("Proveedores")}
                         </Link>
                       </div>
                     </div>

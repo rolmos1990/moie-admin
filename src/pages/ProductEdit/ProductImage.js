@@ -77,7 +77,7 @@ const ProductImage = props => {
                                             <Images className="rounded bg-light"
                                                     alt={f.file?.f?.name}
                                                     src={f.file?.preview}
-                                                    minHeight={250}
+                                                    minheight={250}
                                             />
                                         </Col>
                                     </Row>

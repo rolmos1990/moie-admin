@@ -176,15 +176,15 @@ const CustomerEdit = (props) => {
                                                 <div className="mb-3">
                                                     <Label htmlFor="validationCustom05">Teléfono Celular</Label>
                                                     <FieldPhone
-                                                        name="celphone"
-                                                        value={customerData.celphone}
+                                                        name="cellphone"
+                                                        value={customerData.cellphone}
                                                         placeholder=""
                                                         type="text"
                                                         errorMessage="Ingrese un número valido (Ejemplo: 00000000)"
                                                         className="form-control"
                                                         validate={{required: {value: true}}}
                                                         id="validationCustom06"
-                                                        onChange={(value) => setCustomerData({...customerData, celphone: value})}
+                                                        onChange={(value) => setCustomerData({...customerData, cellphone: value})}
                                                     />
                                                 </div>
                                             </Col>
@@ -218,6 +218,32 @@ const CustomerEdit = (props) => {
                                                 </div>
                                             </Col>
                                         </Row>
+                                        <hr/>
+                                        {customerData.temporalAddress && (
+                                            <Row>
+                                                <Col md="12">
+                                                    <div className="mb-3">
+                                                        <h4>Dirección temporal</h4>
+                                                    </div>
+                                                </Col>
+                                                <Col md="6">
+                                                    <div className="mb-3">
+                                                        <Label htmlFor="validationCustom04">Departamento temporal</Label>
+                                                        <div className="form-control">
+                                                            {customerData.temporalAddress.state}
+                                                        </div>
+                                                    </div>
+                                                </Col>
+                                                <Col md="6">
+                                                    <div className="mb-3">
+                                                        <Label htmlFor="validationCustom04">Municipio temporal</Label>
+                                                        <div className="form-control">
+                                                            {customerData.temporalAddress.municipality}
+                                                        </div>
+                                                    </div>
+                                                </Col>
+                                            </Row>
+                                        )}
                                         <div className="mb-3">
                                             <AvField
                                                 checked={customerData.hasNotification ? true : false}

@@ -106,12 +106,12 @@ const CustomersList = props => {
                                                             <Col md={6}>
                                                                 <div className="form-inline mb-3">
                                                                     <div className="search-box ms-2">
-                                                                        {!filter && (
+                                                                       {/* {!filter && (
                                                                             <div className="position-relative">
                                                                                 <SearchBar {...toolkitProps.searchProps}/>
                                                                                 <i className="mdi mdi-magnify search-icon"></i>
                                                                             </div>
-                                                                        )}
+                                                                        )}*/}
                                                                     </div>
                                                                 </div>
                                                             </Col>

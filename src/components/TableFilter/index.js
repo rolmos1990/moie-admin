@@ -90,11 +90,11 @@ export const TableFilter = (props) => {
                             handleValidSubmit(e, v)
                         }}
                         ref={form}>
-                    <Row>
+
                         {fields.filter(f => f.filter).map((field, idx) => (
-                            <>
+                            <Row key={idx}>
                                 {field.filterType === 'text' && (
-                                    <Col md="12" key={idx}>
+                                    <Col md="12" >
                                         <div className="mb-3">
                                             <Label htmlFor={"_" + field.dataField}>{field.text}</Label>
                                             <FieldText name={"_" + field.dataField}
@@ -104,8 +104,7 @@ export const TableFilter = (props) => {
                                     </Col>
                                 )}
                                 {field.filterType === 'number' && (
-                                    <>
-                                        <Col md="12" key={idx}>
+                                        <Col md="12" >
                                             <div className="mb-3">
                                                 <Label htmlFor={"_" + field.dataField}>{field.text}</Label>
                                                 <Row>
@@ -124,10 +123,9 @@ export const TableFilter = (props) => {
                                                 </Row>
                                             </div>
                                         </Col>
-                                    </>
                                 )}
                                 {field.filterType === 'select' && (
-                                    <Col md="12" key={idx}>
+                                    <Col md="12" >
                                         <div className="mb-3">
                                             <Label htmlFor={"_" + field.dataField}>{field.text}</Label>
                                             <FieldSelect
@@ -140,7 +138,7 @@ export const TableFilter = (props) => {
                                     </Col>
                                 )}
                                 {field.filterType === 'asyncSelect' && (
-                                    <Col md="12" key={idx}>
+                                    <Col md="12" >
                                         <div className="mb-3">
                                             <Label htmlFor={"_" + field.dataField}>{field.text}</Label>
                                             <FieldAsyncSelect
@@ -152,8 +150,9 @@ export const TableFilter = (props) => {
                                         </div>
                                     </Col>
                                 )}
-                            </>
+                            </Row>
                         ))}
+                    <Row>
                         <Col md={"12"}>
                             <div className={"float-end"}>
                                 <Button type="submit" color="primary" className="btn-sm btn-rounded waves-effect waves-light">
