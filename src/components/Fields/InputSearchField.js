@@ -66,11 +66,16 @@ class AvSearchInput extends AvBaseInput {
                 name={name}
                 value={value}
                 validate={validate}
+                // menuIsOpen={true}
                 placeholder={placeholder || ""}
                 onChange={onChange}
                 options={options || []}
                 classNamePrefix="select2-selection"
                 isSearchable={isSearchable || false}
+                styles={{
+                    // Fixes the overlapping problem of the component
+                    menu: styles => ({ ...styles, zIndex: 9999 })
+                }}
             />
                 </div>
                 {feedback}

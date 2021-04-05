@@ -1,11 +1,18 @@
 import {BOOLEAN_STRING} from "./constants";
 import React from "react";
+import moment from "moment";
 
 export const BOOLEAN_STRING_OPTIONS = [
     {label: '-', value: null},
     {label: BOOLEAN_STRING.YES, value: true},
     {label: BOOLEAN_STRING.NO, value: false}
 ];
+
+export const YES_NO_OPTIONS = [
+    {label: '-', value: null},
+    {label: 'Si', value: true},
+    {label: 'No', value: false}
+    ];
 
 export const STATUS_OPTIONS = [
     {label: '-', value: null},
@@ -41,4 +48,37 @@ export const priceFormat = (amount = 0, currency = "", decimalWithCommas = true)
 
 const numberWithCommas =(x) =>{
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+
+export const formatDate =(date) =>{
+    try {
+        return moment(date, moment.ISO_8601).format('DD-MM-YYYY HH:mm:ss');
+    }catch (e){
+        console.log(e)
+    }
+    return "";
+}
+export const formatDateToServer =(date) =>{
+    try {
+        return moment(date).format("YYYY-MM-DD[T]HH:mm:ss");
+    }catch (e){
+        console.log(e)
+    }
+    return "";
+}
+
+export const getImageByQuality = (imgData, quality) => {
+    let result = imgData.path;
+    if (!imgData.thumbs) {
+        return result;
+    }
+    try {
+        const thumbs = JSON.parse(imgData.thumbs);
+        if (thumbs[quality]) {
+            result = thumbs[quality];
+        }
+    } catch (e) {
+        console.log(e);
+    }
+    return result;
 }

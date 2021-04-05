@@ -6,7 +6,7 @@ const Images = props => {
       <img
           {...props}
           data-dz-thumbnail=""
-          height={props.height || 250}
+          maxheight={props.height || 250}
           width={props.width || 250}
           className={props.className  || "avatar-sm rounded bg-light"}
           alt={props.alt}

@@ -13,7 +13,6 @@ import {Button, Tooltip} from "@material-ui/core";
 import BootstrapTable from "react-bootstrap-table-next";
 import NoDataIndication from "../../../components/Common/NoDataIndication";
 import productColumns from "./productColumn";
-import MiniWidget from "../../Dashboard/mini-widget";
 import WidgetCard from "../../../components/Common/WidgetCard";
 
 const ProductList = props => {

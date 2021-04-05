@@ -88,7 +88,7 @@ const StateEdit = (props) => {
                                                         id={"field_dianCode"}
                                                         name={"dianCode"}
                                                         value={estadoData.dianCode}
-                                                        minLength={3}
+                                                        minLength={2}
                                                         maxLength={10}
                                                         required
                                                         />

@@ -7,13 +7,16 @@ import {connect} from "react-redux";
 import {AvForm} from "availity-reactstrap-validation";
 import Images from "../../components/Common/Image";
 import DropZoneIcon from "../../components/Common/DropZoneIcon";
+import {getImageByQuality} from "../../common/utils";
 
 
 const groups = [
     {group: 'Izquierda', groupId: 1},
     {group: 'Centro', groupId: 2},
-    {group: 'Derecha', groupId: 3},
+    {group: 'Derecha', groupId: 3}
 ];
+
+const baseImagePath = "http://lucymodas.com/";
 
 const ProductImage = props => {
     const {product, onGetProductImage, productImages, refresh} = props
@@ -23,8 +26,23 @@ const ProductImage = props => {
     const form = React.createRef();
 
     useEffect(() => {
-        onGetProductImage(product.id);
-        setSelectedFiles(groups.map(g => ({...g, file: {name: '', preview: ''}})));
+        //onGetProductImage(product.id);
+        const files = groups.map(g => ({...g, file: {name: '', preview: ''}}));
+        if(product.productImage && product.productImage.length >0){
+            files.forEach((f, i) => {
+                if(product.productImage.length > i){
+                    const imgData = product.productImage[i];
+                    console.log(imgData)
+                    if(imgData){
+                        // f.groupId = imgData.group;
+                        f.file.preview = `${baseImagePath}${getImageByQuality(imgData, 'hight')}`
+                        f.file.name = imgData.filename;
+                    }
+                }
+            })
+        }
+
+        setSelectedFiles(files);
     }, [product])
 
     useEffect(() => {
@@ -73,18 +91,17 @@ const ProductImage = props => {
                             <Card className="mt-1 mb-0 shadow-none border dz-processing dz-image-preview dz-success dz-complete">
                                 <div className="p-2">
                                     <Row className="align-items-center" style={{borderBottom: '1px solid #f5f6f8'}}>
-                                        <Col md={12} className="text-center p-2">
-                                            <Images className="rounded bg-light"
+                                        <Col md={12} className="text-center p-2" style={{height: '400px'}}>
+                                            <Images className="img-fluid mx-auto d-block tab-img rounded"
                                                     alt={f.file?.f?.name}
                                                     src={f.file?.preview}
-                                                    minheight={250}
                                             />
                                         </Col>
                                     </Row>
                                     <Row className="p-2">
                                         <Col md={8}>
                                             <>
-                                                <div className="text.muted"><strong>Grupo:</strong> {f.group}</div>
+                                                <div className="text.muted"><strong>Grupo:</strong> {f.groupId}</div>
                                                 {(f.file && f.file.f) && (
                                                     <>
                                                         <div className="text.muted">{f.file.f.path}</div>

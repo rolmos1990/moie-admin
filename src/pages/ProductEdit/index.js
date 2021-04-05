@@ -102,6 +102,7 @@ const ProductEdit = (props) => {
             // material: values.material.label,
             size: values.size.value,
             status: 1,
+            weight: values.weight ? Number.parseFloat(values.weight): 0,
             price: Number.parseFloat(values.price),
             cost: Number.parseFloat(values.cost),
         };
@@ -196,7 +197,19 @@ const ProductEdit = (props) => {
                                                     </div>
                                                 </Col>
 
-                                                <Col lg="3">
+                                                <Col lg="2">
+                                                    <div className="mb-3">
+                                                        <Label htmlFor="weight">Peso (g) </Label>
+                                                        <FieldNumber
+                                                            id={"field_weight"}
+                                                            name={"weight"}
+                                                            type="number"
+                                                            value={productData.weight}
+                                                            />
+                                                    </div>
+                                                </Col>
+
+                                                <Col lg="2">
                                                     <div className="mb-3">
                                                         <Label htmlFor="cost">Costo <span className="text-danger">*</span></Label>
                                                         <FieldNumber
@@ -208,7 +221,7 @@ const ProductEdit = (props) => {
                                                     </div>
                                                 </Col>
 
-                                                <Col lg="3">
+                                                <Col lg="2">
                                                     <div className="mb-3">
                                                         <Label htmlFor="price">Precio <span className="text-danger">*</span></Label>
                                                         <FieldNumber
@@ -356,7 +369,6 @@ const ProductEdit = (props) => {
                                     {productData.id && (
                                         <ProductPublish product={product} />
                                     )}
-
                                 </Collapse>
                             </Card>
                         </Col>
@@ -387,12 +399,14 @@ const ProductEdit = (props) => {
                                 </Link>
                                 <Collapse isOpen={isOpenInventary}>
                                     <div className="p-4 border-top">
-                                        {(productData.id && productData.size) && (
+                                        {(productData.id && productData.size)? (
                                             <>
                                                 <h4>{productData.size ? productData.size.name : ''}</h4>
                                                 <p>Ingrese color y tallas para el producto.</p>
                                                 <ProductSize template={productData.size} product={productData}/>
                                             </>
+                                        ):(
+                                            <div className="alert alert-warning">Debe agregar una talla al producto.</div>
                                         )}
                                     </div>
                                 </Collapse>

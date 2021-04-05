@@ -25,5 +25,5 @@ export const getEmptyOptions = () => {
     return {label: '-', value: null};
 }
 export const normalizeColumnsList = (columns) => {
-    return columns.map(r =>({text: r.text, dataField: r.dataField, sort: r.sort, formatter: r.formatter}));
+    return columns.filter(r => !r.hidden).map(r =>({text: r.text, dataField: r.dataField, sort: r.sort, formatter: r.formatter}));
 }

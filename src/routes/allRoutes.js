@@ -22,11 +22,13 @@ import MunicipalityEdit from "../pages/MunicipalityEdit";
 import Categories from "../pages/Category";
 import CategoryEdit from "../pages/CategoryEdit";
 import ProductDetail from "../pages/ProductEdit/ProductDetail";
+import CustomerDetail from "../pages/CustomerEdit/CustomerDetail";
 
 const userRoutes = [
   { path: "/dashboard", component: Dashboard },
   { path: "/customers", component: Customer },
   { path: "/products", component: Product },
+  { path: "/customer/detail/:id", component: CustomerDetail },
   { path: "/customer/:id", component: CustomerEdit },
   { path: "/customer", component: CustomerEdit },
   { path: "/product", component: ProductEdit },

@@ -3,12 +3,15 @@ import { Link } from "react-router-dom"
 import {ConverterCustomerStatus} from "../customer_status";
 import {Button, Tooltip} from "@material-ui/core";
 import {STATUS_COLORS, StatusField} from "../../../components/StatusField";
+import {formatDate, STATUS_OPTIONS, YES_NO_OPTIONS} from "../../../common/utils";
 
 const customerListColumns = (onDelete = false) => [
     {
         text: "Nombre",
         dataField: "name",
         sort: true,
+        filter: true,
+        filterType: "text",
         formatter: (cellContent, item) => (
             <>
                 {!item.img ? (
@@ -21,18 +24,16 @@ const customerListColumns = (onDelete = false) => [
                     <img
                         className="avatar-xs rounded-circle me-2"
                         src={item.img}
-                        alt=""
+                        alt={item.name}
                     />
                 )}
-                <Link to="#" className="text-body">
-                    {item.name} {item.isMayorist == true ?
-                    <Tooltip
-                        placement="bottom"
-                        title="Cliente mayorista" aria-label="add"
-                    >
-                        <i className={"mdi mdi-crown font-size-18 mr-1 text-warning"}></i>
-                    </Tooltip>
-                 : ""}
+                <Link to={`/customer/detail/${item.id}`} className="text-body">
+                    {item.name}
+                    {item.isMayorist == true && (
+                        <Tooltip placement="bottom" title="Cliente mayorista" aria-label="add" >
+                            <i className={"mdi mdi-crown font-size-18 mr-1 text-warning"}> </i>
+                        </Tooltip>
+                    )}
                 </Link>
             </>
         ),
@@ -40,12 +41,40 @@ const customerListColumns = (onDelete = false) => [
     {
         text: "Email",
         dataField: "email",
-        sort: true
+        sort: true,
+        filter: true,
+        filterType: "text",
+    },
+    {
+        text: "Fecha creación",
+        dataField: "createdAt",
+        sort: true,
+        filter: true,
+        filterType: "dateRange",
+        formatter: (cellContent, item) => (
+            <div>
+                {formatDate(item.createdAt)}
+            </div>
+        ),
+    },
+    {
+        text: "¿Es Mayorista?",
+        dataField: "isMayorist",
+        sort: true,
+        hidden: true,
+        filter: true,
+        filterType: "select",
+        filterOptions: YES_NO_OPTIONS,
+        filterDefaultOption: STATUS_OPTIONS[0],
     },
     {
         text: "Estado",
         dataField: "status",
         sort: true,
+        filter: true,
+        filterType: "select",
+        filterOptions: STATUS_OPTIONS,
+        filterDefaultOption: STATUS_OPTIONS[0],
         formatter: (cellContent, item) => (
             <StatusField color={item.status === true ? STATUS_COLORS.SUCCESS : STATUS_COLORS.DANGER}>
                 {ConverterCustomerStatus(item.status)}

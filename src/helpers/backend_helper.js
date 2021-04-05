@@ -19,6 +19,7 @@ const fetchProductApi = data => get((data && data.id) ? `${url.GET_PRODUCT}/${da
 const registerProductApi = data => post(url.POST_PRODUCT, data);
 const updateProductApi = (id, data) => put(`${url.PUT_PRODUCT}/${id}`, data);
 //const deleteProductApi = (id) => del(`${url.DELETE_PRODUCT}/${id}`);
+const updateProductSizeListApi = (productId, data) => post(`${url.POST_PRODUCT}/${productId}/changeSize`, data);
 
 //Categories
 const fetchCategoriesApi = data => get(url.CATEGORY, {}, data);
@@ -37,7 +38,7 @@ const fetchProductSizesApi = data => get(url.PRODUCT_SIZE, {}, data);
 const fetchProductSizeApi = (id) => get(`${url.PRODUCT_SIZE}/${id}`,{});
 const registerProductSizeApi = data => post(url.PRODUCT_SIZE, data);
 const updateProductSizeApi = (id, data) => put(`${url.PRODUCT_SIZE}/${id}`, data);
-const updateProductSizeListApi = (productId, data) => post(`${url.PRODUCT_SIZE}/${productId}/inventary`, data);
+
 
 //Product images
 const fetchProductImagesApi = data => get(url.PRODUCT_IMAGES, {}, data);

@@ -4,8 +4,10 @@ import {AvForm} from "availity-reactstrap-validation";
 import PropTypes from "prop-types";
 import {Button as ButtonMaterial} from "@material-ui/core";
 import Conditionals from "../../common/conditionals";
-import {FieldAsyncSelect, FieldNumber, FieldSelect, FieldText} from "../Fields";
-import {isValidOption, isValidString} from "../../common/utils";
+import {FieldAsyncSelect, FieldDate, FieldNumber, FieldSelect, FieldText} from "../Fields";
+import {formatDateToServer, isValidOption, isValidString} from "../../common/utils";
+import moment from "moment";
+import {DATE_MODES} from "../Fields/InputDate";
 
 export const TableFilter = (props) => {
     const {fields} = props;
@@ -30,7 +32,7 @@ export const TableFilter = (props) => {
                     if (field && field.length) {
                         const filter = field[0];
                         const value = values[dataField];
-
+                        console.log(value)
                         let operator;
                         if (filter.filterType === "text") {
                             operator = filter.filterCondition ? filter.filterCondition : Conditionals.OPERATORS.LIKE;
@@ -53,6 +55,14 @@ export const TableFilter = (props) => {
                             } else if (fieldName.includes("numberB_")) {
                                 operator = resolveOperator(filter, Conditionals.OPERATORS.LESS_THAN);
                                 conditions.add(fieldName.replace("numberB_"), value, operator);
+                            }
+                        }
+                        if (filter.filterType === "dateRange" && value && value.length > 0) {
+                            if(moment(value[0]).isSame(moment(value[1]))){
+                                conditions.add(fieldName,formatDateToServer(value[0]),Conditionals.OPERATORS.LESS_THAN_OR_EQUAL);
+                            }
+                            else {
+                                conditions.add(fieldName,formatDateToServer(value[0]), Conditionals.OPERATORS.BETWEEN,[formatDateToServer(value[1])]);
                             }
                         }
                     }
@@ -146,6 +156,17 @@ export const TableFilter = (props) => {
                                                 urlStr={field.urlStr}
                                                 placeholder={field.text}
                                                 defaultValue={field.filterDefaultOption}
+                                            />
+                                        </div>
+                                    </Col>
+                                )}
+                                {field.filterType === 'dateRange' && (
+                                    <Col md="12" >
+                                        <div className="mb-3">
+                                            <Label htmlFor={"_" + field.dataField}>{field.text}</Label>
+                                            <FieldDate
+                                                name={"_" + field.dataField}
+                                                mode={DATE_MODES.RANGE}
                                             />
                                         </div>
                                     </Col>
