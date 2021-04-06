@@ -63,7 +63,7 @@ const ProductDetail = (props) => {
                                             {map(productData.productImage, (img, key) => (
                                                 <div className={`tab-pane fade ${imgSelected === key ? 'show active bg-white border-1' : ''}`} id={`product-${key}`} role="tabpanel">
                                                     <div className="product-img">
-                                                        <Images src={`${getImageByQuality(img, 'hight')}`}
+                                                        <Images src={`${getImageByQuality(img, 'high')}`}
                                                                 alt={img.filename}
                                                                 className="img-fluid mx-auto d-block"
                                                                 data-zoom={`${img.path}`}/>

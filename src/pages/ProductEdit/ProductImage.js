@@ -33,7 +33,7 @@ const ProductImage = props => {
                     console.log(imgData)
                     if(imgData){
                         // f.groupId = imgData.group;
-                        f.file.preview = `${getImageByQuality(imgData, 'hight')}`
+                        f.file.preview = `${getImageByQuality(imgData, 'high')}`
                         f.file.name = imgData.filename;
                     }
                 }

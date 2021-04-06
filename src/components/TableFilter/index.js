@@ -19,16 +19,21 @@ export const TableFilter = (props) => {
 
     const handleValidSubmit = (event, values) => {
         if (props.onSubmit) {
-            const conditions = new Conditionals.Condition;
+            const numberA = 'numberA_';
+            const numberB = 'numberB_';
 
+            const conditions = new Conditionals.Condition;
+            console.log(values)
             Object.keys(values)//FieldNames
                 .filter(dataField => values[dataField] && values[dataField] !== "")
                 .forEach(dataField => {
 
                     //Se borra el "_" del inicio porque algunos campos se renderizan mal, ejemplo el status
                     const fieldName = dataField.substr(1);
+                    const fn = fieldName.replace(numberA, '').replace(numberB, '');
 
-                    const field = fields.filter(field => field.filter).filter(field => field.dataField === fieldName);
+                    const field = fields.filter(field => field.filter).filter(field => field.dataField === fn);
+
                     if (field && field.length) {
                         const filter = field[0];
                         const value = values[dataField];
@@ -46,15 +51,16 @@ export const TableFilter = (props) => {
                             operator = resolveOperator(filter, Conditionals.OPERATORS.EQUAL);
                             conditions.add(fieldName, value.value, operator);
                         }
+
                         if (filter.filterType === "number" && isValidString(value)) {
 
-                            if (fieldName.includes("numberA_")) {
+                            if (fieldName.includes(numberA)) {
                                 operator = resolveOperator(filter, Conditionals.OPERATORS.GREATER_THAN_OR_EQUAL);
-                                conditions.add(fieldName.replace("numberA_"), value, operator);
+                                conditions.add(fieldName.replace(numberA, ''), value, operator);
 
-                            } else if (fieldName.includes("numberB_")) {
+                            } else if (fieldName.includes(numberB)) {
                                 operator = resolveOperator(filter, Conditionals.OPERATORS.LESS_THAN);
-                                conditions.add(fieldName.replace("numberB_"), value, operator);
+                                conditions.add(fieldName.replace(numberB, ''), value, operator);
                             }
                         }
                         if (filter.filterType === "dateRange" && value && value.length > 0) {
