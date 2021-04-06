@@ -5,11 +5,13 @@ import accessToken from "./jwt-token-access/accessToken";
 const token = accessToken;
 
 export const baseImagePath = "http://lucymodas.com/";
-export const baseImagePathNew = "http://54.226.170.69/";
+export const baseImagePathNew = "http://54.226.170.69:18210/";
+//export const baseImagePathNew = "http://localhost:18210/";
 
 //apply base url for axios
-//const API_URL = "http://localhost:18210";
-const API_URL = "http://54.226.170.69:18210";
+const API_URL = "http://localhost:18210";
+// const API_URL = process.env.REACT_APP_SERVICE; //"http://54.226.170.69:18210";
+// console.log('process.env.REACT_APP_SERVICE', API_URL)
 
 const axiosApi = axios.create({
   baseURL: API_URL,
