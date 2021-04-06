@@ -5,7 +5,7 @@ import PropTypes from "prop-types";
 import {Button as ButtonMaterial} from "@material-ui/core";
 import Conditionals from "../../common/conditionals";
 import {FieldAsyncSelect, FieldDate, FieldNumber, FieldSelect, FieldText} from "../Fields";
-import {formatDateToServer, isValidOption, isValidString} from "../../common/utils";
+import {formatDateToServer, isValidObject, isValidOption, isValidString} from "../../common/utils";
 import moment from "moment";
 import {DATE_MODES} from "../Fields/InputDate";
 
@@ -19,25 +19,32 @@ export const TableFilter = (props) => {
 
     const handleValidSubmit = (event, values) => {
         if (props.onSubmit) {
-            const numberA = 'numberA_';
-            const numberB = 'numberB_';
+
+            let data = {...values};
+            const ranges = {};
+            Object.keys(values).filter(v => v.includes('_number')).forEach(v => {
+                const key = "_"+v.replace('_numberA_', '').replace('_numberB_', '');
+                if(!ranges[key]) ranges[key] = [];
+                ranges[key].push(values[v]);
+                delete data[v]
+            });
+
+            data = {...data, ...ranges};
 
             const conditions = new Conditionals.Condition;
-            console.log(values)
-            Object.keys(values)//FieldNames
-                .filter(dataField => values[dataField] && values[dataField] !== "")
+            Object.keys(data)//FieldNames
+                .filter(dataField => data[dataField] && data[dataField] !== "")
                 .forEach(dataField => {
 
                     //Se borra el "_" del inicio porque algunos campos se renderizan mal, ejemplo el status
                     const fieldName = dataField.substr(1);
-                    const fn = fieldName.replace(numberA, '').replace(numberB, '');
 
-                    const field = fields.filter(field => field.filter).filter(field => field.dataField === fn);
+                    const field = fields.filter(field => field.filter).filter(field => field.dataField === fieldName);
 
                     if (field && field.length) {
                         const filter = field[0];
-                        const value = values[dataField];
-                        console.log(value)
+                        const value = data[dataField];
+
                         let operator;
                         if (filter.filterType === "text") {
                             operator = filter.filterCondition ? filter.filterCondition : Conditionals.OPERATORS.LIKE;
@@ -52,16 +59,18 @@ export const TableFilter = (props) => {
                             conditions.add(fieldName, value.value, operator);
                         }
 
-                        if (filter.filterType === "number" && isValidString(value)) {
+                        if (filter.filterType === "number" && isValidObject(value) && value.length > 0) {
 
-                            if (fieldName.includes(numberA)) {
-                                operator = resolveOperator(filter, Conditionals.OPERATORS.GREATER_THAN_OR_EQUAL);
-                                conditions.add(fieldName.replace(numberA, ''), value, operator);
+                            if (value.length > 1 && value[0] && value[1]) {
+                                conditions.add(fieldName, value[0], Conditionals.OPERATORS.BETWEEN,[value[1]]);
 
-                            } else if (fieldName.includes(numberB)) {
-                                operator = resolveOperator(filter, Conditionals.OPERATORS.LESS_THAN);
-                                conditions.add(fieldName.replace(numberB, ''), value, operator);
+                            } else if (value.length > 0 && value[0]) {
+                                conditions.add(fieldName, value[1], Conditionals.OPERATORS.GREATER_THAN_OR_EQUAL);
+
+                            } else if (value.length > 1 && value[1]) {
+                                conditions.add(fieldName, value[1], Conditionals.OPERATORS.LESS_THAN);
                             }
+
                         }
                         if (filter.filterType === "dateRange" && value && value.length > 0) {
                             if(moment(value[0]).isSame(moment(value[1]))){

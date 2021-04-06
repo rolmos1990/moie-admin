@@ -7,6 +7,7 @@ import PropTypes from "prop-types";
 import Conditionals from "../../../common/conditionals";
 import moment from 'moment';
 import {Button as ButtonMaterial} from "@material-ui/core";
+import ButtonSubmit from "../../../components/Common/ButtonSubmit";
 
 export const CustomerFilter = (props) => {
 

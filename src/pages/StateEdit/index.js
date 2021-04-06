@@ -10,6 +10,7 @@ import {getState, registerState, updateState} from "../../store/location/actions
 import {FieldSwitch, FieldText} from "../../components/Fields";
 import Breadcrumb from "../../components/Common/Breadcrumb";
 import {STATUS} from "../../common/constants";
+import ButtonSubmit from "../../components/Common/ButtonSubmit";
 
 const StateEdit = (props) => {
     const {getState, estado} = props;
@@ -108,10 +109,7 @@ const StateEdit = (props) => {
                                                 </div>
                                             </Col>
                                         </Row>
-                                        <Button color="primary" type="submit">
-                                            {props.loading && <Spinner size="sm" className="m-1" color="primary"/>}
-                                            Guardar
-                                        </Button>
+                                        <ButtonSubmit loading={props.loading}/>
                                     </CardBody>
                                 </Card>
                             </Col>

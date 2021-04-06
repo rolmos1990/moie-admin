@@ -15,6 +15,7 @@ import {STATUS} from "../../common/constants";
 import ProductSize from "./ProductSize";
 import ProductImage from "./ProductImage";
 import ProductPublish from "./ProductPublish";
+import ButtonSubmit from "../../components/Common/ButtonSubmit";
 
 const ProductEdit = (props) => {
 
@@ -298,10 +299,7 @@ const ProductEdit = (props) => {
                                             </Row>
                                             <Row>
                                                 <div className={"float-start m-3"}>
-                                                    <Button color="primary" type="submit">
-                                                        {props.loading && <Spinner size="sm" className="m-1" color="primary"/>}
-                                                        Guardar
-                                                    </Button>
+                                                    <ButtonSubmit loading={props.loading} name='Buscar' iconClass='mdi mdi-magnify'/>
                                                 </div>
                                             </Row>
                                         </div>

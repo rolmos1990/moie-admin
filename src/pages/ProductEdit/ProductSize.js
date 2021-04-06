@@ -8,6 +8,7 @@ import {getProductSizes, updateProductSizeList} from "../../store/productSize/ac
 import {connect} from "react-redux";
 import Conditionals from "../../common/conditionals";
 import {AvForm} from "availity-reactstrap-validation";
+import ButtonSubmit from "../../components/Common/ButtonSubmit";
 
 const ProductSize = props => {
     const {product, template, onGetProductSizes, productSizes, refresh} = props
@@ -192,10 +193,7 @@ const ProductSize = props => {
                 <Row>
                     <Col md={12}>
                         <div className={"float-start m-3"}>
-                            <Button color="primary" type="submit">
-                                {props.loading && <Spinner size="sm" className="m-1" color="primary"/>}
-                                Guardar
-                            </Button>
+                            <ButtonSubmit loading={props.loading}/>
                         </div>
                     </Col>
                 </Row>

@@ -174,10 +174,10 @@ const ProductList = props => {
             charttype: "bar",
             chartheight: 40,
             chartwidth: 70,
-            badgeValue: parseInt(pageOptions.totalSize*0.86),
+            badgeValue: parseInt(pageOptions.totalSize * 0.86),
             color: "success",
             desc: "activos",
-            badgeValue2: parseInt(pageOptions.totalSize*0.14),
+            badgeValue2: parseInt(pageOptions.totalSize * 0.14),
             color2: "danger",
             desc2: "inactivos",
             series: series1,
@@ -187,7 +187,7 @@ const ProductList = props => {
             id: 2,
             icon: "mdi mdi-arrow-up-bold",
             title: "Productos publicados",
-            value: parseInt(pageOptions.totalSize*0.67),
+            value: parseInt(pageOptions.totalSize * 0.67),
             decimal: 0,
             charttype: "radialBar",
             chartheight: 45,
@@ -223,14 +223,12 @@ const ProductList = props => {
         <>
             <Row className="text-center">
                 {reports.map((report, key) => (
-                    <Col md={6} xl={4} key={key}>
+                    <Col md={4} key={key}>
                         <WidgetCard report={report}/>
                     </Col>
                 ))}
             </Row>
             <Row>
-
-
                 <TableFilter
                     onPressDisabled={() => setFilter(false)}
                     isActive={filter}

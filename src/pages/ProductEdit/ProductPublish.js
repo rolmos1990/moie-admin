@@ -7,6 +7,7 @@ import {AvForm} from "availity-reactstrap-validation";
 import {updateProduct} from "../../store/product/actions";
 import {STATUS} from "../../common/constants";
 import {Button} from "@material-ui/core";
+import ButtonSubmit from "../../components/Common/ButtonSubmit";
 
 const ProductPublish = props => {
     const {product, updateProduct} = props
@@ -47,10 +48,7 @@ const ProductPublish = props => {
                     <Row>
                         <Col md={12}>
                             <div className={"float-start m-3"}>
-                                <Button color="primary" type="submit">
-                                    {props.loading && <Spinner size="sm" className="m-1" color="primary"/>}
-                                    Guardar
-                                </Button>
+                                <ButtonSubmit loading={props.loading}/>
                             </div>
                         </Col>
                     </Row>

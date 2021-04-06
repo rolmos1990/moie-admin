@@ -12,6 +12,7 @@ import Conditionals from "../../common/conditionals";
 import {FieldEmail, FieldPhone, FieldSelect, FieldSwitch, FieldText} from "../../components/Fields";
 import Breadcrumb from "../../components/Common/Breadcrumb";
 import {STATUS} from "../../common/constants";
+import ButtonSubmit from "../../components/Common/ButtonSubmit";
 
 const CustomerEdit = (props) => {
     const {getCustomer, customer} = props;
@@ -253,10 +254,7 @@ const CustomerEdit = (props) => {
                                                 name="hasNotification"
                                                 label="Recibe notificaciones"/>
                                         </div>
-                                        <Button color="primary" type="submit">
-                                            {props.loading && <Spinner size="sm" className="m-1" color="primary"/>}
-                                            Guardar
-                                        </Button>
+                                        <ButtonSubmit loading={props.loading}/>
                                     </CardBody>
                                 </Card>
                             </Col>

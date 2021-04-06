@@ -8,6 +8,7 @@ import {AvForm} from "availity-reactstrap-validation";
 import Images from "../../components/Common/Image";
 import DropZoneIcon from "../../components/Common/DropZoneIcon";
 import {getImageByQuality} from "../../common/utils";
+import ButtonSubmit from "../../components/Common/ButtonSubmit";
 
 
 const groups = [
@@ -125,10 +126,7 @@ const ProductImage = props => {
                 <Row>
                     <Col md={12}>
                         <div className={"float-start m-3"}>
-                            <Button color="primary" type="submit">
-                                {props.loading && <Spinner size="sm" className="m-1" color="primary"/>}
-                                Guardar
-                            </Button>
+                            <ButtonSubmit loading={props.loading}/>
                         </div>
                     </Col>
                 </Row>
