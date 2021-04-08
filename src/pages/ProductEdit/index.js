@@ -32,7 +32,6 @@ const ProductEdit = (props) => {
     const toggleInventary = () => setIsOpenInventary(!isOpenInventary);
 
 
-
     const {getProduct, registerProduct, updateProduct, product, getCategories, categories, getSizes, sizes} = props;
     const [productData, setProductData] = useState({_status: STATUS.ACTIVE, sizeModelList: []});
 
@@ -48,12 +47,13 @@ const ProductEdit = (props) => {
     const [sizeSelected, setSizeSelected] = useState(null);
 
     const isEdit = props.match.params.id;
+    const hasOrders = false;
 
     //Carga inicial
     useEffect(() => {
         if (isEdit && getProduct) {
             getProduct(props.match.params.id);
-        }else{
+        } else {
             getCategories();
             getSizes();
         }
@@ -67,7 +67,7 @@ const ProductEdit = (props) => {
             setCategoryDefault(defaultCategory);
 
             const defaultMaterial = materialsList.filter(m => m.label === product.material)[0];
-            if(defaultMaterial) setMaterialDefault(defaultMaterial.id);
+            if (defaultMaterial) setMaterialDefault(defaultMaterial.id);
 
             getCategories();
             getSizes();
@@ -85,7 +85,7 @@ const ProductEdit = (props) => {
     useEffect(() => {
         if (sizes && sizes.length > 0) {
             const sizeList = arrayToOptions(sizes);
-            if(product.size && product.size.id){
+            if (product.size && product.size.id) {
                 const defaultSize = sizeList.filter(m => m.value === product.size.id)[0];
                 setSizeDefault(defaultSize.value);
             }
@@ -103,7 +103,7 @@ const ProductEdit = (props) => {
             // material: values.material.label,
             size: values.size.value,
             status: 1,
-            weight: values.weight ? Number.parseFloat(values.weight): 0,
+            weight: values.weight ? Number.parseFloat(values.weight) : 0,
             price: Number.parseFloat(values.price),
             cost: Number.parseFloat(values.cost),
         };
@@ -119,7 +119,7 @@ const ProductEdit = (props) => {
         <React.Fragment>
             <div className="page-content">
                 <Container fluid>
-                    <Breadcrumb hasBack path="/products" title={productData.name} breadcrumbItem={"Producto"}/>
+                    <Breadcrumb hasBack path="/products" title={productData.reference} breadcrumbItem={"Producto"}/>
 
                     <Row>
                         <Col md={12}>
@@ -135,8 +135,20 @@ const ProductEdit = (props) => {
                                                 </div>
                                             </div>
                                             <div className="flex-1 overflow-hidden">
-                                                <h5 className="font-size-16 mb-1">General</h5>
-                                                <p className="text-muted text-truncate mb-0">Datos principales del producto</p>
+                                                <Row>
+                                                    <Col md={8}>
+                                                        <h5 className="font-size-16 mb-1">General</h5>
+                                                        <p className="text-muted text-truncate mb-0">Datos principales del producto</p>
+                                                    </Col>
+                                                    {isEdit && (
+                                                        <Col md={4}>
+                                                            <div className="text-right pr-10">
+                                                                <h5 className="font-size-16 mb-1">Referencia</h5>
+                                                                <b className="font-size-18 text-info">{productData.reference}</b>
+                                                            </div>
+                                                        </Col>
+                                                    )}
+                                                </Row>
                                             </div>
                                             <i className="mdi mdi-chevron-up accor-down-icon font-size-24"> </i>
                                         </Media>
@@ -149,7 +161,7 @@ const ProductEdit = (props) => {
                                             }}>
                                         <div className="p-4 border-top">
                                             <Row>
-                                                <Col lg="12">
+                                                <Col md={ 12}>
                                                     <div className="mb-3">
                                                         <Label htmlFor="field_name">Nombre de Producto <span className="text-danger">*</span></Label>
                                                         <FieldText
@@ -161,77 +173,7 @@ const ProductEdit = (props) => {
                                                             required/>
                                                     </div>
                                                 </Col>
-                                                <Col lg="6">
-                                                    <div className="mb-3">
-                                                        <Label htmlFor="field_provider">Proveedor</Label>
-                                                        <FieldText
-                                                            id={"field_provider"}
-                                                            name={"provider"}
-                                                            value={productData.provider}
-                                                            minLength={3}
-                                                            maxLength={255}
-                                                        />
-                                                    </div>
-                                                </Col>
-                                                <Col lg="6">
-                                                    <div className="mb-3">
-                                                        <Label htmlFor="field_preference">Referencia</Label>
-                                                        <FieldText
-                                                            id={"field_preference"}
-                                                            name={"reference"}
-                                                            value={productData.reference}
-                                                            minLength={3}
-                                                            maxLength={255}
-                                                        />
-                                                    </div>
-                                                </Col>
-                                                <Col lg="6">
-                                                    <div className="mb-3">
-                                                        <Label htmlFor="field_brand">Marca de Producto</Label>
-                                                        <FieldText
-                                                            id={"field_brand"}
-                                                            name={"brand"}
-                                                            value={productData.brand}
-                                                            minLength={3}
-                                                            maxLength={255}
-                                                        />
-                                                    </div>
-                                                </Col>
 
-                                                <Col lg="2">
-                                                    <div className="mb-3">
-                                                        <Label htmlFor="weight">Peso (g) </Label>
-                                                        <FieldNumber
-                                                            id={"field_weight"}
-                                                            name={"weight"}
-                                                            type="number"
-                                                            value={productData.weight}
-                                                            />
-                                                    </div>
-                                                </Col>
-
-                                                <Col lg="2">
-                                                    <div className="mb-3">
-                                                        <Label htmlFor="cost">Costo <span className="text-danger">*</span></Label>
-                                                        <FieldNumber
-                                                            id={"field_cost"}
-                                                            name={"cost"}
-                                                            type="number"
-                                                            value={productData.cost}
-                                                            required/>
-                                                    </div>
-                                                </Col>
-
-                                                <Col lg="2">
-                                                    <div className="mb-3">
-                                                        <Label htmlFor="price">Precio <span className="text-danger">*</span></Label>
-                                                        <FieldNumber
-                                                            id={"field_price"}
-                                                            name={"price"}
-                                                            value={productData.price}
-                                                            required/>
-                                                    </div>
-                                                </Col>
                                             </Row>
                                             <Row>
                                                 <Col md="4">
@@ -243,6 +185,7 @@ const ProductEdit = (props) => {
                                                             options={categoriesList}
                                                             defaultValue={categoryDefault}
                                                             required
+                                                            disabled={hasOrders}
                                                             isSearchable
                                                         />
                                                     </div>
@@ -278,8 +221,56 @@ const ProductEdit = (props) => {
                                                             onChange={(e) => {
                                                                 setSizeSelected(sizes.find(s => s.id === e.value));
                                                             }}
+                                                            disabled={hasOrders}
                                                             isSearchable
                                                         />
+                                                    </div>
+                                                </Col>
+                                            </Row>
+                                            <Row>
+                                                <Col md="6">
+                                                    <div className="mb-3">
+                                                        <Label htmlFor="field_provider">Proveedor</Label>
+                                                        <FieldText
+                                                            id={"field_provider"}
+                                                            name={"provider"}
+                                                            value={productData.provider}
+                                                            minLength={3}
+                                                            maxLength={255}
+                                                        />
+                                                    </div>
+                                                </Col>
+
+                                                <Col md="2">
+                                                    <div className="mb-3">
+                                                        <Label htmlFor="weight">Peso (g) </Label>
+                                                        <FieldNumber
+                                                            id={"field_weight"}
+                                                            name={"weight"}
+                                                            type="number"
+                                                            value={productData.weight}
+                                                        />
+                                                    </div>
+                                                </Col>
+                                                <Col md="2">
+                                                    <div className="mb-3">
+                                                        <Label htmlFor="cost">Costo <span className="text-danger">*</span></Label>
+                                                        <FieldNumber
+                                                            id={"field_cost"}
+                                                            name={"cost"}
+                                                            type="number"
+                                                            value={productData.cost}
+                                                            required/>
+                                                    </div>
+                                                </Col>
+                                                <Col md="2">
+                                                    <div className="mb-3">
+                                                        <Label htmlFor="price">Precio <span className="text-danger">*</span></Label>
+                                                        <FieldNumber
+                                                            id={"field_price"}
+                                                            name={"price"}
+                                                            value={productData.price}
+                                                            required/>
                                                     </div>
                                                 </Col>
                                             </Row>
@@ -298,9 +289,11 @@ const ProductEdit = (props) => {
                                                 </Col>
                                             </Row>
                                             <Row>
-                                                <div className={"float-start m-3"}>
-                                                    <ButtonSubmit loading={props.loading} name='Buscar' iconClass='mdi mdi-magnify'/>
-                                                </div>
+                                                <Col md={12}>
+                                                    <div className="text-right m-3">
+                                                        <ButtonSubmit loading={props.loading} name='Buscar' iconClass='mdi mdi-magnify'/>
+                                                    </div>
+                                                </Col>
                                             </Row>
                                         </div>
                                     </AvForm>
@@ -309,7 +302,45 @@ const ProductEdit = (props) => {
                             </Card>
                         </Col>
                     </Row>
+                    <Row>
+                        <Col md={12} className="mt-2">
+                            <Card id={'inventory'}>
+                                <Link to="#" className="text-dark collapsed" onClick={toggleInventary}>
+                                    <div className="p-4">
 
+                                        <Media className="d-flex align-items-center">
+                                            <div className="me-3">
+                                                <div className="avatar-xs">
+                                                    <div className="avatar-title rounded-circle bg-soft-primary text-primary">
+                                                        03
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div className="flex-1 overflow-hidden">
+                                                <h5 className="font-size-16 mb-1">Inventario</h5>
+                                                <p className="text-muted text-truncate mb-0">Agregue existencia a su producto.</p>
+                                            </div>
+                                            <i className="mdi mdi-chevron-up accor-down-icon font-size-24"> < /i>
+                                        </Media>
+
+                                    </div>
+                                </Link>
+                                <Collapse isOpen={isOpenInventary}>
+                                    <div className="p-4 border-top">
+                                        {(productData.id && productData.size) ? (
+                                            <>
+                                                <h4>{productData.size ? productData.size.name : ''}</h4>
+                                                <p>Ingrese color y tallas para el producto.</p>
+                                                <ProductSize template={productData.size} product={productData}/>
+                                            </>
+                                        ) : (
+                                            <div className="alert alert-warning">Debe agregar una talla al producto.</div>
+                                        )}
+                                    </div>
+                                </Collapse>
+                            </Card>
+                        </Col>
+                    </Row>
                     <Row>
                         <Col md={12}>
                             <Card id={'images'} className="mt-2 disabled">
@@ -365,52 +396,14 @@ const ProductEdit = (props) => {
                                 </Link>
                                 <Collapse isOpen={isOpenWebConfig}>
                                     {productData.id && (
-                                        <ProductPublish product={product} />
+                                        <ProductPublish product={product}/>
                                     )}
                                 </Collapse>
                             </Card>
                         </Col>
                     </Row>
 
-                    <Row>
-                        <Col md={12} className="mt-2">
-                            <Card id={'inventory'}>
-                                <Link to="#" className="text-dark collapsed" onClick={toggleInventary}>
-                                    <div className="p-4">
 
-                                        <Media className="d-flex align-items-center">
-                                            <div className="me-3">
-                                                <div className="avatar-xs">
-                                                    <div className="avatar-title rounded-circle bg-soft-primary text-primary">
-                                                        03
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div className="flex-1 overflow-hidden">
-                                                <h5 className="font-size-16 mb-1">Inventario</h5>
-                                                <p className="text-muted text-truncate mb-0">Agregue existencia a su producto.</p>
-                                            </div>
-                                            <i className="mdi mdi-chevron-up accor-down-icon font-size-24"> < /i>
-                                        </Media>
-
-                                    </div>
-                                </Link>
-                                <Collapse isOpen={isOpenInventary}>
-                                    <div className="p-4 border-top">
-                                        {(productData.id && productData.size)? (
-                                            <>
-                                                <h4>{productData.size ? productData.size.name : ''}</h4>
-                                                <p>Ingrese color y tallas para el producto.</p>
-                                                <ProductSize template={productData.size} product={productData}/>
-                                            </>
-                                        ):(
-                                            <div className="alert alert-warning">Debe agregar una talla al producto.</div>
-                                        )}
-                                    </div>
-                                </Collapse>
-                            </Card>
-                        </Col>
-                    </Row>
                 </Container>
             </div>
         </React.Fragment>

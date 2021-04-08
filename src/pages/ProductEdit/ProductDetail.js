@@ -24,7 +24,8 @@ const ProductDetail = (props) => {
 
     useEffect(() => {
         if (product.id) {
-            setProductData({...product, _status: product.status});
+            const productImage = product.productImage.length > 0 ? product.productImage : [{}];
+            setProductData({...product, _status: product.status, productImage: productImage});
         }
     }, [product]);
 
@@ -32,13 +33,13 @@ const ProductDetail = (props) => {
         <React.Fragment>
             <div className="page-content">
                 <Container fluid>
-                    <Breadcrumb hasBack path="/products" title={productData.name} breadcrumbItem={"Producto"}/>
+                    <Breadcrumb hasBack path="/products" title={productData.reference} breadcrumbItem={"Producto"}/>
 
                     <Card id={'details'}>
 
                         <Row>
                             <Col md={4} className="p-3 text-center">
-                                <div className="row">
+                                <div className="row p-2">
                                     <div className="col-3 image-left-panel">
                                         <div className={`nav flex-column nav-pills`} id="v-pills-tab" role="tablist" aria-orientation="vertical">
                                             {map(productData.productImage, (img, key) => (
@@ -55,18 +56,17 @@ const ProductDetail = (props) => {
 
                                     <div className="col-9">
                                         <div className="tab-content position-relative" id="v-pills-tabContent">
-                                            {/*<div className="product-wishlist">
-                                                <a href="#">
-                                                    <i className="mdi mdi-heart-outline"></i>
-                                                </a>
-                                            </div>*/}
                                             {map(productData.productImage, (img, key) => (
                                                 <div className={`tab-pane fade ${imgSelected === key ? 'show active bg-white border-1' : ''}`} id={`product-${key}`} role="tabpanel">
-                                                    <div className="product-img">
+                                                    <div className="product-img panel-bordered">
                                                         <Images src={`${getImageByQuality(img, 'high')}`}
                                                                 alt={img.filename}
                                                                 className="img-fluid mx-auto d-block"
                                                                 data-zoom={`${img.path}`}/>
+                                                    </div>
+                                                    <div className="text-left panel-bordered p-2">
+                                                        <div className="text.muted"><b>Grupo:</b> {img.group}</div>
+                                                        <div className="text.muted">{img.filename}</div>
                                                     </div>
                                                 </div>
                                             ))}
@@ -77,40 +77,30 @@ const ProductDetail = (props) => {
                             <Col md={8} className="p-3">
                                 <Row>
                                     <Col md={12}>
-                                        <Row>
-                                            <Col xs={10}>
-                                                <h4 className="card-title">Descripción del producto</h4>
-                                            </Col>
-                                            <Col md={2} className="text-right">
-                                                <li className="list-inline-item">
-                                                    <Link to={`/product/${productData.id}`} className="px-2 text-primary">
-                                                        <i className="uil uil-pen font-size-18"> </i>
-                                                    </Link>
-                                                </li>
-                                            </Col>
-                                        </Row>
+                                        <h3>Referencia: <b className="text-info">{productData.reference}</b></h3>
                                     </Col>
+                                </Row>
+                                <hr/>
+                                <Row>
+                                    <Col xs={10}>
+                                        <h4 className="card-title">Descripción del producto</h4>
+                                    </Col>
+                                    <Col xs={2} className="text-right">
+                                        <li className="list-inline-item">
+                                            <Link to={`/product/${productData.id}`} className="px-2 text-primary">
+                                                <i className="uil uil-pen font-size-18"> </i>
+                                            </Link>
+                                        </li>
+                                    </Col>
+                                </Row>
+                                <Row>
                                     <Col md={12}>
-                                        <Col md={12}>
-                                            <label>Referencia: </label>
-                                            <span className="p-1 text-muted">{productData.reference}</span>
-                                        </Col>
-                                        <Col md={12}>
-                                            <label>Nombre: </label>
-                                            <span className="p-1">{productData.name}</span>
-                                        </Col>
-                                        <Col md={12}>
-                                            <label>Descripción: </label>
-                                            <span className="p-1">{productData.description}</span>
-                                        </Col>
-                                        <Col md={12}>
-                                            <label>Costo: </label>
-                                            <span className="p-1">{priceFormat(productData.cost, "", true)}</span>
-                                        </Col>
-                                        <Col md={12}>
-                                            <label>Precio: </label>
-                                            <span className="p-1">{priceFormat(productData.price, "", true)}</span>
-                                        </Col>
+                                        <ul>
+                                            <li><b>Nombre:</b> {productData.name}</li>
+                                            <li><b>Descripción:</b> {productData.description}</li>
+                                            <li><b>Costo:</b> {priceFormat(productData.cost, "", true)}</li>
+                                            <li><b>Precio:</b> {priceFormat(productData.price, "", true)}</li>
+                                        </ul>
                                     </Col>
                                 </Row>
                                 <hr/>
@@ -119,24 +109,13 @@ const ProductDetail = (props) => {
                                         <h4 className="card-title">Especificaciones</h4>
                                     </Col>
                                     <Col md={12}>
-                                        <label>Tipo: </label>
-                                        <span className="p-1">{productData.size?.name}</span>
-                                    </Col>
-                                    <Col md={12}>
-                                        <label>Categoria: </label>
-                                        <span className="p-1">{productData.category?.name}</span>
-                                    </Col>
-                                    <Col md={12}>
-                                        <label>Material: </label>
-                                        <span className="p-1">{productData.material}</span>
-                                    </Col>
-                                    <Col md={12}>
-                                        <label>Peso (g): </label>
-                                        <span className="p-1">{productData.weight}</span>
-                                    </Col>
-                                    <Col md={12}>
-                                        <label>Proveedor: </label>
-                                        <span className="p-1">{productData.provider}</span>
+                                        <ul>
+                                            <li><b>Tipo:</b> {productData.size?.name}</li>
+                                            <li><b>Categoria:</b> {productData.category?.name}</li>
+                                            <li><b>Material:</b> {productData.material}</li>
+                                            <li><b>Peso (g):</b> {productData.weight}</li>
+                                            <li><b>Proveedor:</b> {productData.provider}</li>
+                                        </ul>
                                     </Col>
                                 </Row>
                             </Col>

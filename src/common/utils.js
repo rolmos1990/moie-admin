@@ -69,6 +69,8 @@ export const formatDateToServer =(date) =>{
 }
 
 export const getImageByQuality = (imgData, quality) => {
+    if(!imgData) return null;
+
     const path = imgData.path && imgData.path.includes('uploads') ? baseImagePathNew : baseImagePath;
 
     let result = imgData.path;

@@ -1,12 +1,14 @@
 import React from "react"
 import {Link} from "react-router-dom"
 import {STATUS_COLORS, StatusField} from "../../../components/StatusField";
+import {HtmlTooltip} from "../../../components/Common/HtmlTooltip";
 import {ConverterStatus} from "../../../common/converters";
 import {STATUS} from "../../../common/constants";
 import Conditionals from "../../../common/conditionals";
-import {priceFormat, STATUS_OPTIONS, YES_NO_OPTIONS} from "../../../common/utils";
+import {getImageByQuality, priceFormat, STATUS_OPTIONS, YES_NO_OPTIONS} from "../../../common/utils";
 import {CATEGORY, SIZE} from "../../../helpers/url_helper";
-import {Tooltip} from "@material-ui/core";
+import { Tooltip} from "@material-ui/core";
+import Images from "../../../components/Common/Image";
 
 const badgeStyles = {minWidth: '30px', margin: '2px'}
 
@@ -18,21 +20,33 @@ const productColumns = (onDelete = false) => [
         filter: true,
         filterType: "text",
         filterCondition: Conditionals.OPERATORS.LIKE,
+        formatter: (cellContent, item) => (
+            <HtmlTooltip
+                title={
+                    <React.Fragment>
+                        <Images src={`${getImageByQuality(item.productImage.length > 0 ? item.productImage[0] : {}, 'medium')}`}
+                                alt={item.reference}
+                                className="img-fluid mx-auto d-block tab-img rounded"/>
+                    </React.Fragment>
+                }>
+                <Link to={`/product/detail/${item.id}`} className="text-body">
+                    <span className="text-info">{item.reference} </span>
+                </Link>
+            </HtmlTooltip>
+        ),
     },
     {
         text: "Nombre",
         dataField: "name",
         sort: true,
         formatter: (cellContent, item) => (
-            <div className="field-br" style={{width:'350px'}}>
-                <Link to={`/product/detail/${item.id}`} className="text-body">
-                    <small>{item.name} </small>
-                    {item.published == false && (
-                        <Tooltip placement="bottom" title="Producto no publicado" aria-label="add" >
-                            <i className={"mdi mdi-alert-octagram-outline font-size-18 mr-1 text-warning"}> </i>
-                        </Tooltip>
-                    )}
-                </Link>
+            <div className="field-br" style={{width: '350px'}}>
+                <small>{item.name} </small>
+                {item.published == false && (
+                    <Tooltip placement="bottom" title="Producto no publicado" aria-label="add">
+                        <i className={"mdi mdi-alert-octagram-outline font-size-18 mr-1 text-warning"}> </i>
+                    </Tooltip>
+                )}
             </div>
         ),
         filter: true,
@@ -74,7 +88,7 @@ const productColumns = (onDelete = false) => [
         dataField: "category",
         sort: true,
         formatter: (cellContent, item) => (
-            <div className="field-br" style={{width:'230px'}}>
+            <div className="field-br" style={{width: '230px'}}>
                 <Link to={`/category/${item.category?.id}`} className="text-body">
                     {item.category?.name}
                 </Link>

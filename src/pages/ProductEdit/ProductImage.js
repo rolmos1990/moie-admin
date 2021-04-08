@@ -31,7 +31,6 @@ const ProductImage = props => {
             files.forEach((f, i) => {
                 if(product.productImage.length > i){
                     const imgData = product.productImage[i];
-                    console.log(imgData)
                     if(imgData){
                         // f.groupId = imgData.group;
                         f.file.preview = `${getImageByQuality(imgData, 'high')}`
