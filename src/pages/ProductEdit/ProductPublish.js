@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react"
 import PropTypes from 'prop-types'
-import {Col, Label, Row, Spinner} from "reactstrap"
+import {CardBody, Col, Label, Row, Spinner} from "reactstrap"
 import {FieldNumber, FieldSwitch, FieldText} from "../../components/Fields";
 import {connect} from "react-redux";
 import {AvForm} from "availity-reactstrap-validation";
@@ -46,10 +46,8 @@ const ProductPublish = props => {
                         </Col>
                     </Row>
                     <Row>
-                        <Col md={12}>
-                            <div className={"float-start m-3"}>
-                                <ButtonSubmit loading={props.loading}/>
-                            </div>
+                        <Col md={12} className="text-right">
+                            <ButtonSubmit loading={props.loading} />
                         </Col>
                     </Row>
                 </div>

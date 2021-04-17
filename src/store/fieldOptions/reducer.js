@@ -27,6 +27,7 @@ const fieldOptions = (state = initialState, action) => {
             return {
                 ...state,
                 loading: true,
+                refresh: false
             }
         case GET_FIELD_OPTIONS_FAILED:
             return {
@@ -68,6 +69,7 @@ const fieldOptions = (state = initialState, action) => {
             state = {
                 ...state,
                 loading: false,
+                refresh: true
             }
             break
         case REGISTER_FIELD_OPTION_FAILED:

@@ -9,7 +9,7 @@ const Customer = () => {
         <React.Fragment>
             <div className="page-content">
                 <Container fluid>
-                    <Breadcrumb path="/customers" title={null} breadcrumbItem="Clientes" />
+                    <Breadcrumb path="/customers" title={null} item="Clientes" />
                     <CustomersList />
                 </Container>
             </div>

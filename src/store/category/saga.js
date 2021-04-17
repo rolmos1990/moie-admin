@@ -22,6 +22,7 @@ import {
 } from "../../helpers/backend_helper"
 
 import Conditionals from "../../common/conditionals";
+import {showResponseMessage} from "../../helpers/service";
 
 /**
  * *  Configuración de CRUD Saga (Realizar configuración para cada uno de las replicas)
@@ -76,6 +77,7 @@ function* fetch({conditional, limit, offset}) {
 function* register({ payload: { data, history } }) {
     try {
         const response = yield call(POST_API_REQUEST, data)
+        showResponseMessage(response, "Categoria creada!");
         yield put(CREATE_SUCCESS_ACTION(response))
         history.push(LIST_URL)
 
@@ -87,6 +89,7 @@ function* register({ payload: { data, history } }) {
 function* update({ payload: { id, data, history } }) {
     try {
         const response = yield call(PUT_API_REQUEST, id, data)
+        showResponseMessage(response, "Categoria actualizada!");
         yield put(UPDATE_SUCCESS_ACTION(response))
         history.push(LIST_URL)
 

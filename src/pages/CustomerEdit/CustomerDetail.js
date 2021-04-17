@@ -34,7 +34,7 @@ const CustomerDetail = (props) => {
         <React.Fragment>
             <div className="page-content">
                 <Container fluid>
-                    <Breadcrumb hasBack path="/customers" title={customerData.name} breadcrumbItem={"Cliente"}/>
+                    <Breadcrumb hasBack path="/customers" title={customerData.name} item={"Cliente"}/>
                     <Card id={'details'} className="p-4">
                         <Row>
                             <Col md={12}>

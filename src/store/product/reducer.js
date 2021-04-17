@@ -36,6 +36,7 @@ const product = (state = initialState, action) => {
         case GET_PRODUCTS_SUCCESS:
             return {
                 ...state,
+                product: {},
                 products: action.payload,
                 meta: action.meta,
                 loading: false,
@@ -66,6 +67,7 @@ const product = (state = initialState, action) => {
             state = {
                 ...state,
                 loading: false,
+                product: action.payload
             }
             break
         case REGISTER_PRODUCT_FAILED:

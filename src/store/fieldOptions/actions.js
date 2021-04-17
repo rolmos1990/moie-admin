@@ -12,6 +12,7 @@ import {
     UPDATE_FIELD_OPTION_SUCCESS,
     UPDATE_FIELD_OPTION_FAILED,
 } from "./actionTypes";
+import Conditionals from "../../common/conditionals";
 
 export const getFieldOptions = (conditional, limit, offset) => ({
     type: GET_FIELD_OPTIONS,
@@ -19,6 +20,12 @@ export const getFieldOptions = (conditional, limit, offset) => ({
     limit: limit,
     offset: offset
 })
+
+export const getFieldOptionByGroup = (groups, limit, offset) => {
+    const conditions = new Conditionals.Condition;
+    conditions.add("group", groups.join("::"), Conditionals.OPERATORS.IN);
+    return getFieldOptions(conditions.all(), limit, offset);
+}
 
 export const getFieldOptionsSuccess = (data, meta) => ({
     type: GET_FIELD_OPTIONS_SUCCESS,

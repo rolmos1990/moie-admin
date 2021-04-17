@@ -8,12 +8,12 @@ const Breadcrumb = props => {
     <Row>
       <Col className="col-12">
         <div className="page-title-box d-flex align-items-center justify-content-between">
-          <h3 className="mb-0">{props.hasBack && <Link to={props.path || "#"}><i className={"bx bx-chevron-left"}></i></Link>}{props.breadcrumbItem}</h3>
+          <h3 className="mb-0">{props.hasBack && <Link to={props.path || "#"}><i className={"bx bx-chevron-left"}></i></Link>}{props.item}</h3>
 
           <div className="page-title-right">
             <ol className="breadcrumb m-0">
               <BreadcrumbItem active>
-                <Link to={props.path || "#"}>{props.breadcrumbItem}</Link>
+                <Link to={props.path || "#"}>{props.item}</Link>
               </BreadcrumbItem>
               {props.title && (
                   <BreadcrumbItem>
@@ -29,7 +29,7 @@ const Breadcrumb = props => {
 }
 
 Breadcrumb.propTypes = {
-  breadcrumbItem: PropTypes.string,
+  item: PropTypes.string,
   title: PropTypes.string,
   hasBack: PropTypes.bool
 }

@@ -8,7 +8,7 @@ const Categories = () => {
         <React.Fragment>
             <div className="page-content">
                 <Container fluid>
-                    <Breadcrumb path="/categories" title={null} breadcrumbItem="Categorias"/>
+                    <Breadcrumb path="/categories" title={null} item="Categorias"/>
                     <CategoryList/>
                 </Container>
             </div>

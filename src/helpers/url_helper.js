@@ -22,7 +22,7 @@ export const CATEGORY = "/category"
 export const SIZE = "/size"
 export const PRODUCT_SIZE = "/productSize"
 export const PRODUCT_IMAGES = "/changeProductImage"
-export const FIELD_OPTIONS = "/fieldOptions"
+export const FIELD_OPTIONS = "/fieldOption"
 
 //LOCATIONS
 export const STATES = "/state"

@@ -36,6 +36,7 @@ import {
     updateMunicipalityApi,
     updateStateApi
 } from "../../helpers/backend_helper";
+import {showResponseMessage} from "../../helpers/service";
 
 
 function* fetchStateById({id}) {
@@ -62,6 +63,7 @@ function* fetchStates({conditional, limit, offset}) {
 function* stateRegister({payload: {data, history}}) {
     try {
         const response = yield call(registerStateApi, data)
+        showResponseMessage(response, "Estado creado!");
         yield put(registerStateSuccess(response))
         history.push("/States")
 
@@ -73,6 +75,7 @@ function* stateRegister({payload: {data, history}}) {
 function* stateUpdate({payload: {id, data, history}}) {
     try {
         const response = yield call(updateStateApi, id, data)
+        showResponseMessage(response, "Estado actualizado!");
         yield put(updateStateSuccess(response))
         history.push("/states")
 
@@ -85,6 +88,7 @@ function* stateUpdate({payload: {id, data, history}}) {
 function* stateDelete({payload: {id, history}}) {
     try {
         yield call(deleteStateApi, id)
+        showResponseMessage({status:200}, "Estado borrado!");
         yield put(deleteStateSuccess(id))
         history.push("/states")
 
@@ -119,6 +123,7 @@ function* fetchMunicipalities({conditional, limit, offset}) {
 function* municipalityRegister({payload: {data, history}}) {
     try {
         const response = yield call(registerMunicipalityApi, data)
+        showResponseMessage(response, "Municipio creado!");
         yield put(registerMunicipalitySuccess(response))
         history.push("/municipalities")
     } catch (error) {
@@ -129,6 +134,7 @@ function* municipalityRegister({payload: {data, history}}) {
 function* municipalityUpdate({payload: {id, data, history}}) {
     try {
         const response = yield call(updateMunicipalityApi, id, data)
+        showResponseMessage(response, "Municipio actualizada!");
         yield put(updateMunicipalitySuccess(response))
         history.push("/municipalities")
 
@@ -141,6 +147,7 @@ function* municipalityUpdate({payload: {id, data, history}}) {
 function* municipalityDelete({payload: {id, history}}) {
     try {
         yield call(deleteMunicipalityApi, id)
+        showResponseMessage({status: 200}, "Municipio borrado!");
         yield put(deleteMunicipalitySuccess(id))
         history.push("/municipalities")
 

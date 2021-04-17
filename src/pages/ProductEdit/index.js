@@ -4,18 +4,22 @@ import Breadcrumb from "../../components/Common/Breadcrumb";
 import {Link, withRouter} from "react-router-dom";
 import {connect} from "react-redux";
 import PropTypes from "prop-types";
-import {getProduct, registerProduct, updateProduct} from "../../store/product/actions";
+import {getProduct, getProducts, registerProduct, updateProduct} from "../../store/product/actions";
+import {getFieldOptionByGroup, registerFieldOption} from "../../store/fieldOptions/actions";
 import {AvForm} from "availity-reactstrap-validation";
 import {FieldNumber, FieldSelect, FieldSwitch, FieldText} from '../../components/Fields';
 import {Button, Card} from "@material-ui/core";
 import {getCategories} from "../../store/category/actions";
 import {getSizes} from "../../store/sizes/actions";
 import {arrayToOptions} from "../../common/converters";
-import {STATUS} from "../../common/constants";
+import {GROUPS, STATUS} from "../../common/constants";
 import ProductSize from "./ProductSize";
 import ProductImage from "./ProductImage";
 import ProductPublish from "./ProductPublish";
 import ButtonSubmit from "../../components/Common/ButtonSubmit";
+import FieldOption from "../../store/fieldOptions/reducer";
+import Autocomplete from "../../components/Fields/Autocomplete";
+import {DEFAULT_PAGE_LIMIT} from "../../common/pagination";
 
 const ProductEdit = (props) => {
 
@@ -32,13 +36,20 @@ const ProductEdit = (props) => {
     const toggleInventary = () => setIsOpenInventary(!isOpenInventary);
 
 
-    const {getProduct, registerProduct, updateProduct, product, getCategories, categories, getSizes, sizes} = props;
+    const {
+        product, categories, sizes, fieldOptions,
+        onGetProduct, onCreateProduct, onUpdateProduct,
+        onGetCategories, onGetSizes,
+        onGetFieldOptions, onCreateFieldOption, refreshFieldOptions
+    } = props;
+
     const [productData, setProductData] = useState({_status: STATUS.ACTIVE, sizeModelList: []});
 
     const [categoriesList, setCategoriesList] = useState([]);
     const [categoryDefault, setCategoryDefault] = useState({});
 
-    const [materialsList, setMaterialsList] = useState([{value: 1, label: 'Terciopelo'}, {value: 2, label: 'Seda'}, {value: 2, label: 'Algodon'}, {value: 3, label: 'Polyester'}]);
+    const [materialsList, setMaterialsList] = useState([]);
+    const [providerList, setProviderList] = useState([]);
     const [materialDefault, setMaterialDefault] = useState({});
     const [publication, setPublication] = useState({_status: "true"});
 
@@ -51,13 +62,13 @@ const ProductEdit = (props) => {
 
     //Carga inicial
     useEffect(() => {
-        if (isEdit && getProduct) {
-            getProduct(props.match.params.id);
-        } else {
-            getCategories();
-            getSizes();
+        if (isEdit && onGetProduct) {
+            onGetProduct(props.match.params.id);
         }
-    }, [getProduct]);
+        onGetCategories();
+        onGetSizes();
+        onGetFieldOptions();
+    }, [onGetProduct]);
 
     //cargar info relacionada al prod
     useEffect(() => {
@@ -65,13 +76,11 @@ const ProductEdit = (props) => {
             setProductData({...product, _status: product.status});
             const defaultCategory = product.category?.id || null;
             setCategoryDefault(defaultCategory);
-
-            const defaultMaterial = materialsList.filter(m => m.label === product.material)[0];
-            if (defaultMaterial) setMaterialDefault(defaultMaterial.id);
-
-            getCategories();
-            getSizes();
+        } else if (product.id && !isEdit) {
+            toggle();
+            toggleInventary();
         }
+        console.log('Product', product)
     }, [product]);
 
     useEffect(() => {
@@ -95,12 +104,28 @@ const ProductEdit = (props) => {
         }
     }, [sizes])
 
+    useEffect(() => {
+        if (fieldOptions && fieldOptions.length > 0) {
+            setMaterialsList(fieldOptions.filter(op => (op.group === GROUPS.MATERIAL)).map(op => ({name: op.value})));
+            setProviderList(fieldOptions.filter(op => (op.group === GROUPS.PROVIDERS)).map(op => ({name: op.value})));
+        } else {
+            setMaterialsList([]);
+            setProviderList([]);
+        }
+        console.log('fieldOptions', fieldOptions)
+    }, [fieldOptions])
+
+    useEffect(() => {
+        if (refreshFieldOptions) {
+            onGetFieldOptions();
+        }
+        console.log('refreshFieldOptions', refreshFieldOptions)
+    }, [refreshFieldOptions])
 
     const handleValidSubmit = (event, values) => {
         const data = {
             ...values,
             category: values.category.value,
-            // material: values.material.label,
             size: values.size.value,
             status: 1,
             weight: values.weight ? Number.parseFloat(values.weight) : 0,
@@ -109,9 +134,16 @@ const ProductEdit = (props) => {
         };
 
         if (!isEdit) {
-            registerProduct(data, props.history)
+            onCreateProduct(data, props.history)
         } else {
-            updateProduct(props.match.params.id, data, props.history)
+            onUpdateProduct(props.match.params.id, data, props.history)
+        }
+
+        if (!materialsList.some(op => op.name === data.material)) {
+            onCreateFieldOption({group: GROUPS.MATERIAL, name: "PRODUCT", value: data.material}, props.history);
+        }
+        if (!providerList.some(op => op.name === data.provider)) {
+            onCreateFieldOption({group: GROUPS.PROVIDERS, name: "PRODUCT", value: data.provider}, props.history);
         }
     }
 
@@ -119,7 +151,7 @@ const ProductEdit = (props) => {
         <React.Fragment>
             <div className="page-content">
                 <Container fluid>
-                    <Breadcrumb hasBack path="/products" title={productData.reference} breadcrumbItem={"Producto"}/>
+                    <Breadcrumb hasBack path="/products" title={productData.reference} item={"Producto"}/>
 
                     <Row>
                         <Col md={12}>
@@ -161,7 +193,7 @@ const ProductEdit = (props) => {
                                             }}>
                                         <div className="p-4 border-top">
                                             <Row>
-                                                <Col md={ 12}>
+                                                <Col md={12}>
                                                     <div className="mb-3">
                                                         <Label htmlFor="field_name">Nombre de Producto <span className="text-danger">*</span></Label>
                                                         <FieldText
@@ -176,7 +208,7 @@ const ProductEdit = (props) => {
 
                                             </Row>
                                             <Row>
-                                                <Col md="4">
+                                                <Col md="6">
                                                     <div className="mb-3">
                                                         <Label className="control-label">Categoria <span className="text-danger">*</span></Label>
                                                         <FieldSelect
@@ -190,27 +222,7 @@ const ProductEdit = (props) => {
                                                         />
                                                     </div>
                                                 </Col>
-                                                <Col md="4">
-                                                    <div className="mb-3">
-                                                        <Label className="control-label">Material</Label>
-                                                        <FieldText
-                                                            id={"field_material"}
-                                                            name={"material"}
-                                                            value={productData.material}
-                                                            minLength={3}
-                                                            maxLength={255}
-                                                        />
-                                                        {/*//TODO descomentar cuando este colgado del servicio
-                                                        <FieldSelect
-                                                            id={"field_material"}
-                                                            name={"material"}
-                                                            options={materialsList}
-                                                            defaultValue={materialDefault}
-                                                            isSearchable
-                                                        />*/}
-                                                    </div>
-                                                </Col>
-                                                <Col md="4">
+                                                <Col md="3">
                                                     <div className="mb-0">
                                                         <Label className="control-label">Tallas</Label>
                                                         <FieldSelect
@@ -226,17 +238,29 @@ const ProductEdit = (props) => {
                                                         />
                                                     </div>
                                                 </Col>
+                                                <Col md="3">
+                                                    <div className="mb-3">
+                                                        <Label className="control-label">Material</Label>
+                                                        <Autocomplete
+                                                            id={"field_material"}
+                                                            name={"material"}
+                                                            options={materialsList}
+                                                            defaultValue={productData.material}
+                                                            onChange={(material) => setProductData({...productData, material: material})}
+                                                        />
+                                                    </div>
+                                                </Col>
                                             </Row>
                                             <Row>
                                                 <Col md="6">
                                                     <div className="mb-3">
                                                         <Label htmlFor="field_provider">Proveedor</Label>
-                                                        <FieldText
+                                                        <Autocomplete
                                                             id={"field_provider"}
                                                             name={"provider"}
-                                                            value={productData.provider}
-                                                            minLength={3}
-                                                            maxLength={255}
+                                                            options={providerList}
+                                                            defaultValue={productData.provider}
+                                                            onChange={(provider) => setProductData({...productData, provider: provider})}
                                                         />
                                                     </div>
                                                 </Col>
@@ -288,11 +312,9 @@ const ProductEdit = (props) => {
                                                     </div>
                                                 </Col>
                                             </Row>
-                                            <Row>
-                                                <Col md={12}>
-                                                    <div className="text-right m-3">
-                                                        <ButtonSubmit loading={props.loading} name='Buscar' iconClass='mdi mdi-magnify'/>
-                                                    </div>
+                                            <Row className="pt-2">
+                                                <Col md={12} className="text-right">
+                                                    <ButtonSubmit loading={props.loading}/>
                                                 </Col>
                                             </Row>
                                         </div>
@@ -312,7 +334,7 @@ const ProductEdit = (props) => {
                                             <div className="me-3">
                                                 <div className="avatar-xs">
                                                     <div className="avatar-title rounded-circle bg-soft-primary text-primary">
-                                                        03
+                                                        02
                                                     </div>
                                                 </div>
                                             </div>
@@ -351,7 +373,7 @@ const ProductEdit = (props) => {
                                             <div className="me-3">
                                                 <div className="avatar-xs">
                                                     <div className="avatar-title rounded-circle bg-soft-primary text-primary">
-                                                        02
+                                                        03
                                                     </div>
                                                 </div>
                                             </div>
@@ -381,7 +403,7 @@ const ProductEdit = (props) => {
                                             <div className="me-3">
                                                 <div className="avatar-xs">
                                                     <div className="avatar-title rounded-circle bg-soft-primary text-primary">
-                                                        03
+                                                        04
                                                     </div>
                                                 </div>
                                             </div>
@@ -402,8 +424,6 @@ const ProductEdit = (props) => {
                             </Card>
                         </Col>
                     </Row>
-
-
                 </Container>
             </div>
         </React.Fragment>
@@ -412,13 +432,24 @@ const ProductEdit = (props) => {
 
 const mapStateToProps = state => {
     const {error, product, loading} = state.Product
+    const {fieldOptions, refresh} = state.FieldOption
     const {categories} = state.Category
     const {sizes} = state.Sizes
-    return {error, product, categories, sizes, loading}
+    return {error, product, categories, sizes, fieldOptions, loading, refreshFieldOptions: refresh}
 }
 
+const mapDispatchToProps = dispatch => ({
+    onGetCategories: (conditional = null, limit = 100, page) => dispatch(getCategories(conditional, limit, page)),
+    onGetSizes: (conditional = null, limit = 100, page) => dispatch(getSizes(conditional, limit, page)),
+    onGetFieldOptions: (conditional = null, limit = 100, page) => dispatch(getFieldOptionByGroup([GROUPS.MATERIAL, GROUPS.PROVIDERS], limit, page)),
+    onGetProduct: (id) => dispatch(getProduct(id)),
+    onCreateProduct: (data, history) => dispatch(registerProduct(data, history)),
+    onUpdateProduct: (data, history) => dispatch(updateProduct(data, history)),
+    onCreateFieldOption: (data, history) => dispatch(registerFieldOption(data, history)),
+})
+
 export default withRouter(
-    connect(mapStateToProps, {getProduct, registerProduct, updateProduct, getCategories, getSizes})(ProductEdit)
+    connect(mapStateToProps, mapDispatchToProps)(ProductEdit)
 )
 
 ProductEdit.propTypes = {

@@ -17,7 +17,7 @@ const InputPhoneField = (props) => {
             name={props.name}
             value={props.value}
             required={props.required}
-            country={props.country || 'pa'}
+            country={props.country || 'co'}
             placeholder={props.placeholder}
             onChange={(value) => props.onChange && props.onChange(value)}
             validate={
@@ -52,6 +52,8 @@ class AvPhoneInput extends AvBaseInput {
                     <PhoneInput
                         id={id || name}
                         country={country}
+                        onlyCountries={[country]}
+                        preferredCountries={[country]}
                         value={value}
                         name={name}
                         placeholder={placeholder}
@@ -59,8 +61,7 @@ class AvPhoneInput extends AvBaseInput {
                         inputClass="form-control w-100"
                         inputProps={{
                             name: {name},
-                            required: {required},
-                            enableAreaCodes: true
+                            required: {required}
                         }}
                         onChange={(value, country, e, formattedValue) => {
                             onChange(formattedValue);

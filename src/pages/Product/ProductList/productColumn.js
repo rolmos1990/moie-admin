@@ -42,7 +42,7 @@ const productColumns = (onDelete = false) => [
         formatter: (cellContent, item) => (
             <div className="field-br" style={{width: '350px'}}>
                 <small>{item.name} </small>
-                {item.published == false && (
+                {item.published === false && (
                     <Tooltip placement="bottom" title="Producto no publicado" aria-label="add">
                         <i className={"mdi mdi-alert-octagram-outline font-size-18 mr-1 text-warning"}> </i>
                     </Tooltip>
@@ -154,11 +154,11 @@ const productColumns = (onDelete = false) => [
                         <i className="uil uil-pen font-size-18"> </i>
                     </Link>
                 </li>
-                <li className="list-inline-item">
+                {/*<li className="list-inline-item">
                     <button size="small" className="btn btn-sm text-danger" onClick={() => onDelete(item.id)}>
                         <i className="uil uil-trash-alt font-size-18"> </i>
                     </button>
-                </li>
+                </li>*/}
             </ul>
         ),
     },

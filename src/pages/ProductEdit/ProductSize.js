@@ -1,10 +1,10 @@
 import React, {useEffect, useState} from "react"
 import PropTypes from 'prop-types'
-import {Col, Row, Spinner} from "reactstrap"
+import {CardBody, Col, Row, Spinner} from "reactstrap"
 import {FieldText} from "../../components/Fields";
 import {map} from "lodash";
 import {Button} from "@material-ui/core";
-import {getProductSizes, updateProductSizeList} from "../../store/productSize/actions";
+import {updateProductSizeList} from "../../store/productSize/actions";
 import {connect} from "react-redux";
 import Conditionals from "../../common/conditionals";
 import {AvForm} from "availity-reactstrap-validation";
@@ -14,23 +14,25 @@ const ProductSize = props => {
     const {product, template, onGetProductSizes, productSizes, refresh} = props
     const [productSizesList, setProductSizesList] = useState([]);
     const [selectValues, setSelectValues] = useState([]);
+    const [sizeTotals, setSizeTotals] = useState({});
     const form = React.createRef();
 
     useEffect(() => {
-        onGetProductSizes(product.id);
+        if (product.productSize.length) {
+            setProductSizesList(parseList(product.productSize));
+        } else {
+            setProductSizesList([]);
+        }
+
         fillSelectValues();
     }, [product])
 
     useEffect(() => {
-        if (productSizes && productSizes.length) {
-            setProductSizesList(parseList(productSizes));
-        }else{
-            setProductSizesList([]);
-        }
-    }, [productSizes])
+        calculateTotals();
+    }, [productSizesList])
 
     const getModel = () => {
-        const model = {color: '', sizes:{}};
+        const model = {color: '', sizes: {}};
         if (template && template.sizes) {
             template.sizes.forEach(size => model.sizes[size] = 0)
         }
@@ -48,11 +50,13 @@ const ProductSize = props => {
     const addColor = () => {
         const list = [...productSizesList, getModel()];
         setProductSizesList(list);
+        calculateTotals();
     }
     const removeColor = (index) => {
         let list = [...productSizesList];
         list.splice(index);
         setProductSizesList(list);
+        calculateTotals();
     }
     const parseDefaultValue = (model, sizeName) => {
         if (!model || !model.sizes) return 0;
@@ -65,7 +69,7 @@ const ProductSize = props => {
             Object.keys(ps.sizes).forEach(sizeName => {
                 let qty = parseFloat(ps.sizes[sizeName]);
 
-                if(qty > 0){
+                if (qty > 0) {
                     dataList.push({name: sizeName, qty: qty, color: ps.color});
                 }
             });
@@ -93,7 +97,7 @@ const ProductSize = props => {
         }
     }
     const handleChangeColors = (index, color) => {
-        if(!productSizesList.some(l => l.color === color)){
+        if (!productSizesList.some(l => l.color === color)) {
             const list = [...productSizesList];
             list[index].color = color;
             setProductSizesList(list);
@@ -104,17 +108,29 @@ const ProductSize = props => {
         const list = [...productSizesList];
         list[index].sizes[sizeName] = sizeValue;
         setProductSizesList(list);
+        calculateTotals();
     }
 
     const validateColorDuplicate = (color) => {
         //TODO validar
-        if(productSizesList.some(l => l.color === color)){
+        if (productSizesList.some(l => l.color === color)) {
             return 'Color repetido.';
         }
         return true;
     }
     const validateColor = (inputName) => {
-       form.current.validateInput(inputName);
+        form.current.validateInput(inputName);
+    }
+    const calculateTotals = () => {
+        const totals = {total: 0};
+        productSizesList.forEach((model) => {
+            template.sizes.forEach((size) => {
+                if (!totals[size]) totals[size] = 0;
+                totals[size] += parseInt(model.sizes[size]);
+                totals.total += parseInt(model.sizes[size]);
+            })
+        })
+        setSizeTotals(totals);
     }
 
 
@@ -176,6 +192,15 @@ const ProductSize = props => {
                                         </th>
                                     </tr>
                                 ))}
+                                <tr>
+                                    <th>Totales</th>
+                                    {map(template.sizes, (size, k) => (
+                                        <th key={'td_' + k} style={{minWidth: '30px'}} className="text-center">
+                                            {sizeTotals[size]}
+                                        </th>
+                                    ))}
+                                    <th>{sizeTotals.total}</th>
+                                </tr>
                                 </tbody>
                             </table>
                         </div>
@@ -191,10 +216,8 @@ const ProductSize = props => {
                     </Col>
                 </Row>
                 <Row>
-                    <Col md={12}>
-                        <div className={"float-start m-3"}>
-                            <ButtonSubmit loading={props.loading}/>
-                        </div>
+                    <Col md={12} className="text-right">
+                        <ButtonSubmit loading={props.loading}/>
                     </Col>
                 </Row>
             </AvForm>
@@ -219,7 +242,7 @@ const mapDispatchToProps = dispatch => ({
         if (productId) {
             conditions.add('product', productId, Conditionals.OPERATORS.EQUAL);
         }
-        dispatch(getProductSizes(conditions.all(), null, 0))
+        //dispatch(getProductSizes(conditions.all(), null, 0))
     },
     onUpdateProductSizeList: (id, data, history) => dispatch(updateProductSizeList(id, data, history))
 })

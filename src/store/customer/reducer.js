@@ -48,6 +48,7 @@ const customer = (state = initialState, action) => {
             }
         case GET_CUSTOMER:
             return {
+                ...state,
                 loading: true,
             }
         case GET_CUSTOMER_SUCCESS:
@@ -58,6 +59,7 @@ const customer = (state = initialState, action) => {
             }
         case GET_CUSTOMER_FAILED:
             return {
+                ...state,
                 loading: false,
             }
         case REGISTER_CUSTOMER:

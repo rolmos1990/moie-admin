@@ -18,7 +18,11 @@ import NonAuthLayout from "./components/NonAuthLayout"
 // Import scss
 import "./assets/scss/theme.scss"
 import "./assets/scss/custom/pages/_common.scss"
+import ContainerToast from "./components/MessageToast/ShowToastMessages";
 
+// import dotenv from  'dotenv'
+// const result = dotenv.config()
+// console.log('dotenv', result)
 
 //import fakeBackend from "./helpers/AuthType/fakeBackend"
 
@@ -72,6 +76,7 @@ const App = props => {
         </Switch>
 
       </Router>
+      <ContainerToast/>
     </React.Fragment>
   )
 }

@@ -44,12 +44,9 @@ const CategoryEdit = (props) => {
         <React.Fragment>
             <div className="page-content">
                 <Container fluid>
-                    <Breadcrumb hasBack path="/categories" title={categoryData.name} breadcrumbItem={"Category"}/>
+                    <Breadcrumb hasBack path="/categories" title={categoryData.name} item={"Category"}/>
 
-                    <AvForm className="needs-validation" autoComplete="off"
-                            onValidSubmit={(e, v) => {
-                                handleValidSubmit(e, v)
-                            }}>
+                    <AvForm className="needs-validation" autoComplete="off" onValidSubmit={(e, v) => handleValidSubmit(e, v)}>
                         <Row>
                             <Col xl="8">
                                 <Card>
@@ -67,7 +64,7 @@ const CategoryEdit = (props) => {
                                             </div>
                                         </div>
                                         <Row>
-                                            <Col md="12">
+                                            <Col md="8">
                                                 <div className="mb-3">
                                                     <Label htmlFor="field_name">Nombre <span className="text-danger">*</span></Label>
                                                     <FieldText
@@ -80,8 +77,25 @@ const CategoryEdit = (props) => {
                                                     />
                                                 </div>
                                             </Col>
+                                            <Col md="4">
+                                                <div className="mb-3">
+                                                    <Label htmlFor="field_prefix">Prefijo <span className="text-danger">*</span></Label>
+                                                    <FieldText
+                                                        id={"field_prefix"}
+                                                        name={"prefix"}
+                                                        value={categoryData.prefix}
+                                                        minLength={1}
+                                                        maxLength={5}
+                                                        required
+                                                    />
+                                                </div>
+                                            </Col>
                                         </Row>
-                                        <ButtonSubmit loading={props.loading} />
+                                        <Row>
+                                            <Col md={12} className="text-right">
+                                                <ButtonSubmit loading={props.loading} />
+                                            </Col>
+                                        </Row>
                                     </CardBody>
                                 </Card>
                             </Col>

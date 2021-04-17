@@ -17,6 +17,28 @@ const DropZoneIcon = props => {
         });
     }
 
+    const handleView = () => {
+        if(props.mode === 'icon'){
+            return (
+                <div className="needsclick">
+                    <i className="display-5 text-muted uil uil-cloud-upload" title={'Subir imagen'}> </i>
+                </div>
+            );
+        }
+        return (
+            <div style={{minHeight:'375px'}}>
+                {props.hasImage ? props.children : (
+                    <div className="dz-message needsclick">
+                        <div className="mb-3">
+                            <i className="display-4 text-muted uil uil-cloud-upload"> </i>
+                        </div>
+                        <h4>Suelta las imagenes aquí.</h4>
+                    </div>
+                )}
+            </div>
+        );
+    }
+
     return (
         <Dropzone
             onDrop={onChange}
@@ -24,9 +46,7 @@ const DropZoneIcon = props => {
             {({getRootProps, getInputProps}) => (
                 <div className="text-center needsclick" {...getRootProps()} >
                     <input {...getInputProps()} />
-                    <div className="needsclick">
-                        <i className="display-5 text-muted uil uil-cloud-upload" title={'Subir imagen'}> </i>
-                    </div>
+                    {handleView()}
                 </div>
             )}
         </Dropzone>

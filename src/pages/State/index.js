@@ -8,7 +8,7 @@ const States = () => {
         <React.Fragment>
             <div className="page-content">
                 <Container fluid>
-                    <Breadcrumb path="/states" title={null} breadcrumbItem="Estados"/>
+                    <Breadcrumb path="/states" title={null} item="Estados"/>
                     <StatesList/>
                 </Container>
             </div>

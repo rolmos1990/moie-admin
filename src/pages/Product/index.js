@@ -8,7 +8,7 @@ const Product = () => {
         <React.Fragment>
             <div className="page-content">
                 <Container fluid>
-                    <Breadcrumb path="/products" title={null} breadcrumbItem="Productos" />
+                    <Breadcrumb path="/products" title={null} item="Productos" />
                     <ProductList />
                 </Container>
             </div>

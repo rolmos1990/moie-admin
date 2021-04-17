@@ -16,7 +16,7 @@ import ButtonSubmit from "../../components/Common/ButtonSubmit";
 
 const CustomerEdit = (props) => {
     const {getCustomer, customer} = props;
-    const [customerData, setCustomerData] = useState({_status:STATUS.ACTIVE});
+    const [customerData, setCustomerData] = useState({_status: STATUS.ACTIVE});
 
     // definición de localidades
     const {getStates, states} = props;
@@ -88,20 +88,24 @@ const CustomerEdit = (props) => {
     }, [state]);
 
     const handleValidSubmit = (event, values) => {
-        values = filteredValues(values);
+        const data = filteredValues(values);
+        console.log(data, values)
         if (!isEdit) {
-            props.registerCustomer(values, props.history)
+            props.registerCustomer(data, props.history)
         } else {
-            props.updateCustomer(props.match.params.id, values, props.history)
+            props.updateCustomer(props.match.params.id, data, props.history)
         }
     }
 
     const filteredValues = (values) => {
-        values.state = values.state?.value;
-        values.municipality = values.municipality?.value;
-        values.status = values._status;
-        delete values._status;
-        return values;
+        const data = {...values};
+        data.state = values.state?.value;
+        data.municipality = values.municipality?.value;
+        data.status = values._status;
+        data.cellphone = values.cellphone ? values.cellphone.replace(/\s/g, '') : '';
+        data.phone = values.phone ? values.phone.replace(/\s/g, '') : '';
+        delete data._status;
+        return data;
     }
 
     function handleSelectDepartment(option) {
@@ -113,7 +117,7 @@ const CustomerEdit = (props) => {
         <React.Fragment>
             <div className="page-content">
                 <Container fluid>
-                    <Breadcrumb hasBack path="/customers" title={customerData.name} breadcrumbItem={"Cliente"}/>
+                    <Breadcrumb hasBack path="/customers" title={customerData.name} item={"Cliente"}/>
 
                     <AvForm className="needs-validation" autoComplete="off"
                             onValidSubmit={(e, v) => {
@@ -142,8 +146,13 @@ const CustomerEdit = (props) => {
                                         <Row>
                                             <Col md="6">
                                                 <div className="mb-3">
-                                                    <Label htmlFor="field_name">Nombre</Label>
-                                                    <FieldText name={"name"} value={customerData.name} required id={"field_name"}/>
+                                                    <Label htmlFor="name">Nombre</Label>
+                                                    <FieldText
+                                                        id={"name"}
+                                                        name={"name"}
+                                                        value={customerData.name}
+                                                        required
+                                                    />
                                                 </div>
                                             </Col>
                                             <Col md="6">
@@ -157,10 +166,21 @@ const CustomerEdit = (props) => {
                                             </Col>
                                         </Row>
                                         <Row>
-                                            <Col md="6">
+                                            <Col md="4">
                                                 <div className="mb-3">
-                                                    <Label htmlFor="validationCustom05">Teléfono Residencial</Label>
+                                                    <Label htmlFor="document">Documento</Label>
+                                                    <FieldText
+                                                        id='document'
+                                                        name={"document"}
+                                                        value={customerData.document}
+                                                        required/>
+                                                </div>
+                                            </Col>
+                                            <Col md="4">
+                                                <div className="mb-3">
+                                                    <Label htmlFor="phone">Teléfono Residencial</Label>
                                                     <FieldPhone
+                                                        id="phone"
                                                         name="phone"
                                                         value={customerData.phone}
                                                         placeholder=""
@@ -168,15 +188,15 @@ const CustomerEdit = (props) => {
                                                         errorMessage="Ingrese un número valido (Ejemplo: 00000000)"
                                                         className="form-control"
                                                         validate={{required: {value: true}}}
-                                                        id="validationCustom05"
                                                         onChange={(value) => setCustomerData({...customerData, phone: value})}
                                                     />
                                                 </div>
                                             </Col>
-                                            <Col md="6">
+                                            <Col md="4">
                                                 <div className="mb-3">
-                                                    <Label htmlFor="validationCustom05">Teléfono Celular</Label>
+                                                    <Label htmlFor="cellphone">Teléfono Celular</Label>
                                                     <FieldPhone
+                                                        id="cellphone"
                                                         name="cellphone"
                                                         value={customerData.cellphone}
                                                         placeholder=""
@@ -184,7 +204,6 @@ const CustomerEdit = (props) => {
                                                         errorMessage="Ingrese un número valido (Ejemplo: 00000000)"
                                                         className="form-control"
                                                         validate={{required: {value: true}}}
-                                                        id="validationCustom06"
                                                         onChange={(value) => setCustomerData({...customerData, cellphone: value})}
                                                     />
                                                 </div>
@@ -193,14 +212,15 @@ const CustomerEdit = (props) => {
                                         <Row>
                                             <Col md="6">
                                                 <div className="mb-3">
-                                                    <Label htmlFor="validationCustom04">Departamento</Label>
+                                                    <Label htmlFor="state">Departamento</Label>
                                                     <FieldSelect
+                                                        id="state"
                                                         defaultValue={state}
                                                         name={"state"}
                                                         placeholder={"Indique un departamento"}
                                                         options={statesOptions}
-                                                        required
                                                         onChange={handleSelectDepartment}
+                                                        required
                                                         isSearchable
                                                     />
                                                 </div>
@@ -209,6 +229,7 @@ const CustomerEdit = (props) => {
                                                 <div className="mb-3">
                                                     <Label htmlFor="validationCustom03">Municipio</Label>
                                                     <FieldSelect
+                                                        id="municipality"
                                                         defaultValue={municipality}
                                                         name={"municipality"}
                                                         placeholder={"Indique un municipio"}
@@ -222,7 +243,7 @@ const CustomerEdit = (props) => {
                                         <hr/>
                                         {customerData.temporalAddress && (
                                             <Row>
-                                                <p className="alert alert-warning" >Este cliente tiene una dirección de una versión anterior, es recomendable que por favor agregue la dirección en la parte superior.</p>
+                                                <p className="alert alert-warning">Este cliente tiene una dirección de una versión anterior, es recomendable que por favor agregue la dirección en la parte superior.</p>
                                                 <Col md="12">
                                                     <div className="mb-3">
                                                         <h4>Dirección temporal</h4>
@@ -246,15 +267,23 @@ const CustomerEdit = (props) => {
                                                 </Col>
                                             </Row>
                                         )}
-                                        <div className="mb-3">
-                                            <AvField
-                                                checked={customerData.hasNotification ? true : false}
-                                                className="form-check-input"
-                                                type="checkbox"
-                                                name="hasNotification"
-                                                label="Recibe notificaciones"/>
-                                        </div>
-                                        <ButtonSubmit loading={props.loading}/>
+                                        <Row>
+                                            <Col>
+                                                <div className="mb-3">
+                                                    <AvField
+                                                        checked={customerData.hasNotification ? true : false}
+                                                        className="form-check-input"
+                                                        type="checkbox"
+                                                        name="hasNotification"
+                                                        label="Recibe notificaciones"/>
+                                                </div>
+                                            </Col>
+                                        </Row>
+                                        <Row>
+                                            <Col md={12} className="text-right">
+                                                <ButtonSubmit loading={props.loading}/>
+                                            </Col>
+                                        </Row>
                                     </CardBody>
                                 </Card>
                             </Col>

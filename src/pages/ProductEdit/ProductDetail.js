@@ -33,7 +33,7 @@ const ProductDetail = (props) => {
         <React.Fragment>
             <div className="page-content">
                 <Container fluid>
-                    <Breadcrumb hasBack path="/products" title={productData.reference} breadcrumbItem={"Producto"}/>
+                    <Breadcrumb hasBack path="/products" title={productData.reference} item={"Producto"}/>
 
                     <Card id={'details'}>
 
@@ -95,8 +95,8 @@ const ProductDetail = (props) => {
                                 </Row>
                                 <Row>
                                     <Col md={12}>
-                                        <ul>
-                                            <li><b>Nombre:</b> {productData.name}</li>
+                                        <ul style={{listStyle: 'none'}}>
+                                            <li><b>Nombre:</b> <small>{productData.name}</small></li>
                                             <li><b>Descripción:</b> {productData.description}</li>
                                             <li><b>Costo:</b> {priceFormat(productData.cost, "", true)}</li>
                                             <li><b>Precio:</b> {priceFormat(productData.price, "", true)}</li>
@@ -109,7 +109,7 @@ const ProductDetail = (props) => {
                                         <h4 className="card-title">Especificaciones</h4>
                                     </Col>
                                     <Col md={12}>
-                                        <ul>
+                                        <ul style={{listStyle: 'none'}}>
                                             <li><b>Tipo:</b> {productData.size?.name}</li>
                                             <li><b>Categoria:</b> {productData.category?.name}</li>
                                             <li><b>Material:</b> {productData.material}</li>

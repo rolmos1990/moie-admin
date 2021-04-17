@@ -12,15 +12,20 @@ const categoryColumns = (onDelete = false) => [
         dataField: "name",
         sort: true,
         formatter: (cellContent, item) => (
-            <>
-                <Link to="#" className="text-body">
-                    {item.name}
-                </Link>
-            </>
+            <Link to={`/category/${item.id}`} className="text-body">
+                {item.name}
+            </Link>
         ),
         filter: true,
         filterType: "text",
         filterCondition: Conditionals.OPERATORS.LIKE,
+    },
+    {
+        text: "Prefijo",
+        dataField: "prefix",
+        sort: true,
+        filter: true,
+        filterType: "text",
     },
     /*{
         text: "Código DIAN",

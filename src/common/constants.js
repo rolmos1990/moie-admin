@@ -8,3 +8,9 @@ export const STATUS = {
     INACTIVE: false
 };
 
+
+//GROUPS
+export const GROUPS = {
+    MATERIAL: 'MATERIAL',
+    PROVIDERS: 'PROVIDERS',
+};

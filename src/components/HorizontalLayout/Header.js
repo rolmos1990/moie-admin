@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 
 import { connect } from "react-redux"
 
-import { Link } from "react-router-dom"
+import {BrowserRouter as Router, Link} from "react-router-dom"
 
 // Redux Store
 import { showRightSidebarAction, toggleLeftmenu } from "../../store/actions"
@@ -29,6 +29,7 @@ import slack from "../../assets/images/brands/slack.png"
 
 //i18n
 import { withTranslation } from "react-i18next"
+
 
 const Header = props => {
   const [isSearch, setSearch] = useState(false)
@@ -238,6 +239,7 @@ const Header = props => {
             </div>*/}
           </div>
         </div>
+
     </React.Fragment>
   )
 }

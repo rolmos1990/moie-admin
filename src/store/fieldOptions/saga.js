@@ -47,8 +47,7 @@ const CREATE_FAILED_ACTION  =   registerFieldOptionFailed;
 const UPDATE_SUCCESS_ACTION =   updateFieldOptionSuccess;
 const UPDATE_FAILED_ACTION  =   updateFieldOptionFail;
 
-
-const LIST_URL = "/fieldOptions";
+// const LIST_URL = "/fieldOptions";
 
 function* get({ id }) {
     try {
@@ -77,7 +76,7 @@ function* register({ payload: { data, history } }) {
     try {
         const response = yield call(POST_API_REQUEST, data)
         yield put(CREATE_SUCCESS_ACTION(response))
-        history.push(LIST_URL)
+        //history.push(LIST_URL)
 
     } catch (error) {
         yield put(CREATE_FAILED_ACTION(error))
@@ -88,7 +87,7 @@ function* update({ payload: { id, data, history } }) {
     try {
         const response = yield call(PUT_API_REQUEST, id, data)
         yield put(UPDATE_SUCCESS_ACTION(response))
-        history.push(LIST_URL)
+        //history.push(LIST_URL)
 
     } catch (error) {
         yield put(UPDATE_FAILED_ACTION(error))

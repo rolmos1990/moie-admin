@@ -44,7 +44,7 @@ const StateEdit = (props) => {
         <React.Fragment>
             <div className="page-content">
                 <Container fluid>
-                    <Breadcrumb hasBack path="/states" title={estadoData.name} breadcrumbItem={"Estado"}/>
+                    <Breadcrumb hasBack path="/states" title={estadoData.name} item={"Estado"}/>
 
                     <AvForm className="needs-validation" autoComplete="off"
                             onValidSubmit={(e, v) => {
@@ -109,7 +109,11 @@ const StateEdit = (props) => {
                                                 </div>
                                             </Col>
                                         </Row>
-                                        <ButtonSubmit loading={props.loading}/>
+                                        <Row>
+                                            <Col md={12} className="text-right">
+                                                <ButtonSubmit loading={props.loading} />
+                                            </Col>
+                                        </Row>
                                     </CardBody>
                                 </Card>
                             </Col>

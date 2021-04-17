@@ -21,6 +21,7 @@ import {
     deleteCustomerApi
 } from "../../helpers/backend_helper"
 import Conditionals from "../../common/conditionals";
+import {showResponseMessage} from "../../helpers/service";
 
 function* fetchCustomerById({ id }) {
     try {
@@ -49,6 +50,7 @@ function* fetchCustomers({conditional, limit, offset}) {
 function* customerRegister({ payload: { customer, history } }) {
     try {
         const response = yield call(registerCustomer, customer)
+        showResponseMessage(response, "Cliente creado!");
         yield put(registerCustomerSuccess(response))
         history.push("/customers")
 
@@ -61,6 +63,7 @@ function* customerRegister({ payload: { customer, history } }) {
 function* customerUpdate({ payload: { id, customer, history } }) {
     try {
         const response = yield call(updateCustomer, id, customer)
+        showResponseMessage(response, "Cliente actualizado!");
         yield put(updateCustomerSuccess(response))
         history.push("/customers")
 
@@ -74,6 +77,7 @@ function* customerDelete({ payload: { id, history } }) {
     try {
         yield call(deleteCustomerApi, id)
         yield put(deleteCustomerSuccess(id))
+        showResponseMessage({status:200}, "Cliente borrado!");
         history.push("/customers")
 
     } catch (error) {

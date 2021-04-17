@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react"
 import PropTypes from 'prop-types'
-import {Card, Col, Row, Spinner} from "reactstrap"
+import {Card, CardBody, Col, Row, Spinner} from "reactstrap"
 import {Button} from "@material-ui/core";
 import {getProductImage, updateProductImage} from "../../store/productImages/actions";
 import {connect} from "react-redux";
@@ -27,11 +27,11 @@ const ProductImage = props => {
     useEffect(() => {
         //onGetProductImage(product.id);
         const files = groups.map(g => ({...g, file: {name: '', preview: ''}}));
-        if(product.productImage && product.productImage.length >0){
+        if (product.productImage && product.productImage.length > 0) {
             files.forEach((f, i) => {
-                if(product.productImage.length > i){
+                if (product.productImage.length > i) {
                     const imgData = product.productImage[i];
-                    if(imgData){
+                    if (imgData) {
                         // f.groupId = imgData.group;
                         f.file.preview = `${getImageByQuality(imgData, 'high')}`
                         f.file.name = imgData.filename;
@@ -74,8 +74,8 @@ const ProductImage = props => {
     }
 
     const handleValidSubmit = (event, values) => {
-        const files = selectedFiles.filter(selectedFile=> selectedFile.groupId && selectedFile.file.base64).map(f => ({group: f.groupId, file: f.file.base64}));
-        if( files.length > 0){
+        const files = selectedFiles.filter(selectedFile => selectedFile.groupId && selectedFile.file.base64).map(f => ({group: f.groupId, file: f.file.base64}));
+        if (files.length > 0) {
             props.onUpdateProductImage(product.id, files, props.history);
         }
     }
@@ -90,10 +90,18 @@ const ProductImage = props => {
                                 <div className="p-2">
                                     <Row className="align-items-center" style={{borderBottom: '1px solid #f5f6f8'}}>
                                         <Col md={12} className="text-center p-2" style={{height: '400px'}}>
-                                            <Images className="img-fluid mx-auto d-block tab-img rounded"
-                                                    alt={f.file?.f?.name}
-                                                    src={f.file?.preview}
-                                            />
+                                            <DropZoneIcon
+                                                maxFiles={1}
+                                                mode="block"
+                                                hasImage={f.file && f.file.preview}
+                                                onDrop={(files) => {
+                                                    handleAcceptedFiles(f.groupId, files);
+                                                }}>
+                                                <Images className="img-fluid mx-auto d-block tab-img rounded"
+                                                        alt={f.file?.f?.name}
+                                                        src={f.file?.preview}
+                                                />
+                                            </DropZoneIcon>
                                         </Col>
                                     </Row>
                                     <Row className="p-2">
@@ -111,6 +119,7 @@ const ProductImage = props => {
                                         <Col md={4} className="text-right">
                                             <DropZoneIcon
                                                 maxFiles={1}
+                                                mode="icon"
                                                 onDrop={(files) => {
                                                     handleAcceptedFiles(f.groupId, files);
                                                 }}
@@ -122,11 +131,9 @@ const ProductImage = props => {
                         </Col>
                     ))}
                 </Row>
-                <Row>
-                    <Col md={12}>
-                        <div className={"float-start m-3"}>
-                            <ButtonSubmit loading={props.loading}/>
-                        </div>
+                <Row className="p-4">
+                    <Col md={12} className="text-right">
+                        <ButtonSubmit loading={props.loading}/>
                     </Col>
                 </Row>
             </AvForm>
