@@ -23,6 +23,7 @@ import Categories from "../pages/Category";
 import CategoryEdit from "../pages/CategoryEdit";
 import ProductDetail from "../pages/ProductEdit/ProductDetail";
 import CustomerDetail from "../pages/CustomerEdit/CustomerDetail";
+import Configs from "../pages/FieldOption";
 
 const userRoutes = [
   { path: "/dashboard", component: Dashboard },
@@ -43,6 +44,7 @@ const userRoutes = [
   { path: "/municipalities", component: Municipalities },
   { path: "/municipality", component: MunicipalityEdit },
   { path: "/municipality/:id", component: MunicipalityEdit },
+  { path: "/configs", component: Configs },
 
   // //profile
   { path: "/profile", component: UserProfile },

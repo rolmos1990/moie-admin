@@ -11,6 +11,7 @@ import {FieldNumber, FieldSelect, FieldSwitch, FieldText} from '../../components
 import {Button, Card} from "@material-ui/core";
 import {getCategories} from "../../store/category/actions";
 import {getSizes} from "../../store/sizes/actions";
+import {parseJson} from "../../common/utils";
 import {arrayToOptions} from "../../common/converters";
 import {GROUPS, STATUS} from "../../common/constants";
 import ProductSize from "./ProductSize";
@@ -50,6 +51,7 @@ const ProductEdit = (props) => {
 
     const [materialsList, setMaterialsList] = useState([]);
     const [providerList, setProviderList] = useState([]);
+    const [referenceList, setReferenceList] = useState([]);
     const [materialDefault, setMaterialDefault] = useState({});
     const [publication, setPublication] = useState({_status: "true"});
 
@@ -106,13 +108,18 @@ const ProductEdit = (props) => {
 
     useEffect(() => {
         if (fieldOptions && fieldOptions.length > 0) {
-            setMaterialsList(fieldOptions.filter(op => (op.group === GROUPS.MATERIAL)).map(op => ({name: op.value})));
-            setProviderList(fieldOptions.filter(op => (op.group === GROUPS.PROVIDERS)).map(op => ({name: op.value})));
+            setMaterialsList(filterFieldOptions(fieldOptions, GROUPS.MATERIAL));
+            setProviderList(filterFieldOptions(fieldOptions, GROUPS.PROVIDERS));
+            setReferenceList(filterFieldOptions(fieldOptions, GROUPS.REFERENCE).map(op => {
+                const value = parseJson(op.name);
+                const key = value ? value.key : '';
+                return {label: key, value: key};
+            }));
         } else {
             setMaterialsList([]);
             setProviderList([]);
+            setReferenceList([]);
         }
-        console.log('fieldOptions', fieldOptions)
     }, [fieldOptions])
 
     useEffect(() => {
@@ -122,11 +129,16 @@ const ProductEdit = (props) => {
         console.log('refreshFieldOptions', refreshFieldOptions)
     }, [refreshFieldOptions])
 
+    const filterFieldOptions = (arr, group) => {
+        return arr.filter(op => (op.group === group)).map(op => ({name: op.value}));
+    }
+
     const handleValidSubmit = (event, values) => {
         const data = {
             ...values,
             category: values.category.value,
             size: values.size.value,
+            referenceKey: values.referenceKey.value,
             status: 1,
             weight: values.weight ? Number.parseFloat(values.weight) : 0,
             price: Number.parseFloat(values.price),
@@ -175,7 +187,7 @@ const ProductEdit = (props) => {
                                                     {isEdit && (
                                                         <Col md={4}>
                                                             <div className="text-right pr-10">
-                                                                <h5 className="font-size-16 mb-1">Referencia</h5>
+                                                                <h5 className="font-size-16 mb-1">Código</h5>
                                                                 <b className="font-size-18 text-info">{productData.reference}</b>
                                                             </div>
                                                         </Col>
@@ -193,7 +205,20 @@ const ProductEdit = (props) => {
                                             }}>
                                         <div className="p-4 border-top">
                                             <Row>
-                                                <Col md={12}>
+                                                <Col md={2}>
+                                                    <div className="mb-3">
+                                                        <Label htmlFor="field_referenceKey">Ref. <span className="text-danger">*</span></Label>
+                                                        <FieldSelect
+                                                            id={"field_referenceKey"}
+                                                            name={"referenceKey"}
+                                                            options={referenceList}
+                                                            defaultValue={productData.referenceKey}
+                                                            required
+                                                            isSearchable
+                                                        />
+                                                    </div>
+                                                </Col>
+                                                <Col md={10}>
                                                     <div className="mb-3">
                                                         <Label htmlFor="field_name">Nombre de Producto <span className="text-danger">*</span></Label>
                                                         <FieldText
@@ -441,7 +466,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => ({
     onGetCategories: (conditional = null, limit = 100, page) => dispatch(getCategories(conditional, limit, page)),
     onGetSizes: (conditional = null, limit = 100, page) => dispatch(getSizes(conditional, limit, page)),
-    onGetFieldOptions: (conditional = null, limit = 100, page) => dispatch(getFieldOptionByGroup([GROUPS.MATERIAL, GROUPS.PROVIDERS], limit, page)),
+    onGetFieldOptions: (conditional = null, limit = 500, page) => dispatch(getFieldOptionByGroup([GROUPS.MATERIAL, GROUPS.PROVIDERS, GROUPS.REFERENCE], limit, page)),
     onGetProduct: (id) => dispatch(getProduct(id)),
     onCreateProduct: (data, history) => dispatch(registerProduct(data, history)),
     onUpdateProduct: (data, history) => dispatch(updateProduct(data, history)),

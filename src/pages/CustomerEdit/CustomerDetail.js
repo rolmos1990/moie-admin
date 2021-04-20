@@ -88,8 +88,12 @@ const CustomerDetail = (props) => {
                                 <span className="p-1">{customerData.email}</span>
                             </Col>
                             <Col md={4}>
-                                <label>Telefono: </label>
+                                <label>Teléfono Celular: </label>
                                 <span className="p-1">{customerData.cellphone}</span>
+                            </Col>
+                            <Col md={4}>
+                                <label>Teléfono Residencial: </label>
+                                <span className="p-1">{customerData.phone}</span>
                             </Col>
                         </Row>
                         <hr/>

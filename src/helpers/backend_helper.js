@@ -51,6 +51,7 @@ const fetchFieldOptionsApi = data => get(url.FIELD_OPTIONS, {}, data);
 const fetchFieldOptionApi = (id) => get(`${url.FIELD_OPTIONS}/${id}`,{});
 const registerFieldOptionApi = data => post(url.FIELD_OPTIONS, data);
 const updateFieldOptionApi = (id, data) => put(`${url.FIELD_OPTIONS}/${id}`, data);
+const deleteFieldOptionApi = (id, data) => del(`${url.FIELD_OPTIONS}/${id}`, data);
 
 //Delivery locality
 const fetchDeliveryLocalitiesApi = data => get(url.DELIVERY_LOCALITY, {}, data);
@@ -130,4 +131,5 @@ export {
     fetchFieldOptionApi,
     registerFieldOptionApi,
     updateFieldOptionApi,
+    deleteFieldOptionApi
 }

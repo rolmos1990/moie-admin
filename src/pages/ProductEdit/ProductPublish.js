@@ -1,19 +1,22 @@
 import React, {useEffect, useState} from "react"
 import PropTypes from 'prop-types'
 import {CardBody, Col, Label, Row, Spinner} from "reactstrap"
-import {FieldNumber, FieldSwitch, FieldText} from "../../components/Fields";
+import {FieldNumber, FieldSelect, FieldSwitch, FieldText} from "../../components/Fields";
 import {connect} from "react-redux";
 import {AvForm} from "availity-reactstrap-validation";
 import {updateProduct} from "../../store/product/actions";
 import {STATUS} from "../../common/constants";
 import {Button} from "@material-ui/core";
 import ButtonSubmit from "../../components/Common/ButtonSubmit";
+import {map} from "lodash";
 
 const ProductPublish = props => {
     const {product, updateProduct} = props
     const [productData, setProductData] = useState(product);
+    const [selectValues, setSelectValues] = useState([]);
 
     useEffect(() => {
+        fillValues();
     }, [product])
 
     const handleValidSubmit = (event, values) => {
@@ -22,6 +25,18 @@ const ProductPublish = props => {
             discount: Number.parseFloat(values.discount)
         };
         updateProduct(product.id, data, props.history);
+    }
+
+    const fillValues = () => {
+        if (selectValues.length === 0) {
+            console.log('paso ')
+            const valueList = [];
+            for (let i = 5; i <= 100;) {
+                valueList.push({label: i, value: i});
+                i += 5;
+            }
+            setSelectValues(valueList);
+        }
     }
 
     return (
@@ -37,17 +52,25 @@ const ProductPublish = props => {
                         </Col>
                         <Col lg={6}>
                             <div className="mb-3">
-                                <Label htmlFor="productdiscount">Descuento especial</Label>
-                                <FieldNumber
+                                <Label htmlFor="field_discount">Descuento especial</Label>
+                                <select
                                     id={"field_discount"}
                                     name={"discount"}
-                                    value={productData.discount}/>
+                                    value={productData.discount}
+                                    // defaultValue={parseDefaultValue(model, size)}
+                                    //onChange={(e) => handleChangeSizes(k1, size, e.target.value, model)}
+                                    className="form-control"
+                                >
+                                    {map(selectValues, (o, k3) => (
+                                        <option key={k3} value={o.value}>{o.label}</option>
+                                    ))}
+                                </select>
                             </div>
                         </Col>
                     </Row>
                     <Row>
                         <Col md={12} className="text-right">
-                            <ButtonSubmit loading={props.loading} />
+                            <ButtonSubmit loading={props.loading}/>
                         </Col>
                     </Row>
                 </div>
@@ -67,6 +90,5 @@ const mapStateToProps = state => {
 }
 
 
-
-export default  connect(mapStateToProps, {updateProduct})(ProductPublish)
+export default connect(mapStateToProps, {updateProduct})(ProductPublish)
 

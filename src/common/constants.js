@@ -11,6 +11,7 @@ export const STATUS = {
 
 //GROUPS
 export const GROUPS = {
+    REFERENCE: 'REFERENCE',
     MATERIAL: 'MATERIAL',
     PROVIDERS: 'PROVIDERS',
 };

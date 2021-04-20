@@ -95,3 +95,12 @@ export const getErrorMessage = (error) => {
         return "Se ha producido un error";
     }
 }
+export const parseJson = (data) => {
+    let result = null;
+    try {
+        return JSON.parse(data)
+    }catch (e){
+        console.error('parseJson', e);
+    }
+    return result;
+}

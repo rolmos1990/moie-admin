@@ -16,7 +16,7 @@ import ButtonSubmit from "../../components/Common/ButtonSubmit";
 
 const CustomerEdit = (props) => {
     const {getCustomer, customer} = props;
-    const [customerData, setCustomerData] = useState({_status: STATUS.ACTIVE});
+    const [customerData, setCustomerData] = useState({_status: "true"});
 
     // definición de localidades
     const {getStates, states} = props;

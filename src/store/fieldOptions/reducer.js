@@ -1,4 +1,5 @@
 import {
+    DELETE_FIELD_OPTION, DELETE_FIELD_OPTION_FAILED, DELETE_FIELD_OPTION_SUCCESS,
     GET_FIELD_OPTION,
     GET_FIELD_OPTION_FAILED,
     GET_FIELD_OPTION_SUCCESS,
@@ -91,6 +92,24 @@ const fieldOptions = (state = initialState, action) => {
             }
             break
         case UPDATE_FIELD_OPTION_FAILED:
+            state = {
+                ...state,
+                loading: false,
+            }
+            break
+        case DELETE_FIELD_OPTION:
+            state = {
+                ...state,
+                loading: true,
+            }
+            break
+        case DELETE_FIELD_OPTION_SUCCESS:
+            state = {
+                ...state,
+                loading: false,
+            }
+            break
+        case DELETE_FIELD_OPTION_FAILED:
             state = {
                 ...state,
                 loading: false,

@@ -14,7 +14,7 @@ const badgeStyles = {minWidth: '30px', margin: '2px'}
 
 const productColumns = (onDelete = false) => [
     {
-        text: "Referencia",
+        text: "Código",
         dataField: "reference",
         sort: false,
         filter: true,
@@ -89,9 +89,11 @@ const productColumns = (onDelete = false) => [
         sort: true,
         formatter: (cellContent, item) => (
             <div className="field-br" style={{width: '230px'}}>
-                <Link to={`/category/${item.category?.id}`} className="text-body">
-                    {item.category?.name}
-                </Link>
+                {!item.category ? '': (
+                    <Link to={`/category/${item.category.id}`} className="text-body">
+                        {item.category.name}
+                    </Link>
+                )}
             </div>
         ),
         filter: true,

@@ -10,7 +10,7 @@ import {
     REGISTER_FIELD_OPTION_FAILED,
     UPDATE_FIELD_OPTION,
     UPDATE_FIELD_OPTION_SUCCESS,
-    UPDATE_FIELD_OPTION_FAILED,
+    UPDATE_FIELD_OPTION_FAILED, DELETE_FIELD_OPTION, DELETE_FIELD_OPTION_SUCCESS, DELETE_FIELD_OPTION_FAILED,
 } from "./actionTypes";
 import Conditionals from "../../common/conditionals";
 
@@ -24,6 +24,16 @@ export const getFieldOptions = (conditional, limit, offset) => ({
 export const getFieldOptionByGroup = (groups, limit, offset) => {
     const conditions = new Conditionals.Condition;
     conditions.add("group", groups.join("::"), Conditionals.OPERATORS.IN);
+    return getFieldOptions(conditions.all(), limit, offset);
+}
+
+export const getProductFieldOption = (limit, offset) => {
+    return getFieldOptionByName("PRODUCT", limit, offset);
+}
+
+export const getFieldOptionByName = (name, limit, offset) => {
+    const conditions = new Conditionals.Condition;
+    conditions.add("name", name, Conditionals.OPERATORS.EQUAL);
     return getFieldOptions(conditions.all(), limit, offset);
 }
 
@@ -81,18 +91,34 @@ export const updateFieldOption = (id, data, history) => {
         payload: { id, data, history },
     }
 }
-
 export const updateFieldOptionSuccess = data => {
     return {
         type: UPDATE_FIELD_OPTION_SUCCESS,
         payload: data,
     }
 }
-
-
 export const updateFieldOptionFail = error => {
     return {
         type: UPDATE_FIELD_OPTION_FAILED,
+        payload: error,
+    }
+}
+
+export const deleteFieldOption = (id, history) => {
+    return {
+        type: DELETE_FIELD_OPTION,
+        payload: { id, history },
+    }
+}
+export const deleteFieldOptionSuccess = data => {
+    return {
+        type: DELETE_FIELD_OPTION_SUCCESS,
+        payload: data,
+    }
+}
+export const deleteFieldOptionFail = error => {
+    return {
+        type: DELETE_FIELD_OPTION_FAILED,
         payload: error,
     }
 }

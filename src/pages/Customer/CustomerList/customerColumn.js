@@ -1,5 +1,5 @@
 import React from "react"
-import { Link } from "react-router-dom"
+import {Link} from "react-router-dom"
 import {ConverterCustomerStatus} from "../customer_status";
 import {Button, Tooltip} from "@material-ui/core";
 import {STATUS_COLORS, StatusField} from "../../../components/StatusField";
@@ -29,8 +29,8 @@ const customerListColumns = (onDelete = false) => [
                 )}
                 <Link to={`/customer/detail/${item.id}`} className="text-body">
                     {item.name}
-                    {item.isMayorist == true && (
-                        <Tooltip placement="bottom" title="Cliente mayorista" aria-label="add" >
+                    {item.isMayorist === true && (
+                        <Tooltip placement="bottom" title="Cliente mayorista" aria-label="add">
                             <i className={"mdi mdi-crown font-size-18 mr-1 text-warning"}> </i>
                         </Tooltip>
                     )}
@@ -44,6 +44,17 @@ const customerListColumns = (onDelete = false) => [
         sort: true,
         filter: true,
         filterType: "text",
+    },
+    {
+        text: "Télefonos",
+        dataField: "phone",
+        sort: false,
+        formatter: (cellContent, item) => (
+            <>
+                <div>Cel.: {item.phone && item.phone.length > 3 ? item.phone : ''}</div>
+                <div>Res.: {item.cellphone && item.cellphone.length > 3 ? item.cellphone : ''}</div>
+            </>
+        ),
     },
     {
         text: "Fecha creación",

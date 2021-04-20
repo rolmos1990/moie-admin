@@ -77,7 +77,7 @@ const ProductDetail = (props) => {
                             <Col md={8} className="p-3">
                                 <Row>
                                     <Col md={12}>
-                                        <h3>Referencia: <b className="text-info">{productData.reference}</b></h3>
+                                        <h3>Código: <b className="text-info">{productData.reference}</b></h3>
                                     </Col>
                                 </Row>
                                 <hr/>
