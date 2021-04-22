@@ -1,4 +1,4 @@
-import {UPDATE_PRODUCT_SIZE_LIST, UPDATE_PRODUCT_SIZE_LIST_FAILED, UPDATE_PRODUCT_SIZE_LIST_SUCCESS} from "./actionTypes";
+import {RESET_PRODUCT_SIZE, UPDATE_PRODUCT_SIZE_LIST, UPDATE_PRODUCT_SIZE_LIST_FAILED, UPDATE_PRODUCT_SIZE_LIST_SUCCESS} from "./actionTypes";
 
 const initialState = {
     error: "",
@@ -11,6 +11,13 @@ const initialState = {
 
 const productSizes = (state = initialState, action) => {
     switch (action.type) {
+        case RESET_PRODUCT_SIZE:
+            state = {
+                ...state,
+                loading: false,
+                refresh: false
+            }
+            break
         case UPDATE_PRODUCT_SIZE_LIST:
             state = {
                 ...state,
@@ -21,6 +28,7 @@ const productSizes = (state = initialState, action) => {
             state = {
                 ...state,
                 loading: false,
+                refresh: true
             }
             break
         case UPDATE_PRODUCT_SIZE_LIST_FAILED:

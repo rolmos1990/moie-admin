@@ -29,7 +29,6 @@ const ProductPublish = props => {
 
     const fillValues = () => {
         if (selectValues.length === 0) {
-            console.log('paso ')
             const valueList = [];
             for (let i = 5; i <= 100;) {
                 valueList.push({label: i, value: i});
@@ -56,7 +55,7 @@ const ProductPublish = props => {
                                 <select
                                     id={"field_discount"}
                                     name={"discount"}
-                                    value={productData.discount}
+                                    defaultValue={productData.discount}
                                     // defaultValue={parseDefaultValue(model, size)}
                                     //onChange={(e) => handleChangeSizes(k1, size, e.target.value, model)}
                                     className="form-control"

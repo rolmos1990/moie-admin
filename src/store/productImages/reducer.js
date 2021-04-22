@@ -7,10 +7,11 @@ import {
     GET_PRODUCT_IMAGES_SUCCESS,
     REGISTER_PRODUCT_IMAGE,
     REGISTER_PRODUCT_IMAGE_FAILED,
-    REGISTER_PRODUCT_IMAGE_SUCCESS,
+    REGISTER_PRODUCT_IMAGE_SUCCESS, RESET_PRODUCT_IMAGES,
     UPDATE_PRODUCT_IMAGE, UPDATE_PRODUCT_IMAGE_FAILED,
     UPDATE_PRODUCT_IMAGE_SUCCESS
 } from "./actionTypes";
+import {RESET_PRODUCT_SIZE} from "../productSize/actionTypes";
 
 const initialState = {
     error: "",
@@ -23,6 +24,13 @@ const initialState = {
 
 const productImages = (state = initialState, action) => {
     switch (action.type) {
+        case RESET_PRODUCT_IMAGES:
+            state = {
+                ...state,
+                loading: false,
+                refresh: false
+            }
+            break
         case GET_PRODUCT_IMAGES:
             return {
                 ...state,
@@ -86,6 +94,7 @@ const productImages = (state = initialState, action) => {
             state = {
                 ...state,
                 loading: false,
+                refresh: true
             }
             break
         case UPDATE_PRODUCT_IMAGE_FAILED:

@@ -55,7 +55,7 @@ export const registerProduct = (data, history) => {
 export const registerProductSuccess = data => {
     return {
         type: REGISTER_PRODUCT_SUCCESS,
-        payload: data,
+        payload: data.product,
     }
 }
 

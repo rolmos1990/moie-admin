@@ -10,9 +10,12 @@ import {
     REGISTER_PRODUCT_IMAGE_FAILED,
     UPDATE_PRODUCT_IMAGE,
     UPDATE_PRODUCT_IMAGE_SUCCESS,
-    UPDATE_PRODUCT_IMAGE_FAILED,
+    UPDATE_PRODUCT_IMAGE_FAILED, RESET_PRODUCT_IMAGES,
 } from "./actionTypes";
 
+export const resetProductImages = () => ({
+    type: RESET_PRODUCT_IMAGES,
+})
 export const getProductImages = (conditional, limit, offset) => ({
     type: GET_PRODUCT_IMAGES,
     conditional: conditional,

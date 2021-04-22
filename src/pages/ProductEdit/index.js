@@ -6,6 +6,8 @@ import {connect} from "react-redux";
 import PropTypes from "prop-types";
 import {getProduct, getProducts, registerProduct, updateProduct} from "../../store/product/actions";
 import {getFieldOptionByGroup, registerFieldOption} from "../../store/fieldOptions/actions";
+import {resetProductImages} from "../../store/productImages/actions";
+import {resetProductSize} from "../../store/productSize/actions";
 import {AvForm} from "availity-reactstrap-validation";
 import {FieldNumber, FieldSelect, FieldSwitch, FieldText} from '../../components/Fields';
 import {Button, Card} from "@material-ui/core";
@@ -38,9 +40,9 @@ const ProductEdit = (props) => {
 
 
     const {
-        product, categories, sizes, fieldOptions,
+        product, categories, sizes, fieldOptions, refreshProduct,
         onGetProduct, onCreateProduct, onUpdateProduct,
-        onGetCategories, onGetSizes,
+        onGetCategories, onGetSizes, onResetProductSize, onResetProductImages,
         onGetFieldOptions, onCreateFieldOption, refreshFieldOptions
     } = props;
 
@@ -72,15 +74,31 @@ const ProductEdit = (props) => {
         onGetFieldOptions();
     }, [onGetProduct]);
 
+    useEffect(() => {
+        if (product.id) {
+            onGetProduct(product.id);
+        }
+        onResetProductSize();
+        onResetProductImages();
+    }, [refreshProduct]);
+
     //cargar info relacionada al prod
     useEffect(() => {
-        if (product.id && isEdit) {
+        if (product.id) {
             setProductData({...product, _status: product.status});
             const defaultCategory = product.category?.id || null;
             setCategoryDefault(defaultCategory);
-        } else if (product.id && !isEdit) {
-            toggle();
-            toggleInventary();
+
+            if (!isEdit) {
+                if (product.productSize.length === 0) {
+                    setIsOpen(false)
+                    setIsOpenInventary(true);
+                } else if (product.productImage.length === 0) {
+                    setIsOpen(false)
+                    setIsOpenInventary(false);
+                    setIsOpenDropImages(true);
+                }
+            }
         }
         console.log('Product', product)
     }, [product]);
@@ -126,7 +144,6 @@ const ProductEdit = (props) => {
         if (refreshFieldOptions) {
             onGetFieldOptions();
         }
-        console.log('refreshFieldOptions', refreshFieldOptions)
     }, [refreshFieldOptions])
 
     const filterFieldOptions = (arr, group) => {
@@ -458,9 +475,10 @@ const ProductEdit = (props) => {
 const mapStateToProps = state => {
     const {error, product, loading} = state.Product
     const {fieldOptions, refresh} = state.FieldOption
+    const refreshProduct = state.ProductSize.refresh || state.ProductImage.refresh;
     const {categories} = state.Category
     const {sizes} = state.Sizes
-    return {error, product, categories, sizes, fieldOptions, loading, refreshFieldOptions: refresh}
+    return {error, product, categories, sizes, fieldOptions, loading, refreshProduct, refreshFieldOptions: refresh}
 }
 
 const mapDispatchToProps = dispatch => ({
@@ -471,6 +489,8 @@ const mapDispatchToProps = dispatch => ({
     onCreateProduct: (data, history) => dispatch(registerProduct(data, history)),
     onUpdateProduct: (data, history) => dispatch(updateProduct(data, history)),
     onCreateFieldOption: (data, history) => dispatch(registerFieldOption(data, history)),
+    onResetProductSize: () => dispatch(resetProductSize()),
+    onResetProductImages: () => dispatch(resetProductImages()),
 })
 
 export default withRouter(
