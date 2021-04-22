@@ -13,6 +13,7 @@ import {map} from "lodash";
 const ProductPublish = props => {
     const {product, updateProduct} = props
     const [productData, setProductData] = useState(product);
+    const [discount, setDiscount] = useState(0);
     const [selectValues, setSelectValues] = useState([]);
 
     useEffect(() => {
@@ -22,7 +23,7 @@ const ProductPublish = props => {
     const handleValidSubmit = (event, values) => {
         const data = {
             published: values.published === true,
-            discount: Number.parseFloat(values.discount)
+            discount: Number.parseFloat(discount)
         };
         updateProduct(product.id, data, props.history);
     }
@@ -55,9 +56,8 @@ const ProductPublish = props => {
                                 <select
                                     id={"field_discount"}
                                     name={"discount"}
-                                    defaultValue={productData.discount}
-                                    // defaultValue={parseDefaultValue(model, size)}
-                                    //onChange={(e) => handleChangeSizes(k1, size, e.target.value, model)}
+                                    value={discount}
+                                    onChange={(e) => setDiscount(e.target.value)}
                                     className="form-control"
                                 >
                                     {map(selectValues, (o, k3) => (
