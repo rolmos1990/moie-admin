@@ -51,7 +51,7 @@ const ProductList = props => {
     }
 
     const handleTableChange = (type, {page, searchText}) => {
-        onGetProducts(conditional, DEFAULT_PAGE_LIMIT, page - 1);
+        onGetProducts(conditional, DEFAULT_PAGE_LIMIT, (page - 1)*DEFAULT_PAGE_LIMIT);
     }
 
 

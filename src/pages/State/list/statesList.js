@@ -25,7 +25,7 @@ const StatesList = props => {
 
     const pageOptions = {
         sizePerPage: DEFAULT_PAGE_LIMIT,
-        //totalSize: meta.totalRegisters, // replace later with size(users),
+        totalSize: meta.totalRegisters,
         custom: true,
     }
     const {SearchBar} = Search
@@ -44,7 +44,7 @@ const StatesList = props => {
 
     // eslint-disable-next-line no-unused-vars
     const handleTableChange = (type, {page, searchText}) => {
-        onGetStates(conditional, DEFAULT_PAGE_LIMIT, page - 1);
+        onGetStates(conditional, DEFAULT_PAGE_LIMIT, (page - 1)*DEFAULT_PAGE_LIMIT);
     }
 
     const onFilterAction = (condition) => {

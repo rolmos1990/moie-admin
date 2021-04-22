@@ -1,0 +1,57 @@
+Index: ../moie-core/src/common/repositories/base.repository.ts
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import {Repository} from \"typeorm\";\nimport {PageQuery} from \"../controllers/page.query\";\nimport {OperationQuery} from \"../controllers/operation.query\";\n\nexport default abstract class BaseRepository<T> {\n    protected readonly repositoryManager : Repository<T>;\n\n    async count(page: PageQuery = new PageQuery()){\n        return await this.repositoryManager.count(page.get());\n    }\n\n    async all(page: PageQuery = new PageQuery()){\n        const operators : OperationQuery = page.getOperation();\n        if(operators.isOperator()) {\n            const tableName = this.repositoryManager.metadata.tableName;\n            let select = \"*\";\n            if(operators.getGroups().length > 0){\n                select = operators.getOperator().join(\",\") + \",\" + operators.getGroups().join(\",\");\n            } else {\n                select = operators.getOperator().join(\",\");\n            }\n            const sum = await this.repositoryManager\n                .createQueryBuilder(tableName)\n                .select(select)\n                .where(page.getWhere())\n                .groupBy(operators.getGroups().join(\",\"));\n            return sum.getRawMany();\n        }\n        else if(operators.isGroup()){\n            const tableName = this.repositoryManager.metadata.tableName;\n            const sum = await this.repositoryManager\n                .createQueryBuilder(tableName)\n                .where(page.getWhere())\n                .groupBy(operators.getGroups().join(\",\"));\n            if(page.getRelations().length > 0){\n                page.getRelations().forEach(item => {\n                   sum.leftJoinAndSelect( tableName + \".\" + item, item);\n                });\n            }\n            return sum.getMany();\n        }\n        else {\n            return await this.repositoryManager.find(page.get());\n        }\n    }\n\n    async findBy(field: string, value: any, relations = []){\n        return await this.repositoryManager.find({\n            where: {\n                [field]: value\n            },\n            relations\n        });\n    }\n\n    async findByObject(field: Object, relations = []){\n        return await this.repositoryManager.find({\n            where: field,\n            relations\n        });\n    }\n\n    async find(id: number, relations = []){\n        return await this.repositoryManager.findOneOrFail(id, {relations});\n    }\n\n    async save(entity: T){\n        await this.repositoryManager.save(entity);\n    }\n\n    async delete(id: T){\n        await this.repositoryManager.delete(id);\n    }\n\n};\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/../moie-core/src/common/repositories/base.repository.ts b/../moie-core/src/common/repositories/base.repository.ts
+--- a/../moie-core/src/common/repositories/base.repository.ts	(revision 30ac200481a4822807b23c7b756467b82060ad41)
++++ b/../moie-core/src/common/repositories/base.repository.ts	(date 1618784003764)
+@@ -6,6 +6,7 @@
+     protected readonly repositoryManager : Repository<T>;
+ 
+     async count(page: PageQuery = new PageQuery()){
++        console.log('page', page, page.get())
+         return await this.repositoryManager.count(page.get());
+     }
+ 
+Index: ../moie-core/ormconfig.json
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>{\n   \"type\": \"mysql\",\n   \"host\": \"localhost\",\n   \"port\": 8889,\n   \"username\": \"root\",\n   \"password\": \"root\",\n   \"database\": \"moie-lucy-v2\",\n   \"synchronize\": true,\n   \"logging\": false,\n   \"entities\": [\n      \"src/entity/**/*.ts\"\n   ],\n   \"migrations\": [\n      \"src/migration/**/*.ts\"\n   ],\n   \"subscribers\": [\n      \"src/subscriber/**/*.ts\"\n   ],\n   \"seeds\": [\n      \"src/seeds/*.ts\"\n   ],\n   \"cli\": {\n      \"entitiesDir\": \"src/models\",\n      \"migrationsDir\": \"src/migration\",\n      \"subscribersDir\": \"src/subscriber\"\n   }\n}\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/../moie-core/ormconfig.json b/../moie-core/ormconfig.json
+--- a/../moie-core/ormconfig.json	(revision 30ac200481a4822807b23c7b756467b82060ad41)
++++ b/../moie-core/ormconfig.json	(date 1617677783082)
+@@ -1,7 +1,7 @@
+ {
+    "type": "mysql",
+    "host": "localhost",
+-   "port": 8889,
++   "port": 3306,
+    "username": "root",
+    "password": "root",
+    "database": "moie-lucy-v2",
+Index: ../moie-core/moie-core.iml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/../moie-core/moie-core.iml b/../moie-core/moie-core.iml
+new file mode 100644
+--- /dev/null	(date 1617677783106)
++++ b/../moie-core/moie-core.iml	(date 1617677783106)
+@@ -0,0 +1,9 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<module type="WEB_MODULE" version="4">
++  <component name="NewModuleRootManager" inherit-compiler-output="true">
++    <exclude-output />
++    <content url="file://$MODULE_DIR$" />
++    <orderEntry type="inheritedJdk" />
++    <orderEntry type="sourceFolder" forTests="false" />
++  </component>
++</module>
+\ No newline at end of file

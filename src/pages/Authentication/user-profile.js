@@ -60,7 +60,7 @@ const UserProfile = props => {
       <div className="page-content">
         <Container fluid>
           {/* Render Breadcrumb */}
-          <Breadcrumb title="Lucy Moie" breadcrumbItem="Profile" />
+          <Breadcrumb title="Lucy Moie" item="Profile" />
 
           <Row>
             <Col lg="12">

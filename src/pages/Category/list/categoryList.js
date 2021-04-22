@@ -46,7 +46,7 @@ const CategoryList = props => {
 
     // eslint-disable-next-line no-unused-vars
     const handleTableChange = (type, {page, searchText}) => {
-        onGetCategories(conditional, DEFAULT_PAGE_LIMIT, page - 1);
+        onGetCategories(conditional, DEFAULT_PAGE_LIMIT, (page - 1)*DEFAULT_PAGE_LIMIT);
     }
 
     const onFilterAction = (condition) => {

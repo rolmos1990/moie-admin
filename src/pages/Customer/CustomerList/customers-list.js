@@ -27,7 +27,7 @@ const CustomersList = props => {
     const [conditional, setConditional] = useState(null);
     const pageOptions = {
         sizePerPage: DEFAULT_PAGE_LIMIT,
-        totalSize: meta?.totalRegisters, // replace later with size(users),
+        totalSize: meta?.totalRegisters,
         custom: true,
     }
     const {SearchBar} = Search
@@ -46,7 +46,7 @@ const CustomersList = props => {
 
     // eslint-disable-next-line no-unused-vars
     const handleTableChange = (type, {page, searchText}) => {
-        onGetCustomers(conditional, DEFAULT_PAGE_LIMIT, page - 1);
+        onGetCustomers(conditional, DEFAULT_PAGE_LIMIT, (page - 1)*DEFAULT_PAGE_LIMIT);
     }
 
     const onFilterAction = (condition) => {

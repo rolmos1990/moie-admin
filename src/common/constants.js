@@ -9,9 +9,13 @@ export const STATUS = {
 };
 
 
-//GROUPS
+//FIELD OPTIONS GROUPS
 export const GROUPS = {
     REFERENCE: 'REFERENCE',
     MATERIAL: 'MATERIAL',
     PROVIDERS: 'PROVIDERS',
+};
+//FIELD OPTIONS NAMES
+export const NAMES = {
+    PRODUCT: 'PRODUCT',
 };

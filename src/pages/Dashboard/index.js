@@ -236,7 +236,7 @@ const Dashboard = () => {
     <React.Fragment>
       <div className="page-content">
         <Container fluid>
-            <Breadcrumbs title="Lucy Moie" breadcrumbItem="Dashboard" />
+            <Breadcrumbs title="Lucy Moie" item="Dashboard" />
             <Row>
                 <MiniWidget reports={reports} />
             </Row>

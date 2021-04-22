@@ -89,6 +89,7 @@ const fieldOptions = (state = initialState, action) => {
             state = {
                 ...state,
                 loading: false,
+                refresh: true
             }
             break
         case UPDATE_FIELD_OPTION_FAILED:
@@ -107,6 +108,7 @@ const fieldOptions = (state = initialState, action) => {
             state = {
                 ...state,
                 loading: false,
+                refresh: true
             }
             break
         case DELETE_FIELD_OPTION_FAILED:
