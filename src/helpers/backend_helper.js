@@ -66,6 +66,13 @@ const registerStateApi = data => post(url.STATES, data);
 const updateStateApi = (id, data) => put(`${url.STATES}/${id}`, data);
 const deleteStateApi = (id) => del(`${url.STATES}/${id}`);
 
+//orders
+const fetchOrdersApi = data => get(url.ORDERS, {}, data);
+const fetchOrderApi = (id) => get(`${url.ORDERS}/${id}`,{});
+const registerOrderApi = data => post(url.ORDERS, data);
+const updateOrderApi = (id, data) => put(`${url.ORDERS}/${id}`, data);
+const deleteOrderApi = (id) => del(`${url.ORDERS}/${id}`);
+
 const fetchMunicipalitiesApi = data => get(url.MUNICIPALITIES, {}, data);
 const fetchMunicipalityApi = (id) => get(`${url.MUNICIPALITIES}/${id}`,{});
 const registerMunicipalityApi = data => post(url.MUNICIPALITIES, data);
@@ -131,5 +138,11 @@ export {
     fetchFieldOptionApi,
     registerFieldOptionApi,
     updateFieldOptionApi,
-    deleteFieldOptionApi
+    deleteFieldOptionApi,
+
+    fetchOrdersApi,
+    fetchOrderApi,
+    registerOrderApi,
+    updateOrderApi,
+    deleteOrderApi,
 }

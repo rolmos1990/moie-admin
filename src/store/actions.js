@@ -13,7 +13,8 @@ export * from "./category/actions"
 export * from "./sizes/actions"
 export * from "./productImages/actions"
 export * from "./productSize/actions"
-export * from "./fieldOptions/actions"
+export * from "./productSize/actions"
+export * from "./order/actions"
 
 //System
 export * from "./location/actions"

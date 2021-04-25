@@ -43,7 +43,7 @@ const NumberField = (props) => (
         className="form-control"
         validate={
             {
-                required: { value: props.required ? true : false, errorMessage: messages.required },
+                required: { value: props.required === true, errorMessage: messages.required },
                 number: { value: true},
             }
         }

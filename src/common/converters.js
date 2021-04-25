@@ -21,6 +21,12 @@ export const arrayToOptions = (array) => {
         value: item.id
     }));
 }
+export const arrayToOptionsByFieldName = (array, fieldName) => {
+    return array.map(item => ({
+        label: item[fieldName],
+        value: item.id
+    }));
+}
 export const getEmptyOptions = () => {
     return {label: '-', value: null};
 }

@@ -21,16 +21,11 @@ const ProductList = props => {
     const [productList, setProductList] = useState([]);
     const [filter, setFilter] = useState(false);
     const [conditional, setConditional] = useState(null);
-    const {SearchBar} = Search
 
     const pageOptions = {
         sizePerPage: DEFAULT_PAGE_LIMIT,
         totalSize: meta?.totalRegisters || 0,
         custom: true,
-    };
-    var selectRowProp = {
-        mode: "checkbox",
-        clickToSelect: true,
     };
 
     useEffect(() => {

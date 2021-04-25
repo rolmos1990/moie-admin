@@ -13,6 +13,7 @@ import ProductImageSaga from "./productImages/saga"
 import ProductSizeSaga from "./productSize/saga"
 import LocationSaga from "./location/saga"
 import FieldOptionSaga from "./fieldOptions/saga"
+import OrderSaga from "./order/saga"
 import LayoutSaga from "./layout/saga"
 
 export default function* rootSaga() {
@@ -29,6 +30,7 @@ export default function* rootSaga() {
     ProductSizeSaga(),
     LocationSaga(),
     FieldOptionSaga(),
+    OrderSaga(),
     ForgetSaga(),
     fork(LayoutSaga)
   ])

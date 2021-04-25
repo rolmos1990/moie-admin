@@ -4,34 +4,32 @@ import AsyncSelect from 'react-select/async';
 import {FormGroup, FormText} from "reactstrap";
 import './style.scss';
 import {getData} from "../../helpers/service";
-import {arrayToOptions, getEmptyOptions} from "../../common/converters";
+import {arrayToOptions, arrayToOptionsByFieldName, getEmptyOptions} from "../../common/converters";
 import {AvBaseInput} from "availity-reactstrap-validation";
 import messages from "./messages";
 
 const InputAsyncSearchField = (props) => {
-    const [ selected, setSelected ,defaultValue,] = useState(null);
+    const {defaultValue, conditionalOptions} = props;
+    const [selected, setSelected] = useState(null);
 
     useEffect(() => {
-        if(defaultValue && defaultValue.value > 0) {
-            setSelected(defaultValue);
-        }
+        setSelected(defaultValue);
     }, [defaultValue]);
 
     return (
         <AvAsyncSearchInput
-            validate={{
-                required: {value: props.required ? true : false, errorMessage: messages.required}
-            }}
+            validate={{required: {value: props.required === true, errorMessage: messages.required}}}
             name={props.name}
             value={selected}
             placeholder={props.placeholder}
             urlStr={props.urlStr}
             onChange={(value) => {
                 setSelected(value)
-                if(props.onChange){
+                if (props.onChange) {
                     props.onChange(value);
                 }
             }}
+            conditionalOptions={conditionalOptions}
         />
     )
 }
@@ -43,14 +41,13 @@ InputAsyncSearchField.propTypes = {
 
 class AvAsyncSearchInput extends AvBaseInput {
     render() {
-        const {name, value, onChange, validate, urlStr, placeholder, helpMessage} = this.props;
+        const {name, value, onChange, validate, urlStr, conditionalOptions, placeholder, helpMessage} = this.props;
         const validation = this.context.FormCtrl.getInputState(this.props.name);
         const feedback = validation.errorMessage ? (<div className="invalid-feedback" style={{display: "block"}}>{validation.errorMessage}</div>) : null;
         const help = helpMessage ? (<FormText>{helpMessage}</FormText>) : null;
         const isInvalid = validation.errorMessage ? "select-is-invalid" : "";
 
         return (
-
             <FormGroup className={isInvalid}>
                 <div>
                     <AsyncSelect
@@ -61,8 +58,9 @@ class AvAsyncSearchInput extends AvBaseInput {
                         onChange={onChange}
                         placeholder={placeholder}
                         loadOptions={inputValue => {
-                            return getData(urlStr, inputValue).then(response => {
-                                const options = arrayToOptions(response.data);
+                            return getData(urlStr, inputValue, conditionalOptions).then(response => {
+                                const fieldName = conditionalOptions && conditionalOptions.fieldName ? conditionalOptions.fieldName:'name';
+                                const options = arrayToOptionsByFieldName(response.data, fieldName);
                                 options.unshift(getEmptyOptions());
                                 return options
                             })

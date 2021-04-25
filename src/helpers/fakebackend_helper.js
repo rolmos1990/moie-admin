@@ -108,7 +108,7 @@ export const getMessages = (roomId = "") =>
 export const addMessage = message => post(url.ADD_MESSAGE, message)
 
 // get orders
-export const getOrders = () => get(url.GET_ORDERS)
+export const getOrders = () => get(url.ORDERS)
 
 // get cart data
 export const getCartData = () => get(url.GET_CART_DATA)
