@@ -4,8 +4,10 @@ import {EmailField, NumberField, TextField} from './InputTextField';
 import InputDate from "./InputDate";
 import InputPhoneField from "./InputPhoneField";
 import InputAsyncSearchField from "./InputAsyncSearchField";
+import InputSelectBasicField from "./InputSelectBasicField";
 
 const FieldAsyncSelect = InputAsyncSearchField;
+const FieldSelectBasic = InputSelectBasicField;
 const FieldSelect = InputSearchField;
 const FieldSwitch = InputSwitchField;
 const FieldText = TextField;
@@ -17,6 +19,7 @@ const FieldPhone = InputPhoneField;
 export {
     FieldSwitch,
     FieldAsyncSelect,
+    FieldSelectBasic,
     FieldSelect,
     FieldText,
     FieldNumber,

@@ -48,7 +48,7 @@ const userRoutes = [
   { path: "/municipality/:id", component: MunicipalityEdit },
   { path: "/configs", component: Configs },
   { path: "/orders", component: Orders },
-  { path: "/order", component: CreateOrder },
+  { path: "/order/create", component: CreateOrder },
 
   // //profile
   { path: "/profile", component: UserProfile },

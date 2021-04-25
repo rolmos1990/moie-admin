@@ -104,3 +104,12 @@ export const parseJson = (data) => {
     }
     return result;
 }
+
+export const buildNumericOptions = (qty, sk=1) => {
+    const valueList = [];
+    for (let i = 0; i <= qty;) {
+        valueList.push({label: i, value: i});
+        i+= sk;
+    }
+    return valueList;
+}

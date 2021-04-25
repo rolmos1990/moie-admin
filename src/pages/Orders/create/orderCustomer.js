@@ -5,17 +5,19 @@ import {connect} from "react-redux";
 import {apiError} from "../../../store/auth/login/actions";
 import PropTypes from "prop-types";
 import {FieldAsyncSelect} from "../../../components/Fields";
-import {GET_CUSTOMER} from "../../../helpers/url_helper";
+import {GET_CUSTOMER, GET_PRODUCT} from "../../../helpers/url_helper";
 import {formatDate} from "../../../common/utils";
 import {getCustomer} from "../../../store/customer/actions";
 import {getEmptyOptions} from "../../../common/converters";
 import {AvForm} from "availity-reactstrap-validation";
 import {Tooltip} from "@material-ui/core";
+import Conditionals from "../../../common/conditionals";
 
 const OrderCustomer = (props) => {
     const {onSelect, customer, getCustomer} = props;
     const [customerData, setCustomerData] = useState({});
     const [customerDefault, setCustomerDefault] = useState(getEmptyOptions());
+    const [customerDocumentDefault, setCustomerDocumentDefault] = useState(getEmptyOptions());
 
     useEffect(() => {
         if (customer.id) {
@@ -25,37 +27,51 @@ const OrderCustomer = (props) => {
 
     const handleValidSubmit = (e, d) => {
         console.log(d);
-
-
     }
 
     const onChange = (e) => {
         getCustomer(e.value);
         onSelect(e);
-        setCustomerDefault(getEmptyOptions());
     }
 
     return (
         <React.Fragment>
             <Row>
                 <Col>
-                    <h5 className="text-info">Clientes</h5>
+                    <h5 className="text-info">Datos del cliente</h5>
                 </Col>
             </Row>
-            <Row>
-                <Col md={12}>
-                    <AvForm className="needs-validation" autoComplete="off" onValidSubmit={(e, v) => handleValidSubmit(e, v)}>
-                        <Label htmlFor="customer">Nombre</Label>
+            <AvForm className="needs-validation" autoComplete="off" onValidSubmit={(e, v) => handleValidSubmit(e, v)}>
+                <Row>
+                    <Col md={3}>
+                        <Label htmlFor="product">Buscar por Documento</Label>
+                        <FieldAsyncSelect
+                            name={"product"}
+                            urlStr={GET_CUSTOMER}
+                            placeholder="Buscar por documento"
+                            defaultValue={customerDocumentDefault}
+                            conditionalOptions={{fieldName: 'document', operator: Conditionals.OPERATORS.EQUAL}}
+                            onChange={(d) => {
+                                onChange(d);
+                                setCustomerDefault(getEmptyOptions());
+                            }}
+                        />
+                    </Col>
+                    <Col md={9}>
+                        <Label htmlFor="customer">Buscar por Nombre</Label>
                         <FieldAsyncSelect
                             name={"customer"}
                             urlStr={GET_CUSTOMER}
-                            placeholder="Buscar cliente"
+                            placeholder="Buscar por nombre"
                             defaultValue={customerDefault}
-                            onChange={onChange}
+                            onChange={(d) => {
+                                onChange(d);
+                                setCustomerDocumentDefault(getEmptyOptions());
+                            }}
                         />
-                    </AvForm>
-                </Col>
-            </Row>
+                    </Col>
+                </Row>
+            </AvForm>
             {customerData.id && (
                 <Row className="mt-3">
                     <Col md={6}>
@@ -79,15 +95,15 @@ const OrderCustomer = (props) => {
                         <label>Municipio: </label>
                         <span className="p-1">{customerData.municipality?.name}</span>
                     </Col>
-                    <Col md={4}>
+                    <Col md={6}>
                         <label>Documento: </label>
                         <span className="p-1">{customerData.document}</span>
                     </Col>
-                    <Col md={4}>
+                    <Col md={6}>
                         <label>Teléfono Celular: </label>
                         <span className="p-1">{customerData.cellphone}</span>
                     </Col>
-                    <Col md={4}>
+                    <Col md={6}>
                         <label>Teléfono Residencial: </label>
                         <span className="p-1">{customerData.phone}</span>
                     </Col>

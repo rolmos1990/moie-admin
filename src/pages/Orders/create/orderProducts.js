@@ -4,16 +4,14 @@ import {withRouter, Link} from "react-router-dom"
 import {connect} from "react-redux";
 import {apiError} from "../../../store/auth/login/actions";
 import PropTypes from "prop-types";
-import {FieldAsyncSelect, FieldNumber, FieldSelect} from "../../../components/Fields";
+import {FieldAsyncSelect, FieldNumber, FieldSelect, FieldSelectBasic} from "../../../components/Fields";
 import {GET_PRODUCT} from "../../../helpers/url_helper";
 import {getProduct} from "../../../store/product/actions";
 import {getEmptyOptions} from "../../../common/converters";
 import {AvForm} from "availity-reactstrap-validation";
-import {Button, Tooltip} from "@material-ui/core";
 import {map} from "lodash";
 import Images from "../../../components/Common/Image";
-import {getImageByQuality, priceFormat} from "../../../common/utils";
-import ButtonSubmit from "../../../components/Common/ButtonSubmit";
+import {buildNumericOptions, getImageByQuality, priceFormat} from "../../../common/utils";
 import Conditionals from "../../../common/conditionals";
 
 const OrderProducts = (props) => {
@@ -52,23 +50,13 @@ const OrderProducts = (props) => {
     }, [product]);
 
     const addToOrder = (e, d) => {
-        const discountPercentage = 0;
-        let total = productData.price * d.quantity;
-        const discount = total * (discountPercentage / 100);
-
-        total = total - discount;
-
         const prod = {
             origin: productData,
             color: d.color.value,
             size: d.size.label,
             sizeId: d.size.value,
-            quantity: d.quantity,
-            discountPercentage: discountPercentage,
-            discount: discount,
-            total: total,
+            quantity: d.quantity.value,
         };
-        console.log(prod)
 
         onSelect(prod);
         setProductDefault(getEmptyOptions());
@@ -81,16 +69,16 @@ const OrderProducts = (props) => {
             <AvForm className="needs-validation" autoComplete="off" onValidSubmit={(e, v) => addToOrder(e, v)}>
                 <Row>
                     <Col>
-                        <h5 className="text-info">Productos</h5>
+                        <h5 className="text-info">Agregar productos</h5>
                     </Col>
                 </Row>
                 <Row>
-                    <Col md={4}>
-                        <Label htmlFor="product">Código</Label>
+                    <Col md={3}>
+                        <Label htmlFor="product">Buscar por Código</Label>
                         <FieldAsyncSelect
-                            name={"product"}
+                            name={"productCode"}
                             urlStr={GET_PRODUCT}
-                            placeholder="Buscar código"
+                            placeholder="Código del producto"
                             defaultValue={productReferenceDefault}
                             conditionalOptions={{fieldName: 'reference', operator: Conditionals.OPERATORS.EQUAL}}
                             onChange={(d) => {
@@ -99,12 +87,12 @@ const OrderProducts = (props) => {
                             }}
                         />
                     </Col>
-                    <Col md={8}>
-                        <Label htmlFor="product">Nombre</Label>
+                    <Col md={9}>
+                        <Label htmlFor="product">Buscar por Nombre</Label>
                         <FieldAsyncSelect
-                            name={"product"}
+                            name={"productName"}
                             urlStr={GET_PRODUCT}
-                            placeholder="Buscar productos"
+                            placeholder="Nombre del producto"
                             defaultValue={productDefault}
                             onChange={(d) => {
                                 getProduct(d.value);
@@ -216,22 +204,13 @@ const OrderProducts = (props) => {
                                 </Col>
                                 <Col md={3}>
                                     <Label htmlFor="weight">Cantidad</Label>
-                                    <FieldNumber
+                                    <FieldSelect
                                         id={"quantity"}
                                         name={"quantity"}
-                                        type="number"
-                                        value={quantity}
+                                        options={buildNumericOptions(100)}
+                                        defaultValue={product.quantity}
                                         required
                                     />
-                                    {/*<div className="input-group bootstrap-touchspin bootstrap-touchspin-injected">
-                                        <span className="input-group-btn input-group-prepend">
-                                            <button className="btn btn-primary bootstrap-touchspin-down" type="button" disabled={quantity === 1} onClick={() => setQuantity(quantity - 1)}>-</button>
-                                        </span>
-                                        <input data-toggle="touchspin" type="number" value={quantity} className="form-control"/>
-                                        <span className="input-group-btn input-group-append">
-                                                <button className="btn btn-primary bootstrap-touchspin-up" type="button" onClick={() => setQuantity(quantity + 1)}>+</button>
-                                        </span>
-                                    </div>*/}
                                 </Col>
                                 <Col md={2} style={{display: 'flex', 'alignItems': 'normal'}}>
                                     <button type="submit" className="btn btn-primary btn-block waves-effect waves-light mt-2 me-1">

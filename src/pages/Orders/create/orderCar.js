@@ -1,44 +1,100 @@
-import React, {useState, useEffect} from "react"
-import {CardBody, Col, Label, Row, Spinner} from "reactstrap"
-import {withRouter, Link} from "react-router-dom"
+import React, {useEffect, useState} from "react"
+import {Col, Row} from "reactstrap"
+import {withRouter} from "react-router-dom"
 import {connect} from "react-redux";
 import {apiError} from "../../../store/auth/login/actions";
 import PropTypes from "prop-types";
-import {FieldAsyncSelect, FieldNumber, FieldSelect} from "../../../components/Fields";
-import {GET_PRODUCT} from "../../../helpers/url_helper";
 import {getProduct} from "../../../store/product/actions";
-import {getEmptyOptions} from "../../../common/converters";
-import {AvForm} from "availity-reactstrap-validation";
-import {Button, Tooltip} from "@material-ui/core";
 import {map} from "lodash";
 import Images from "../../../components/Common/Image";
-import {getImageByQuality, priceFormat} from "../../../common/utils";
-import ButtonSubmit from "../../../components/Common/ButtonSubmit";
-import Conditionals from "../../../common/conditionals";
+import {getImageByQuality, priceFormat, buildNumericOptions} from "../../../common/utils";
+import {FieldSelect, FieldSelectBasic} from "../../../components/Fields";
 import {HtmlTooltip} from "../../../components/Common/HtmlTooltip";
+import {AvForm} from "availity-reactstrap-validation";
+
+const modelSummary = () => ({quantity: 0, totalDiscount: 0, totalWithoutDiscount: 0, totalWithDiscount: 0, delivery: 0, totalWithDelivery: 0, weight: 0});
 
 const OrderCar = (props) => {
-    const {products, delivery} = props;
-    const [summary, setSummary] = useState({quantity: 0, totalDiscount: 0, totalWithoutDiscount: 0, totalWithDiscount: 0, delivery: 0, totalWithDelivery: 0, weight: 0});
+    const {productSelected, delivery} = props;
+    const [summary, setSummary] = useState(modelSummary());
+    const [productList, setProductList] = useState([]);
 
     useEffect(() => {
-        const s = {quantity: 0, totalDiscount: 0, totalWithoutDiscount: 0, totalWithDiscount: 0, delivery: 0, totalWithDelivery: 0, weight: 0};
-        products.forEach(product => {
-            s.quantity += product.quantity;
-            s.weight += product.origin.weight || 0;
-            s.totalDiscount += product.discount;
-            s.totalWithoutDiscount += product.origin.price * product.quantity;
-            s.totalWithDiscount += product.total;
+        if(productSelected && productSelected.origin){
+            const list = [...productList, productSelected];
+            setProductList(getProductListWithTotals(list));
+        }
+    }, [productSelected])
+
+    useEffect(() => {
+        const s = modelSummary();
+        productList.forEach(prod => {
+            s.quantity += parseInt(prod.quantity);
+            s.weight += prod.origin.weight || 0;
+            s.totalDiscount += prod.discount;
+            s.totalWithoutDiscount += prod.origin.price * prod.quantity;
+            s.totalWithDiscount += prod.total;
         });
         s.totalWithDelivery = s.totalWithDiscount + delivery;
         setSummary(s);
-    }, [products])
+    }, [productList])
+
+    const getProductListWithTotals = (list) => {
+        var map = {};
+        list
+            .map((prod) => {
+                const discountPercentage = 0;
+                let total = prod.origin.price * prod.quantity;
+                const discount = total * (discountPercentage / 100);
+
+                total = total - discount;
+
+                return {
+                    ...prod,
+                    quantity: parseInt(prod.quantity),
+                    discountPercentage: discountPercentage,
+                    discount: discount,
+                    total: total,
+                };
+            })
+            .forEach((prod) => {
+                const key = prod.origin.id + '_' + prod.color + '_' + prod.sizeId;
+                if (map[key]) {
+                    map[key].quantity += prod.quantity;
+                    map[key].total += prod.total;
+                } else {
+                    map[key] = prod;
+                }
+            });
+        return Object.keys(map).map((key) => (map[key]));
+    }
+
+    const removeProduct = (prod) => {
+        const list = [...productList];
+        list.splice(list.indexOf(prod), 1);
+        setProductList(list);
+    }
+
+    const onChangeQuantity = (quantity, p) => {
+        const list = [...productList];
+
+        if (quantity === 0) {
+            removeProduct(p);
+        } else {
+            list.forEach((prod) => {
+                if (prod.origin.id === p.origin.id) {
+                    prod.quantity = parseInt(quantity);
+                }
+            });
+            setProductList(getProductListWithTotals(list));
+        }
+    }
 
     return (
         <React.Fragment>
             <Row>
                 <Col>
-                    <h5 className="text-info">Pedido</h5>
+                    <h5 className="text-info">Resumen del pedido</h5>
                 </Col>
                 <Col md={12}>
                     <table className="table table-sm table-striped table-bordered table-centered table-nowrap">
@@ -51,12 +107,13 @@ const OrderCar = (props) => {
                             <th className="text-center">Precio Unit.</th>
                             <th className="text-center">Descuento</th>
                             <th className="text-center">SubTotal</th>
+                            <th className="text-center"> </th>
                         </tr>
                         </thead>
                         <tbody>
-                        {map(products, (product, key) => (
+                        {map(productList, (product, key) => (
                             <tr key={key}>
-                                <td>
+                                <td style={{width: '10%'}}>
                                     <HtmlTooltip
                                         title={
                                             <React.Fragment>
@@ -69,15 +126,31 @@ const OrderCar = (props) => {
                                     </HtmlTooltip>
 
                                 </td>
-                                <td className="text-center">{product.color}</td>
-                                <td className="text-center">{product.size}</td>
-                                <td className="text-center">{product.quantity}</td>
-                                <td className="text-end">{priceFormat(product.origin.price)}</td>
-                                <td className="text-center">{product.discount}%</td>
-                                <td className="text-end">{priceFormat(product.total)}</td>
+                                <td style={{width: '25%'}} className="text-center">{product.color}</td>
+                                <td style={{width: '15%'}} className="text-center">{product.size}</td>
+                                <td style={{width: '15%'}}>
+                                    <AvForm className="needs-validation" autoComplete="off">
+                                        <FieldSelect
+                                            id={"quantity"}
+                                            name={"quantity"}
+                                            options={buildNumericOptions(100)}
+                                            defaultValue={product.quantity}
+                                            onChange={(item => onChangeQuantity(item.value, product))}
+                                            required
+                                        />
+                                    </AvForm>
+                                </td>
+                                <td style={{width: '10%'}} className="text-end">{priceFormat(product.origin.price)}</td>
+                                <td style={{width: '10%'}} className="text-center">{product.discount}%</td>
+                                <td style={{width: '10%'}} className="text-end">{priceFormat(product.total)}</td>
+                                <td style={{width: '5%'}} className="text-end">
+                                    <button size="small" className="btn btn-sm text-danger" onClick={() => removeProduct(product)}>
+                                        <i className="uil uil-trash-alt font-size-18"> </i>
+                                    </button>
+                                </td>
                             </tr>
                         ))}
-                        {products.length === 0 && (
+                        {productList.length === 0 && (
                             <tr>
                                 <td colSpan={7} className="text-center text-muted">Pedido vacio</td>
                             </tr>
@@ -134,7 +207,7 @@ const OrderCar = (props) => {
 }
 
 OrderCar.propTypes = {
-    products: PropTypes.array.isRequired,
+    productSelected: PropTypes.object.isRequired,
     delivery: PropTypes.number.isRequired,
     history: PropTypes.object
 }

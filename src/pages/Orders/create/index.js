@@ -9,18 +9,21 @@ import Breadcrumb from "../../../components/Common/Breadcrumb";
 import OrderCustomer from "./orderCustomer";
 import OrderProducts from "./orderProducts";
 import OrderCar from "./orderCar";
+import OrderDeliveryOptions from "./orderDeliveryOptions";
 
 const CreateOrder = (props) => {
     const {estado} = props;
-    const [products, setProducts] = useState([]);
+    const [product, setProduct] = useState([]);
+    const [customer, setCustomer] = useState([]);
     const [delivery, setDelivery] = useState(0);
 
-    const onSelectCustomer = (customer) => {
-        console.log('onSelectCustomer', customer)
+    const onSelectCustomer = (c) => {
+        console.log('onSelectCustomer', c)
+        setCustomer(c);
     }
-    const onSelectProduct = (product) => {
-        console.log('onSelectProduct', product)
-        setProducts([...products, product]);
+    const onSelectProduct = (prod) => {
+        console.log('onSelectProduct', prod)
+        setProduct(prod);
     }
     const onSelectDeliveryOptions = (deliveryOptions) => {
         console.log('onSelectDeliveryOptions', deliveryOptions)
@@ -45,7 +48,7 @@ const CreateOrder = (props) => {
                             <hr/>
                             <Row>
                                 <Col md={12}>
-                                    options
+                                    <OrderDeliveryOptions onChange={onSelectDeliveryOptions}/>
                                 </Col>
                             </Row>
                             <hr/>
@@ -57,7 +60,7 @@ const CreateOrder = (props) => {
                             <hr/>
                             <Row>
                                 <Col md={12}>
-                                    <OrderCar products={products} delivery={delivery}/>
+                                    <OrderCar productSelected={product} delivery={delivery}/>
                                 </Col>
                             </Row>
                         </CardBody>
