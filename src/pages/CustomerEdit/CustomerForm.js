@@ -264,7 +264,7 @@ const CustomerForm = (props) => {
                         )}
                         <Row>
                             <Col>
-                                <div className="mb-3">
+                                <div className="">
                                     <AvField
                                         checked={customerData.hasNotification ? true : false}
                                         className="form-check-input"

@@ -13,8 +13,12 @@ import {
     UPDATE_CUSTOMER_FAILED,
     DELETE_CUSTOMER,
     DELETE_CUSTOMER_SUCCESS,
-    DELETE_CUSTOMER_FAILED
+    DELETE_CUSTOMER_FAILED, RESET_CUSTOMERS
 } from "./actionTypes"
+
+export const resetCustomer = () => ({
+    type: RESET_CUSTOMERS,
+})
 
 export const getCustomers = (conditional, limit, offset) => ({
     type: GET_CUSTOMERS,

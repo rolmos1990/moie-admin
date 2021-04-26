@@ -5,18 +5,18 @@ import {connect} from "react-redux";
 import {apiError} from "../../../store/auth/login/actions";
 import PropTypes from "prop-types";
 import {FieldAsyncSelect} from "../../../components/Fields";
-import {GET_CUSTOMER, GET_PRODUCT} from "../../../helpers/url_helper";
-import {formatDate} from "../../../common/utils";
+import {GET_CUSTOMER} from "../../../helpers/url_helper";
 import {getCustomer} from "../../../store/customer/actions";
 import {getEmptyOptions} from "../../../common/converters";
 import {AvForm} from "availity-reactstrap-validation";
-import {Button, Tooltip} from "@material-ui/core";
+import {Tooltip} from "@material-ui/core";
 import Conditionals from "../../../common/conditionals";
 import CustomModal from "../../../components/Modal/CommosModal";
 import CustomerForm from "../../CustomerEdit/CustomerForm";
 
 const OrderCustomer = (props) => {
     const {onSelect, customer, getCustomer} = props;
+    const [editCustomer, setEditCustomer] = useState(false);
     const [openCustomerModal, setOpenCustomerModal] = useState(false);
     const [customerData, setCustomerData] = useState({});
     const [customerDefault, setCustomerDefault] = useState(getEmptyOptions());
@@ -26,11 +26,35 @@ const OrderCustomer = (props) => {
         if (customer.id) {
             setCustomerData(customer);
             onSelect(customer);
+        } else {
+            resetData();
+            onSelect({});
         }
     }, [customer]);
 
-    const toggleModal=()=>{
+    const toggleModal = () => {
         setOpenCustomerModal(!openCustomerModal);
+    }
+
+    const resetData = () => {
+        setCustomerDefault(getEmptyOptions());
+        setCustomerDocumentDefault(getEmptyOptions());
+        setCustomerData({})
+    }
+
+    const onCloseModal = () => {
+        toggleModal();
+        setEditCustomer(false);
+    }
+
+    const onAcceptModal = () => {
+        toggleModal();
+        setCustomerDefault(getEmptyOptions());
+        setCustomerDocumentDefault(getEmptyOptions());
+        if(editCustomer){
+            getCustomer(customer.id);
+        }
+        setEditCustomer(false);
     }
 
     return (
@@ -40,7 +64,7 @@ const OrderCustomer = (props) => {
                     <h5 className="text-info">Datos del cliente</h5>
                 </Col>
             </Row>
-            <AvForm className="needs-validation" autoComplete="off" >
+            <AvForm className="needs-validation" autoComplete="off">
                 <Row>
                     <Col md={3}>
                         <Label htmlFor="product">Buscar por Documento</Label>
@@ -120,21 +144,20 @@ const OrderCustomer = (props) => {
                                 title="Editar cliente"
                                 size="small"
                                 className="btn btn-sm text-primary"
-                                onClick={() => toggleModal()}>
+                                onClick={() => {
+                                    toggleModal();
+                                    setEditCustomer(true);
+                                }}>
                             <i className="uil uil-pen font-size-18"> </i>
                         </button>
                     </Col>
                 </Row>
             )}
-            <CustomModal title="Nuevo cliente" showFooter={false} isOpen={openCustomerModal} onClose={() => toggleModal()}>
+            <CustomModal title={editCustomer ? "Modificar cliente":"Nuevo cliente"} showFooter={false} isOpen={openCustomerModal} onClose={onCloseModal}>
                 <CustomerForm customer={customerData}
                               showAsModal={true}
-                              onCloseModal={() => toggleModal()}
-                              onAcceptModal={() => {
-                                  toggleModal();
-                                  setCustomerDefault(getEmptyOptions());
-                                  setCustomerDocumentDefault(getEmptyOptions());
-                              }}
+                              onCloseModal={onCloseModal}
+                              onAcceptModal={onAcceptModal}
                 />
             </CustomModal>
         </React.Fragment>

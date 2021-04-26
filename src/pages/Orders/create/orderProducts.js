@@ -20,7 +20,6 @@ const OrderProducts = (props) => {
     const [productDefault, setProductDefault] = useState(getEmptyOptions());
     const [productReferenceDefault, setProductReferenceDefault] = useState(getEmptyOptions());
     const [imgSelected, setImgSelected] = useState(0);
-    const [quantity, setQuantity] = useState(1);
     const [colorsMap, setColorsMap] = useState({});
     const [colors, setColors] = useState([]);
     const [color, setColor] = useState({});
@@ -46,6 +45,8 @@ const OrderProducts = (props) => {
             if (productSizeColors.length === 1) {
                 setColor(productSizeColors[0]);
             }
+        } else {
+            resetData();
         }
     }, [product]);
 
@@ -59,6 +60,10 @@ const OrderProducts = (props) => {
         };
 
         onSelect(prod);
+        resetData();
+    }
+
+    const resetData = () => {
         setProductDefault(getEmptyOptions());
         setProductReferenceDefault(getEmptyOptions());
         setProductData({})

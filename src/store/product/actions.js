@@ -9,8 +9,12 @@ import {
     REGISTER_PRODUCT_SUCCESS,
     REGISTER_PRODUCT,
     UPDATE_PRODUCT_FAILED,
-    UPDATE_PRODUCT_SUCCESS, UPDATE_PRODUCT
+    UPDATE_PRODUCT_SUCCESS, UPDATE_PRODUCT, RESET_PRODUCT
 } from "./actionTypes";
+
+export const resetProduct = () => ({
+    type: RESET_PRODUCT,
+})
 
 export const getProducts = (conditional, limit, offset) => ({
     type: GET_PRODUCTS,

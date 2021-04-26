@@ -11,7 +11,7 @@ import {
     UPDATE_CUSTOMER_FAILED,
     UPDATE_CUSTOMER_SUCCESS,
     GET_CUSTOMERS_FAILED,
-    GET_CUSTOMERS_SUCCESS
+    GET_CUSTOMERS_SUCCESS, RESET_CUSTOMERS
 
 } from "./actionTypes"
 import {GET_CUSTOMER, GET_CUSTOMERS} from "../../helpers/url_helper";
@@ -27,6 +27,10 @@ const initialState = {
 
 const customer = (state = initialState, action) => {
     switch (action.type) {
+        case RESET_CUSTOMERS:
+            return {
+                ...initialState
+            }
         case GET_CUSTOMERS:
             return {
                 ...state,

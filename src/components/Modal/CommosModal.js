@@ -2,7 +2,7 @@ import PropTypes from "prop-types";
 import {Modal} from "reactstrap";
 
 const CustomModal = (props) => {
-    const {isOpen, scrollable, id, onAccept, onClose, title, description, children, showFooter=true} = props;
+    const {isOpen, scrollable, id, onAccept, onClose, title, children, showFooter=true} = props;
     return (
         <Modal
             isOpen={isOpen}
@@ -31,7 +31,6 @@ const CustomModal = (props) => {
 CustomModal.propTypes = {
     children: PropTypes.element.isRequired,
     title: PropTypes.string,
-    description: PropTypes.string,
     isOpen: PropTypes.bool,
     scrollable: PropTypes.bool,
     onClose: PropTypes.func,

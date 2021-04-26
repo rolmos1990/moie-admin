@@ -8,14 +8,15 @@ import {getProduct} from "../../../store/product/actions";
 import {map} from "lodash";
 import Images from "../../../components/Common/Image";
 import {getImageByQuality, priceFormat, buildNumericOptions} from "../../../common/utils";
-import {FieldSelect, FieldSelectBasic} from "../../../components/Fields";
+import {FieldSelect} from "../../../components/Fields";
 import {HtmlTooltip} from "../../../components/Common/HtmlTooltip";
 import {AvForm} from "availity-reactstrap-validation";
+import {ConfirmationModalAction} from "../../../components/Modal/ConfirmationModal";
 
 const modelSummary = () => ({quantity: 0, totalDiscount: 0, totalWithoutDiscount: 0, totalWithDiscount: 0, delivery: 0, totalWithDelivery: 0, weight: 0});
 
 const OrderCar = (props) => {
-    const {productSelected, delivery} = props;
+    const {productSelected, delivery, onCancel} = props;
     const [summary, setSummary] = useState(modelSummary());
     const [productList, setProductList] = useState([]);
 
@@ -91,9 +92,17 @@ const OrderCar = (props) => {
     }
 
     const onCancelOrder = () => {
-
+        ConfirmationModalAction({
+            title: 'Confirmación',
+            description:'¿Seguro desea cancelar el pedido?',
+            id: '_OrderModal',
+            onConfirm: () => {
+                onCancel();
+                setSummary(modelSummary());
+                setProductList([]);
+            }
+        });
     }
-
     const onCreateOrder = () => {
 
     }
@@ -108,7 +117,7 @@ const OrderCar = (props) => {
                         </Col>
                         <Col md={6} className="text-right">
                             <div className="btn-group">
-                                <button type="button" className="btn btn-light text-danger" onClick={() => onCancelOrder()}>
+                                <button type="button" className="btn btn-light text-danger" disabled={!productList || productList.length === 0} onClick={() => onCancelOrder()}>
                                     <i className="uil uil-trash-alt font-size-18"> </i> Cancelar
                                 </button>
                                 <button type="button" className="btn btn-primary" disabled={!productList || productList.length === 0} onClick={() => onCreateOrder()}>
@@ -222,10 +231,6 @@ const OrderCar = (props) => {
                             </div>
                         </div>
                     </div>
-
-                </Col>
-                <Col md={6}>
-
                 </Col>
             </Row>
         </React.Fragment>
@@ -233,6 +238,7 @@ const OrderCar = (props) => {
 }
 
 OrderCar.propTypes = {
+    onCancel: PropTypes.func.isRequired,
     productSelected: PropTypes.object.isRequired,
     delivery: PropTypes.number.isRequired,
     history: PropTypes.object

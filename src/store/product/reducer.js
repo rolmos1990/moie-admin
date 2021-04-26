@@ -5,10 +5,11 @@ import {
     GET_PRODUCTS, GET_PRODUCTS_FAILED, GET_PRODUCTS_SUCCESS,
     REGISTER_PRODUCT,
     REGISTER_PRODUCT_FAILED,
-    REGISTER_PRODUCT_SUCCESS,
+    REGISTER_PRODUCT_SUCCESS, RESET_PRODUCT,
     UPDATE_PRODUCT, UPDATE_PRODUCT_FAILED,
     UPDATE_PRODUCT_SUCCESS
 } from "./actionTypes";
+import {RESET_CUSTOMERS} from "../customer/actionTypes";
 
 const initialState = {
     error: "",
@@ -21,6 +22,10 @@ const initialState = {
 
 const product = (state = initialState, action) => {
     switch (action.type) {
+        case RESET_PRODUCT:
+            return {
+                ...initialState
+            }
         case GET_PRODUCTS:
             return {
                 ...state,
