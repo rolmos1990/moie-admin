@@ -65,6 +65,7 @@ const customer = (state = initialState, action) => {
         case REGISTER_CUSTOMER:
             state = {
                 ...state,
+                error: false,
                 loading: true,
             }
             break
@@ -72,11 +73,13 @@ const customer = (state = initialState, action) => {
             state = {
                 ...state,
                 loading: false,
+                customer: action.payload
             }
             break
         case REGISTER_CUSTOMER_FAILED:
             state = {
                 ...state,
+                error: true,
                 loading: false,
             }
             break

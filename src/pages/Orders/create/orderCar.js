@@ -90,11 +90,33 @@ const OrderCar = (props) => {
         }
     }
 
+    const onCancelOrder = () => {
+
+    }
+
+    const onCreateOrder = () => {
+
+    }
+
     return (
         <React.Fragment>
             <Row>
-                <Col>
-                    <h5 className="text-info">Resumen del pedido</h5>
+                <Col md={12}>
+                    <Row className="mb-3">
+                        <Col md={6}>
+                            <h5 className="text-info">Resumen del pedido</h5>
+                        </Col>
+                        <Col md={6} className="text-right">
+                            <div className="btn-group">
+                                <button type="button" className="btn btn-light text-danger" onClick={() => onCancelOrder()}>
+                                    <i className="uil uil-trash-alt font-size-18"> </i> Cancelar
+                                </button>
+                                <button type="button" className="btn btn-primary" disabled={!productList || productList.length === 0} onClick={() => onCreateOrder()}>
+                                    <i className="uil uil-shopping-cart-alt me-2"> </i> Crear pedido
+                                </button>
+                            </div>
+                        </Col>
+                    </Row>
                 </Col>
                 <Col md={12}>
                     <table className="table table-sm table-striped table-bordered table-centered table-nowrap">
@@ -152,7 +174,7 @@ const OrderCar = (props) => {
                         ))}
                         {productList.length === 0 && (
                             <tr>
-                                <td colSpan={7} className="text-center text-muted">Pedido vacio</td>
+                                <td colSpan={8} className="text-center text-muted">Pedido vacio</td>
                             </tr>
                         )}
                         </tbody>
@@ -160,9 +182,10 @@ const OrderCar = (props) => {
                 </Col>
             </Row>
             <Row>
-                <Col md={{size: 6, order: 1, offset: 6}}>
+                {/*<Col md={{size: 6, order: 1, offset: 6}}>*/}
+                <Col md={6}>
                     <div className="card border shadow-none">
-                        <div className="card-body p-4">
+                        <div className="card-body p-2">
                             <div className="table-responsive">
                                 <table className="table table-sm mb-0">
                                     <tbody>
@@ -199,6 +222,9 @@ const OrderCar = (props) => {
                             </div>
                         </div>
                     </div>
+
+                </Col>
+                <Col md={6}>
 
                 </Col>
             </Row>

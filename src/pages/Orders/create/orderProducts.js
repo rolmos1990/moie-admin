@@ -207,13 +207,13 @@ const OrderProducts = (props) => {
                                     <FieldSelect
                                         id={"quantity"}
                                         name={"quantity"}
-                                        options={buildNumericOptions(100)}
+                                        options={buildNumericOptions(100, 1, 1)}
                                         defaultValue={product.quantity}
                                         required
                                     />
                                 </Col>
                                 <Col md={2} style={{display: 'flex', 'alignItems': 'normal'}}>
-                                    <button type="submit" className="btn btn-primary btn-block waves-effect waves-light mt-2 me-1">
+                                    <button type="submit" className="btn btn-primary btn-block waves-effect waves-light mt-2 me-1 w-100">
                                         <i className="uil uil-shopping-cart-alt me-2"> </i> Agregar
                                     </button>
                                 </Col>

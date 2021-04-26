@@ -57,10 +57,10 @@ export const registerCustomer = (customer, history) => {
     }
 }
 
-export const registerCustomerSuccess = customer => {
+export const registerCustomerSuccess = data => {
     return {
         type: REGISTER_CUSTOMER_SUCCESS,
-        payload: customer,
+        payload: data.customer,
     }
 }
 

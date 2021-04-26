@@ -52,8 +52,7 @@ function* customerRegister({ payload: { customer, history } }) {
         const response = yield call(registerCustomer, customer)
         showResponseMessage(response, "Cliente creado!");
         yield put(registerCustomerSuccess(response))
-        history.push("/customers")
-
+        //history.push("/customers")
     } catch (error) {
         yield put(registerCustomerFail(error))
     }
@@ -65,8 +64,7 @@ function* customerUpdate({ payload: { id, customer, history } }) {
         const response = yield call(updateCustomer, id, customer)
         showResponseMessage(response, "Cliente actualizado!");
         yield put(updateCustomerSuccess(response))
-        history.push("/customers")
-
+        //history.push("/customers")
     } catch (error) {
         console.log("error", error);
         yield put(updateCustomerFail(error))

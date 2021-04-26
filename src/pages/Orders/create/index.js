@@ -13,7 +13,7 @@ import OrderDeliveryOptions from "./orderDeliveryOptions";
 
 const CreateOrder = (props) => {
     const {estado} = props;
-    const [product, setProduct] = useState([]);
+    const [product, setProduct] = useState({});
     const [customer, setCustomer] = useState([]);
     const [delivery, setDelivery] = useState(0);
 

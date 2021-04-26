@@ -105,9 +105,9 @@ export const parseJson = (data) => {
     return result;
 }
 
-export const buildNumericOptions = (qty, sk=1) => {
+export const buildNumericOptions = (qty, sk=1, start=0) => {
     const valueList = [];
-    for (let i = 0; i <= qty;) {
+    for (let i = start; i <= qty;) {
         valueList.push({label: i, value: i});
         i+= sk;
     }
