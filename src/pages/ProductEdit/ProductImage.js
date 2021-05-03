@@ -98,6 +98,7 @@ const ProductImage = props => {
                                                     handleAcceptedFiles(f.groupId, files);
                                                 }}>
                                                 <Images className="img-fluid mx-auto d-block tab-img rounded"
+                                                        height={370}
                                                         alt={f.file?.f?.name}
                                                         src={f.file?.preview}
                                                 />

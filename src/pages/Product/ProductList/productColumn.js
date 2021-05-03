@@ -19,13 +19,14 @@ const productColumns = (onDelete = false) => [
         sort: false,
         filter: true,
         filterType: "text",
-        filterCondition: Conditionals.OPERATORS.LIKE,
+        filterCondition: Conditionals.OPERATORS.EQUAL,
         formatter: (cellContent, item) => (
             <HtmlTooltip
                 title={
                     <React.Fragment>
                         <Images src={`${getImageByQuality(item.productImage.length > 0 ? item.productImage[0] : {}, 'medium')}`}
                                 alt={item.reference}
+                                height={100}
                                 className="img-fluid mx-auto d-block tab-img rounded"/>
                     </React.Fragment>
                 }>

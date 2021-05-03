@@ -13,22 +13,23 @@ import {Tooltip} from "@material-ui/core";
 import Conditionals from "../../../common/conditionals";
 import CustomModal from "../../../components/Modal/CommosModal";
 import CustomerForm from "../../CustomerEdit/CustomerForm";
+import {updateCard} from "../../../store/order/actions";
 
 const OrderCustomer = (props) => {
-    const {onSelect, customer, getCustomer} = props;
+    const {car, customer, onGetCustomer, onUpdateCar} = props;
     const [editCustomer, setEditCustomer] = useState(false);
     const [openCustomerModal, setOpenCustomerModal] = useState(false);
     const [customerData, setCustomerData] = useState({});
     const [customerDefault, setCustomerDefault] = useState(getEmptyOptions());
+    const [customerEmailDefault, setCustomerEmailDefault] = useState(getEmptyOptions());
     const [customerDocumentDefault, setCustomerDocumentDefault] = useState(getEmptyOptions());
 
     useEffect(() => {
         if (customer.id) {
             setCustomerData(customer);
-            onSelect(customer);
+            onUpdateCar({...car, customer})
         } else {
             resetData();
-            onSelect({});
         }
     }, [customer]);
 
@@ -38,6 +39,7 @@ const OrderCustomer = (props) => {
 
     const resetData = () => {
         setCustomerDefault(getEmptyOptions());
+        setCustomerEmailDefault(getEmptyOptions());
         setCustomerDocumentDefault(getEmptyOptions());
         setCustomerData({})
     }
@@ -50,9 +52,10 @@ const OrderCustomer = (props) => {
     const onAcceptModal = () => {
         toggleModal();
         setCustomerDefault(getEmptyOptions());
+        setCustomerEmailDefault(getEmptyOptions());
         setCustomerDocumentDefault(getEmptyOptions());
         if(editCustomer){
-            getCustomer(customer.id);
+            onGetCustomer(customer.id);
         }
         setEditCustomer(false);
     }
@@ -66,7 +69,7 @@ const OrderCustomer = (props) => {
             </Row>
             <AvForm className="needs-validation" autoComplete="off">
                 <Row>
-                    <Col md={3}>
+                    <Col md={2}>
                         <Label htmlFor="product">Buscar por Documento</Label>
                         <FieldAsyncSelect
                             name={"product"}
@@ -75,12 +78,12 @@ const OrderCustomer = (props) => {
                             defaultValue={customerDocumentDefault}
                             conditionalOptions={{fieldName: 'document', operator: Conditionals.OPERATORS.EQUAL}}
                             onChange={(c) => {
-                                getCustomer(c.value);
+                                onGetCustomer(c.value);
                                 setCustomerDefault(getEmptyOptions());
                             }}
                         />
                     </Col>
-                    <Col md={7}>
+                    <Col md={4}>
                         <Label htmlFor="customer">Buscar por Nombre</Label>
                         <FieldAsyncSelect
                             name={"customer"}
@@ -88,8 +91,22 @@ const OrderCustomer = (props) => {
                             placeholder="Buscar por nombre"
                             defaultValue={customerDefault}
                             onChange={(c) => {
-                                getCustomer(c.value);
+                                onGetCustomer(c.value);
                                 setCustomerDocumentDefault(getEmptyOptions());
+                            }}
+                        />
+                    </Col>
+                    <Col md={4}>
+                        <Label htmlFor="customer">Correo</Label>
+                        <FieldAsyncSelect
+                            name={"email"}
+                            urlStr={GET_CUSTOMER}
+                            placeholder="Buscar por correo"
+                            defaultValue={customerEmailDefault}
+                            conditionalOptions={{fieldName: 'email', operator: Conditionals.OPERATORS.EQUAL}}
+                            onChange={(c) => {
+                                onGetCustomer(c.value);
+                                setCustomerEmailDefault(getEmptyOptions());
                             }}
                         />
                     </Col>
@@ -153,7 +170,7 @@ const OrderCustomer = (props) => {
                     </Col>
                 </Row>
             )}
-            <CustomModal title={editCustomer ? "Modificar cliente":"Nuevo cliente"} showFooter={false} isOpen={openCustomerModal} onClose={onCloseModal}>
+            <CustomModal title={editCustomer ? "Modificar cliente":"Nuevo cliente"} size="lg" showFooter={false} isOpen={openCustomerModal} onClose={onCloseModal}>
                 <CustomerForm customer={customerData}
                               showAsModal={true}
                               onCloseModal={onCloseModal}
@@ -171,7 +188,13 @@ OrderCustomer.propTypes = {
 
 const mapStateToProps = state => {
     const {customer, error, loading} = state.Customer
-    return {customer, error, loading};
+    const {car} = state.Order
+    return {car, customer, error, loading};
 }
 
-export default withRouter(connect(mapStateToProps, {apiError, getCustomer})(OrderCustomer))
+const mapDispatchToProps = dispatch => ({
+    onGetCustomer: (id) => dispatch(getCustomer(id)),
+    onUpdateCar: (data) => dispatch(updateCard(data)),
+})
+
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(OrderCustomer))

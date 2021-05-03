@@ -126,11 +126,10 @@ const ProductEdit = (props) => {
 
     useEffect(() => {
         if (fieldOptions && fieldOptions.length > 0) {
-            setMaterialsList(filterFieldOptions(fieldOptions, GROUPS.MATERIAL));
+            setMaterialsList(filterFieldOptions(fieldOptions, GROUPS.MATERIALS));
             setProviderList(filterFieldOptions(fieldOptions, GROUPS.PROVIDERS));
-            setReferenceList(filterFieldOptions(fieldOptions, GROUPS.REFERENCE).map(op => {
-                const value = parseJson(op.name);
-                const key = value ? value.key : '';
+            setReferenceList(filterFieldOptions(fieldOptions, GROUPS.REFERENCE_KEY).map(op => {
+                const key = op.name ? op.name : '';
                 return {label: key, value: key};
             }));
         } else {
@@ -147,7 +146,7 @@ const ProductEdit = (props) => {
     }, [refreshFieldOptions])
 
     const filterFieldOptions = (arr, group) => {
-        return arr.filter(op => (op.group === group)).map(op => ({name: op.value}));
+        return arr.filter(op => (op.group === group)).map(op => ({name: op.name}));
     }
 
     const handleValidSubmit = (event, values) => {
@@ -155,12 +154,15 @@ const ProductEdit = (props) => {
             ...values,
             category: values.category.value,
             size: values.size.value,
-            referenceKey: values.referenceKey.value,
             status: 1,
             weight: values.weight ? Number.parseFloat(values.weight) : 0,
             price: Number.parseFloat(values.price),
             cost: Number.parseFloat(values.cost),
         };
+
+        if(values.referenceKey && values.referenceKey.value){
+            data.referenceKey= values.referenceKey.value;
+        }
 
         if (!isEdit) {
             onCreateProduct(data, props.history)
@@ -169,10 +171,10 @@ const ProductEdit = (props) => {
         }
 
         if (!materialsList.some(op => op.name === data.material)) {
-            onCreateFieldOption({group: GROUPS.MATERIAL, name: "PRODUCT", value: data.material}, props.history);
+            onCreateFieldOption({group: GROUPS.MATERIALS, name: data.material, value: data.material}, props.history);
         }
         if (!providerList.some(op => op.name === data.provider)) {
-            onCreateFieldOption({group: GROUPS.PROVIDERS, name: "PRODUCT", value: data.provider}, props.history);
+            onCreateFieldOption({group: GROUPS.PROVIDERS, name: data.provider, value: data.provider}, props.history);
         }
     }
 
@@ -222,20 +224,22 @@ const ProductEdit = (props) => {
                                             }}>
                                         <div className="p-4 border-top">
                                             <Row>
-                                                <Col md={2}>
-                                                    <div className="mb-3">
-                                                        <Label htmlFor="field_referenceKey">Ref. <span className="text-danger">*</span></Label>
-                                                        <FieldSelect
-                                                            id={"field_referenceKey"}
-                                                            name={"referenceKey"}
-                                                            options={referenceList}
-                                                            defaultValue={productData.referenceKey}
-                                                            required
-                                                            isSearchable
-                                                        />
-                                                    </div>
-                                                </Col>
-                                                <Col md={10}>
+                                                {!(product && product.id) && (
+                                                    <Col md={2}>
+                                                        <div className="mb-3">
+                                                            <Label htmlFor="field_referenceKey">Ref. <span className="text-danger">*</span></Label>
+                                                            <FieldSelect
+                                                                id={"field_referenceKey"}
+                                                                name={"referenceKey"}
+                                                                options={referenceList}
+                                                                defaultValue={productData.referenceKey}
+                                                                required
+                                                                isSearchable
+                                                            />
+                                                        </div>
+                                                    </Col>
+                                                )}
+                                                <Col md={product && product.id ? 12: 10}>
                                                     <div className="mb-3">
                                                         <Label htmlFor="field_name">Nombre de Producto <span className="text-danger">*</span></Label>
                                                         <FieldText
@@ -475,7 +479,7 @@ const ProductEdit = (props) => {
 const mapStateToProps = state => {
     const {error, product, loading} = state.Product
     const {fieldOptions, refresh} = state.FieldOption
-    const refreshProduct = state.ProductSize.refresh || state.ProductImage.refresh;
+    const refreshProduct = state.ProductSize.refresh || state.ProductImage.refresh || state.Product.refresh;
     const {categories} = state.Category
     const {sizes} = state.Sizes
     return {error, product, categories, sizes, fieldOptions, loading, refreshProduct, refreshFieldOptions: refresh}
@@ -484,7 +488,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => ({
     onGetCategories: (conditional = null, limit = 100, page) => dispatch(getCategories(conditional, limit, page)),
     onGetSizes: (conditional = null, limit = 100, page) => dispatch(getSizes(conditional, limit, page)),
-    onGetFieldOptions: (conditional = null, limit = 500, page) => dispatch(getFieldOptionByGroup([GROUPS.MATERIAL, GROUPS.PROVIDERS, GROUPS.REFERENCE], limit, page)),
+    onGetFieldOptions: (conditional = null, limit = 500, page) => dispatch(getFieldOptionByGroup([GROUPS.MATERIALS, GROUPS.PROVIDERS, GROUPS.REFERENCE_KEY], limit, page)),
     onGetProduct: (id) => dispatch(getProduct(id)),
     onCreateProduct: (data, history) => dispatch(registerProduct(data, history)),
     onUpdateProduct: (data, history) => dispatch(updateProduct(data, history)),

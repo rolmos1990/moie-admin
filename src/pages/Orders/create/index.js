@@ -11,40 +11,44 @@ import OrderCar from "./orderCar";
 import OrderDeliveryOptions from "./orderDeliveryOptions";
 import {resetCustomer} from "../../../store/customer/actions";
 import {resetProduct} from "../../../store/product/actions";
+import {ConfirmationModalAction} from "../../../components/Modal/ConfirmationModal";
+import OrderSummary from "./orderSummary";
+import {resetCar} from "../../../store/order/actions";
 
 const CreateOrder = (props) => {
-    const {onResetOrder} = props;
+    const {onResetOrder, car, history} = props;
     const [initComponent, setInitComponent] = useState(true);
-    const [product, setProduct] = useState({});
-    const [customer, setCustomer] = useState({});
-    const [delivery, setDelivery] = useState(0);
+    const [isValidOrder, setIsValidOrder] = useState(false);
 
     useEffect(() => {
         if (initComponent) {
-            resetData();
+            onResetOrder();
             setInitComponent(false);
         }
-
     }, [initComponent]);
 
-    const resetData = () => {
-        setCustomer({});
-        setDelivery(0);
-        setProduct({});
-        onResetOrder();
+    useEffect(() => {
+        if (car) {
+            const isValidCustomer = !!car.customer.id;
+            const isValidProducts = car.products.length > 0;
+            const isValidDeliveryOptions = car.deliveryOptions && car.deliveryOptions.origin && car.deliveryOptions.type && car.deliveryOptions.method;
+            setIsValidOrder(isValidCustomer && isValidProducts && isValidDeliveryOptions);
+        }
+    }, [car]);
+
+    const onCancelOrder = () => {
+        ConfirmationModalAction({
+            title: 'Confirmación',
+            description: '¿Seguro desea cancelar el pedido?',
+            id: '_OrderModal',
+            onConfirm: () => {
+                onResetOrder();
+            }
+        });
     }
 
-    const onSelectCustomer = (c) => {
-        console.log('onSelectCustomer', c)
-        setCustomer(c);
-    }
-    const onSelectProduct = (prod) => {
-        console.log('onSelectProduct', prod)
-        setProduct(prod);
-    }
-    const onSelectDeliveryOptions = (deliveryOptions) => {
-        console.log('onSelectDeliveryOptions', deliveryOptions)
-        setDelivery(0);
+    const onCreateOrder = () => {
+        console.log('onCreateOrder car', car);
     }
 
     return (
@@ -56,25 +60,44 @@ const CreateOrder = (props) => {
                         <CardBody>
                             <Row>
                                 <Col md={12}>
-                                    <OrderCustomer onSelect={onSelectCustomer}/>
+                                    <OrderCustomer/>
                                 </Col>
                             </Row>
                             <hr/>
                             <Row>
                                 <Col md={12}>
-                                    <OrderDeliveryOptions onChange={onSelectDeliveryOptions}/>
+                                    <OrderProducts/>
                                 </Col>
                             </Row>
                             <hr/>
                             <Row>
                                 <Col md={12}>
-                                    <OrderProducts onSelect={onSelectProduct}/>
+                                    <OrderCar/>
                                 </Col>
                             </Row>
                             <hr/>
                             <Row>
                                 <Col md={12}>
-                                    <OrderCar productSelected={product} delivery={delivery} onCancel={() => resetData()}/>
+                                    <OrderDeliveryOptions/>
+                                </Col>
+                            </Row>
+                            <hr/>
+                            <Row>
+                                <Col md={12}>
+                                    <OrderSummary />
+                                </Col>
+                            </Row>
+                            <hr/>
+                            <Row>
+                                <Col md={12} className="text-center">
+                                    <div className="btn-group">
+                                        <button type="button" className="btn btn-light text-danger" onClick={() => onCancelOrder()}>
+                                            Cancelar
+                                        </button>
+                                        <button type="button" className="btn btn-primary" disabled={!isValidOrder} onClick={() => onCreateOrder()}>
+                                            <i className="uil uil-shopping-cart-alt me-2"> </i> Crear pedido
+                                        </button>
+                                    </div>
                                 </Col>
                             </Row>
                         </CardBody>
@@ -86,14 +109,15 @@ const CreateOrder = (props) => {
 }
 
 const mapStateToProps = state => {
-    const {error, loading} = state.Location
-    return {error, loading}
+    const {car, loading} = state.Order
+    return {car, loading}
 }
 
 const mapDispatchToProps = dispatch => ({
     onResetOrder: () => {
         dispatch(resetCustomer());
         dispatch(resetProduct());
+        dispatch(resetCar());
     }
 })
 
@@ -106,4 +130,3 @@ CreateOrder.propTypes = {
     error: PropTypes.any,
     history: PropTypes.object
 }
-

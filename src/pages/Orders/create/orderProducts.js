@@ -1,10 +1,9 @@
-import React, {useState, useEffect} from "react"
-import {Col, Label, Row, Spinner} from "reactstrap"
-import {withRouter, Link} from "react-router-dom"
+import React, {useEffect, useState} from "react"
+import {Col, Label, Row} from "reactstrap"
+import {withRouter} from "react-router-dom"
 import {connect} from "react-redux";
-import {apiError} from "../../../store/auth/login/actions";
 import PropTypes from "prop-types";
-import {FieldAsyncSelect, FieldNumber, FieldSelect, FieldSelectBasic} from "../../../components/Fields";
+import {FieldAsyncSelect, FieldSelect} from "../../../components/Fields";
 import {GET_PRODUCT} from "../../../helpers/url_helper";
 import {getProduct} from "../../../store/product/actions";
 import {getEmptyOptions} from "../../../common/converters";
@@ -13,13 +12,15 @@ import {map} from "lodash";
 import Images from "../../../components/Common/Image";
 import {buildNumericOptions, getImageByQuality, priceFormat} from "../../../common/utils";
 import Conditionals from "../../../common/conditionals";
+import {updateCard} from "../../../store/order/actions";
 
 const OrderProducts = (props) => {
-    const {onSelect, product, getProduct} = props;
+    const {car, product, onGetProduct, onUpdateCar} = props;
     const [productData, setProductData] = useState({});
     const [productDefault, setProductDefault] = useState(getEmptyOptions());
     const [productReferenceDefault, setProductReferenceDefault] = useState(getEmptyOptions());
     const [imgSelected, setImgSelected] = useState(0);
+    const [quantityAvailable, setQuantityAvailable] = useState(0);
     const [colorsMap, setColorsMap] = useState({});
     const [colors, setColors] = useState([]);
     const [color, setColor] = useState({});
@@ -33,7 +34,7 @@ const OrderProducts = (props) => {
 
             const map = {};
             if (product.productSize.length) {
-                product.productSize.forEach((s => {
+                product.productSize.filter(s => s.quantity > 0).forEach((s => {
                     if (!map[s.color]) map[s.color] = [];
                     map[s.color].push({label: s.name, value: s.id});
                 }))
@@ -43,7 +44,7 @@ const OrderProducts = (props) => {
             let productSizeColors = Object.keys(map).map(k => ({label: k, value: k}));
             setColors(productSizeColors);
             if (productSizeColors.length === 1) {
-                setColor(productSizeColors[0]);
+                setColor(productSizeColors[0].value);
             }
         } else {
             resetData();
@@ -57,10 +58,18 @@ const OrderProducts = (props) => {
             size: d.size.label,
             sizeId: d.size.value,
             quantity: d.quantity.value,
+            quantityAvailable: quantityAvailable,
+            discountPercentage: 0,
         };
 
-        onSelect(prod);
+        onUpdateCar({...car, products: [...car.products, prod]})
         resetData();
+    }
+
+    const onChangeSize = (e) => {
+        const item = product.productSize.find(s => s.id === e.value);
+        setQuantityAvailable(item.quantity);
+        setSize(sizes.find(s => s.id === e.value));
     }
 
     const resetData = () => {
@@ -78,7 +87,7 @@ const OrderProducts = (props) => {
                     </Col>
                 </Row>
                 <Row>
-                    <Col md={3}>
+                    <Col md={2}>
                         <Label htmlFor="product">Buscar por Código</Label>
                         <FieldAsyncSelect
                             name={"productCode"}
@@ -87,12 +96,12 @@ const OrderProducts = (props) => {
                             defaultValue={productReferenceDefault}
                             conditionalOptions={{fieldName: 'reference', operator: Conditionals.OPERATORS.EQUAL}}
                             onChange={(d) => {
-                                getProduct(d.value);
+                                onGetProduct(d.value);
                                 setProductDefault(getEmptyOptions());
                             }}
                         />
                     </Col>
-                    <Col md={9}>
+                    <Col md={10}>
                         <Label htmlFor="product">Buscar por Nombre</Label>
                         <FieldAsyncSelect
                             name={"productName"}
@@ -100,7 +109,7 @@ const OrderProducts = (props) => {
                             placeholder="Nombre del producto"
                             defaultValue={productDefault}
                             onChange={(d) => {
-                                getProduct(d.value);
+                                onGetProduct(d.value);
                                 setProductReferenceDefault(getEmptyOptions());
                             }}
                         />
@@ -170,7 +179,7 @@ const OrderProducts = (props) => {
                                         <Col md={12} className="text-right">
                                             <div className="mt-3">
                                                 <p className="text-muted mb-2">Precio</p>
-                                                <h5 className="font-size-16">{priceFormat(productData.price)}</h5>
+                                                <h5 className="font-size-20">{priceFormat(productData.price)}</h5>
                                             </div>
                                         </Col>
                                     </Row>
@@ -200,9 +209,7 @@ const OrderProducts = (props) => {
                                         name={"size"}
                                         options={sizes}
                                         defaultValue={size}
-                                        onChange={(e) => {
-                                            setSize(sizes.find(s => s.id === e.value));
-                                        }}
+                                        onChange={(e) => onChangeSize(e)}
                                         isSearchable
                                         required
                                     />
@@ -212,8 +219,8 @@ const OrderProducts = (props) => {
                                     <FieldSelect
                                         id={"quantity"}
                                         name={"quantity"}
-                                        options={buildNumericOptions(100, 1, 1)}
-                                        defaultValue={product.quantity}
+                                        options={buildNumericOptions(quantityAvailable, 1, 1)}
+                                        defaultValue={0}
                                         required
                                     />
                                 </Col>
@@ -238,8 +245,14 @@ OrderProducts.propTypes = {
 }
 
 const mapStateToProps = state => {
-    const {product, error, loading} = state.Product
-    return {product, error, loading};
+    const {product, error, loading} = state.Product;
+    const {car} = state.Order;
+    return {car, product, error, loading};
 }
 
-export default withRouter(connect(mapStateToProps, {apiError, getProduct})(OrderProducts))
+const mapDispatchToProps = dispatch => ({
+    onGetProduct: (id) => dispatch(getProduct(id)),
+    onUpdateCar: (data) => dispatch(updateCard(data)),
+})
+
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(OrderProducts))

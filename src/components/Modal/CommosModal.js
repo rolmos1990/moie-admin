@@ -2,10 +2,11 @@ import PropTypes from "prop-types";
 import {Modal} from "reactstrap";
 
 const CustomModal = (props) => {
-    const {isOpen, scrollable, id, onAccept, onClose, title, children, showFooter=true} = props;
+    const {isOpen, scrollable, id, onAccept, onClose, title, children,size, showFooter=true} = props;
     return (
         <Modal
             isOpen={isOpen}
+            size={size}
             scrollable={scrollable || true}
             id={id || "staticModal"}
         >

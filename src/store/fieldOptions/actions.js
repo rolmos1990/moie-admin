@@ -23,7 +23,7 @@ export const getFieldOptions = (conditional, limit, offset) => ({
 
 export const getFieldOptionByGroup = (groups, limit, offset) => {
     const conditions = new Conditionals.Condition;
-    conditions.add("group", groups.join("::"), Conditionals.OPERATORS.IN);
+    if(groups.length > 0) conditions.add("group", groups.join("::"), Conditionals.OPERATORS.IN);
     return getFieldOptions(conditions.all(), limit, offset);
 }
 

@@ -2,19 +2,21 @@ import React from "react"
 import imageNotFound from "../../assets/images/image-not-found.png"
 
 const Images = props => {
+  let styles = {};
+  if(props.height) styles.height = props.height;
+  if(props.width) styles.width = props.width;
+
   return (
       <img
           {...props}
           data-dz-thumbnail=""
-          height={props.height || 'auto'}
-          width={props.width || 250}
           className={props.className  || "avatar-sm rounded bg-light"}
           alt={props.alt}
           src={props.src || imageNotFound}
           onError={(e)=>{
             e.target.src = imageNotFound;
           }}
-
+          style={styles}
       />
   )
 }

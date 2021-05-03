@@ -1,7 +1,7 @@
 import {all, call, fork, put, takeEvery} from "redux-saga/effects"
 
 //Account Redux states
-import {GET_ORDERS, GET_ORDER, REGISTER_ORDER, UPDATE_ORDER} from "./actionTypes"
+import {GET_ORDERS, GET_ORDER, REGISTER_ORDER, UPDATE_ORDER, GET_DELIVERY_METHODS, GET_DELIVERY_QUOTE} from "./actionTypes"
 
 import {
     getOrdersSuccess,
@@ -11,14 +11,14 @@ import {
     getOrderFailed,
     registerOrderFailed,
     updateOrderSuccess,
-    updateOrderFail
+    updateOrderFail, getDeliveryMethodsSuccess, getDeliveryMethodsFailed, getDeliveryQuoteSuccess, getDeliveryQuoteFailed
 } from "./actions"
 
 import {
     registerOrderApi,
     updateOrderApi,
     fetchOrderApi,
-    fetchOrdersApi
+    fetchOrdersApi, fetchDeliveryMethodsApi, fetchDeliveryQuoteApi
 } from "../../helpers/backend_helper"
 
 import Conditionals from "../../common/conditionals";
@@ -89,11 +89,32 @@ function* update({ payload: { id, data, history } }) {
     }
 }
 
+
+function* fetchDeliveryMethods({conditional, limit, offset}) {
+    try {
+        const cond = Conditionals.getConditionalFormat(conditional);
+        const response = yield call(fetchDeliveryMethodsApi, Conditionals.buildHttpGetQuery(cond, limit, offset))
+        yield put(getDeliveryMethodsSuccess(response.data, response.meta));
+    } catch (error) {
+        yield put(getDeliveryMethodsFailed(error))
+    }
+}
+function* fetchDeliveryQuote({data}) {
+    try {
+        const response = yield call(fetchDeliveryQuoteApi, data)
+        yield put(getDeliveryQuoteSuccess(response));
+    } catch (error) {
+        yield put(getDeliveryQuoteFailed(error))
+    }
+}
+
 export function* watchOrder() {
     yield takeEvery(ACTION_NAME_CREATE, register);
     yield takeEvery(ACTION_NAME_UPDATE, update);
     yield takeEvery(ACTION_NAME_LIST, fetch);
     yield takeEvery(ACTION_NAME_GET, get)
+    yield takeEvery(GET_DELIVERY_METHODS, fetchDeliveryMethods)
+    yield takeEvery(GET_DELIVERY_QUOTE, fetchDeliveryQuote)
 }
 
 function* orderSaga() {

@@ -98,9 +98,9 @@ const OrderList = props => {
                                                 <Col md={6}>
                                                     <div className="mb-3 float-md-end">
                                                         {columns.some(s => s.filter) && (
-                                                            <div>add filters</div>
+                                                            <div>pending add filters</div>
                                                         )}
-                                                        <Link to={"/order"} className="btn btn-primary waves-effect waves-light text-light">
+                                                        <Link to={"/order/create"} className="btn btn-primary waves-effect waves-light text-light">
                                                             <i className="mdi mdi-plus"> </i> Crear pedido
                                                         </Link>
                                                     </div>

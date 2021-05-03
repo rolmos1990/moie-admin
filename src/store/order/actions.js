@@ -10,7 +10,7 @@ import {
     REGISTER_ORDER_FAILED,
     UPDATE_ORDER,
     UPDATE_ORDER_SUCCESS,
-    UPDATE_ORDER_FAILED,
+    UPDATE_ORDER_FAILED, GET_DELIVERY_METHODS, GET_DELIVERY_METHODS_SUCCESS, GET_DELIVERY_METHODS_FAILED, GET_DELIVERY_QUOTE, GET_DELIVERY_QUOTE_SUCCESS, GET_DELIVERY_QUOTE_FAILED, RESET_CAR, UPDATE_CAR,
 } from "./actionTypes";
 
 export const getOrders = (conditional, limit, offset) => ({
@@ -81,11 +81,49 @@ export const updateOrderSuccess = data => {
         payload: data,
     }
 }
-
-
 export const updateOrderFail = error => {
     return {
         type: UPDATE_ORDER_FAILED,
         payload: error,
     }
 }
+
+export const getDeliveryMethods = (conditional, limit, offset) => ({
+    type: GET_DELIVERY_METHODS,
+    conditional: conditional,
+    limit: limit,
+    offset: offset
+})
+export const getDeliveryMethodsSuccess = (data, meta) => ({
+    type: GET_DELIVERY_METHODS_SUCCESS,
+    meta: meta,
+    payload: data,
+})
+export const getDeliveryMethodsFailed = error => ({
+    type: GET_DELIVERY_METHODS_FAILED,
+    payload: error,
+})
+
+export const getDeliveryQuote = (request) => ({
+    type: GET_DELIVERY_QUOTE,
+    data: request
+})
+
+export const getDeliveryQuoteSuccess = (data, meta) => ({
+    type: GET_DELIVERY_QUOTE_SUCCESS,
+    meta: meta,
+    payload: data,
+})
+
+export const getDeliveryQuoteFailed = error => ({
+    type: GET_DELIVERY_QUOTE_FAILED,
+    payload: error,
+})
+
+
+export const resetCar = () => ({type: RESET_CAR});
+
+export const updateCard = (payload) => ({
+    type: UPDATE_CAR,
+    payload
+})

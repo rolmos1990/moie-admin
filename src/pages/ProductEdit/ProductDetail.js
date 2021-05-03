@@ -61,6 +61,7 @@ const ProductDetail = (props) => {
                                                     <div className="product-img panel-bordered">
                                                         <Images src={`${getImageByQuality(img, 'high')}`}
                                                                 alt={img.filename}
+                                                                height={370}
                                                                 className="img-fluid mx-auto d-block"
                                                                 data-zoom={`${img.path}`}/>
                                                     </div>

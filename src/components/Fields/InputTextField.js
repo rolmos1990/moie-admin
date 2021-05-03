@@ -29,6 +29,7 @@ TextField.propTypes = {
     placeholder: PropTypes.string,
     type: PropTypes.string,
     required: PropTypes.bool,
+    disabled: PropTypes.bool,
     minLength: PropTypes.number,
     maxLength: PropTypes.number,
 }
@@ -38,6 +39,7 @@ const NumberField = (props) => (
         name={props.name}
         value={props.value}
         placeholder={props.placeholder}
+        disabled={props.disabled}
         onChange={props.onChange ? props.onChange : null}
         type={"number"}
         className="form-control"
@@ -51,6 +53,35 @@ const NumberField = (props) => (
 )
 
 NumberField.propTypes = {
+    name: PropTypes.string,
+    value: PropTypes.number,
+    placeholder: PropTypes.string,
+    required: PropTypes.bool
+}
+
+const NumberDecimalField = (props) => (
+    <AvField
+        id ={props.id}
+        name={props.name}
+        value={props.value > 0 ? props.value : "0"}
+        placeholder={props.placeholder}
+        onChange={props.onChange ? props.onChange : null}
+        type="number"
+        className="form-control"
+        min={props.min || "0.00"}
+        step={props.step || "0.01"}
+        max={props.max || "100.00"}
+        presicion={2}
+        validate={
+            {
+                required: { value: props.required === true, errorMessage: messages.required },
+                number: { value: true},
+            }
+        }
+    />
+)
+
+NumberDecimalField.propTypes = {
     name: PropTypes.string,
     value: PropTypes.number,
     placeholder: PropTypes.string,
@@ -85,5 +116,6 @@ EmailField.propTypes = {
 export {
     TextField,
     NumberField,
+    NumberDecimalField,
     EmailField
 };

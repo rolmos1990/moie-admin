@@ -6,7 +6,7 @@ import {Card, CardBody, Col, Row} from "reactstrap"
 import {parseJson} from "../../common/utils";
 import {DEFAULT_PAGE_LIMIT} from "../../common/pagination";
 import {ConfirmationModalAction} from "../../components/Modal/ConfirmationModal";
-import {deleteFieldOption, getProductFieldOption, registerFieldOption, updateFieldOption} from "../../store/fieldOptions/actions";
+import {deleteFieldOption, getFieldOptionByGroup, getProductFieldOption, registerFieldOption, updateFieldOption} from "../../store/fieldOptions/actions";
 import {GROUPS, NAMES} from "../../common/constants";
 import {map} from "lodash";
 import {FieldNumber, FieldSelect, FieldText} from "../../components/Fields";
@@ -36,25 +36,19 @@ const ConfigsList = props => {
         if (fieldOptions && fieldOptions.length > 0) {
             const options = {};
             fieldOptions.forEach(op => {
-                const key = op.group + '_' + op.name;
+                const key = op.group;
                 if (!options[key]) {
-                    options[key] = {group: op.group, name: op.name, options: []};
+                    options[key] = {group: op.group, options: []};
                 }
-                if (op.group === GROUPS.REFERENCE) {
-                    options[key].options.push({id: op.id, op: parseJson(op.value)});
-                } else {
-                    options[key].options.push({id: op.id, op: op.value});
-                }
+                options[key].options.push({id: op.id, name: op.name, op: op.value});
             });
+
             const list = [];
-            Object.keys(options).forEach(op => {
-                list.push(options[op]);
-            })
+            Object.keys(options).forEach(op => list.push(options[op]))
 
             setFieldOptionsList(list);
-
-            if (fieldOption.group && fieldOption.name) {
-                onSelect(list.find(l => (l.group === fieldOption.group && l.name === fieldOption.name)));
+            if (fieldOption.group) {
+                onSelect(list.find(l => (l.group === fieldOption.group)));
             }
         } else {
             setFieldOptionsList([])
@@ -63,7 +57,7 @@ const ConfigsList = props => {
     }, [fieldOptions])
 
     const isReferenceGroup = (group) => {
-        return GROUPS.REFERENCE === group;
+        return GROUPS.REFERENCE_KEY === group;
     }
     const handleTableChange = (type, {page, searchText}) => {
         onGetFieldOptions(DEFAULT_PAGE_LIMIT, page - 1);
@@ -73,30 +67,25 @@ const ConfigsList = props => {
     }
 
     const onAddFieldOptions = (ev, data) => {
-        const item = {group: data.group.value, name: data.name.value, options: [{id: null, op: ''}]}
+        if(!data.group || !data.group.value) return;
+
         const items = fieldOptionsList ? fieldOptionsList : [];
 
         //If item doesnt exist It will be added
-        if (data.group.value && data.name.value && !items.some(i => i.group === item.group && i.name === item.name)) {
-            items.push(item);
-            setFieldOptionsList(items);
-            onSelect(item);
-        }
+        if(items.some(i => i.group === data.group.value)) return;
+
+        const item = {group: data.group.value, options: [{id: null, name: null,  op: ''}]};
+        items.push(item);
+        setFieldOptionsList(items);
+        onSelect(item);
 
         //Empty fields
-        setDefaultFieldOption({group: undefined, name: undefined});
+        setDefaultFieldOption({group: undefined});
     };
 
     const onAddFieldOption = () => {
         setFieldOptionEdited(null);
-
-        let options = [...fieldOption.options,];
-        if (isReferenceGroup(fieldOption.group)) {
-            options.push({id: null, op: {key: '', startFrom: ''}});
-        } else {
-            options.push({id: null, op: ''});
-        }
-        setFieldOption({...fieldOption, options: options});
+        setFieldOption({...fieldOption, options: [...fieldOption.options,{id: null,  name: null, op: ''}]});
     };
 
     const onSelect = (op) => {
@@ -114,14 +103,11 @@ const ConfigsList = props => {
     };
 
     const handleValidSubmit = (ev, data) => {
-        let value = data.value;
-        if (isReferenceGroup(fieldOption.group)) {
-            value = JSON.stringify(data);
-        }
+        console.log(data, fieldOption);
         const payload = {
             group: fieldOption.group,
-            name: fieldOption.name,
-            value: value
+            name: data.name ? data.name : data.value,
+            value: data.value
         }
 
         if (fieldOptionEdited) {
@@ -142,8 +128,7 @@ const ConfigsList = props => {
                                     <table className="table table-bordered table-condensed">
                                         <thead>
                                         <tr>
-                                            <th style={{width: '40%'}}>Grupo</th>
-                                            <th style={{width: '40%'}}>Nombre</th>
+                                            <th style={{width: '80%'}}>Grupo</th>
                                             <th style={{width: '20%'}}>Acciones</th>
                                         </tr>
                                         </thead>
@@ -159,26 +144,15 @@ const ConfigsList = props => {
                                                     required
                                                 />
                                             </td>
-                                            <td>
-                                                <FieldSelect
-                                                    id={"name"}
-                                                    name={"name"}
-                                                    options={names}
-                                                    defaultValue={defaultFieldOption.name}
-                                                    onChange={(val)=>setDefaultFieldOption({...defaultFieldOption,name: val.value})}
-                                                    required
-                                                />
-                                            </td>
-                                            <td className="text-center ">
+                                            <td className="text-center">
                                                 <button type="submit" size="small" className="btn btn-sm text-primary">
                                                     <i className="uil uil-plus font-size-18"> </i>
                                                 </button>
                                             </td>
                                         </tr>
                                         {map(fieldOptionsList, (item, key) => (
-                                            <tr key={key} className={item.group ===fieldOption.group  && item.name ===fieldOption.name? 'bg-light':''}>
+                                            <tr key={key} className={item.group ===fieldOption.group? 'bg-light':''}>
                                                 <td>{item.group}</td>
-                                                <td>{item.name}</td>
                                                 <td className="text-center">
                                                     <ul className="list-inline font-size-20 contact-links mb-0">
                                                         <li className="list-inline-item">
@@ -205,7 +179,7 @@ const ConfigsList = props => {
                             <Row>
                                 <Col className="text-right p-2">
                                     {fieldOption.group && (
-                                        <button size="small" className="btn btn-sm text-primary" onClick={() => onAddFieldOption()}>
+                                        <button size="small" type="button" className="btn btn-sm text-primary" onClick={() => onAddFieldOption()}>
                                             <i className="uil uil-plus font-size-18"> </i> Agregar
                                         </button>
                                     )}
@@ -216,15 +190,10 @@ const ConfigsList = props => {
                                     <table className="table table-bordered table-condensed">
                                         <thead>
                                         <tr>
-                                            {fieldOption.group === GROUPS.REFERENCE && (
+                                            <th>Nombre</th>
+                                            {fieldOption.group === GROUPS.REFERENCE_KEY && (
                                                 <>
-                                                    <th style={{width: '40%'}}>Reference</th>
-                                                    <th style={{width: '40%'}}>Inicia en</th>
-                                                </>
-                                            )}
-                                            {fieldOption.group !== GROUPS.REFERENCE && (
-                                                <>
-                                                    <th>Value</th>
+                                                    <th>Inicia en</th>
                                                 </>
                                             )}
                                             <th style={{width: '20%'}}>Acciones</th>
@@ -233,28 +202,28 @@ const ConfigsList = props => {
                                         <tbody>
                                         {map(fieldOption.options, (option, key) => (
                                             <tr key={key}>
-                                                {fieldOption.group === GROUPS.REFERENCE && (
+                                                {fieldOption.group === GROUPS.REFERENCE_KEY && (
                                                     <>
                                                         {fieldOptionEdited !== option.id && (
                                                             <>
-                                                                <td>{option.op.key}</td>
-                                                                <td>{option.op.startFrom}</td>
+                                                                <td>{option.name}</td>
+                                                                <td>{option.op}</td>
                                                             </>
                                                         )}
                                                         {fieldOptionEdited === option.id && (
                                                             <>
                                                                 <td>
                                                                     <FieldText
-                                                                        id={"key"}
-                                                                        name={"key"}
-                                                                        value={option.op.key}
+                                                                        id={"name"}
+                                                                        name={"name"}
+                                                                        value={option.name}
                                                                         required/>
                                                                 </td>
                                                                 <td>
                                                                     <FieldNumber
-                                                                        id={"startFrom"}
-                                                                        name={"startFrom"}
-                                                                        value={option.op.startFrom}
+                                                                        id={"value"}
+                                                                        name={"value"}
+                                                                        value={option.op}
                                                                         required/>
                                                                 </td>
                                                             </>
@@ -262,7 +231,7 @@ const ConfigsList = props => {
                                                     </>
                                                 )}
 
-                                                {fieldOption.group !== GROUPS.REFERENCE && (
+                                                {fieldOption.group !== GROUPS.REFERENCE_KEY && (
                                                     <td>
                                                         {fieldOptionEdited !== option.id && (
                                                             <>
@@ -285,10 +254,10 @@ const ConfigsList = props => {
 
                                                         {(!fieldOptionEdited && option.id) && (
                                                             <div>
-                                                                <button size="small" className="btn btn-sm text-primary" onClick={() => setFieldOptionEdited(option.id)}>
+                                                                <button type="button"size="small" className="btn btn-sm text-primary" onClick={() => setFieldOptionEdited(option.id)}>
                                                                     <i className="uil uil-pen font-size-18"> </i>
                                                                 </button>
-                                                                <button size="small" className="btn btn-sm text-danger" onClick={() => onDeleteOption(option.id)}>
+                                                                <button type="button" size="small" className="btn btn-sm text-danger" onClick={() => onDeleteOption(option.id)}>
                                                                     <i className="uil uil-trash-alt font-size-18"> </i>
                                                                 </button>
                                                             </div>
@@ -299,7 +268,7 @@ const ConfigsList = props => {
                                                                     <i className="uil uil-check font-size-18"> </i>
                                                                 </button>
                                                                 {option.id && (
-                                                                    <button size="small" className="btn btn-sm text-primary" onClick={() => setFieldOptionEdited(null)}>
+                                                                    <button type="button" size="small" className="btn btn-sm text-primary" onClick={() => setFieldOptionEdited(null)}>
                                                                         <i className="uil uil-redo font-size-18"> </i>
                                                                     </button>
                                                                 )}
@@ -336,7 +305,7 @@ const mapStateToProps = state => {
 }
 
 const mapDispatchToProps = dispatch => ({
-    onGetFieldOptions: (group = null, limit = 500, page) => dispatch(getProductFieldOption(limit, page)),
+    onGetFieldOptions: (group = null, limit = 500, page) => dispatch(getFieldOptionByGroup([], limit, page)),
     onCreateFieldOption: (data, history) => dispatch(registerFieldOption(data, history)),
     onUpdateFieldOption: (id, data, history) => dispatch(updateFieldOption(id, data, history)),
     onDeleteFieldOption: (id, history) => dispatch(deleteFieldOption(id, history))

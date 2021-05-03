@@ -49,6 +49,7 @@ const product = (state = initialState, action) => {
         case GET_PRODUCT:
             return {
                 ...state,
+                refresh: false,
                 loading: true,
             }
         case GET_PRODUCT_SUCCESS:
@@ -90,6 +91,7 @@ const product = (state = initialState, action) => {
         case UPDATE_PRODUCT_SUCCESS:
             state = {
                 ...state,
+                refresh: true,
                 loading: false,
             }
             break

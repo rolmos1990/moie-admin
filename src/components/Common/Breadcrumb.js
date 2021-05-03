@@ -8,8 +8,9 @@ const Breadcrumb = props => {
     <Row>
       <Col className="col-12">
         <div className="page-title-box d-flex align-items-center justify-content-between">
-          <h3 className="mb-0">{props.hasBack && <Link to={props.path || "#"}><i className={"bx bx-chevron-left"}></i></Link>}{props.item}</h3>
-
+          <h3 className="mb-0">
+            {props.hasBack && (<Link to={props.path || "#"}><i className={"bx bx-chevron-left"}> </i> {props.item}</Link>)}
+          </h3>
           <div className="page-title-right">
             <ol className="breadcrumb m-0">
               <BreadcrumbItem active>

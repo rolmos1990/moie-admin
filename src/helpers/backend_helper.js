@@ -1,6 +1,7 @@
 // Login Method
 import {del, get, post, put} from "./api_helper";
 import * as url from "./url_helper";
+import {DELIVERY_METHODS} from "./url_helper";
 
 const postLogin = data => post(url.POST_LOGIN, data);
 
@@ -72,6 +73,9 @@ const fetchOrderApi = (id) => get(`${url.ORDERS}/${id}`,{});
 const registerOrderApi = data => post(url.ORDERS, data);
 const updateOrderApi = (id, data) => put(`${url.ORDERS}/${id}`, data);
 const deleteOrderApi = (id) => del(`${url.ORDERS}/${id}`);
+
+const fetchDeliveryMethodsApi = () => get(`${url.DELIVERY_METHODS}`,{});
+const fetchDeliveryQuoteApi = (data) => post(`${url.DELIVERY_METHODS}/quote`,data);
 
 const fetchMunicipalitiesApi = data => get(url.MUNICIPALITIES, {}, data);
 const fetchMunicipalityApi = (id) => get(`${url.MUNICIPALITIES}/${id}`,{});
@@ -145,4 +149,7 @@ export {
     registerOrderApi,
     updateOrderApi,
     deleteOrderApi,
+
+    fetchDeliveryMethodsApi,
+    fetchDeliveryQuoteApi,
 }
