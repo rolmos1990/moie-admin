@@ -60,6 +60,7 @@ const OrderProducts = (props) => {
             quantity: d.quantity.value,
             quantityAvailable: quantityAvailable,
             discountPercentage: 0,
+            discount: 0,
         };
 
         onUpdateCar({...car, products: [...car.products, prod]})

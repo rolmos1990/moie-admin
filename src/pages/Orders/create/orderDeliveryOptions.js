@@ -64,7 +64,7 @@ const OrderDeliveryOptions = (props) => {
     }, [deliveryMethod]);
 
     useEffect(() => {
-        if (deliveryQuote) {
+        if (deliveryMethod && deliveryQuote) {
             setDeliveryCost(parseFloat(deliveryQuote.amount || 0));
             onChangeDeliveryOptions();
         }

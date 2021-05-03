@@ -13,10 +13,11 @@ import {resetCustomer} from "../../../store/customer/actions";
 import {resetProduct} from "../../../store/product/actions";
 import {ConfirmationModalAction} from "../../../components/Modal/ConfirmationModal";
 import OrderSummary from "./orderSummary";
-import {resetCar} from "../../../store/order/actions";
+import {registerOrder, resetCar} from "../../../store/order/actions";
+import {DELIVERY_TYPES} from "../../../common/constants";
 
 const CreateOrder = (props) => {
-    const {onResetOrder, car, history} = props;
+    const {onResetOrder, car, onRegisterOrder} = props;
     const [initComponent, setInitComponent] = useState(true);
     const [isValidOrder, setIsValidOrder] = useState(false);
 
@@ -48,7 +49,34 @@ const CreateOrder = (props) => {
     }
 
     const onCreateOrder = () => {
-        console.log('onCreateOrder car', car);
+        console.log('Car', car);
+
+        const order = {
+            customer: car.customer.id,
+            deliveryMethod: car.deliveryOptions.method,
+            deliveryCost: car.deliveryOptions.cost,
+            chargeOnDelivery: car.deliveryOptions.type === DELIVERY_TYPES.CHARGE_ON_DELIVERY,
+            paymentType: car.deliveryOptions.paymentType,
+            pieces: car.deliveryOptions.pieces,
+            origen: car.deliveryOptions.origin,
+            totalAmount: car.summary.totalWithoutDiscount,
+            totalDiscount: car.summary.totalDiscount,
+            totalRevenue: car.summary.totalWithDelivery,
+            totalWeight: car.summary.weight,
+            remember: false,
+            deliveryType: false,
+            products: car.products.map(prod => ({
+                id:prod.origin.id,
+                sizeId:prod.sizeId,
+                qty: prod.quantity,
+                price: prod.origin.price,
+                weight: prod.origin.weight,
+                discount: prod.discount,
+                discountPercentage: prod.discountPercentage
+            }))
+        };
+        console.log('order payload', order);
+        onRegisterOrder(order);
     }
 
     return (
@@ -118,7 +146,8 @@ const mapDispatchToProps = dispatch => ({
         dispatch(resetCustomer());
         dispatch(resetProduct());
         dispatch(resetCar());
-    }
+    },
+    onRegisterOrder: (order) => dispatch(registerOrder(order))
 })
 
 export default withRouter(
