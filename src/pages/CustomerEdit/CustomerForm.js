@@ -94,7 +94,7 @@ const CustomerForm = (props) => {
             props.updateCustomer(customer.id, data, props.history)
         }
         if(showAsModal && onAcceptModal){
-            onAcceptModal();
+            onAcceptModal(customer.id);
         }
     }
 

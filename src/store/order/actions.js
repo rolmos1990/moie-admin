@@ -56,7 +56,7 @@ export const registerOrder = (data, history) => {
 export const registerOrderSuccess = data => {
     return {
         type: REGISTER_ORDER_SUCCESS,
-        payload: data,
+        payload: data.order,
     }
 }
 

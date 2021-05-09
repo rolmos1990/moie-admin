@@ -57,7 +57,7 @@ const ProductDetail = (props) => {
                                     <div className="col-9">
                                         <div className="tab-content position-relative" id="v-pills-tabContent">
                                             {map(productData.productImage, (img, key) => (
-                                                <div className={`tab-pane fade ${imgSelected === key ? 'show active bg-white border-1' : ''}`} id={`product-${key}`} role="tabpanel">
+                                                <div key={key} className={`tab-pane fade ${imgSelected === key ? 'show active bg-white border-1' : ''}`} id={`product-${key}`} role="tabpanel">
                                                     <div className="product-img panel-bordered">
                                                         <Images src={`${getImageByQuality(img, 'high')}`}
                                                                 alt={img.filename}

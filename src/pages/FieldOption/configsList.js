@@ -26,7 +26,7 @@ const ConfigsList = props => {
     const [fieldOptionsList, setFieldOptionsList] = useState([]);
     const [fieldOption, setFieldOption] = useState({options: []});
     const [fieldOptionEdited, setFieldOptionEdited] = useState(null);
-    const [defaultFieldOption, setDefaultFieldOption] = useState({group: undefined, name: undefined});
+    const [defaultFieldOption, setDefaultFieldOption] = useState({groups: undefined, name: undefined});
 
     useEffect(() => {
         onGetFieldOptions();
@@ -36,9 +36,9 @@ const ConfigsList = props => {
         if (fieldOptions && fieldOptions.length > 0) {
             const options = {};
             fieldOptions.forEach(op => {
-                const key = op.group;
+                const key = op.groups;
                 if (!options[key]) {
-                    options[key] = {group: op.group, options: []};
+                    options[key] = {groups: op.groups, options: []};
                 }
                 options[key].options.push({id: op.id, name: op.name, op: op.value});
             });
@@ -47,8 +47,8 @@ const ConfigsList = props => {
             Object.keys(options).forEach(op => list.push(options[op]))
 
             setFieldOptionsList(list);
-            if (fieldOption.group) {
-                onSelect(list.find(l => (l.group === fieldOption.group)));
+            if (fieldOption.groups) {
+                onSelect(list.find(l => (l.groups === fieldOption.groups)));
             }
         } else {
             setFieldOptionsList([])
@@ -56,8 +56,8 @@ const ConfigsList = props => {
 
     }, [fieldOptions])
 
-    const isReferenceGroup = (group) => {
-        return GROUPS.REFERENCE_KEY === group;
+    const isReferenceGroup = (groups) => {
+        return GROUPS.REFERENCE_KEY === groups;
     }
     const handleTableChange = (type, {page, searchText}) => {
         onGetFieldOptions(DEFAULT_PAGE_LIMIT, page - 1);
@@ -67,20 +67,20 @@ const ConfigsList = props => {
     }
 
     const onAddFieldOptions = (ev, data) => {
-        if(!data.group || !data.group.value) return;
+        if(!data.groups || !data.groups.value) return;
 
         const items = fieldOptionsList ? fieldOptionsList : [];
 
         //If item doesnt exist It will be added
-        if(items.some(i => i.group === data.group.value)) return;
+        if(items.some(i => i.groups === data.groups.value)) return;
 
-        const item = {group: data.group.value, options: [{id: null, name: null,  op: ''}]};
+        const item = {groups: data.groups.value, options: [{id: null, name: null,  op: ''}]};
         items.push(item);
         setFieldOptionsList(items);
         onSelect(item);
 
         //Empty fields
-        setDefaultFieldOption({group: undefined});
+        setDefaultFieldOption({groups: undefined});
     };
 
     const onAddFieldOption = () => {
@@ -105,7 +105,7 @@ const ConfigsList = props => {
     const handleValidSubmit = (ev, data) => {
         console.log(data, fieldOption);
         const payload = {
-            group: fieldOption.group,
+            groups: fieldOption.groups,
             name: data.name ? data.name : data.value,
             value: data.value
         }
@@ -136,11 +136,11 @@ const ConfigsList = props => {
                                         <tr >
                                             <td>
                                                 <FieldSelect
-                                                    id={"group"}
-                                                    name={"group"}
+                                                    id={"groups"}
+                                                    name={"groups"}
                                                     options={groups}
-                                                    defaultValue={defaultFieldOption.group}
-                                                    onChange={(val)=>setDefaultFieldOption({...defaultFieldOption,group: val.value})}
+                                                    defaultValue={defaultFieldOption.groups}
+                                                    onChange={(val)=>setDefaultFieldOption({...defaultFieldOption,groups: val.value})}
                                                     required
                                                 />
                                             </td>
@@ -151,8 +151,8 @@ const ConfigsList = props => {
                                             </td>
                                         </tr>
                                         {map(fieldOptionsList, (item, key) => (
-                                            <tr key={key} className={item.group ===fieldOption.group? 'bg-light':''}>
-                                                <td>{item.group}</td>
+                                            <tr key={key} className={item.groups ===fieldOption.groups? 'bg-light':''}>
+                                                <td>{item.groups}</td>
                                                 <td className="text-center">
                                                     <ul className="list-inline font-size-20 contact-links mb-0">
                                                         <li className="list-inline-item">
@@ -178,7 +178,7 @@ const ConfigsList = props => {
                         <AvForm className="needs-validation" autoComplete="off" onValidSubmit={(e, v) => handleValidSubmit(e, v)}>
                             <Row>
                                 <Col className="text-right p-2">
-                                    {fieldOption.group && (
+                                    {fieldOption.groups && (
                                         <button size="small" type="button" className="btn btn-sm text-primary" onClick={() => onAddFieldOption()}>
                                             <i className="uil uil-plus font-size-18"> </i> Agregar
                                         </button>
@@ -191,7 +191,7 @@ const ConfigsList = props => {
                                         <thead>
                                         <tr>
                                             <th>Nombre</th>
-                                            {fieldOption.group === GROUPS.REFERENCE_KEY && (
+                                            {fieldOption.groups === GROUPS.REFERENCE_KEY && (
                                                 <>
                                                     <th>Inicia en</th>
                                                 </>
@@ -202,7 +202,7 @@ const ConfigsList = props => {
                                         <tbody>
                                         {map(fieldOption.options, (option, key) => (
                                             <tr key={key}>
-                                                {fieldOption.group === GROUPS.REFERENCE_KEY && (
+                                                {fieldOption.groups === GROUPS.REFERENCE_KEY && (
                                                     <>
                                                         {fieldOptionEdited !== option.id && (
                                                             <>
@@ -231,7 +231,7 @@ const ConfigsList = props => {
                                                     </>
                                                 )}
 
-                                                {fieldOption.group !== GROUPS.REFERENCE_KEY && (
+                                                {fieldOption.groups !== GROUPS.REFERENCE_KEY && (
                                                     <td>
                                                         {fieldOptionEdited !== option.id && (
                                                             <>

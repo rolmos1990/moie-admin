@@ -26,6 +26,7 @@ import CustomerDetail from "../pages/CustomerEdit/CustomerDetail";
 import Configs from "../pages/FieldOption";
 import Orders from "../pages/Orders";
 import CreateOrder from "../pages/Orders/create";
+import OrderDetail from "../pages/Orders/orderDetail";
 
 const userRoutes = [
   { path: "/dashboard", component: Dashboard },
@@ -48,7 +49,8 @@ const userRoutes = [
   { path: "/municipality/:id", component: MunicipalityEdit },
   { path: "/configs", component: Configs },
   { path: "/orders", component: Orders },
-  { path: "/order/create", component: CreateOrder },
+  { path: "/order/:id", component: OrderDetail },
+  { path: "/orders/create", component: CreateOrder },
 
   // //profile
   { path: "/profile", component: UserProfile },

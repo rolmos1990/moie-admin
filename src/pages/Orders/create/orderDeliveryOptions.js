@@ -12,11 +12,14 @@ import {getDeliveryMethods, getDeliveryQuote, updateCard} from "../../../store/o
 import {getEmptyOptions} from "../../../common/converters";
 
 const OrderDeliveryOptions = (props) => {
-    const {onUpdateCar, car, fieldOptions, onGetFieldOptions, onGetDeliveryMethods, onGetDeliveryQuote, deliveryMethods, deliveryQuote} = props;
+    const {onUpdateCar, car, fieldOptions, onGetFieldOptions, onGetDeliveryMethods, onGetDeliveryQuote, deliveryMethods, deliveryQuote,
+        showAsModal, onCloseModal, onAcceptModal, pOriginOrder} = props;
+
+    const [initComponent, setInitComponent] = useState(true);
     const [deliveryMethodList, setDeliveryMethodList] = useState([]);
     const [deliveryMethod, setDeliveryMethod] = useState(null);
     const [originOrders, setOriginOrders] = useState([]);
-    const [originOrder, setOriginOrder] = useState(null);
+    const [originOrder, setOriginOrder] = useState(pOriginOrder || null);
     const [orderTypes, setOrderTypes] = useState(null);
     const [orderType, setOrderType] = useState(null);
     const [paymentTypes, setPaymentTypes] = useState(null);
@@ -28,7 +31,7 @@ const OrderDeliveryOptions = (props) => {
 
     //Carga inicial
     useEffect(() => {
-        setOrderTypes([getEmptyOptions(), ...Object.keys(DELIVERY_TYPES).map(k => ({label: DELIVERY_TYPES[k], value: k}))]);
+        setOrderTypes([getEmptyOptions(), ...Object.keys(DELIVERY_TYPES).map(k => ({label: DELIVERY_TYPES[k].label, value: DELIVERY_TYPES[k].id}))]);
         setPaymentTypes([getEmptyOptions(), ...Object.keys(PAYMENT_TYPES).map(k => ({label: PAYMENT_TYPES[k], value: PAYMENT_TYPES[k]}))]);
         onGetFieldOptions();
         onGetDeliveryMethods();
@@ -46,12 +49,13 @@ const OrderDeliveryOptions = (props) => {
 
     useEffect(() => {
         const list = fieldOptions || [];
-        setOriginOrders([getEmptyOptions(), ...list.filter(op => (op.group === GROUPS.ORDERS_ORIGIN)).map(op => ({label: op.name, value: op.name}))]);
+        setOriginOrders([getEmptyOptions(), ...list.filter(op => (op.groups === GROUPS.ORDERS_ORIGIN)).map(op => ({label: op.name, value: op.name}))]);
     }, [fieldOptions]);
 
     useEffect(() => {
         const list = deliveryMethods || [];
-        setDeliveryMethodList([getEmptyOptions(), ...list.filter(op => (op.settings.includes(orderType))).map(op => ({label: op.name, value: op.code}))]);
+        const ot = orderType +'';
+        setDeliveryMethodList([getEmptyOptions(), ...list.filter(op => (op.settings.includes(ot))).map(op => ({label: op.name, value: op.code}))]);
         onChangeDeliveryOptions();
     }, [orderType]);
 
@@ -78,6 +82,21 @@ const OrderDeliveryOptions = (props) => {
         getQuote();
     }, [car.products]);
 
+    useEffect(() => {
+        if(car.deliveryOptions && car.deliveryOptions.origin && initComponent){
+            setInitComponent(false);
+
+            setDeliveryMethod(car.deliveryOptions.method);
+            setOriginOrder(car.deliveryOptions.origin);
+            setOrderType(car.deliveryOptions.method);
+            setPaymentType(car.deliveryOptions.paymentType);
+            setDeliveryCost(car.deliveryOptions.cost);
+            setPieceToChange(car.deliveryOptions.pieces);
+            setShowPaymentType(DELIVERY_METHODS_PAYMENT_TYPES.includes(car.deliveryOptions.method));
+            getQuote()
+        }
+    }, [car.deliveryOptions]);
+
     const getQuote = () => {
         let qty = 0;
         car.products.forEach(prod => (qty += prod.quantity));
@@ -91,6 +110,10 @@ const OrderDeliveryOptions = (props) => {
     const onChangeDeliveryOptions = () => {
         let deliveryOps = {origin: originOrder, type: orderType, method: deliveryMethod, cost: parseFloat(deliveryCost) || 0, paymentType: paymentType, pieces: pieceToChange};
         onUpdateCar({...car, deliveryOptions: deliveryOps});
+    }
+
+    const acceptModal = () => {
+        onAcceptModal(car);
     }
 
     return (
@@ -172,6 +195,19 @@ const OrderDeliveryOptions = (props) => {
 
                 </Row>
             </AvForm>
+            {showAsModal  && (
+                <Row>
+                    <Col md={12} className="text-right">
+                        {onCloseModal && (
+                            <button type="button" className="btn btn-light" onClick={() => props.onCloseModal()}>Cancelar</button>
+                        )}
+                        {onAcceptModal && (
+                            <button type="button" className="btn btn-primary" onClick={() => acceptModal()}>Guardar</button>
+                        )}
+                    </Col>
+                </Row>
+            )}
+
         </React.Fragment>
     )
 }

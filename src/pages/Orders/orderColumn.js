@@ -2,36 +2,62 @@ import React from "react"
 import {Link} from "react-router-dom"
 import {STATUS_COLORS, StatusField} from "../../components/StatusField";
 import {ConverterStatus} from "../../common/converters";
-import {STATUS} from "../../common/constants";
+import {ORDER_STATUS, STATUS} from "../../common/constants";
 import Conditionals from "../../common/conditionals";
-import {isValidOption, STATUS_OPTIONS} from "../../common/utils";
+import {formatDate, isValidOption, STATUS_OPTIONS} from "../../common/utils";
+import {Tooltip} from "@material-ui/core";
 
 const orderColumns = (onDelete = false) => [
     {
-        text: "Nombre",
-        dataField: "name",
+        text: "# Pedido",
+        dataField: "id",
         sort: true,
         formatter: (cellContent, item) => (
-            <>
-                <Link to="#" className="text-body">
-                    {item.name}
-                </Link>
-            </>
+            <Link to={`/order/${item.id}`} className="text-body">
+                {item.id}
+            </Link>
         ),
         filter: true,
         filterType: "text",
-        filterCondition: Conditionals.OPERATORS.LIKE,
+        filterCondition: Conditionals.OPERATORS.EQUAL,
     },
     {
-        text: "Código DIAN",
-        dataField: "dianCode",
+        text: "Cliente",
+        dataField: "customer",
+        sort: true,
+        filter: true,
+        filterType: "text",
+        formatter: (cellContent, item) => (
+            <Link to={`/customer/detail/${item.customer.id}`} className="text-body">
+                {item.customer.name}
+                {item.customer.isMayorist === true && (
+                    <Tooltip placement="bottom" title="Cliente mayorista" aria-label="add">
+                        <i className={"mdi mdi-crown font-size-18 mr-1 text-warning"}> </i>
+                    </Tooltip>
+                )}
+            </Link>
+        ),
+    },
+    {
+        text: "Fecha",
+        dataField: "createdAt",
+        sort: true,
+        filter: true,
+        filterType: "dateRange",
+        formatter: (cellContent, item) => (
+            <div>{formatDate(item.createdAt)}</div>
+        ),
+    },
+    {
+        text: "Tracking",
+        dataField: "tracking",
         sort: true,
         filter: true,
         filterType: "text",
     },
     {
-        text: "Código ISO",
-        dataField: "isoCode",
+        text: "Piezas",
+        dataField: "quantity",
         sort: true,
         filter: true,
         filterType: "text",
@@ -45,8 +71,8 @@ const orderColumns = (onDelete = false) => [
         filterOptions: STATUS_OPTIONS,
         filterDefaultOption: STATUS_OPTIONS[0],
         formatter: (cellContent, item) => (
-            <StatusField color={item.status === STATUS.ACTIVE ? STATUS_COLORS.SUCCESS : STATUS_COLORS.DANGER}>
-                {ConverterStatus(item.status)}
+            <StatusField color={ORDER_STATUS[item.status].color}>
+                {ORDER_STATUS[item.status].name}
             </StatusField>
         ),
     },
@@ -57,17 +83,10 @@ const orderColumns = (onDelete = false) => [
         formatter: (cellContent, item) => (
             <ul className="list-inline font-size-20 contact-links mb-0">
                 <li className="list-inline-item">
-                    <Link to={`/state/${item.id}`} className="px-2 text-primary">
+                    <Link to={`/order/${item.id}`} className="px-2 text-primary">
                         <i className="uil uil-pen font-size-18"> </i>
                     </Link>
                 </li>
-                {onDelete && (
-                    <li className="list-inline-item">
-                        <button size="small" className="btn btn-sm text-danger" onClick={() => onDelete(item.id)}>
-                            <i className="uil uil-trash-alt font-size-18"> </i>
-                        </button>
-                    </li>
-                )}
             </ul>
         ),
     },

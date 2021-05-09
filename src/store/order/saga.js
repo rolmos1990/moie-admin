@@ -73,6 +73,9 @@ function* register({ payload: { data, history } }) {
     try {
         const response = yield call(POST_API_REQUEST, data)
         showResponseMessage(response, "Pedido creado!");
+        if(response && response.order){
+            history.push("/order/" + response.order.id)
+        }
         yield put(CREATE_SUCCESS_ACTION(response))
     } catch (error) {
         yield put(CREATE_FAILED_ACTION(error))

@@ -145,8 +145,8 @@ const ProductEdit = (props) => {
         }
     }, [refreshFieldOptions])
 
-    const filterFieldOptions = (arr, group) => {
-        return arr.filter(op => (op.group === group)).map(op => ({name: op.name}));
+    const filterFieldOptions = (arr, groups) => {
+        return arr.filter(op => (op.groups === groups)).map(op => ({name: op.name}));
     }
 
     const handleValidSubmit = (event, values) => {
@@ -171,10 +171,10 @@ const ProductEdit = (props) => {
         }
 
         if (!materialsList.some(op => op.name === data.material)) {
-            onCreateFieldOption({group: GROUPS.MATERIALS, name: data.material, value: data.material}, props.history);
+            onCreateFieldOption({groups: GROUPS.MATERIALS, name: data.material, value: data.material}, props.history);
         }
         if (!providerList.some(op => op.name === data.provider)) {
-            onCreateFieldOption({group: GROUPS.PROVIDERS, name: data.provider, value: data.provider}, props.history);
+            onCreateFieldOption({groups: GROUPS.PROVIDERS, name: data.provider, value: data.provider}, props.history);
         }
     }
 

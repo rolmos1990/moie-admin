@@ -103,7 +103,7 @@ const OrderCustomer = (props) => {
                             urlStr={GET_CUSTOMER}
                             placeholder="Buscar por correo"
                             defaultValue={customerEmailDefault}
-                            conditionalOptions={{fieldName: 'email', operator: Conditionals.OPERATORS.EQUAL}}
+                            conditionalOptions={{fieldName: 'email', operator: Conditionals.OPERATORS.LIKE}}
                             onChange={(c) => {
                                 onGetCustomer(c.value);
                                 setCustomerEmailDefault(getEmptyOptions());
@@ -131,7 +131,7 @@ const OrderCustomer = (props) => {
                                 )}
                             </Col>
                             <Col md={6}>
-                                <label>Email: </label>
+                                <label>Correo: </label>
                                 <span className="p-1">{customerData.email}</span>
                             </Col>
                             <Col md={6}>
@@ -157,16 +157,18 @@ const OrderCustomer = (props) => {
                         </Row>
                     </Col>
                     <Col md={1} className="text-right">
-                        <button type="button"
-                                title="Editar cliente"
-                                size="small"
-                                className="btn btn-sm text-primary"
-                                onClick={() => {
-                                    toggleModal();
-                                    setEditCustomer(true);
-                                }}>
-                            <i className="uil uil-pen font-size-18"> </i>
-                        </button>
+                        <Tooltip placement="bottom" title="Editar cliente" aria-label="add">
+                            <button type="button"
+                                    size="small"
+                                    className="btn btn-sm text-primary"
+                                    onClick={() => {
+                                        toggleModal();
+                                        setEditCustomer(true);
+                                    }}>
+                                <i className="uil uil-pen font-size-18"> </i>
+                            </button>
+                        </Tooltip>
+
                     </Col>
                 </Row>
             )}

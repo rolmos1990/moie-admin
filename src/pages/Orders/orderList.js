@@ -9,61 +9,48 @@ import BootstrapTable from "react-bootstrap-table-next"
 import {Link} from "react-router-dom"
 import {DEFAULT_PAGE_LIMIT} from "../../common/pagination";
 import {ConfirmationModalAction} from "../../components/Modal/ConfirmationModal";
-import {deleteState, getStates} from "../../store/location/actions";
 import {TableFilter} from "../../components/TableFilter";
 import {normalizeColumnsList} from "../../common/converters";
 import NoDataIndication from "../../components/Common/NoDataIndication";
 import orderColumns from "./orderColumn";
+import {Button, Tooltip} from "@material-ui/core";
+import {getOrders} from "../../store/order/actions";
 
 const OrderList = props => {
-    const {states, meta, onGetStates, onDeleteState, loading, refresh} = props;
+    const {orders, meta, onGetOrders, loading, refresh} = props;
     const [statesList, setStatesList] = useState([])
     const [filter, setFilter] = useState(false);
     const [conditional, setConditional] = useState(null);
-
 
     const pageOptions = {
         sizePerPage: DEFAULT_PAGE_LIMIT,
         totalSize: meta?.totalRegisters,
         custom: true,
     }
-    const {SearchBar} = Search
 
     useEffect(() => {
-        onGetStates();
+        onGetOrders();
     }, [refresh])
 
     useEffect(() => {
-        onGetStates()
-    }, [onGetStates])
+        onGetOrders()
+    }, [onGetOrders])
 
     useEffect(() => {
-        setStatesList(states)
-    }, [states])
+        setStatesList(orders)
+    }, [orders])
 
     // eslint-disable-next-line no-unused-vars
     const handleTableChange = (type, {page, searchText}) => {
-        onGetStates(conditional, DEFAULT_PAGE_LIMIT, (page - 1)*DEFAULT_PAGE_LIMIT);
+        onGetOrders(conditional, DEFAULT_PAGE_LIMIT, (page - 1)*DEFAULT_PAGE_LIMIT);
     }
 
     const onFilterAction = (condition) => {
         setConditional(condition);
-        onGetStates(condition, DEFAULT_PAGE_LIMIT, 0);
+        onGetOrders(condition, DEFAULT_PAGE_LIMIT, 0);
     }
-    const onConfirmDelete = (id) => {
-        onDeleteState(id);
-    };
 
-    const onDelete = (id) => {
-        ConfirmationModalAction({
-            title: '¿Seguro desea eliminar el Estado?',
-            description: 'Usted está eliminado este Estado, una vez eliminado no podrá ser recuperado.',
-            id: '_clienteModal',
-            onConfirm: () => onConfirmDelete(id)
-        });
-    };
-
-    const columns = orderColumns(onDelete);
+    const columns = orderColumns();
 
     return (
         <Row>
@@ -98,9 +85,13 @@ const OrderList = props => {
                                                 <Col md={6}>
                                                     <div className="mb-3 float-md-end">
                                                         {columns.some(s => s.filter) && (
-                                                            <div>pending add filters</div>
+                                                            <Tooltip placement="bottom" title="Filtros Avanzados" aria-label="add">
+                                                                <Button onClick={() => setFilter(!filter)}>
+                                                                    <i className={"mdi mdi-filter"}> </i>
+                                                                </Button>
+                                                            </Tooltip>
                                                         )}
-                                                        <Link to={"/order/create"} className="btn btn-primary waves-effect waves-light text-light">
+                                                        <Link to={"/orders/create"} className="btn btn-primary waves-effect waves-light text-light">
                                                             <i className="mdi mdi-plus"> </i> Crear pedido
                                                         </Link>
                                                     </div>
@@ -148,13 +139,12 @@ OrderList.propTypes = {
 }
 
 const mapStateToProps = state => {
-    const {states, loading, meta, refresh} = state.Location
-    return {states, loading, meta, refresh}
+    const {orders, loading, meta, refresh} = state.Order
+    return {orders, loading, meta, refresh}
 }
 
 const mapDispatchToProps = dispatch => ({
-    onGetStates: (conditional = null, limit = DEFAULT_PAGE_LIMIT, page) => dispatch(getStates(conditional, limit, page)),
-    onDeleteStates: (id) => dispatch(deleteState(id))
+    onGetOrders: (conditional = null, limit = DEFAULT_PAGE_LIMIT, page) => dispatch(getOrders(conditional, limit, page)),
 })
 
 export default connect(

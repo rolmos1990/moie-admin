@@ -105,6 +105,7 @@ const order = (state = initialState, action) => {
             state = {
                 ...state,
                 loading: false,
+                order: action.payload
             }
             break
         case REGISTER_ORDER_FAILED:

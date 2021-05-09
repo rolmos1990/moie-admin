@@ -52,7 +52,7 @@ export const GET_MESSAGES = "/messages"
 export const ADD_MESSAGE = "/add/messages"
 
 //ORDERS
-export const ORDERS = "/orders"
+export const ORDERS = "/order"
 export const DELIVERY_METHODS = "/deliveryMethod"
 
 //CART DATA

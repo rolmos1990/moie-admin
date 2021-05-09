@@ -22,7 +22,7 @@ export const arrayToOptions = (array) => {
     }));
 }
 export const arrayToOptionsByFieldName = (array, fieldName) => {
-    return array.map(item => ({
+    return array.filter(item => item[fieldName] && item[fieldName] !== '').map(item => ({
         label: item[fieldName],
         value: item.id
     }));

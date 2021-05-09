@@ -50,21 +50,14 @@ const CreateOrder = (props) => {
 
     const onCreateOrder = () => {
         console.log('Car', car);
-
         const order = {
             customer: car.customer.id,
             deliveryMethod: car.deliveryOptions.method,
             deliveryCost: car.deliveryOptions.cost,
-            chargeOnDelivery: car.deliveryOptions.type === DELIVERY_TYPES.CHARGE_ON_DELIVERY,
+            chargeOnDelivery: car.deliveryOptions.type === 3,
             origen: car.deliveryOptions.origin,
-            deliveryType: car.deliveryOptions.paymentType,
+            deliveryType: parseInt(car.deliveryOptions.type),
             pieces: car.deliveryOptions.pieces,
-            // totalAmount: car.summary.totalWithoutDiscount,
-            // totalDiscount: car.summary.totalDiscount,
-            // totalRevenue: car.summary.totalWithDelivery,
-            // totalWeight: car.summary.weight,
-            // remember: false,
-            // deliveryType: false,
             products: car.products.map(prod => ({
                 id:prod.origin.id,
                 productSize:prod.sizeId,
@@ -73,7 +66,7 @@ const CreateOrder = (props) => {
             }))
         };
         console.log('order payload', order);
-        onRegisterOrder(order);
+        onRegisterOrder(order, props.history);
     }
 
     return (
@@ -144,7 +137,7 @@ const mapDispatchToProps = dispatch => ({
         dispatch(resetProduct());
         dispatch(resetCar());
     },
-    onRegisterOrder: (order) => dispatch(registerOrder(order))
+    onRegisterOrder: (order, history) => dispatch(registerOrder(order, history))
 })
 
 export default withRouter(
