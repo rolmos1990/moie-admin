@@ -57,7 +57,8 @@ const CreateOrder = (props) => {
             chargeOnDelivery: car.deliveryOptions.type === 3,
             origen: car.deliveryOptions.origin,
             deliveryType: parseInt(car.deliveryOptions.type),
-            pieces: car.deliveryOptions.pieces,
+            piecesForChanges: car.deliveryOptions.pieces,
+            paymentMode: car.deliveryOptions.paymentType,
             products: car.products.map(prod => ({
                 id:prod.origin.id,
                 productSize:prod.sizeId,

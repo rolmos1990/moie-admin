@@ -1,28 +1,39 @@
-import React, {useState, useEffect} from "react"
-import {Col, Label, Row} from "reactstrap"
-import {withRouter, Link} from "react-router-dom"
+import React, {useEffect, useState} from "react"
+import {Col, Label, Row, Spinner} from "reactstrap"
+import {withRouter} from "react-router-dom"
 import {connect} from "react-redux";
-import {apiError} from "../../../store/auth/login/actions";
 import PropTypes from "prop-types";
-import {FieldAsyncSelect} from "../../../components/Fields";
+import {FieldAsyncSelect, FieldSelect} from "../../../components/Fields";
 import {GET_CUSTOMER} from "../../../helpers/url_helper";
 import {getCustomer} from "../../../store/customer/actions";
 import {getEmptyOptions} from "../../../common/converters";
 import {AvForm} from "availity-reactstrap-validation";
-import {Tooltip} from "@material-ui/core";
+import {Button, Tooltip} from "@material-ui/core";
 import Conditionals from "../../../common/conditionals";
 import CustomModal from "../../../components/Modal/CommosModal";
 import CustomerForm from "../../CustomerEdit/CustomerForm";
 import {updateCard} from "../../../store/order/actions";
 
+const searchByOptions = [{label:"Documento", value:"doc"},{label:"Nombre", value:"name"},{label:"Correo", value:"email"}];
+
 const OrderCustomer = (props) => {
-    const {car, customer, onGetCustomer, onUpdateCar} = props;
+    const {car, customer, onGetCustomer, onUpdateCar, showAsModal} = props;
+    const [initComponent, setInitComponent] = useState(true);
+    const [searchBy, setSearchBy] = useState(searchByOptions[0].value);
     const [editCustomer, setEditCustomer] = useState(false);
     const [openCustomerModal, setOpenCustomerModal] = useState(false);
     const [customerData, setCustomerData] = useState({});
     const [customerDefault, setCustomerDefault] = useState(getEmptyOptions());
     const [customerEmailDefault, setCustomerEmailDefault] = useState(getEmptyOptions());
     const [customerDocumentDefault, setCustomerDocumentDefault] = useState(getEmptyOptions());
+
+    useEffect(() => {
+        console.log(car)
+        if(showAsModal && car.customer && car.customer.id && initComponent){
+            setInitComponent(false);
+            onGetCustomer(car.customer.id);
+        }
+    }, [showAsModal]);
 
     useEffect(() => {
         if (customer.id) {
@@ -44,12 +55,12 @@ const OrderCustomer = (props) => {
         setCustomerData({})
     }
 
-    const onCloseModal = () => {
+    const onCloseCustomerModal = () => {
         toggleModal();
         setEditCustomer(false);
     }
 
-    const onAcceptModal = () => {
+    const onAcceptCustomerModal = () => {
         toggleModal();
         setCustomerDefault(getEmptyOptions());
         setCustomerEmailDefault(getEmptyOptions());
@@ -64,56 +75,76 @@ const OrderCustomer = (props) => {
         <React.Fragment>
             <Row>
                 <Col>
-                    <h5 className="text-info">Datos del cliente</h5>
+                    <h5 className="text-info"><i className="uil-users-alt me-2"> </i> Datos del cliente</h5>
                 </Col>
             </Row>
             <AvForm className="needs-validation" autoComplete="off">
                 <Row>
                     <Col md={2}>
-                        <Label htmlFor="product">Buscar por Documento</Label>
-                        <FieldAsyncSelect
-                            name={"product"}
-                            urlStr={GET_CUSTOMER}
-                            placeholder="Buscar por documento"
-                            defaultValue={customerDocumentDefault}
-                            conditionalOptions={{fieldName: 'document', operator: Conditionals.OPERATORS.EQUAL}}
-                            onChange={(c) => {
-                                onGetCustomer(c.value);
-                                setCustomerDefault(getEmptyOptions());
+                        <Label htmlFor="product">Buscar por</Label>
+                        <FieldSelect
+                            id={"searchByOptions"}
+                            name={"searchByOptions"}
+                            options={searchByOptions}
+                            defaultValue={searchBy}
+                            onChange={(e) => {
+                                setSearchBy(e.value);
                             }}
                         />
                     </Col>
-                    <Col md={4}>
-                        <Label htmlFor="customer">Buscar por Nombre</Label>
-                        <FieldAsyncSelect
-                            name={"customer"}
-                            urlStr={GET_CUSTOMER}
-                            placeholder="Buscar por nombre"
-                            defaultValue={customerDefault}
-                            onChange={(c) => {
-                                onGetCustomer(c.value);
-                                setCustomerDocumentDefault(getEmptyOptions());
-                            }}
-                        />
-                    </Col>
-                    <Col md={4}>
-                        <Label htmlFor="customer">Correo</Label>
-                        <FieldAsyncSelect
-                            name={"email"}
-                            urlStr={GET_CUSTOMER}
-                            placeholder="Buscar por correo"
-                            defaultValue={customerEmailDefault}
-                            conditionalOptions={{fieldName: 'email', operator: Conditionals.OPERATORS.LIKE}}
-                            onChange={(c) => {
-                                onGetCustomer(c.value);
-                                setCustomerEmailDefault(getEmptyOptions());
-                            }}
-                        />
-                    </Col>
-                    <Col md={2} style={{display: 'flex', 'alignItems': 'flex-end'}}>
-                        <button type="button" className="btn btn-primary btn-block waves-effect waves-light mt-2 me-1 w-100" onClick={() => toggleModal()}>
-                            <i className="mdi mdi-plus"> </i> Nuevo Cliente
-                        </button>
+                    {searchBy === "doc" && (
+                        <Col md={9}>
+                            <Label htmlFor="product">Documento</Label>
+                            <FieldAsyncSelect
+                                name={"product"}
+                                urlStr={GET_CUSTOMER}
+                                placeholder="Buscar por documento"
+                                defaultValue={customerDocumentDefault}
+                                conditionalOptions={{fieldName: 'document', operator: Conditionals.OPERATORS.EQUAL}}
+                                onChange={(c) => {
+                                    onGetCustomer(c.value);
+                                    setCustomerDefault(getEmptyOptions());
+                                }}
+                            />
+                        </Col>
+                    )}
+                    {searchBy === "name" && (
+                        <Col md={9}>
+                            <Label htmlFor="customer">Nombre</Label>
+                            <FieldAsyncSelect
+                                name={"customer"}
+                                urlStr={GET_CUSTOMER}
+                                placeholder="Buscar por nombre"
+                                defaultValue={customerDefault}
+                                onChange={(c) => {
+                                    onGetCustomer(c.value);
+                                    setCustomerDocumentDefault(getEmptyOptions());
+                                }}
+                            />
+                        </Col>
+                    )}
+                    {searchBy === "email" && (
+                        <Col md={9}>
+                            <Label htmlFor="customer">Correo</Label>
+                            <FieldAsyncSelect
+                                name={"email"}
+                                urlStr={GET_CUSTOMER}
+                                placeholder="Buscar por correo"
+                                defaultValue={customerEmailDefault}
+                                conditionalOptions={{fieldName: 'email', operator: Conditionals.OPERATORS.LIKE}}
+                                onChange={(c) => {
+                                    onGetCustomer(c.value);
+                                    setCustomerEmailDefault(getEmptyOptions());
+                                }}
+                            />
+                        </Col>
+                    )}
+                    <Col md={1} style={{display: 'flex', 'alignItems': 'flex-end'}}>
+                        <Tooltip placement="bottom" title="Agregar nuevo cliente" aria-label="add">
+                            <button type="button" className="btn btn-primary btn-block waves-effect waves-light mt-2 me-1 w-100" onClick={() => toggleModal()}>
+                                <i className="mdi mdi-plus"> </i>
+                            </button>
+                        </Tooltip>
                     </Col>
                 </Row>
             </AvForm>
@@ -170,13 +201,29 @@ const OrderCustomer = (props) => {
                         </Tooltip>
 
                     </Col>
+
+                    {showAsModal  && (
+                       <>
+                           <hr/>
+                           <Row>
+                               <Col md={12} className="text-right">
+                                   {props.onCloseModal && (
+                                       <button type="button" className="btn btn-light" onClick={() => props.onCloseModal()}>Cancelar</button>
+                                   )}
+                                   {props.onAcceptModal && (
+                                       <Button color="primary" type="button" onClick={() => props.onAcceptModal()}>Guardar</Button>
+                                   )}
+                               </Col>
+                           </Row>
+                       </>
+                    )}
                 </Row>
             )}
-            <CustomModal title={editCustomer ? "Modificar cliente":"Nuevo cliente"} size="lg" showFooter={false} isOpen={openCustomerModal} onClose={onCloseModal}>
+            <CustomModal title={editCustomer ? "Modificar cliente":"Nuevo cliente"} size="lg" showFooter={false} isOpen={openCustomerModal} onClose={onCloseCustomerModal}>
                 <CustomerForm customer={customerData}
                               showAsModal={true}
-                              onCloseModal={onCloseModal}
-                              onAcceptModal={onAcceptModal}
+                              onCloseModal={onCloseCustomerModal}
+                              onAcceptModal={onAcceptCustomerModal}
                 />
             </CustomModal>
         </React.Fragment>

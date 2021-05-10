@@ -29,7 +29,11 @@ const customer = (state = initialState, action) => {
     switch (action.type) {
         case RESET_CUSTOMERS:
             return {
-                ...initialState
+                ...state,
+                loading: false,
+                customer: {},
+                meta: {},
+                refresh: false
             }
         case GET_CUSTOMERS:
             return {

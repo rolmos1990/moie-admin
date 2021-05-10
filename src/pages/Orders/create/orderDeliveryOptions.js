@@ -10,6 +10,7 @@ import {getFieldOptionByGroup} from "../../../store/fieldOptions/actions";
 import {DELIVERY_METHODS_PAYMENT_TYPES, DELIVERY_TYPES, GROUPS, PAYMENT_TYPES} from "../../../common/constants";
 import {getDeliveryMethods, getDeliveryQuote, updateCard} from "../../../store/order/actions";
 import {getEmptyOptions} from "../../../common/converters";
+import {Button} from "@material-ui/core";
 
 const OrderDeliveryOptions = (props) => {
     const {onUpdateCar, car, fieldOptions, onGetFieldOptions, onGetDeliveryMethods, onGetDeliveryQuote, deliveryMethods, deliveryQuote,
@@ -93,7 +94,7 @@ const OrderDeliveryOptions = (props) => {
             setDeliveryCost(car.deliveryOptions.cost);
             setPieceToChange(car.deliveryOptions.pieces);
             setShowPaymentType(DELIVERY_METHODS_PAYMENT_TYPES.includes(car.deliveryOptions.method));
-            getQuote()
+            //getQuote()
         }
     }, [car.deliveryOptions]);
 
@@ -121,7 +122,7 @@ const OrderDeliveryOptions = (props) => {
             <AvForm className="needs-validation" autoComplete="off">
                 <Row>
                     <Col>
-                        <h5 className="text-info">Opciones de envio</h5>
+                        <h5 className="text-info"><i className="uil-shopping-cart-alt me-2"> </i> Opciones de envio</h5>
                     </Col>
                 </Row>
                 <Row>
@@ -202,7 +203,7 @@ const OrderDeliveryOptions = (props) => {
                             <button type="button" className="btn btn-light" onClick={() => props.onCloseModal()}>Cancelar</button>
                         )}
                         {onAcceptModal && (
-                            <button type="button" className="btn btn-primary" onClick={() => acceptModal()}>Guardar</button>
+                            <Button color="primary" type="button" onClick={() => acceptModal()}>Guardar</Button>
                         )}
                     </Col>
                 </Row>

@@ -91,7 +91,7 @@ const OrderCar = (props) => {
             <AvForm className="needs-validation" autoComplete="off">
                 <Row>
                     <Col md={12} className="mb-3">
-                        <h5 className="text-info">Productos</h5>
+                        <h5 className="text-info"><i className="uil-box me-2"> </i> Productos</h5>
                     </Col>
                     <Col md={4} className="mb-3">
                         <Label htmlFor="weight">Descuento Global</Label>
@@ -138,27 +138,26 @@ const OrderCar = (props) => {
                                     <td style={{width: '25%'}} className="text-center">{product.color}</td>
                                     <td style={{width: '15%'}} className="text-center">{product.size}</td>
                                     <td style={{width: '10%'}}>
-                                            <FieldSelect
-                                                id={"quantity"}
-                                                name={"quantity"}
-                                                options={buildNumericOptions(product.quantityAvailable)}
-                                                defaultValue={product.quantity}
-                                                onChange={item => onChangeQuantity(item.value, product)}
-                                                required
-                                            />
+                                        <FieldSelect
+                                            id={"quantity"}
+                                            name={"quantity"}
+                                            options={buildNumericOptions(product.quantityAvailable)}
+                                            defaultValue={product.quantity}
+                                            onChange={item => onChangeQuantity(item.value, product)}
+                                            required
+                                        />
                                     </td>
                                     <td style={{width: '10%'}} className="text-end">{priceFormat(product.origin.price)}</td>
                                     <td style={{width: '10%'}} className="text-center">
                                         {globalDiscount > 0 && (<>{product.discountPercentage + '%'}</>)}
                                         {globalDiscount === 0 && (
-                                                <FieldDecimalNumber
-                                                    id={"discountProd"}
-                                                    name={"discountProd"}
-                                                    value={product.discountPercentage}
-                                                    onChange={el => onChangeDiscount(el.target.value, product)}
-                                                />
+                                            <FieldDecimalNumber
+                                                id={"discountProd"}
+                                                name={"discountProd"}
+                                                value={product.discountPercentage}
+                                                onChange={el => onChangeDiscount(el.target.value, product)}
+                                            />
                                         )}
-
                                     </td>
                                     <td style={{width: '10%'}} className="text-end">{priceFormat(product.discount)}</td>
                                     <td style={{width: '15%'}} className="text-end">{priceFormat(product.total)}</td>

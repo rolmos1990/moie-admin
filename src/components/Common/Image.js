@@ -2,7 +2,7 @@ import React from "react"
 import imageNotFound from "../../assets/images/image-not-found.png"
 
 const Images = props => {
-  let styles = {};
+  let styles = props.styles || {};
   if(props.height) styles.height = props.height;
   if(props.width) styles.width = props.width;
 

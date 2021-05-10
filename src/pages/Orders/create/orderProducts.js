@@ -4,7 +4,7 @@ import {withRouter} from "react-router-dom"
 import {connect} from "react-redux";
 import PropTypes from "prop-types";
 import {FieldAsyncSelect, FieldSelect} from "../../../components/Fields";
-import {GET_PRODUCT} from "../../../helpers/url_helper";
+import {GET_CUSTOMER, GET_PRODUCT} from "../../../helpers/url_helper";
 import {getProduct} from "../../../store/product/actions";
 import {getEmptyOptions} from "../../../common/converters";
 import {AvForm} from "availity-reactstrap-validation";
@@ -14,8 +14,11 @@ import {buildNumericOptions, getImageByQuality, priceFormat} from "../../../comm
 import Conditionals from "../../../common/conditionals";
 import {updateCard} from "../../../store/order/actions";
 
+const searchByOptions = [{label:"Codigo", value:"code"},{label:"Nombre", value:"name"}];
+
 const OrderProducts = (props) => {
     const {car, product, onGetProduct, onUpdateCar} = props;
+    const [searchBy, setSearchBy] = useState(searchByOptions[0].value);
     const [productData, setProductData] = useState({});
     const [productDefault, setProductDefault] = useState(getEmptyOptions());
     const [productReferenceDefault, setProductReferenceDefault] = useState(getEmptyOptions());
@@ -84,37 +87,53 @@ const OrderProducts = (props) => {
             <AvForm className="needs-validation" autoComplete="off" onValidSubmit={(e, v) => addToOrder(e, v)}>
                 <Row>
                     <Col>
-                        <h5 className="text-info">Agregar productos</h5>
+                        <h5 className="text-info"><i className="uil-filter me-2"> </i> Agregar productos</h5>
                     </Col>
                 </Row>
                 <Row>
                     <Col md={2}>
-                        <Label htmlFor="product">Buscar por Código</Label>
-                        <FieldAsyncSelect
-                            name={"productCode"}
-                            urlStr={GET_PRODUCT}
-                            placeholder="Código del producto"
-                            defaultValue={productReferenceDefault}
-                            conditionalOptions={{fieldName: 'reference', operator: Conditionals.OPERATORS.EQUAL}}
-                            onChange={(d) => {
-                                onGetProduct(d.value);
-                                setProductDefault(getEmptyOptions());
+                        <Label htmlFor="product">Buscar por</Label>
+                        <FieldSelect
+                            id={"searchByOptions"}
+                            name={"searchByOptions"}
+                            options={searchByOptions}
+                            defaultValue={searchBy}
+                            onChange={(e) => {
+                                setSearchBy(e.value);
                             }}
                         />
                     </Col>
-                    <Col md={10}>
-                        <Label htmlFor="product">Buscar por Nombre</Label>
-                        <FieldAsyncSelect
-                            name={"productName"}
-                            urlStr={GET_PRODUCT}
-                            placeholder="Nombre del producto"
-                            defaultValue={productDefault}
-                            onChange={(d) => {
-                                onGetProduct(d.value);
-                                setProductReferenceDefault(getEmptyOptions());
-                            }}
-                        />
-                    </Col>
+                    {searchBy === "code" && (
+                        <Col md={10}>
+                            <Label htmlFor="product">Código</Label>
+                            <FieldAsyncSelect
+                                name={"productCode"}
+                                urlStr={GET_PRODUCT}
+                                placeholder="Código del producto"
+                                defaultValue={productReferenceDefault}
+                                conditionalOptions={{fieldName: 'reference', operator: Conditionals.OPERATORS.EQUAL}}
+                                onChange={(d) => {
+                                    onGetProduct(d.value);
+                                    setProductDefault(getEmptyOptions());
+                                }}
+                            />
+                        </Col>
+                    )}
+                    {searchBy === "name" && (
+                        <Col md={10}>
+                            <Label htmlFor="product">Nombre</Label>
+                            <FieldAsyncSelect
+                                name={"productName"}
+                                urlStr={GET_PRODUCT}
+                                placeholder="Nombre del producto"
+                                defaultValue={productDefault}
+                                onChange={(d) => {
+                                    onGetProduct(d.value);
+                                    setProductReferenceDefault(getEmptyOptions());
+                                }}
+                            />
+                        </Col>
+                    )}
                 </Row>
                 {productData.id && (
                     <Row className="mt-3">
