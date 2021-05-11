@@ -86,7 +86,7 @@ function* update({ payload: { id, data, history } }) {
     try {
         const response = yield call(PUT_API_REQUEST, id, data)
         showResponseMessage(response, "Pedido actualizado!");
-        yield put(UPDATE_SUCCESS_ACTION(response))
+        yield put(UPDATE_SUCCESS_ACTION(response.order))
     } catch (error) {
         yield put(UPDATE_FAILED_ACTION(error))
     }

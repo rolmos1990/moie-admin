@@ -1,36 +1,29 @@
 import React, {useEffect, useState} from "react"
 import {Col, Container, Row} from "reactstrap"
-import {Card, Tooltip} from "@material-ui/core";
-import {Link, withRouter} from "react-router-dom"
+import {Button, Card, Tooltip} from "@material-ui/core";
+import {withRouter} from "react-router-dom"
 import {connect} from "react-redux";
 import PropTypes from "prop-types";
-import Breadcrumb from "../../components/Common/Breadcrumb";
-import {formatDate, getImageByQuality, priceFormat} from "../../common/utils";
+import {getImageByQuality, priceFormat} from "../../common/utils";
 import NoDataIndication from "../../components/Common/NoDataIndication";
 
 import {getOrder, updateCard, updateOrder} from "../../store/order/actions";
-import CustomerForm from "../CustomerEdit/CustomerForm";
 import CustomModal from "../../components/Modal/CommosModal";
-import {getEmptyOptions} from "../../common/converters";
 import OrderDeliveryOptions from "./create/orderDeliveryOptions";
-import {DELIVERY_METHODS_PAYMENT_TYPES, DELIVERY_TYPES} from "../../common/constants";
+import {DELIVERY_METHODS_PAYMENT_TYPES, DELIVERY_TYPES, PAYMENT_TYPES} from "../../common/constants";
 import {map} from "lodash";
 import Images from "../../components/Common/Image";
 import OrderCustomer from "./create/orderCustomer";
-import imageNotFound from "../../assets/images/image-not-found.png";
+import OrderProducts from "./create/orderProducts";
+import OrderCar from "./create/orderCar";
 
 const OrderDetail = (props) => {
 
     const {onGetOrder, onUpdateCar, onUpdateOrder, order, car} = props;
     const [orderData, setOrderData] = useState({});
 
-    const [editCustomer, setEditCustomer] = useState(false);
     const [openCustomerModal, setOpenCustomerModal] = useState(false);
-
-    const [editDelivery, setEditDelivery] = useState(false);
     const [openDeliveryModal, setOpenDeliveryModal] = useState(false);
-
-    const [editProducts, setEditProducts] = useState(false);
     const [openProductsModal, setOpenProductsModal] = useState(false);
 
     useEffect(() => {
@@ -51,10 +44,11 @@ const OrderDetail = (props) => {
                     type: order.deliveryType,
                     method: order.deliveryMethod.name,
                     cost: parseFloat(order.deliveryCost) || 0,
-                    paymentType: "",
-                    pieces: 0
+                    paymentType: order.paymentMode,
+                    pieces: order.piecesForChanges || 0
                 },
-                products: []
+                products: [],
+                isEdit:true
             };
 
             const o = {...order}
@@ -90,14 +84,13 @@ const OrderDetail = (props) => {
     }
     const onCloseModal = () => {
         toggleModal();
-        setEditCustomer(false);
+        onUpdateCar({...car, customer:{}});
     }
-    const onAcceptModal = (id) => {
+    const onAcceptModal = () => {
         toggleModal();
-        if (id) {
-            onUpdateOrder(orderData.id, {customer: id});
+        if (car.customer && car.customer.id) {
+            onUpdateOrder(orderData.id, {customer: car.customer.id});
         }
-        setEditCustomer(false);
     }
 
     const toggleDeliveryModal = () => {
@@ -105,34 +98,55 @@ const OrderDetail = (props) => {
     }
     const onCloseDeliveryModal = () => {
         toggleDeliveryModal();
-        setEditDelivery(false);
     }
-    const onAcceptDeliveryModal = (delivery) => {
+    const onAcceptDeliveryModal = () => {
         toggleDeliveryModal();
-        if (delivery) {
-            onUpdateOrder(orderData.id, {delivery});
+        if (car.deliveryOptions) {
+            const deliveryData = {
+                deliveryMethod: car.deliveryOptions.method,
+                deliveryCost: car.deliveryOptions.cost,
+                chargeOnDelivery: car.deliveryOptions.type === 3,
+                origen: car.deliveryOptions.origin,
+                deliveryType: parseInt(car.deliveryOptions.type),
+            };
+
+            if(DELIVERY_METHODS_PAYMENT_TYPES.includes(deliveryData.deliveryMethod)){
+                deliveryData.piecesForChanges = parseInt(car.deliveryOptions.pieces);
+                deliveryData.paymentMode = car.deliveryOptions.paymentType === PAYMENT_TYPES.CASH? 1:2;
+            }
+            onUpdateOrder(orderData.id, deliveryData);
         }
-        setEditDelivery(false);
     }
 
     const toggleProductsModal = () => {
-        setOpenDeliveryModal(!openDeliveryModal);
+        setOpenProductsModal(!openDeliveryModal);
     }
     const onCloseProductsModal = () => {
-        toggleDeliveryModal();
-        setEditDelivery(false);
+        toggleProductsModal();
     }
-    const onAcceptProductsModal = (products) => {
-        toggleDeliveryModal();
-        if (products) {
-            onUpdateOrder(orderData.id, {products: products});
+    const onAcceptProductsModal = () => {
+        toggleProductsModal();
+        if (car.products) {
+            const order = {
+                products: car.products.map(prod => ({
+                    id:prod.origin.id,
+                    productSize:prod.sizeId,
+                    quantity: prod.quantity,
+                    discountPercentage: prod.discountPercentage,
+                }))
+            };
+            onUpdateOrder(orderData.id, order);
         }
-        setEditDelivery(false);
     }
 
     const getDeliveryType = (deliveryType) => {
         let find = DELIVERY_TYPES.find(dt => dt.id === deliveryType);
         return find ? find.label : '';
+    }
+
+    const getPaymentType = () => {
+       if(!order.paymentMode) return '';
+       return order.paymentMode === 1? PAYMENT_TYPES.CASH:PAYMENT_TYPES.TRANSFER;
     }
 
     return orderData.id ? (
@@ -155,7 +169,6 @@ const OrderDetail = (props) => {
                                                             className="btn btn-sm text-primary"
                                                             onClick={() => {
                                                                 toggleModal();
-                                                                setEditCustomer(true);
                                                             }}>
                                                         <i className="uil uil-pen font-size-18"> </i>
                                                     </button>
@@ -212,7 +225,6 @@ const OrderDetail = (props) => {
                                                             className="btn btn-sm text-primary"
                                                             onClick={() => {
                                                                 toggleDeliveryModal();
-                                                                setEditDelivery(true);
                                                             }}>
                                                         <i className="uil uil-pen font-size-18"> </i>
                                                     </button>
@@ -240,11 +252,11 @@ const OrderDetail = (props) => {
                                                 <>
                                                     <Col md={12}>
                                                         <label>Forma de pago: </label>
-                                                        <span className="p-1">{orderData.deliveryMethod.name || 'TBD'}</span>
+                                                        <span className="p-1">{getPaymentType()}</span>
                                                     </Col>
                                                     <Col md={12}>
                                                         <label>Piezas para cambio: </label>
-                                                        <span className="p-1">{orderData.deliveryMethod.name || 'TBD'}</span>
+                                                        <span className="p-1">{orderData.piecesForChanges || 0}</span>
                                                     </Col>
                                                 </>
                                             )}
@@ -268,7 +280,6 @@ const OrderDetail = (props) => {
                                                             className="btn btn-sm text-primary"
                                                             onClick={() => {
                                                                 toggleProductsModal();
-                                                                setEditProducts(true);
                                                             }}>
                                                         <i className="uil uil-pen font-size-18"> </i>
                                                     </button>
@@ -291,27 +302,26 @@ const OrderDetail = (props) => {
                                                                     />
                                                                 </div>
                                                             </Col>
-                                                            <Col md={6} className="p-1">
+                                                            <Col md={5} className="p-1">
                                                                 <Row>
                                                                     <Col md={12}>
                                                                         <b className="text-info">{product.product.reference}</b>
                                                                     </Col>
                                                                     <Col md={12}>
-                                                                        <small><span className="font-weight-600">Color:</span> {product.color} <span
-                                                                            className="badge rounded-pill bg-soft-info">{product.size}</span></small>
+                                                                        <small>{product.color} <span className="badge rounded-pill bg-soft-info">{product.size}</span></small>
                                                                     </Col>
                                                                     <Col md={12}>
                                                                         <small><span className="font-weight-600">Cantidad:</span> {product.quantity}</small>
                                                                     </Col>
                                                                 </Row>
                                                             </Col>
-                                                            <Col md={4} className="p-1">
+                                                            <Col md={5} className="p-1">
                                                                 <Row>
                                                                     <Col md={12}>
                                                                         <small><span className="font-weight-600">Precio:</span> {priceFormat(product.price)}</small>
                                                                     </Col>
                                                                     <Col md={12}>
-                                                                        <small><span className="font-weight-600">Descuento:</span> <span
+                                                                        <small><span className="font-weight-600">Desc.:</span> <span
                                                                             className="text-danger">-{priceFormat(product.discount)} ({product.discountPercent}%)</span></small>
                                                                     </Col>
                                                                     <Col md={12}>
@@ -386,13 +396,34 @@ const OrderDetail = (props) => {
                 />
             </CustomModal>
 
+            <CustomModal title={"Modificar productos"} size="lg" showFooter={false} isOpen={openProductsModal} onClose={onCloseProductsModal}>
+                <Row>
+                    <Col md={12}>
+                        <OrderProducts/>
+                    </Col>
+                </Row>
+                <hr/>
+                <Row>
+                    <Col md={12}>
+                        <OrderCar/>
+                    </Col>
+                </Row>
+                <hr/>
+                <Row>
+                    <Col md={12} className="text-right">
+                        <button type="button" className="btn btn-light" onClick={() => onCloseProductsModal()}>Cancelar</button>
+                        <Button color="primary" type="button" onClick={() => onAcceptProductsModal()}>Guardar</Button>
+                    </Col>
+                </Row>
+            </CustomModal>
+
         </React.Fragment>
     ) : <NoDataIndication/>;
 }
 
 const mapStateToProps = state => {
     const {error, car, order, loading} = state.Order;
-    return {error, order, loading}
+    return {error, car, order, loading}
 }
 
 const mapDispatchToProps = dispatch => ({

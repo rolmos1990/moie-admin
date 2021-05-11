@@ -1,11 +1,14 @@
 import React from "react"
 import {Link} from "react-router-dom"
 import {STATUS_COLORS, StatusField} from "../../components/StatusField";
-import {ConverterStatus} from "../../common/converters";
-import {ORDER_STATUS, STATUS} from "../../common/constants";
+import {ConverterStatus, getEmptyOptions} from "../../common/converters";
+import {ORDER_STATUS, ORDER_STATUS_LIST, STATUS} from "../../common/constants";
 import Conditionals from "../../common/conditionals";
 import {formatDate, isValidOption, STATUS_OPTIONS} from "../../common/utils";
 import {Tooltip} from "@material-ui/core";
+
+const statusOptions = ORDER_STATUS_LIST;
+statusOptions.unshift(getEmptyOptions);
 
 const orderColumns = (onDelete = false) => [
     {
@@ -68,8 +71,8 @@ const orderColumns = (onDelete = false) => [
         sort: true,
         filter: true,
         filterType: "select",
-        filterOptions: STATUS_OPTIONS,
-        filterDefaultOption: STATUS_OPTIONS[0],
+        filterOptions: statusOptions,
+        filterDefaultOption: statusOptions[0],
         formatter: (cellContent, item) => (
             <StatusField color={ORDER_STATUS[item.status].color}>
                 {ORDER_STATUS[item.status].name}

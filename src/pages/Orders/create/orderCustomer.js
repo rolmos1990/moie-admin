@@ -28,8 +28,7 @@ const OrderCustomer = (props) => {
     const [customerDocumentDefault, setCustomerDocumentDefault] = useState(getEmptyOptions());
 
     useEffect(() => {
-        console.log(car)
-        if(showAsModal && car.customer && car.customer.id && initComponent){
+        if(showAsModal && car.isEdit && car.customer && car.customer.id && initComponent){
             setInitComponent(false);
             onGetCustomer(car.customer.id);
         }
@@ -142,7 +141,7 @@ const OrderCustomer = (props) => {
                     <Col md={1} style={{display: 'flex', 'alignItems': 'flex-end'}}>
                         <Tooltip placement="bottom" title="Agregar nuevo cliente" aria-label="add">
                             <button type="button" className="btn btn-primary btn-block waves-effect waves-light mt-2 me-1 w-100" onClick={() => toggleModal()}>
-                                <i className="mdi mdi-plus"> </i>
+                                <i className="fa fa-user-plus"> </i>
                             </button>
                         </Tooltip>
                     </Col>

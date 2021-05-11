@@ -14,7 +14,7 @@ import {resetProduct} from "../../../store/product/actions";
 import {ConfirmationModalAction} from "../../../components/Modal/ConfirmationModal";
 import OrderSummary from "./orderSummary";
 import {registerOrder, resetCar} from "../../../store/order/actions";
-import {DELIVERY_TYPES} from "../../../common/constants";
+import {DELIVERY_METHODS_PAYMENT_TYPES, DELIVERY_TYPES, PAYMENT_TYPES} from "../../../common/constants";
 
 const CreateOrder = (props) => {
     const {onResetOrder, car, onRegisterOrder} = props;
@@ -38,14 +38,26 @@ const CreateOrder = (props) => {
     }, [car]);
 
     const onCancelOrder = () => {
+        const dirty = car.customer.id || car.products.length > 0;
+
+        if (!dirty) {
+            resetOrder();
+            return;
+        }
+
         ConfirmationModalAction({
             title: 'Confirmación',
             description: '¿Seguro desea cancelar el pedido?',
             id: '_OrderModal',
             onConfirm: () => {
-                onResetOrder();
+                resetOrder();
             }
         });
+    }
+
+    const resetOrder = () => {
+        onResetOrder();
+        props.history.push("/orders");
     }
 
     const onCreateOrder = () => {
@@ -57,8 +69,6 @@ const CreateOrder = (props) => {
             chargeOnDelivery: car.deliveryOptions.type === 3,
             origen: car.deliveryOptions.origin,
             deliveryType: parseInt(car.deliveryOptions.type),
-            piecesForChanges: car.deliveryOptions.pieces,
-            paymentMode: car.deliveryOptions.paymentType,
             products: car.products.map(prod => ({
                 id:prod.origin.id,
                 productSize:prod.sizeId,
@@ -66,6 +76,12 @@ const CreateOrder = (props) => {
                 discountPercentage: prod.discountPercentage,
             }))
         };
+
+        if(DELIVERY_METHODS_PAYMENT_TYPES.includes(order.deliveryMethod)){
+            order.piecesForChanges = parseInt(car.deliveryOptions.pieces);
+            order.paymentMode = car.deliveryOptions.paymentType === PAYMENT_TYPES.CASH? 1:2;
+        }
+
         console.log('order payload', order);
         onRegisterOrder(order, props.history);
     }

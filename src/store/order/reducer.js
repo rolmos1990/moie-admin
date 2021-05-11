@@ -35,7 +35,8 @@ const initialState = {
         products: [],
         deliveryOptions: {},
         summary: {},
-        reset: true
+        reset: true,
+        isEdit: false,
     }
 }
 
@@ -124,6 +125,7 @@ const order = (state = initialState, action) => {
             state = {
                 ...state,
                 loading: false,
+                order: action.payload
             }
             break
         case UPDATE_ORDER_FAILED:

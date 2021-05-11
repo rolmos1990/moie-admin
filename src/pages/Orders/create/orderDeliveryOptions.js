@@ -7,7 +7,7 @@ import {FieldNumber, FieldSelect} from "../../../components/Fields";
 import {getProduct} from "../../../store/product/actions";
 import {AvForm} from "availity-reactstrap-validation";
 import {getFieldOptionByGroup} from "../../../store/fieldOptions/actions";
-import {DELIVERY_METHODS_PAYMENT_TYPES, DELIVERY_TYPES, GROUPS, PAYMENT_TYPES} from "../../../common/constants";
+import {DELIVERY_METHODS_PAYMENT_TYPES, DELIVERY_TYPES, GROUPS, PAYMENT_TYPES, PAYMENT_TYPES_LIST} from "../../../common/constants";
 import {getDeliveryMethods, getDeliveryQuote, updateCard} from "../../../store/order/actions";
 import {getEmptyOptions} from "../../../common/converters";
 import {Button} from "@material-ui/core";
@@ -21,8 +21,8 @@ const OrderDeliveryOptions = (props) => {
     const [deliveryMethod, setDeliveryMethod] = useState(null);
     const [originOrders, setOriginOrders] = useState([]);
     const [originOrder, setOriginOrder] = useState(pOriginOrder || null);
-    const [orderTypes, setOrderTypes] = useState(null);
-    const [orderType, setOrderType] = useState(null);
+    const [deliveryTypes, setDeliveryTypes] = useState(null);
+    const [deliveryType, setDeliveryType] = useState(null);
     const [paymentTypes, setPaymentTypes] = useState(null);
     const [paymentType, setPaymentType] = useState(null);
     const [deliveryCost, setDeliveryCost] = useState(0);
@@ -32,14 +32,14 @@ const OrderDeliveryOptions = (props) => {
 
     //Carga inicial
     useEffect(() => {
-        setOrderTypes([getEmptyOptions(), ...Object.keys(DELIVERY_TYPES).map(k => ({label: DELIVERY_TYPES[k].label, value: DELIVERY_TYPES[k].id}))]);
-        setPaymentTypes([getEmptyOptions(), ...Object.keys(PAYMENT_TYPES).map(k => ({label: PAYMENT_TYPES[k], value: PAYMENT_TYPES[k]}))]);
+        setDeliveryTypes([getEmptyOptions(), ...DELIVERY_TYPES.map(dt => ({label: dt.label, value: dt.id}))]);
+        setPaymentTypes([getEmptyOptions(), ...PAYMENT_TYPES_LIST]);
         onGetFieldOptions();
         onGetDeliveryMethods();
         if(car.reset){
             setDeliveryMethod(null);
             setOriginOrder(null);
-            setOrderType(null);
+            setDeliveryType(null);
             setPaymentType(null);
             setDeliveryCost(0);
             setPieceToChange(0);
@@ -55,10 +55,10 @@ const OrderDeliveryOptions = (props) => {
 
     useEffect(() => {
         const list = deliveryMethods || [];
-        const ot = orderType +'';
+        const ot = deliveryType +'';
         setDeliveryMethodList([getEmptyOptions(), ...list.filter(op => (op.settings.includes(ot))).map(op => ({label: op.name, value: op.code}))]);
         onChangeDeliveryOptions();
-    }, [orderType]);
+    }, [deliveryType]);
 
     useEffect(() => {
         if (deliveryMethod) {
@@ -77,23 +77,25 @@ const OrderDeliveryOptions = (props) => {
 
     useEffect(() => {
         onChangeDeliveryOptions();
-    }, [deliveryCost]);
+    }, [deliveryCost, paymentType, pieceToChange]);
 
     useEffect(() => {
         getQuote();
     }, [car.products]);
 
     useEffect(() => {
-        if(car.deliveryOptions && car.deliveryOptions.origin && initComponent){
+        if(car.isEdit && car.deliveryOptions && car.deliveryOptions.origin && initComponent){
             setInitComponent(false);
 
             setDeliveryMethod(car.deliveryOptions.method);
             setOriginOrder(car.deliveryOptions.origin);
-            setOrderType(car.deliveryOptions.method);
-            setPaymentType(car.deliveryOptions.paymentType);
+            setDeliveryType(car.deliveryOptions.type);
             setDeliveryCost(car.deliveryOptions.cost);
             setPieceToChange(car.deliveryOptions.pieces);
             setShowPaymentType(DELIVERY_METHODS_PAYMENT_TYPES.includes(car.deliveryOptions.method));
+
+            if(car.deliveryOptions.paymentType)
+                setPaymentType(car.deliveryOptions.paymentType === 1 ?PAYMENT_TYPES.CASH:PAYMENT_TYPES.TRANSFER);
             //getQuote()
         }
     }, [car.deliveryOptions]);
@@ -104,12 +106,13 @@ const OrderDeliveryOptions = (props) => {
         if (qty > 0 && deliveryMethod && (qty !== productQty || car.deliveryOptions.method !== deliveryMethod)) {
             setProductQty(qty);
             let products = car.products.map(prod => ({id: prod.origin.id, qty: prod.quantity}));
-            onGetDeliveryQuote({deliveryType: orderType, deliveryMethodCode: deliveryMethod, products});
+            onGetDeliveryQuote({deliveryType: deliveryType, deliveryMethodCode: deliveryMethod, products});
         }
     }
 
     const onChangeDeliveryOptions = () => {
-        let deliveryOps = {origin: originOrder, type: orderType, method: deliveryMethod, cost: parseFloat(deliveryCost) || 0, paymentType: paymentType, pieces: pieceToChange};
+        let deliveryOps = {origin: originOrder, type: deliveryType, method: deliveryMethod, cost: (parseFloat(deliveryCost) || 0), paymentType: paymentType, pieces: pieceToChange};
+        console.log(deliveryOps, paymentType)
         onUpdateCar({...car, deliveryOptions: deliveryOps});
     }
 
@@ -133,18 +136,18 @@ const OrderDeliveryOptions = (props) => {
                             name={"originOrder"}
                             options={originOrders}
                             defaultValue={originOrder}
-                            onChange={(item => setOriginOrder(item.value))}
+                            onChange={item => setOriginOrder(item.value)}
                             required
                         />
                     </Col>
                     <Col md={6}>
                         <Label htmlFor="weight">Tipo de pedido</Label>
                         <FieldSelect
-                            id={"orderType"}
-                            name={"orderType"}
-                            options={orderTypes}
-                            defaultValue={orderType}
-                            onChange={(item => setOrderType(item.value))}
+                            id={"deliveryType"}
+                            name={"deliveryType"}
+                            options={deliveryTypes}
+                            defaultValue={deliveryType}
+                            onChange={item => setDeliveryType(item.value)}
                             required
                         />
                     </Col>
@@ -155,7 +158,7 @@ const OrderDeliveryOptions = (props) => {
                             name={"deliveryMethod"}
                             options={deliveryMethodList}
                             defaultValue={deliveryMethod}
-                            onChange={(item => setDeliveryMethod(item.value))}
+                            onChange={item => setDeliveryMethod(item.value)}
                             required
                         />
                     </Col>
@@ -166,7 +169,7 @@ const OrderDeliveryOptions = (props) => {
                             name={"deliveryCost"}
                             value={deliveryCost}
                             disabled={deliveryQuote.hasCharge}
-                            onChange={(item => setDeliveryCost(item.target.value))}
+                            onChange={item => setDeliveryCost(item.target.value)}
                             required/>
                     </Col>
                     {showPaymentType && (
@@ -178,7 +181,9 @@ const OrderDeliveryOptions = (props) => {
                                     name={"paymentType"}
                                     options={paymentTypes}
                                     defaultValue={paymentType}
-                                    onChange={(item => setPaymentType(item.value))}
+                                    onChange={item => {
+                                        setPaymentType(item.value)
+                                    }}
                                     required
                                 />
                             </Col>
@@ -188,7 +193,7 @@ const OrderDeliveryOptions = (props) => {
                                     id={"pieceToChange"}
                                     name={"pieceToChange"}
                                     value={pieceToChange}
-                                    onChange={(item => setPieceToChange(item.target.value))}
+                                    onChange={item => setPieceToChange(item.target.value)}
                                     required/>
                             </Col>
                         </>
@@ -197,16 +202,20 @@ const OrderDeliveryOptions = (props) => {
                 </Row>
             </AvForm>
             {showAsModal  && (
-                <Row>
-                    <Col md={12} className="text-right">
-                        {onCloseModal && (
-                            <button type="button" className="btn btn-light" onClick={() => props.onCloseModal()}>Cancelar</button>
-                        )}
-                        {onAcceptModal && (
-                            <Button color="primary" type="button" onClick={() => acceptModal()}>Guardar</Button>
-                        )}
-                    </Col>
-                </Row>
+                <>
+                    <hr/>
+                    <Row>
+                        <Col md={12} className="text-right">
+                            {onCloseModal && (
+                                <button type="button" className="btn btn-light" onClick={() => props.onCloseModal()}>Cancelar</button>
+                            )}
+                            {onAcceptModal && (
+                                <Button color="primary" type="button" onClick={() => acceptModal()}>Guardar</Button>
+                            )}
+                        </Col>
+                    </Row>
+                </>
+
             )}
 
         </React.Fragment>

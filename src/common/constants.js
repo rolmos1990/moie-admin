@@ -35,11 +35,15 @@ export const PAYMENT_TYPES = {
     TRANSFER: 'TRANSFERENCIA',
 };
 
+export const PAYMENT_TYPES_LIST = Object.keys(PAYMENT_TYPES).map(k => ({label: PAYMENT_TYPES[k], value: PAYMENT_TYPES[k]}));
+
 export const ORDER_STATUS = {
     1: {name: 'Pendiente', color:'danger'},
     2: {name: 'Confirmado', color:'success'},
     3: {name: 'impreso', color:'warning'},
     4: {name: 'enviado', color:'warning'},
-    5: {name: 'conciliado', color:'blue'},//conciliado no se permiten cambios
+    5: {name: 'conciliado', color:'blue'},
     6: {name: 'anulado', color:'blue'},
 };
+
+export const ORDER_STATUS_LIST = Object.keys(ORDER_STATUS).map(s => ({label:ORDER_STATUS[s].name, value:s}))
