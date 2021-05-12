@@ -103,7 +103,7 @@ const ConfigsList = props => {
     };
 
     const handleValidSubmit = (ev, data) => {
-        console.log(data, fieldOption);
+        //console.log(data, fieldOption);
         const payload = {
             groups: fieldOption.groups,
             name: data.name ? data.name : data.value,

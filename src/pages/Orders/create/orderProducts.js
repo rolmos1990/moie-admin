@@ -87,7 +87,7 @@ const OrderProducts = (props) => {
             <AvForm className="needs-validation" autoComplete="off" onValidSubmit={(e, v) => addToOrder(e, v)}>
                 <Row>
                     <Col>
-                        <h5 className="text-info"><i className="uil-filter me-2"> </i> Agregar productos</h5>
+                        <h4 className="card-title text-info"><i className="uil-filter me-2"> </i> Agregar productos</h4>
                     </Col>
                 </Row>
                 <Row>

@@ -17,7 +17,7 @@ export const HtmlTooltip = props => {
         <CustomHtmlTooltip
             TransitionComponent={Fade}
             TransitionProps={{timeout: 600}}
-            placement="top-end"
+            placement={props.placement || "top-end"}
             title={props.title}>
             {props.children}
         </CustomHtmlTooltip>

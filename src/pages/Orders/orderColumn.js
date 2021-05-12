@@ -6,18 +6,19 @@ import {ORDER_STATUS, ORDER_STATUS_LIST, STATUS} from "../../common/constants";
 import Conditionals from "../../common/conditionals";
 import {formatDate, isValidOption, STATUS_OPTIONS} from "../../common/utils";
 import {Tooltip} from "@material-ui/core";
+import {CATEGORY, GET_CUSTOMER} from "../../helpers/url_helper";
 
 const statusOptions = ORDER_STATUS_LIST;
 statusOptions.unshift(getEmptyOptions);
 
-const orderColumns = (onDelete = false) => [
+const orderColumns = () => [
     {
         text: "# Pedido",
         dataField: "id",
         sort: true,
         formatter: (cellContent, item) => (
             <Link to={`/order/${item.id}`} className="text-body">
-                {item.id}
+               <b className="text-info">{item.id}</b>
             </Link>
         ),
         filter: true,
@@ -29,7 +30,8 @@ const orderColumns = (onDelete = false) => [
         dataField: "customer",
         sort: true,
         filter: true,
-        filterType: "text",
+        filterType: "asyncSelect",
+        urlStr: GET_CUSTOMER,
         formatter: (cellContent, item) => (
             <Link to={`/customer/detail/${item.customer.id}`} className="text-body">
                 {item.customer.name}
@@ -52,18 +54,23 @@ const orderColumns = (onDelete = false) => [
         ),
     },
     {
-        text: "Tracking",
-        dataField: "tracking",
+        text: "Metodo de envio",
+        dataField: "deliveryMethod",
         sort: true,
         filter: true,
         filterType: "text",
+        formatter: (cellContent, item) => (
+            <>
+                <div>{item.deliveryMethod.name}</div>
+                <small>{item.tracking}</small>
+            </>
+        ),
     },
     {
         text: "Piezas",
         dataField: "quantity",
-        sort: true,
-        filter: true,
-        filterType: "text",
+        sort: false,
+        filter: false,
     },
     {
         text: "Estado",

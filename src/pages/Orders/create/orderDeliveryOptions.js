@@ -112,7 +112,7 @@ const OrderDeliveryOptions = (props) => {
 
     const onChangeDeliveryOptions = () => {
         let deliveryOps = {origin: originOrder, type: deliveryType, method: deliveryMethod, cost: (parseFloat(deliveryCost) || 0), paymentType: paymentType, pieces: pieceToChange};
-        console.log(deliveryOps, paymentType)
+        //console.log(deliveryOps, paymentType)
         onUpdateCar({...car, deliveryOptions: deliveryOps});
     }
 
@@ -125,7 +125,7 @@ const OrderDeliveryOptions = (props) => {
             <AvForm className="needs-validation" autoComplete="off">
                 <Row>
                     <Col>
-                        <h5 className="text-info"><i className="uil-shopping-cart-alt me-2"> </i> Opciones de envio</h5>
+                        <h4 className="card-title text-info"><i className="uil-shopping-cart-alt me-2"> </i> Opciones de envio</h4>
                     </Col>
                 </Row>
                 <Row>

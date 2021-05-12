@@ -1,19 +1,16 @@
-import React, {useState, useEffect} from "react"
-import {CardBody, Col, Container, Label, Row, Spinner} from "reactstrap"
-import {AvForm, AvField} from "availity-reactstrap-validation"
-import {Button, Card} from "@material-ui/core";
-import {withRouter, Link} from "react-router-dom"
+import React, {useEffect, useState} from "react"
+import {Col, Container, Row} from "reactstrap"
+import {Card, Tooltip} from "@material-ui/core";
+import {Link, withRouter} from "react-router-dom"
 import {connect} from "react-redux";
-import {apiError} from "../../store/auth/login/actions";
 import PropTypes from "prop-types";
-import {getState, registerState, updateState} from "../../store/location/actions";
-import {FieldSwitch, FieldText} from "../../components/Fields";
 import Breadcrumb from "../../components/Common/Breadcrumb";
-import {STATUS} from "../../common/constants";
-import Images from "../../components/Common/Image";
 import {formatDate} from "../../common/utils";
 import NoDataIndication from "../../components/Common/NoDataIndication";
 import {getCustomer} from "../../store/customer/actions";
+import OrderCardList from "../Orders/OrderCardList";
+import {STATUS_COLORS, StatusField} from "../../components/StatusField";
+import {ConverterCustomerStatus} from "../Customer/customer_status";
 
 const CustomerDetail = (props) => {
 
@@ -35,82 +32,99 @@ const CustomerDetail = (props) => {
             <div className="page-content">
                 <Container fluid>
                     <Breadcrumb hasBack path="/customers" title={customerData.name} item={"Cliente"}/>
-                    <Card id={'details'} className="p-4">
-                        <Row>
-                            <Col md={12}>
+                    <Row>
+                        <Col md={7}>
+                            <Card id={'details'} className="p-3">
                                 <Row>
-                                    <Col xs={10}>
-                                        <h4 className="card-title">Descripción del cliente</h4>
-                                    </Col>
-                                    <Col md={2} className="text-right">
-                                        <li className="list-inline-item">
-                                            <Link to={`/customer/${customerData.id}`} className="px-2 text-primary">
-                                                <i className="uil uil-pen font-size-18"> </i>
-                                            </Link>
-                                        </li>
+                                    <Col md={12}>
+                                        <Row>
+                                            <Col xs={10}>
+                                                <h4 className="card-title text-info">Descripción del cliente</h4>
+                                            </Col>
+                                            <Col md={2} className="text-right">
+                                                <li className="list-inline-item">
+                                                    <Link to={`/customer/${customerData.id}`} className="px-2 text-primary">
+                                                        <i className="uil uil-pen font-size-18"> </i>
+                                                    </Link>
+                                                </li>
+                                            </Col>
+                                        </Row>
                                     </Col>
                                 </Row>
-                            </Col>
-                        </Row>
-                        <Row>
-                            <Col md={4}>
-                                <label>Nombre: </label>
-                                <span className="p-1">{customerData.name}</span>
-                            </Col>
-                            <Col md={4}>
-                                <label>Documento: </label>
-                                <span className="p-1">{customerData.document}</span>
-                            </Col>
-                            <Col md={4}>
-                                <label>¿Es mayorista?: </label>
-                                <span className="p-1">{customerData.isMayorist ? 'Si' : 'No'}</span>
-                            </Col>
-                            <Col md={4}>
-                                <label>¿Recibe notificaciones?: </label>
-                                <span className="p-1">{customerData.hasNotification ? 'Si' : 'No'}</span>
-                            </Col>
-                            <Col md={4}>
-                                <label>Estatus: </label>
-                                <span className="p-1">{customerData.status ? 'Activo' : 'Inactivo'}</span>
-                            </Col>
-                            <Col md={4}>
-                                <label>Fecha creación: </label>
-                                <span className="p-1">{formatDate(customerData.createdAt)}</span>
-                            </Col>
-                        </Row>
-                        <hr/>
-                        <Row>
-                            <Col xs={12}>
-                                <h4 className="card-title">Datos de contacto</h4>
-                            </Col>
-                            <Col md={4}>
-                                <label>Email: </label>
-                                <span className="p-1">{customerData.email}</span>
-                            </Col>
-                            <Col md={4}>
-                                <label>Teléfono Celular: </label>
-                                <span className="p-1">{customerData.cellphone}</span>
-                            </Col>
-                            <Col md={4}>
-                                <label>Teléfono Residencial: </label>
-                                <span className="p-1">{customerData.phone}</span>
-                            </Col>
-                        </Row>
-                        <hr/>
-                        <Row>
-                            <Col xs={12}>
-                                <h4 className="card-title">Localidad</h4>
-                            </Col>
-                            <Col md={4}>
-                                <label>Departamento: </label>
-                                <span className="p-1">{customerData.state?.name}</span>
-                            </Col>
-                            <Col md={4}>
-                                <label>Municipio: </label>
-                                <span className="p-1">{customerData.municipality?.name}</span>
-                            </Col>
-                        </Row>
-                    </Card>
+                                <Row>
+                                    <Col md={6}>
+                                        <label>Nombre: </label>
+                                        <span className="p-1">{customerData.name}</span>
+                                        {customerData.isMayorist === true && (
+                                            <Tooltip placement="bottom" title="Cliente mayorista" aria-label="add">
+                                                <i className={"mdi mdi-crown font-size-18 mr-1 text-warning"}> </i>
+                                            </Tooltip>
+                                        )}
+                                    </Col>
+                                    <Col md={6}>
+                                        <label>Documento: </label>
+                                        <span className="p-1">{customerData.document}</span>
+                                    </Col>
+
+                                </Row>
+                                <hr/>
+                                <Row>
+                                    <Col xs={12}>
+                                        <h4 className="card-title text-info">Datos de contacto</h4>
+                                    </Col>
+                                    <Col md={6}>
+                                        <label>Email: </label>
+                                        <span className="p-1">{customerData.email}</span>
+                                    </Col>
+                                    <Col md={6}>
+                                        <label>Teléfono Celular: </label>
+                                        <span className="p-1">{customerData.cellphone}</span>
+                                    </Col>
+                                    <Col md={6}>
+                                        <label>Teléfono Residencial: </label>
+                                        <span className="p-1">{customerData.phone}</span>
+                                    </Col>
+                                </Row>
+                                <hr/>
+                                <Row>
+                                    <Col xs={12}>
+                                        <h4 className="card-title text-info">Localidad</h4>
+                                    </Col>
+                                    <Col md={6}>
+                                        <label>Departamento: </label>
+                                        <span className="p-1">{customerData.state?.name}</span>
+                                    </Col>
+                                    <Col md={6}>
+                                        <label>Municipio: </label>
+                                        <span className="p-1">{customerData.municipality?.name}</span>
+                                    </Col>
+                                </Row>
+                                <hr/>
+                                <Row>
+                                    <Col xs={12} className="footer-details">
+                                        {customerData.hasNotification && (
+                                            <Tooltip placement="bottom" title="Recibe notificaciones" aria-label="add">
+                                                <span className="badge rounded-pill bg-info font-size-12 p-2"><i className="fa fa-envelope"> </i></span>
+                                            </Tooltip>
+                                        )}
+                                        <Tooltip placement="bottom" title="Estado" aria-label="add">
+                                            <StatusField color={customerData.status === true ? STATUS_COLORS.SUCCESS : STATUS_COLORS.DANGER}>
+                                                {ConverterCustomerStatus(customerData.status)}
+                                            </StatusField>
+                                        </Tooltip>
+                                        <Tooltip placement="bottom" title="Fecha creación" aria-label="add">
+                                            <small className="badge rounded-pill bg-light p-2">{formatDate(customerData.createdAt)}</small>
+                                        </Tooltip>
+                                    </Col>
+                                </Row>
+                            </Card>
+                        </Col>
+                        <Col md={5}>
+                            <Card id={'orders'} className="p-3">
+                                <OrderCardList customerId={customerData.id}/>
+                            </Card>
+                        </Col>
+                    </Row>
                 </Container>
 
             </div>

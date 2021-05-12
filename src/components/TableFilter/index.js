@@ -51,8 +51,13 @@ export const TableFilter = (props) => {
                             conditions.add(fieldName, value, operator);
                         }
                         if (filter.filterType === "select" && isValidOption(filter.filterOptions, value.value)) {//for status
-                            operator = resolveOperator(filter, (value.value ? Conditionals.OPERATORS.TRUE : Conditionals.OPERATORS.FALSE));
-                            conditions.add(fieldName, null, operator);
+                            if(value.value === true || value.value === false){
+                                operator = resolveOperator(filter, value.value ? Conditionals.OPERATORS.TRUE : Conditionals.OPERATORS.FALSE);
+                                conditions.add(fieldName, null, operator);
+                            }else{
+                                operator = resolveOperator(filter, Conditionals.OPERATORS.EQUAL);
+                                conditions.add(fieldName, value.value, operator);
+                            }
                         }
                         if (filter.filterType === "asyncSelect" && value.value) {
                             operator = resolveOperator(filter, Conditionals.OPERATORS.EQUAL);

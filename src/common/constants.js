@@ -42,8 +42,8 @@ export const ORDER_STATUS = {
     2: {name: 'Confirmado', color:'success'},
     3: {name: 'impreso', color:'warning'},
     4: {name: 'enviado', color:'warning'},
-    5: {name: 'conciliado', color:'blue'},
-    6: {name: 'anulado', color:'blue'},
+    5: {name: 'conciliado', color:'info'},
+    6: {name: 'anulado', color:'info'},
 };
 
 export const ORDER_STATUS_LIST = Object.keys(ORDER_STATUS).map(s => ({label:ORDER_STATUS[s].name, value:s}))

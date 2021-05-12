@@ -61,7 +61,7 @@ const CreateOrder = (props) => {
     }
 
     const onCreateOrder = () => {
-        console.log('Car', car);
+        //console.log('Car', car);
         const order = {
             customer: car.customer.id,
             deliveryMethod: car.deliveryOptions.method,
@@ -70,8 +70,8 @@ const CreateOrder = (props) => {
             origen: car.deliveryOptions.origin,
             deliveryType: parseInt(car.deliveryOptions.type),
             products: car.products.map(prod => ({
-                id:prod.origin.id,
-                productSize:prod.sizeId,
+                id: prod.origin.id,
+                productSize: prod.sizeId,
                 quantity: prod.quantity,
                 discountPercentage: prod.discountPercentage,
             }))

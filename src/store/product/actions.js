@@ -11,6 +11,8 @@ import {
     UPDATE_PRODUCT_FAILED,
     UPDATE_PRODUCT_SUCCESS, UPDATE_PRODUCT, RESET_PRODUCT
 } from "./actionTypes";
+import Conditionals from "../../common/conditionals";
+import {getFieldOptions} from "../fieldOptions/actions";
 
 export const resetProduct = () => ({
     type: RESET_PRODUCT,
@@ -22,6 +24,12 @@ export const getProducts = (conditional, limit, offset) => ({
     limit: limit,
     offset: offset
 })
+
+export const getProductsByIds = (ids, offset) => {
+    const conditions = new Conditionals.Condition;
+    if(ids.length > 0) conditions.add("id", ids.join("::"), Conditionals.OPERATORS.IN);
+    return getProducts(conditions.all(), ids.length, offset);
+}
 
 export const getProductsSuccess = (data, meta) => ({
     type: GET_PRODUCTS_SUCCESS,

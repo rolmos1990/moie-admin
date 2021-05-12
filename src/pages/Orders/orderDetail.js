@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react"
 import {Col, Container, Row} from "reactstrap"
 import {Button, Card, Tooltip} from "@material-ui/core";
-import {withRouter} from "react-router-dom"
+import {Link, withRouter} from "react-router-dom"
 import {connect} from "react-redux";
 import PropTypes from "prop-types";
 import {getImageByQuality, priceFormat} from "../../common/utils";
@@ -16,10 +16,12 @@ import Images from "../../components/Common/Image";
 import OrderCustomer from "./create/orderCustomer";
 import OrderProducts from "./create/orderProducts";
 import OrderCar from "./create/orderCar";
+import { getProductsByIds} from "../../store/product/actions";
+import {HtmlTooltip} from "../../components/Common/HtmlTooltip";
 
 const OrderDetail = (props) => {
 
-    const {onGetOrder, onUpdateCar, onUpdateOrder, order, car} = props;
+    const {onGetOrder, onUpdateCar, onUpdateOrder, onGetProducts, order, car, products} = props;
     const [orderData, setOrderData] = useState({});
 
     const [openCustomerModal, setOpenCustomerModal] = useState(false);
@@ -58,25 +60,25 @@ const OrderDetail = (props) => {
                     prod.discount = total * (prod.discountPercent / 100);
                     prod.total = total - prod.discount;
                 });
-
                 o.orderDetails.forEach(prod => {
                     newCar.products.push({
-                        origin: prod.product,
+                        id:  prod.id,
+                        origin: {...prod.product, id: prod.id, price: prod.price},
                         color: prod.color,
                         size: prod.size,
-                        sizeId: prod.size,
+                        sizeId: prod.productSize?.id || 0,
                         quantity: prod.quantity,
-                        quantityAvailable: 0,
+                        quantityAvailable: prod.productSize?.quantity || 0,
                         discountPercentage: prod.discountPercent,
                         discount: prod.discount,
                     });
                 })
             }
-
+            // onGetProducts(newCar.products.map(prod => prod.origin.id))
             onUpdateCar(newCar)
             setOrderData(order);
         }
-        console.log(order);
+        //console.log(order);
     }, [order]);
 
     const toggleModal = () => {
@@ -119,7 +121,7 @@ const OrderDetail = (props) => {
     }
 
     const toggleProductsModal = () => {
-        setOpenProductsModal(!openDeliveryModal);
+        setOpenProductsModal(!openProductsModal);
     }
     const onCloseProductsModal = () => {
         toggleProductsModal();
@@ -149,6 +151,13 @@ const OrderDetail = (props) => {
        return order.paymentMode === 1? PAYMENT_TYPES.CASH:PAYMENT_TYPES.TRANSFER;
     }
 
+    const colorThreeDots = (product) => {
+        if(product.color.length > 20){
+            return product.color.substr(0,22) + "...";
+        }
+        return product.color;
+    }
+
     return orderData.id ? (
         <React.Fragment>
             <div className="page-content">
@@ -160,7 +169,7 @@ const OrderDetail = (props) => {
                                     <Card id={'customer-detail'} className="p-3">
                                         <Row>
                                             <Col md={10}>
-                                                <h5 className="text-info"><i className="uil-users-alt me-2"> </i> Datos del cliente</h5>
+                                                <h4 className="card-title text-info"><i className="uil-users-alt me-2"> </i> Datos del cliente</h4>
                                             </Col>
                                             <Col md={2} className="text-right">
                                                 <Tooltip placement="bottom" title="Editar cliente" aria-label="add">
@@ -216,7 +225,7 @@ const OrderDetail = (props) => {
                                     <Card id={'delivery-options'} className="p-3">
                                         <Row>
                                             <Col md={10}>
-                                                <h5 className="text-info"><i className="uil-shopping-cart-alt me-2"> </i> Datos de envio</h5>
+                                                <h4 className="card-title text-info"><i className="uil-shopping-cart-alt me-2"> </i> Datos de envio</h4>
                                             </Col>
                                             <Col md={2} className="text-right">
                                                 <Tooltip placement="bottom" title="Editar envio" aria-label="add">
@@ -271,7 +280,7 @@ const OrderDetail = (props) => {
                                     <Card id={'products'} className="p-3">
                                         <Row>
                                             <Col md={11}>
-                                                <h5 className="text-info"><i className="uil-box me-2"> </i> Productos</h5>
+                                                <h4 className="card-title text-info"><i className="uil-box me-2"> </i> Productos</h4>
                                             </Col>
                                             <Col md={1} className="text-right">
                                                 <Tooltip placement="bottom" title="Editar products" aria-label="add">
@@ -292,15 +301,26 @@ const OrderDetail = (props) => {
                                                     <div className="prod-box">
                                                         <Row>
                                                             <Col md={2} className="text-center">
-                                                                <div className={`border-1`} id={`product-${k}`} role="tabpanel">
-                                                                    <Images src={`${getImageByQuality(product.product.productImage[0], 'medium')}`}
-                                                                            alt={product.product.productImage[0].filename}
-                                                                            height={83}
-                                                                            className="img-fluid mx-auto d-block"
-                                                                            data-zoom={`${product.product.productImage[0].path}`}
-                                                                            styles={{height: '83px', borderRadius: '8px'}}
-                                                                    />
-                                                                </div>
+                                                                <HtmlTooltip
+                                                                    placement={'right-end'}
+                                                                    title={
+                                                                        <React.Fragment>
+                                                                            <Images src={`${getImageByQuality(product.product.productImage.length > 0 ? product.product.productImage[0] : {}, 'medium')}`}
+                                                                                    alt={product.product.reference}
+                                                                                    height={120}
+                                                                                    className="img-fluid mx-auto d-block tab-img rounded"/>
+                                                                        </React.Fragment>
+                                                                    }>
+                                                                    <div className={`border-1`} id={`product-${k}`} role="tabpanel">
+                                                                        <Images src={`${getImageByQuality(product.product.productImage[0], 'medium')}`}
+                                                                                alt={product.product.productImage[0].filename}
+                                                                                height={83}
+                                                                                className="img-fluid mx-auto d-block"
+                                                                                data-zoom={`${product.product.productImage[0].path}`}
+                                                                                styles={{height: '83px', borderRadius: '8px'}}
+                                                                        />
+                                                                    </div>
+                                                                </HtmlTooltip>
                                                             </Col>
                                                             <Col md={5} className="p-1">
                                                                 <Row>
@@ -308,10 +328,15 @@ const OrderDetail = (props) => {
                                                                         <b className="text-info">{product.product.reference}</b>
                                                                     </Col>
                                                                     <Col md={12}>
-                                                                        <small>{product.color} <span className="badge rounded-pill bg-soft-info">{product.size}</span></small>
+                                                                        <Tooltip placement="bottom" title={product.color} aria-label="add">
+                                                                            <small> {colorThreeDots(product)}</small>
+                                                                        </Tooltip>
                                                                     </Col>
                                                                     <Col md={12}>
                                                                         <small><span className="font-weight-600">Cantidad:</span> {product.quantity}</small>
+                                                                    </Col>
+                                                                    <Col md={12}>
+                                                                        <small className="badge rounded-pill bg-soft-info">Talla: {product.size}</small>
                                                                     </Col>
                                                                 </Row>
                                                             </Col>
@@ -342,7 +367,7 @@ const OrderDetail = (props) => {
                                     <Card id={'summary-detail'} className="p-3">
                                         <Row>
                                             <Col md={12}>
-                                                <h5 className="text-info"><i className="uil-dollar-alt me-2"> </i> Totales</h5>
+                                                <h4 className="card-title text-info"><i className="uil-dollar-alt me-2"> </i> Totales</h4>
                                             </Col>
                                             <Col md={12}>
                                                 <div className="table-responsive">
@@ -411,8 +436,8 @@ const OrderDetail = (props) => {
                 <hr/>
                 <Row>
                     <Col md={12} className="text-right">
-                        <button type="button" className="btn btn-light" onClick={() => onCloseProductsModal()}>Cancelar</button>
-                        <Button color="primary" type="button" onClick={() => onAcceptProductsModal()}>Guardar</Button>
+                        <button type="button" className="btn btn-light" onClick={onCloseProductsModal}>Cancelar</button>
+                        <Button color="primary" type="button" onClick={onAcceptProductsModal}>Guardar</Button>
                     </Col>
                 </Row>
             </CustomModal>
@@ -422,14 +447,16 @@ const OrderDetail = (props) => {
 }
 
 const mapStateToProps = state => {
+    const {products} = state.Product
     const {error, car, order, loading} = state.Order;
-    return {error, car, order, loading}
+    return {error, car, order, products, loading}
 }
 
 const mapDispatchToProps = dispatch => ({
     onGetOrder: (id) => dispatch(getOrder(id)),
     onUpdateOrder: (id, payload) => dispatch(updateOrder(id, payload)),
     onUpdateCar: (data) => dispatch(updateCard(data)),
+    onGetProducts: (ids = []) => dispatch(getProductsByIds(ids)),
 })
 
 export default withRouter(

@@ -74,7 +74,7 @@ const OrderCustomer = (props) => {
         <React.Fragment>
             <Row>
                 <Col>
-                    <h5 className="text-info"><i className="uil-users-alt me-2"> </i> Datos del cliente</h5>
+                    <h4 className="card-title text-info"><i className="uil-users-alt me-2"> </i> Datos del cliente</h4>
                 </Col>
             </Row>
             <AvForm className="needs-validation" autoComplete="off">

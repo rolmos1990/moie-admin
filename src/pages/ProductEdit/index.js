@@ -100,7 +100,7 @@ const ProductEdit = (props) => {
                 }
             }
         }
-        console.log('Product', product)
+        //console.log('Product', product)
     }, [product]);
 
     useEffect(() => {

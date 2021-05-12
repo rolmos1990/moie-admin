@@ -91,7 +91,7 @@ const OrderCar = (props) => {
             <AvForm className="needs-validation" autoComplete="off">
                 <Row>
                     <Col md={12} className="mb-3">
-                        <h5 className="text-info"><i className="uil-box me-2"> </i> Productos</h5>
+                        <h4 className="card-title text-info"><i className="uil-box me-2"> </i> Productos</h4>
                     </Col>
                     <Col md={4} className="mb-3">
                         <Label htmlFor="weight">Descuento Global</Label>
@@ -105,7 +105,7 @@ const OrderCar = (props) => {
                         />
                     </Col>
                     <Col md={12}>
-                        <table className="table table-sm table-striped table-bordered table-centered table-nowrap">
+                        <table className="table table-sm table-striped table-bordered table-centered table-nowrap font-size-11">
                             <thead>
                             <tr>
                                 <th className="text-center">Código</th>

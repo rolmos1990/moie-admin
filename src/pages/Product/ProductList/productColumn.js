@@ -107,9 +107,15 @@ const productColumns = (onDelete = false) => [
         isDummyField: true,
         formatter: (cellContent, item) => (
             <>
-                <span className="mb-0 badge bg-grey p-2" title='Vendidos' style={badgeStyles}>{item.productAvailable?.completed || 0}</span>
-                <span className="mb-0 badge bg-danger p-2" title='Apartado' style={badgeStyles}>{item.productAvailable?.reserved || 0}</span>
-                <span className="mb-0 badge bg-success p-2" title='Disponible' style={badgeStyles}>{item.productAvailable?.available || 0}</span>
+                <Tooltip placement="bottom" title="Vendidos" aria-label="add">
+                    <span className="mb-0 badge bg-grey p-2" style={badgeStyles}>{item.productAvailable?.completed || 0}</span>
+                </Tooltip>
+                <Tooltip placement="bottom" title="Apartado" aria-label="add">
+                    <span className="mb-0 badge bg-danger p-2" style={badgeStyles}>{item.productAvailable?.reserved || 0}</span>
+                </Tooltip>
+                <Tooltip placement="bottom" title="Disponible" aria-label="add">
+                    <span className="mb-0 badge bg-success p-2" style={badgeStyles}>{item.productAvailable?.available || 0}</span>
+                </Tooltip>
             </>
         ),
     },

@@ -146,6 +146,20 @@ h1 small {
 }
 
 .prod-box {
-  border: 1px solid #42a5f5;
+  border: 1px solid #ced4da;
   border-radius: 10px;
+  box-shadow: 0px 2px 1px -1px #ced4da, 0px 1px 1px 0px #ced4da, 0px 1px 3px 0px #ced4da;
+}
+
+.order-box {
+  border: 1px solid #ced4da;
+  border-radius: 10px;
+  padding: 2px 10px;
+  margin-bottom: 8px;
+  box-shadow: 0px 2px 1px -1px #ced4da, 0px 1px 1px 0px #ced4da, 0px 1px 3px 0px #ced4da;
+}
+
+.footer-details {
+  display: flex;
+  justify-content: space-around;
 }
