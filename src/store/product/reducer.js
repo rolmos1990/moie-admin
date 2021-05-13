@@ -2,7 +2,7 @@ import {
     GET_PRODUCT,
     GET_PRODUCT_FAILED,
     GET_PRODUCT_SUCCESS,
-    GET_PRODUCTS, GET_PRODUCTS_FAILED, GET_PRODUCTS_SUCCESS,
+    GET_PRODUCTS, GET_PRODUCTS_FAILED, GET_PRODUCTS_SUCCESS, QUERY_PRODUCTS, QUERY_PRODUCTS_FAILED, QUERY_PRODUCTS_SUCCESS,
     REGISTER_PRODUCT,
     REGISTER_PRODUCT_FAILED,
     REGISTER_PRODUCT_SUCCESS, RESET_PRODUCT,
@@ -17,6 +17,11 @@ const initialState = {
     meta: {},
     products: [],
     product: {},
+    custom: {
+        loading: false,
+        meta: {},
+        data: {}
+    },
     refresh: false
 }
 
@@ -35,16 +40,44 @@ const product = (state = initialState, action) => {
             return {
                 ...state,
                 error: action.payload,
-                loading: true,
+                loading: false,
             }
-
         case GET_PRODUCTS_SUCCESS:
             return {
                 ...state,
-                product: {},
                 products: action.payload,
                 meta: action.meta,
                 loading: false,
+            }
+        case QUERY_PRODUCTS:
+            return {
+                ...state,
+                custom: {
+                    ...state.custom,
+                    loading: true
+                }
+            }
+        case QUERY_PRODUCTS_FAILED:
+            return {
+                ...state,
+                custom: {
+                    ...state.custom,
+                    error: action.payload,
+                    loading: false,
+                }
+            }
+        case QUERY_PRODUCTS_SUCCESS:
+            const data = {...state.custom.data};
+            data[action.node] = action.payload;
+
+            return {
+                ...state,
+                custom: {
+                    ...state.custom,
+                    data: data,
+                    meta: action.meta,
+                    loading: false
+                }
             }
         case GET_PRODUCT:
             return {
@@ -102,7 +135,7 @@ const product = (state = initialState, action) => {
             }
             break
         default:
-            state = { ...state }
+            state = {...state}
             break
     }
     return state

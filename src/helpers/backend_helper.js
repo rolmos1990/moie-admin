@@ -15,7 +15,7 @@ const fetchCustomer = data => get((data && data.id) ? `${url.GET_CUSTOMER}/${dat
 const deleteCustomerApi = (id) => del(`${url.PUT_CUSTOMER}/${id}`);
 
 //products
-const fetchProductsApi = data => get(url.GET_PRODUCT, {}, data);
+const fetchProductsApi = params => get(url.GET_PRODUCT, {}, params);
 const fetchProductApi = data => get((data && data.id) ? `${url.GET_PRODUCT}/${data.id}` : url.GET_PRODUCT, data);
 const registerProductApi = data => post(url.POST_PRODUCT, data);
 const updateProductApi = (id, data) => put(`${url.PUT_PRODUCT}/${id}`, data);

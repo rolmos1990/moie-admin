@@ -1,7 +1,7 @@
 import {all, call, fork, put, takeEvery} from "redux-saga/effects"
 
 //Account Redux states
-import {GET_PRODUCTS, GET_PRODUCT, REGISTER_PRODUCT, UPDATE_PRODUCT} from "./actionTypes"
+import {GET_PRODUCTS, GET_PRODUCT, REGISTER_PRODUCT, UPDATE_PRODUCT, QUERY_PRODUCTS} from "./actionTypes"
 
 import {
     getProductsSuccess,
@@ -11,7 +11,7 @@ import {
     getProductFailed,
     registerProductFailed,
     updateProductSuccess,
-    updateProductFail
+    updateProductFail, queryProductsSuccess, queryProductsFailed
 } from "./actions"
 
 import {
@@ -28,6 +28,7 @@ import {showResponseMessage} from "../../helpers/service";
  * *  Configuración de CRUD Saga (Realizar configuración para cada uno de las replicas)
 */
 
+const ACTION_NAME_QUERY      =   QUERY_PRODUCTS;
 const ACTION_NAME_LIST      =   GET_PRODUCTS;
 const ACTION_NAME_GET       =   GET_PRODUCT;
 const ACTION_NAME_CREATE    =   REGISTER_PRODUCT;
@@ -39,6 +40,8 @@ const POST_API_REQUEST      =   registerProductApi;
 const PUT_API_REQUEST       =   updateProductApi;
 
 //actions
+const QUERY_SUCCESS_ACTION  =   queryProductsSuccess;
+const QUERY_FAILED_ACTION   =   queryProductsFailed;
 const LIST_SUCCESS_ACTION   =   getProductsSuccess;
 const LIST_FAILED_ACTION    =   getProductsFailed;
 const GET_SUCCESS_ACTION    =   getProductSuccess;
@@ -63,14 +66,20 @@ function* get({ id }) {
 
 function* fetch({conditional, limit, offset}) {
     try {
-
         const cond = Conditionals.getConditionalFormat(conditional);
         const query = Conditionals.buildHttpGetQuery(cond, limit, offset);
-
         const response = yield call(LIST_API_REQUEST, query)
         yield put(LIST_SUCCESS_ACTION(response.data, response.meta));
     } catch (error) {
         yield put(LIST_FAILED_ACTION(error))
+    }
+}
+function* queryData({params ={}, node='products'}) {
+    try {
+        const response = yield call(LIST_API_REQUEST, params)
+        yield put(QUERY_SUCCESS_ACTION(response.data, response.meta, node));
+    } catch (error) {
+        yield put(QUERY_FAILED_ACTION(error))
     }
 }
 
@@ -101,6 +110,7 @@ export function* watchProduct() {
     yield takeEvery(ACTION_NAME_UPDATE, update);
     yield takeEvery(ACTION_NAME_LIST, fetch);
     yield takeEvery(ACTION_NAME_GET, get)
+    yield takeEvery(ACTION_NAME_QUERY, queryData)
 }
 
 function* productSaga() {

@@ -9,7 +9,7 @@ import {
     REGISTER_PRODUCT_SUCCESS,
     REGISTER_PRODUCT,
     UPDATE_PRODUCT_FAILED,
-    UPDATE_PRODUCT_SUCCESS, UPDATE_PRODUCT, RESET_PRODUCT
+    UPDATE_PRODUCT_SUCCESS, UPDATE_PRODUCT, RESET_PRODUCT, QUERY_PRODUCTS, QUERY_PRODUCTS_FAILED, QUERY_PRODUCTS_SUCCESS
 } from "./actionTypes";
 import Conditionals from "../../common/conditionals";
 import {getFieldOptions} from "../fieldOptions/actions";
@@ -24,6 +24,8 @@ export const getProducts = (conditional, limit, offset) => ({
     limit: limit,
     offset: offset
 })
+
+
 
 export const getProductsByIds = (ids, offset) => {
     const conditions = new Conditionals.Condition;
@@ -100,3 +102,26 @@ export const updateProductFail = error => {
         payload: error,
     }
 }
+
+
+
+export const countProductByStatus = () => {
+    const params = {operation:'id::count', group:"status"};
+    return queryProducts(params, 'statusGroup');
+}
+
+export const queryProducts = (params, node) => ({
+    type: QUERY_PRODUCTS,
+    params: params,
+    node: node,
+})
+export const queryProductsFailed = error => ({
+    type: QUERY_PRODUCTS_FAILED,
+    payload: error,
+})
+export const queryProductsSuccess = (data, meta, node) => ({
+    type: QUERY_PRODUCTS_SUCCESS,
+    meta: meta,
+    payload: data,
+    node: node,
+})

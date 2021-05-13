@@ -154,17 +154,20 @@ const ProductEdit = (props) => {
             ...values,
             category: values.category.value,
             size: values.size.value,
-            status: 1,
+            status: values._status,
             weight: values.weight ? Number.parseFloat(values.weight) : 0,
             price: Number.parseFloat(values.price),
             cost: Number.parseFloat(values.cost),
         };
 
-        if(values.referenceKey && values.referenceKey.value){
-            data.referenceKey= values.referenceKey.value;
+        delete data._status;
+
+        if (values.referenceKey && values.referenceKey.value) {
+            data.referenceKey = values.referenceKey.value;
         }
 
         if (!isEdit) {
+            data.status = 1;
             onCreateProduct(data, props.history)
         } else {
             onUpdateProduct(props.match.params.id, data, props.history)
@@ -239,7 +242,7 @@ const ProductEdit = (props) => {
                                                         </div>
                                                     </Col>
                                                 )}
-                                                <Col md={product && product.id ? 12: 10}>
+                                                <Col md={10}>
                                                     <div className="mb-3">
                                                         <Label htmlFor="field_name">Nombre de Producto <span className="text-danger">*</span></Label>
                                                         <FieldText
@@ -251,7 +254,22 @@ const ProductEdit = (props) => {
                                                             required/>
                                                     </div>
                                                 </Col>
-
+                                                {(product && product.id) && (
+                                                    <Col md={2}>
+                                                        <div className={"mt-1 mb-5"} style={{position: "relative"}}>
+                                                            <div className={"float-end"}>
+                                                                <Row>
+                                                                    <Col>
+                                                                        ¿Activo?
+                                                                    </Col>
+                                                                    <Col>
+                                                                        <FieldSwitch defaultValue={productData._status} name={"_status"}/>
+                                                                    </Col>
+                                                                </Row>
+                                                            </div>
+                                                        </div>
+                                                    </Col>
+                                                )}
                                             </Row>
                                             <Row>
                                                 <Col md="6">

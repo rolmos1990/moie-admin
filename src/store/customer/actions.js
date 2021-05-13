@@ -13,7 +13,7 @@ import {
     UPDATE_CUSTOMER_FAILED,
     DELETE_CUSTOMER,
     DELETE_CUSTOMER_SUCCESS,
-    DELETE_CUSTOMER_FAILED, RESET_CUSTOMERS
+    DELETE_CUSTOMER_FAILED, RESET_CUSTOMERS, QUERY_CUSTOMERS, QUERY_CUSTOMERS_FAILED, QUERY_CUSTOMERS_SUCCESS
 } from "./actionTypes"
 
 export const resetCustomer = () => ({
@@ -110,4 +110,27 @@ export const deleteCustomerSuccess = () => ({
 export const deleteCustomerFailed = error => ({
     type: DELETE_CUSTOMER_FAILED,
     payload: error,
+})
+
+
+
+export const countCustomersByStatus = () => {
+    const params = {operation:'id::count', group:"status"};
+    return queryCustomers(params, 'statusGroup');
+}
+
+export const queryCustomers = (params, node) => ({
+    type: QUERY_CUSTOMERS,
+    params: params,
+    node: node,
+})
+export const queryCustomersFailed = error => ({
+    type: QUERY_CUSTOMERS_FAILED,
+    payload: error,
+})
+export const queryCustomersSuccess = (data, meta, node) => ({
+    type: QUERY_CUSTOMERS_SUCCESS,
+    meta: meta,
+    payload: data,
+    node: node,
 })

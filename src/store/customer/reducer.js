@@ -11,7 +11,7 @@ import {
     UPDATE_CUSTOMER_FAILED,
     UPDATE_CUSTOMER_SUCCESS,
     GET_CUSTOMERS_FAILED,
-    GET_CUSTOMERS_SUCCESS, RESET_CUSTOMERS
+    GET_CUSTOMERS_SUCCESS, RESET_CUSTOMERS, QUERY_CUSTOMERS, QUERY_CUSTOMERS_FAILED, QUERY_CUSTOMERS_SUCCESS
 
 } from "./actionTypes"
 import {GET_CUSTOMER, GET_CUSTOMERS} from "../../helpers/url_helper";
@@ -53,6 +53,36 @@ const customer = (state = initialState, action) => {
                 customers: action.payload,
                 meta: action.meta,
                 loading: false,
+            }
+        case QUERY_CUSTOMERS:
+            return {
+                ...state,
+                custom: {
+                    ...state.custom,
+                    loading: true
+                }
+            }
+        case QUERY_CUSTOMERS_FAILED:
+            return {
+                ...state,
+                custom: {
+                    ...state.custom,
+                    error: action.payload,
+                    loading: false,
+                }
+            }
+        case QUERY_CUSTOMERS_SUCCESS:
+            const data = {...state.custom.data};
+            data[action.node] = action.payload;
+
+            return {
+                ...state,
+                custom: {
+                    ...state.custom,
+                    data: data,
+                    meta: action.meta,
+                    loading: false
+                }
             }
         case GET_CUSTOMER:
             return {

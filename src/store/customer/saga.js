@@ -1,7 +1,7 @@
 import {all, call, fork, put, takeEvery} from "redux-saga/effects"
 
 //Account Redux states
-import {GET_CUSTOMERS, GET_CUSTOMER, REGISTER_CUSTOMER, UPDATE_CUSTOMER, DELETE_CUSTOMER} from "./actionTypes"
+import {GET_CUSTOMERS, GET_CUSTOMER, REGISTER_CUSTOMER, UPDATE_CUSTOMER, DELETE_CUSTOMER, QUERY_CUSTOMERS} from "./actionTypes"
 import {
     getCustomersSuccess,
     registerCustomerSuccess,
@@ -9,7 +9,7 @@ import {
     getCustomerSuccess,
     getCustomerFail,
     registerCustomerFail,
-    updateCustomerSuccess, updateCustomerFail, deleteCustomerSuccess, deleteCustomerFailed
+    updateCustomerSuccess, updateCustomerFail, deleteCustomerSuccess, deleteCustomerFailed, queryCustomersFailed, queryCustomersSuccess
 } from "./actions"
 
 //Include Both Helper File with needed methods
@@ -43,6 +43,14 @@ function* fetchCustomers({conditional, limit, offset}) {
         yield put(getCustomersSuccess(response.data, response.meta));
     } catch (error) {
         yield put(getCustomersFail(error))
+    }
+}
+function* queryData({params ={}, node='customers'}) {
+    try {
+        const response = yield call(fetchCustomersApi, params)
+        yield put(queryCustomersSuccess(response.data, response.meta, node));
+    } catch (error) {
+        yield put(queryCustomersFailed(error))
     }
 }
 
@@ -90,6 +98,7 @@ export function* watchCustomer() {
     yield takeEvery(GET_CUSTOMERS, fetchCustomers);
     yield takeEvery(GET_CUSTOMER, fetchCustomerById);
     yield takeEvery(DELETE_CUSTOMER, customerDelete);
+    yield takeEvery(QUERY_CUSTOMERS, queryData);
 }
 
 function* customerSaga() {
