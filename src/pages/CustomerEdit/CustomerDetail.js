@@ -11,6 +11,7 @@ import {getCustomer} from "../../store/customer/actions";
 import OrderCardList from "../Orders/OrderCardList";
 import {STATUS_COLORS, StatusField} from "../../components/StatusField";
 import {ConverterCustomerStatus} from "../Customer/customer_status";
+import Observations from "./Observations";
 
 const CustomerDetail = (props) => {
 
@@ -30,11 +31,11 @@ const CustomerDetail = (props) => {
     return customerData.id ? (
         <React.Fragment>
             <div className="page-content">
-                <Container fluid>
+                <Container fluid className="pb-3">
                     <Breadcrumb hasBack path="/customers" title={customerData.name} item={"Cliente"}/>
                     <Row>
                         <Col md={7}>
-                            <Card id={'details'} className="p-3">
+                            <Card id={'details'} className="mb-3 p-3">
                                 <Row>
                                     <Col md={12}>
                                         <Row>
@@ -118,6 +119,7 @@ const CustomerDetail = (props) => {
                                     </Col>
                                 </Row>
                             </Card>
+                            <Observations/>
                         </Col>
                         <Col md={5}>
                             <Card id={'orders'} className="p-3">
@@ -126,7 +128,6 @@ const CustomerDetail = (props) => {
                         </Col>
                     </Row>
                 </Container>
-
             </div>
         </React.Fragment>
     ) : <NoDataIndication/>;

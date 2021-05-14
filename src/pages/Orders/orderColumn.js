@@ -1,15 +1,18 @@
 import React from "react"
 import {Link} from "react-router-dom"
-import {STATUS_COLORS, StatusField} from "../../components/StatusField";
-import {ConverterStatus, getEmptyOptions} from "../../common/converters";
-import {ORDER_STATUS, ORDER_STATUS_LIST, STATUS} from "../../common/constants";
+import {StatusField} from "../../components/StatusField";
+import {getEmptyOptions} from "../../common/converters";
+import {DELIVERY_METHODS_LIST, ORDER_STATUS, ORDER_STATUS_LIST} from "../../common/constants";
 import Conditionals from "../../common/conditionals";
-import {formatDate, isValidOption, STATUS_OPTIONS} from "../../common/utils";
+import {formatDate} from "../../common/utils";
 import {Tooltip} from "@material-ui/core";
-import {CATEGORY, GET_CUSTOMER} from "../../helpers/url_helper";
+import {GET_CUSTOMER} from "../../helpers/url_helper";
 
 const statusOptions = ORDER_STATUS_LIST;
 statusOptions.unshift(getEmptyOptions);
+
+const deliveryMethodsOptions = DELIVERY_METHODS_LIST;
+deliveryMethodsOptions.unshift(getEmptyOptions);
 
 const orderColumns = () => [
     {
@@ -58,7 +61,9 @@ const orderColumns = () => [
         dataField: "deliveryMethod",
         sort: true,
         filter: true,
-        filterType: "text",
+        filterType: "select",
+        filterOptions: deliveryMethodsOptions,
+        filterDefaultOption: deliveryMethodsOptions[0],
         formatter: (cellContent, item) => (
             <>
                 <div>{item.deliveryMethod.name}</div>
