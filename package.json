@@ -28,6 +28,7 @@
     "feather-icons-react": "^0.4.1",
     "firebase": "^8.1.1",
     "google-maps-react": "^2.0.6",
+    "html-to-image": "^1.6.1",
     "i18next": "^19.8.4",
     "i18next-browser-languagedetector": "^6.0.1",
     "leaflet": "^1.7.1",

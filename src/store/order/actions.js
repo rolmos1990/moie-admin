@@ -10,7 +10,16 @@ import {
     REGISTER_ORDER_FAILED,
     UPDATE_ORDER,
     UPDATE_ORDER_SUCCESS,
-    UPDATE_ORDER_FAILED, GET_DELIVERY_METHODS, GET_DELIVERY_METHODS_SUCCESS, GET_DELIVERY_METHODS_FAILED, GET_DELIVERY_QUOTE, GET_DELIVERY_QUOTE_SUCCESS, GET_DELIVERY_QUOTE_FAILED, RESET_CAR, UPDATE_CAR,
+    UPDATE_ORDER_FAILED,
+    GET_DELIVERY_METHODS,
+    GET_DELIVERY_METHODS_SUCCESS,
+    GET_DELIVERY_METHODS_FAILED,
+    GET_DELIVERY_QUOTE,
+    GET_DELIVERY_QUOTE_SUCCESS,
+    GET_DELIVERY_QUOTE_FAILED,
+    RESET_CAR,
+    UPDATE_CAR,
+    NEXT_STATUS_ORDER,
 } from "./actionTypes";
 
 export const getOrders = (conditional, limit, offset) => ({
@@ -46,6 +55,12 @@ export const getOrderFailed = error => ({
     payload: error,
 })
 
+export const nextStatusOrder = (data, history) => {
+    return {
+        type: NEXT_STATUS_ORDER,
+        payload: { data, history },
+    }
+}
 export const registerOrder = (data, history) => {
     return {
         type: REGISTER_ORDER,

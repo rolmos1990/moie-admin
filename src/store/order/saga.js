@@ -1,7 +1,7 @@
 import {all, call, fork, put, takeEvery} from "redux-saga/effects"
 
 //Account Redux states
-import {GET_ORDERS, GET_ORDER, REGISTER_ORDER, UPDATE_ORDER, GET_DELIVERY_METHODS, GET_DELIVERY_QUOTE} from "./actionTypes"
+import {GET_ORDERS, GET_ORDER, REGISTER_ORDER, UPDATE_ORDER, GET_DELIVERY_METHODS, GET_DELIVERY_QUOTE, NEXT_STATUS_ORDER} from "./actionTypes"
 
 import {
     getOrdersSuccess,
@@ -18,7 +18,7 @@ import {
     registerOrderApi,
     updateOrderApi,
     fetchOrderApi,
-    fetchOrdersApi, fetchDeliveryMethodsApi, fetchDeliveryQuoteApi
+    fetchOrdersApi, fetchDeliveryMethodsApi, fetchDeliveryQuoteApi, nextStatusOrderApi
 } from "../../helpers/backend_helper"
 
 import Conditionals from "../../common/conditionals";
@@ -34,6 +34,7 @@ const ACTION_NAME_CREATE    =   REGISTER_ORDER;
 const ACTION_NAME_UPDATE    =   UPDATE_ORDER;
 
 const LIST_API_REQUEST      =   fetchOrdersApi;
+const NEXT_STATUS_API_REQUEST   =   nextStatusOrderApi;
 const GET_API_REQUEST       =   fetchOrderApi;
 const POST_API_REQUEST      =   registerOrderApi;
 const PUT_API_REQUEST       =   updateOrderApi;
@@ -82,6 +83,16 @@ function* register({ payload: { data, history } }) {
     }
 }
 
+function* nextStatus({ payload: { data, history } }) {
+    try {
+        const response = yield call(NEXT_STATUS_API_REQUEST, data)
+        showResponseMessage(response, "Operación exitosa!");
+        yield put(CREATE_SUCCESS_ACTION(response))
+    } catch (error) {
+        yield put(CREATE_FAILED_ACTION(error))
+    }
+}
+
 function* update({ payload: { id, data, history } }) {
     try {
         const response = yield call(PUT_API_REQUEST, id, data)
@@ -91,7 +102,6 @@ function* update({ payload: { id, data, history } }) {
         yield put(UPDATE_FAILED_ACTION(error))
     }
 }
-
 
 function* fetchDeliveryMethods({conditional, limit, offset}) {
     try {
@@ -118,6 +128,7 @@ export function* watchOrder() {
     yield takeEvery(ACTION_NAME_GET, get)
     yield takeEvery(GET_DELIVERY_METHODS, fetchDeliveryMethods)
     yield takeEvery(GET_DELIVERY_QUOTE, fetchDeliveryQuote)
+    yield takeEvery(NEXT_STATUS_ORDER, nextStatus)
 }
 
 function* orderSaga() {

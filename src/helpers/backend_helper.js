@@ -72,6 +72,7 @@ const deleteStateApi = (id) => del(`${url.STATES}/${id}`);
 const fetchOrdersApi = data => get(url.ORDERS, {}, data);
 const fetchOrderApi = (id) => get(`${url.ORDERS}/${id}`,{});
 const registerOrderApi = data => post(url.ORDERS, data);
+const nextStatusOrderApi = data => post(`${url.ORDERS}/nextStatus`, data);
 const updateOrderApi = (id, data) => put(`${url.ORDERS}/${id}`, data);
 const deleteOrderApi = (id) => del(`${url.ORDERS}/${id}`);
 
@@ -128,7 +129,9 @@ export {
     registerProductSizeApi,
     updateProductSizeApi,
     updateProductSizeListApi,
+
     getProductsPendingApi,
+    nextStatusOrderApi,
 
     fetchProductImagesApi,
     fetchProductImageApi,
