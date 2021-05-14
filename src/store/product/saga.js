@@ -1,7 +1,7 @@
 import {all, call, fork, put, takeEvery} from "redux-saga/effects"
 
 //Account Redux states
-import {GET_PRODUCTS, GET_PRODUCT, REGISTER_PRODUCT, UPDATE_PRODUCT, QUERY_PRODUCTS} from "./actionTypes"
+import {GET_PRODUCTS, GET_PRODUCT, REGISTER_PRODUCT, UPDATE_PRODUCT, QUERY_PRODUCTS, QUERY_PENDING_PRODUCTS} from "./actionTypes"
 
 import {
     getProductsSuccess,
@@ -18,7 +18,7 @@ import {
     registerProductApi,
     updateProductApi,
     fetchProductApi,
-    fetchProductsApi
+    fetchProductsApi, getProductsPendingApi
 } from "../../helpers/backend_helper"
 
 import Conditionals from "../../common/conditionals";
@@ -28,12 +28,14 @@ import {showResponseMessage} from "../../helpers/service";
  * *  Configuración de CRUD Saga (Realizar configuración para cada uno de las replicas)
 */
 
+const ACTION_NAME_QUERY_PENDING_PRODUCTS =   QUERY_PENDING_PRODUCTS;
 const ACTION_NAME_QUERY      =   QUERY_PRODUCTS;
 const ACTION_NAME_LIST      =   GET_PRODUCTS;
 const ACTION_NAME_GET       =   GET_PRODUCT;
 const ACTION_NAME_CREATE    =   REGISTER_PRODUCT;
 const ACTION_NAME_UPDATE    =   UPDATE_PRODUCT;
 
+const PENDING_PRODUCTS_API_REQUEST   =   getProductsPendingApi;
 const LIST_API_REQUEST      =   fetchProductsApi;
 const GET_API_REQUEST       =   fetchProductApi;
 const POST_API_REQUEST      =   registerProductApi;
@@ -82,6 +84,14 @@ function* queryData({params ={}, node='products'}) {
         yield put(QUERY_FAILED_ACTION(error))
     }
 }
+function* getPendingProducts({id}) {
+    try {
+        const response = yield call(PENDING_PRODUCTS_API_REQUEST, id)
+        yield put(QUERY_SUCCESS_ACTION(response.data, response.meta, 'pendingProducts'));
+    } catch (error) {
+        yield put(QUERY_FAILED_ACTION(error))
+    }
+}
 
 function* register({ payload: { data, history } }) {
     try {
@@ -111,6 +121,7 @@ export function* watchProduct() {
     yield takeEvery(ACTION_NAME_LIST, fetch);
     yield takeEvery(ACTION_NAME_GET, get)
     yield takeEvery(ACTION_NAME_QUERY, queryData)
+    yield takeEvery(ACTION_NAME_QUERY_PENDING_PRODUCTS, getPendingProducts)
 }
 
 function* productSaga() {

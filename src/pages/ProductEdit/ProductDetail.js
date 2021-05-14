@@ -11,6 +11,7 @@ import Images from "../../components/Common/Image";
 import {getImageByQuality, priceFormat} from "../../common/utils";
 import NoDataIndication from "../../components/Common/NoDataIndication";
 import {map} from "lodash";
+import ProductsPendingList from "./ProductsPending";
 
 const ProductDetail = (props) => {
 
@@ -35,8 +36,7 @@ const ProductDetail = (props) => {
                 <Container fluid>
                     <Breadcrumb hasBack path="/products" title={productData.reference} item={"Producto"}/>
 
-                    <Card id={'details'}>
-
+                    <Card id={'details'} className="mb-3">
                         <Row>
                             <Col md={4} className="p-3 text-center">
                                 <div className="row p-2">
@@ -122,6 +122,7 @@ const ProductDetail = (props) => {
                             </Col>
                         </Row>
                     </Card>
+                    <ProductsPendingList product={productData}/>
                 </Container>
             </div>
         </React.Fragment>

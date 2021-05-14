@@ -158,6 +158,11 @@ const OrderDetail = (props) => {
         return product.color;
     }
 
+    const takePhoto = () => {
+
+
+    }
+
     return orderData.id ? (
         <React.Fragment>
             <div className="page-content">
@@ -225,7 +230,7 @@ const OrderDetail = (props) => {
                                     <Card id={'delivery-options'} className="p-3">
                                         <Row>
                                             <Col md={10}>
-                                                <h4 className="card-title text-info"><i className="uil-shopping-cart-alt me-2"> </i> Datos de envio</h4>
+                                                <h4 className="card-title text-info"><i className="uil-archive me-2"> </i> Datos de envio</h4>
                                             </Col>
                                             <Col md={2} className="text-right">
                                                 <Tooltip placement="bottom" title="Editar envio" aria-label="add">
@@ -275,132 +280,155 @@ const OrderDetail = (props) => {
                             </Row>
                         </Col>
                         <Col md={8}>
-                            <Row>
-                                <Col md={12} className="mb-3">
-                                    <Card id={'products'} className="p-3">
-                                        <Row>
-                                            <Col md={11}>
-                                                <h4 className="card-title text-info"><i className="uil-box me-2"> </i> Productos</h4>
-                                            </Col>
-                                            <Col md={1} className="text-right">
-                                                <Tooltip placement="bottom" title="Editar products" aria-label="add">
-                                                    <button type="button"
-                                                            size="small"
-                                                            className="btn btn-sm text-primary"
-                                                            onClick={() => {
-                                                                toggleProductsModal();
-                                                            }}>
-                                                        <i className="uil uil-pen font-size-18"> </i>
-                                                    </button>
-                                                </Tooltip>
-                                            </Col>
-                                        </Row>
-                                        <Row>
-                                            {map(orderData.orderDetails, (product, k) => (
-                                                <div key={k} className="col-md-6">
-                                                    <div className="prod-box">
-                                                        <Row>
-                                                            <Col md={2} className="text-center">
-                                                                <HtmlTooltip
-                                                                    placement={'right-end'}
-                                                                    title={
-                                                                        <React.Fragment>
-                                                                            <Images src={`${getImageByQuality(product.product.productImage.length > 0 ? product.product.productImage[0] : {}, 'medium')}`}
-                                                                                    alt={product.product.reference}
-                                                                                    height={120}
-                                                                                    className="img-fluid mx-auto d-block tab-img rounded"/>
-                                                                        </React.Fragment>
-                                                                    }>
-                                                                    <div className={`border-1`} id={`product-${k}`} role="tabpanel">
-                                                                        <Images src={`${getImageByQuality(product.product.productImage[0], 'medium')}`}
-                                                                                alt={product.product.productImage[0].filename}
-                                                                                height={83}
-                                                                                className="img-fluid mx-auto d-block"
-                                                                                data-zoom={`${product.product.productImage[0].path}`}
-                                                                                styles={{height: '83px', borderRadius: '8px'}}
-                                                                        />
-                                                                    </div>
-                                                                </HtmlTooltip>
-                                                            </Col>
-                                                            <Col md={5} className="p-1">
-                                                                <Row>
-                                                                    <Col md={12}>
-                                                                        <b className="text-info">{product.product.reference}</b>
-                                                                    </Col>
-                                                                    <Col md={12}>
-                                                                        <Tooltip placement="bottom" title={product.color} aria-label="add">
-                                                                            <small> {colorThreeDots(product)}</small>
-                                                                        </Tooltip>
-                                                                    </Col>
-                                                                    <Col md={12}>
-                                                                        <small><span className="font-weight-600">Cantidad:</span> {product.quantity}</small>
-                                                                    </Col>
-                                                                    <Col md={12}>
-                                                                        <small className="badge rounded-pill bg-soft-info">Talla: {product.size}</small>
-                                                                    </Col>
-                                                                </Row>
-                                                            </Col>
-                                                            <Col md={5} className="p-1">
-                                                                <Row>
-                                                                    <Col md={12}>
-                                                                        <small><span className="font-weight-600">Precio:</span> {priceFormat(product.price)}</small>
-                                                                    </Col>
-                                                                    <Col md={12}>
-                                                                        <small><span className="font-weight-600">Desc.:</span> <span
-                                                                            className="text-danger">-{priceFormat(product.discount)} ({product.discountPercent}%)</span></small>
-                                                                    </Col>
-                                                                    <Col md={12}>
-                                                                        <div className="font-weight-600 font-size-12"><b>Total: {priceFormat(product.total)}</b></div>
-                                                                    </Col>
-                                                                </Row>
-                                                            </Col>
-                                                        </Row>
-                                                    </div>
-                                                </div>
-                                            ))}
-                                        </Row>
-                                    </Card>
-                                </Col>
-                            </Row>
-                            <Row>
+                            <Row className="row mb-2">
                                 <Col md={12}>
-                                    <Card id={'summary-detail'} className="p-3">
-                                        <Row>
-                                            <Col md={12}>
-                                                <h4 className="card-title text-info"><i className="uil-dollar-alt me-2"> </i> Totales</h4>
-                                            </Col>
-                                            <Col md={12}>
-                                                <div className="table-responsive">
-                                                    <table className="table table-sm mb-0">
-                                                        <tbody>
-                                                        <tr>
-                                                            <td>Total sin descuento:</td>
-                                                            <td className="text-end">{priceFormat(orderData.subTotalAmount)}</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>Descuento:</td>
-                                                            <td className="text-end text-danger">- {priceFormat(orderData.totalDiscount)}</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>Total con descuento:</td>
-                                                            <td className="text-end">{priceFormat(orderData.totalDiscount + orderData.subTotalAmount)}</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>Envio:</td>
-                                                            <td className="text-end">{priceFormat(orderData.deliveryCost)}</td>
-                                                        </tr>
-                                                        <tr className="bg-light">
-                                                            <th className="font-size-16">Total :</th>
-                                                            <td className="text-end"><span className="fw-bold font-size-16">{priceFormat(orderData.totalAmount)}</span></td>
-                                                        </tr>
-                                                        </tbody>
-                                                    </table>
-                                                </div>
-                                            </Col>
-                                        </Row>
-                                    </Card>
+                                    <div className="mb-3 float-md-end">
+                                        <Button type="button" color="primary" className="btn-sm btn-rounded waves-effect waves-light">
+                                            <i className={"mdi mdi-delete"}> </i> Anular
+                                        </Button>
+                                        <Button type="button" color="primary" className="btn-sm btn-rounded waves-effect waves-light">
+                                            <i className={"mdi mdi-check"}> </i> Confirmar
+                                        </Button>
+                                        <Button type="button" color="primary" className="btn-sm btn-rounded waves-effect waves-light">
+                                            <i className={"mdi mdi-printer"}> </i> Imprimir
+                                        </Button>
+                                        <Button type="button" color="primary" className="btn-sm btn-rounded waves-effect waves-light">
+                                            <i className={"mdi mdi-content-copy"}> </i> Copiar resumen
+                                        </Button>
+                                        <Button type="button" color="primary" className="btn-sm btn-rounded waves-effect waves-light" onClick={() => takePhoto()}>
+                                            <i className={"mdi mdi-camera"}> </i> Descargar foto
+                                        </Button>
+                                    </div>
                                 </Col>
                             </Row>
+                          <div id={"products-summary"}>
+                              <Row>
+                                  <Col md={12} className="mb-3">
+                                      <Card id={'products'} className="p-3">
+                                          <Row>
+                                              <Col md={11}>
+                                                  <h4 className="card-title text-info"><i className="uil-box me-2"> </i> Productos</h4>
+                                              </Col>
+                                              <Col md={1} className="text-right">
+                                                  <Tooltip placement="bottom" title="Editar products" aria-label="add">
+                                                      <button type="button"
+                                                              size="small"
+                                                              className="btn btn-sm text-primary"
+                                                              onClick={() => {
+                                                                  toggleProductsModal();
+                                                              }}>
+                                                          <i className="uil uil-pen font-size-18"> </i>
+                                                      </button>
+                                                  </Tooltip>
+                                              </Col>
+                                          </Row>
+                                          <Row>
+                                              {map(orderData.orderDetails, (product, k) => (
+                                                  <div key={k} className="col-md-6">
+                                                      <div className="prod-box">
+                                                          <Row>
+                                                              <Col md={2} className="text-center">
+                                                                  <HtmlTooltip
+                                                                      placement={'right-end'}
+                                                                      title={
+                                                                          <React.Fragment>
+                                                                              <Images src={`${getImageByQuality(product.product.productImage.length > 0 ? product.product.productImage[0] : {}, 'medium')}`}
+                                                                                      alt={product.product.reference}
+                                                                                      height={120}
+                                                                                      className="img-fluid mx-auto d-block tab-img rounded"/>
+                                                                          </React.Fragment>
+                                                                      }>
+                                                                      <div className={`border-1`} id={`product-${k}`} role="tabpanel">
+                                                                          <Images src={`${getImageByQuality(product.product.productImage[0], 'medium')}`}
+                                                                                  alt={product.product.productImage[0].filename}
+                                                                                  height={83}
+                                                                                  className="img-fluid mx-auto d-block"
+                                                                                  data-zoom={`${product.product.productImage[0].path}`}
+                                                                                  styles={{height: '83px', borderRadius: '8px'}}
+                                                                          />
+                                                                      </div>
+                                                                  </HtmlTooltip>
+                                                              </Col>
+                                                              <Col md={5} className="p-1">
+                                                                  <Row>
+                                                                      <Col md={12}>
+                                                                          <b className="text-info">{product.product.reference}</b>
+                                                                      </Col>
+                                                                      <Col md={12}>
+                                                                          <Tooltip placement="bottom" title={product.color} aria-label="add">
+                                                                              <small> {colorThreeDots(product)}</small>
+                                                                          </Tooltip>
+                                                                      </Col>
+                                                                      <Col md={12}>
+                                                                          <small><span className="font-weight-600">Cantidad:</span> {product.quantity}</small>
+                                                                      </Col>
+                                                                      <Col md={12}>
+                                                                          <small className="badge rounded-pill bg-soft-info">Talla: {product.size}</small>
+                                                                      </Col>
+                                                                  </Row>
+                                                              </Col>
+                                                              <Col md={5} className="p-1">
+                                                                  <Row>
+                                                                      <Col md={12}>
+                                                                          <small><span className="font-weight-600">Precio:</span> {priceFormat(product.price)}</small>
+                                                                      </Col>
+                                                                      <Col md={12}>
+                                                                          <small><span className="font-weight-600">Desc.:</span> <span
+                                                                              className="text-danger">-{priceFormat(product.discount)} ({product.discountPercent}%)</span></small>
+                                                                      </Col>
+                                                                      <Col md={12}>
+                                                                          <div className="font-weight-600 font-size-12"><b>Total: {priceFormat(product.total)}</b></div>
+                                                                      </Col>
+                                                                  </Row>
+                                                              </Col>
+                                                          </Row>
+                                                      </div>
+                                                  </div>
+                                              ))}
+                                          </Row>
+                                      </Card>
+                                  </Col>
+                              </Row>
+                              <Row>
+                                  <Col md={12}>
+                                      <Card id={'summary-detail'} className="p-3">
+                                          <Row>
+                                              <Col md={12}>
+                                                  <h4 className="card-title text-info"><i className="uil-dollar-alt me-2"> </i> Totales</h4>
+                                              </Col>
+                                              <Col md={12}>
+                                                  <div className="table-responsive">
+                                                      <table className="table table-sm mb-0">
+                                                          <tbody>
+                                                          <tr>
+                                                              <td>Total sin descuento:</td>
+                                                              <td className="text-end">{priceFormat(orderData.subTotalAmount)}</td>
+                                                          </tr>
+                                                          <tr>
+                                                              <td>Descuento:</td>
+                                                              <td className="text-end text-danger">- {priceFormat(orderData.totalDiscount)}</td>
+                                                          </tr>
+                                                          <tr>
+                                                              <td>Total con descuento:</td>
+                                                              <td className="text-end">{priceFormat(orderData.totalDiscount + orderData.subTotalAmount)}</td>
+                                                          </tr>
+                                                          <tr>
+                                                              <td>Envio:</td>
+                                                              <td className="text-end">{priceFormat(orderData.deliveryCost)}</td>
+                                                          </tr>
+                                                          <tr className="bg-light">
+                                                              <th className="font-size-16">Total :</th>
+                                                              <td className="text-end"><span className="fw-bold font-size-16">{priceFormat(orderData.totalAmount)}</span></td>
+                                                          </tr>
+                                                          </tbody>
+                                                      </table>
+                                                  </div>
+                                              </Col>
+                                          </Row>
+                                      </Card>
+                                  </Col>
+                              </Row>
+                          </div>
                         </Col>
                     </Row>
                 </Container>

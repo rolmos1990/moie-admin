@@ -16,7 +16,7 @@ deliveryMethodsOptions.unshift(getEmptyOptions);
 
 const orderColumns = () => [
     {
-        text: "# Pedido",
+        text: "Pedido #",
         dataField: "id",
         sort: true,
         formatter: (cellContent, item) => (

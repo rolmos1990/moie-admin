@@ -9,7 +9,7 @@ import {
     REGISTER_PRODUCT_SUCCESS,
     REGISTER_PRODUCT,
     UPDATE_PRODUCT_FAILED,
-    UPDATE_PRODUCT_SUCCESS, UPDATE_PRODUCT, RESET_PRODUCT, QUERY_PRODUCTS, QUERY_PRODUCTS_FAILED, QUERY_PRODUCTS_SUCCESS
+    UPDATE_PRODUCT_SUCCESS, UPDATE_PRODUCT, RESET_PRODUCT, QUERY_PRODUCTS, QUERY_PRODUCTS_FAILED, QUERY_PRODUCTS_SUCCESS, QUERY_PENDING_PRODUCTS
 } from "./actionTypes";
 import Conditionals from "../../common/conditionals";
 import {getFieldOptions} from "../fieldOptions/actions";
@@ -110,6 +110,10 @@ export const countProductByStatus = () => {
     return queryProducts(params, 'statusGroup');
 }
 
+export const pendingProducts = (id) => ({
+    type: QUERY_PENDING_PRODUCTS,
+    id:id
+})
 export const queryProducts = (params, node) => ({
     type: QUERY_PRODUCTS,
     params: params,

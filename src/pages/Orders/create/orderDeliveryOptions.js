@@ -125,7 +125,7 @@ const OrderDeliveryOptions = (props) => {
             <AvForm className="needs-validation" autoComplete="off">
                 <Row>
                     <Col>
-                        <h4 className="card-title text-info"><i className="uil-shopping-cart-alt me-2"> </i> Opciones de envio</h4>
+                        <h4 className="card-title text-info"><i className="uil-archive me-2"> </i> Opciones de envio</h4>
                     </Col>
                 </Row>
                 <Row>
