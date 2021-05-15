@@ -45,10 +45,8 @@ const CustomizedTimeline = ({data, onDelete}) => {
                     <TimelineContent>
                         <Paper elevation={3} className={classes.paper}>
                             <Row>
-                                <Col md={10}>
+                                <Col md={12} style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
                                     <h5>{tl.user}</h5>
-                                </Col>
-                                <Col md={2} className="text.right">
                                     {onDelete && (
                                         <button size="small" className="btn btn-sm text-danger" onClick={() => onDelete(tl.id)}>
                                             <i className="uil uil-trash-alt font-size-18"> </i>

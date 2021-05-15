@@ -87,7 +87,6 @@ const CustomerForm = (props) => {
 
     const handleValidSubmit = (event, values) => {
         const data = filteredValues(values);
-        //console.log(data, values)
         if (!customer.id) {
             props.registerCustomer(data, props.history)
         } else {

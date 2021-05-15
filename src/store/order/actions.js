@@ -96,7 +96,7 @@ export const registerOrder = (data, history) => {
 
 export const registerOrderSuccess = data => {
     return {
-        type: CUSTOM_ORDER_SUCCESS,
+        type: REGISTER_ORDER_SUCCESS,
         payload: data.order,
     }
 }
@@ -104,7 +104,7 @@ export const registerOrderSuccess = data => {
 
 export const registerOrderFailed = data => {
     return {
-        type: CUSTOM_ORDER_FAILED,
+        type: REGISTER_ORDER_SUCCESS,
         payload: data,
     }
 }

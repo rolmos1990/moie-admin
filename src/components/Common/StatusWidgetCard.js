@@ -84,7 +84,6 @@ const StatusWidgetCard = props => {
             options: options1,
         };
         setDataCard(data);
-        console.log(data)
     }, [statusGroup])
 
     return (

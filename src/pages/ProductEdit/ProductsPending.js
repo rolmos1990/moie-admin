@@ -17,8 +17,6 @@ const ProductsPendingList = ({onGetProductsPending, product, pendingProducts}) =
         }
     }, [product]);
 
-    console.log('productsPending', pendingProducts)
-
     return (
         <React.Fragment>
             <Card className="p-3">

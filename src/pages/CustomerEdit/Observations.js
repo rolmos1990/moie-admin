@@ -8,10 +8,11 @@ import PropTypes from "prop-types";
 import {getCustomer} from "../../store/customer/actions";
 import CustomizedTimeline from "./TimeLine";
 import ButtonSubmit from "../../components/Common/ButtonSubmit";
+import login from "../../store/auth/login/reducer";
 
 const Observations = (props) => {
 
-    const {getCustomer, comments} = props;
+    const {getCustomer, comments, user} = props;
     const [comment, setComment] = useState(undefined);
     const [commentList, setCommentList] = useState([]);
 
@@ -35,9 +36,8 @@ const Observations = (props) => {
         if (!comment || comment === '') return;
         setComment(undefined);
         event.target.reset();
-
         const list = [...commentList];
-        list.push({id: new Date().getTime(), user: "Usuario 1", comment: comment, date: new Date()});
+        list.push({id: new Date().getTime(), user: user.username, userId: user.id, comment: comment, date: new Date()});
         setCommentList(list);
     }
 
@@ -76,8 +76,9 @@ const Observations = (props) => {
 }
 
 const mapStateToProps = state => {
+    const {user} = state.Login
     const {error, customer, loading} = state.Customer
-    return {error, customer, loading}
+    return {error, customer, loading, user}
 }
 
 export default withRouter(

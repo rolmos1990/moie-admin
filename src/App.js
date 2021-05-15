@@ -44,6 +44,7 @@ const App = props => {
         layoutCls = VerticalLayout
         break
     }
+    console.log('props.layout.layoutType', props.layout.layoutType);
     return layoutCls
   }
 

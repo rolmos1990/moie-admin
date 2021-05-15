@@ -91,9 +91,9 @@ function* nextStatus({ payload: { data, history } }) {
     try {
         const response = yield call(NEXT_STATUS_API_REQUEST, data)
         showResponseMessage(response, "Operación exitosa!");
-        yield put(CREATE_SUCCESS_ACTION(response))
+        yield put(UPDATE_SUCCESS_ACTION(response.order))
     } catch (error) {
-        yield put(CREATE_FAILED_ACTION(error))
+        yield put(UPDATE_FAILED_ACTION(error))
     }
 }
 

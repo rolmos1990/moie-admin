@@ -24,7 +24,7 @@ const login = (state = initialState, action) => {
       state = {
         ...state,
         loading: false,
-        user: action.payload
+        user: action.payload?.user || {}
       }
       break
     case LOGOUT_USER:

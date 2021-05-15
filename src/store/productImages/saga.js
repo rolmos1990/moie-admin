@@ -82,7 +82,6 @@ function* register({ payload: { data, history } }) {
 
 function* update({ payload: { id, data, history } }) {
     try {
-        console.log();
         const response = yield call(PUT_API_REQUEST, id, data)
         showResponseMessage(response, "Images actualizadas!");
         yield put(UPDATE_SUCCESS_ACTION(response))

@@ -174,7 +174,6 @@ const ProductList = props => {
             });
             setStatusGroup(group);
         }
-        console.log('customData', customData, statusGroup);
     }, [customData])
 
     const onFilterAction = (condition) => {

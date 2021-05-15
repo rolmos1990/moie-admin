@@ -48,7 +48,7 @@ const OrderDeliveryOptions = (props) => {
             setPieceToChange(0);
             setShowPaymentType(false);
             setProductQty(0);
-            setTracking(0);
+            setTracking("");
         }
     }, [onGetFieldOptions, car.reset]);
 
@@ -142,7 +142,7 @@ const OrderDeliveryOptions = (props) => {
                     </Col>
                 </Row>
                 <Row>
-                    <Col md={6}>
+                    <Col md={6} className="p-1">
                         <Label htmlFor="weight">Origen del pedido</Label>
                         <FieldSelect
                             id={"originOrder"}
@@ -153,7 +153,7 @@ const OrderDeliveryOptions = (props) => {
                             required
                         />
                     </Col>
-                    <Col md={6}>
+                    <Col md={6} className="p-1">
                         <Label htmlFor="weight">Tipo de pedido</Label>
                         <FieldSelect
                             id={"deliveryType"}
@@ -164,7 +164,7 @@ const OrderDeliveryOptions = (props) => {
                             required
                         />
                     </Col>
-                    <Col md={6}>
+                    <Col md={6} className="p-1">
                         <Label htmlFor="weight">Metodo de envio</Label>
                         <FieldSelect
                             id={"deliveryMethod"}
@@ -175,7 +175,7 @@ const OrderDeliveryOptions = (props) => {
                             required
                         />
                     </Col>
-                    <Col md={6}>
+                    <Col md={6} className="p-1">
                         <Label htmlFor="weight">Costo del envio</Label>
                         <FieldNumber
                             id={"deliveryCost"}
@@ -187,7 +187,7 @@ const OrderDeliveryOptions = (props) => {
                     </Col>
                     {showPaymentType && (
                         <>
-                            <Col md={6}>
+                            <Col md={6} className="p-1">
                                 <Label htmlFor="weight">Forma de pago</Label>
                                 <FieldSelect
                                     id={"paymentType"}
@@ -200,7 +200,7 @@ const OrderDeliveryOptions = (props) => {
                                     required
                                 />
                             </Col>
-                            <Col md={6}>
+                            <Col md={6} className="p-1">
                                 <Label htmlFor="weight">Piezas para cambio</Label>
                                 <FieldNumber
                                     id={"pieceToChange"}
@@ -211,15 +211,17 @@ const OrderDeliveryOptions = (props) => {
                             </Col>
                         </>
                     )}
-                    <Col md={6}>
-                        <Label htmlFor="weight">Guia número</Label>
-                        <FieldText
-                            id={"tracking"}
-                            name={"tracking"}
-                            value={tracking}
-                            onChange={item => setTracking(item.target.value)}
-                        />
-                    </Col>
+                    {showAsModal && (
+                        <Col md={6} className="p-1">
+                            <Label htmlFor="weight">Guia número</Label>
+                            <FieldText
+                                id={"tracking"}
+                                name={"tracking"}
+                                value={tracking}
+                                onChange={item => setTracking(item.target.value)}
+                            />
+                        </Col>
+                    )}
                 </Row>
             </AvForm>
             {showAsModal && (

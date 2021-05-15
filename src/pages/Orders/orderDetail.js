@@ -33,6 +33,7 @@ const OrderDetail = (props) => {
     const [orderPrint, setOrderPrint] = useState('');
     const [downloadingPhoto, setDownloadingPhoto] = useState(false);
 
+    const [openPrintConfirmModal, setOpenPrintConfirmModal] = useState(false);
     const [openCustomerModal, setOpenCustomerModal] = useState(false);
     const [openDeliveryModal, setOpenDeliveryModal] = useState(false);
     const [openProductsModal, setOpenProductsModal] = useState(false);
@@ -110,13 +111,12 @@ const OrderDetail = (props) => {
     }, [print]);
 
     const copyResume = () => {
-        console.log('copyToClipboard', resume)
         copyToClipboard(resume);
     }
 
     const printOrder = () => {
-        console.log('printOrder', orderPrint)
         printPartOfPage( orderPrint);
+        setTimeout(() => setOpenPrintConfirmModal(true),3000);
     }
 
     const toggleModal = () => {
@@ -227,6 +227,15 @@ const OrderDetail = (props) => {
             })
     }
 
+    const onConfirmPrintOrder = () => {
+        setOpenPrintConfirmModal(false);
+        onNextStatusOrder(order.id);
+    }
+
+    const onRefreshAddress = () => {
+        onUpdateOrder(orderData.id, {refreshAddress: true});
+    }
+
     return orderData.id ? (
         <React.Fragment>
             <div className="page-content">
@@ -331,9 +340,7 @@ const OrderDetail = (props) => {
                                                     <button type="button"
                                                             size="small"
                                                             className="btn btn-sm text-primary"
-                                                            onClick={() => {
-                                                                toggleDeliveryModal();
-                                                            }}>
+                                                            onClick={toggleDeliveryModal}>
                                                         <i className="uil uil-pen font-size-18"> </i>
                                                     </button>
                                                 </Tooltip>
@@ -368,6 +375,20 @@ const OrderDetail = (props) => {
                                                     </Col>
                                                 </>
                                             )}
+                                            <Col md={12}>
+                                                <label>Dirección del envio: </label>
+                                                <span className="p-1">{orderData?.orderDelivery?.address}</span>
+                                            </Col>
+                                            <Col md={12}>
+                                                <Tooltip placement="bottom" title="Refrescar dirección" aria-label="add">
+                                                    <button type="button"
+                                                            size="small"
+                                                            className="btn btn-sm text-primary"
+                                                            onClick={onRefreshAddress}>
+                                                        <i className="uil uil-refresh"> Refrescar dirección</i>
+                                                    </button>
+                                                </Tooltip>
+                                            </Col>
                                         </Row>
                                     </Card>
                                 </Col>
@@ -507,6 +528,21 @@ const OrderDetail = (props) => {
                     </Row>
                 </Container>
             </div>
+
+            <CustomModal title={"Confirmar impresión de la orden"} showFooter={false} isOpen={order.status === 1 && openPrintConfirmModal} onClose={() => setOpenPrintConfirmModal(false)}>
+                <Row>
+                    <Col md={12}>
+                        ¿Logró imprimir la orden?
+                    </Col>
+                </Row>
+                <hr/>
+                <Row>
+                    <Col md={12} className="text-right">
+                        <button type="button" className="btn btn-light" onClick={() => setOpenPrintConfirmModal(false)}>NO</button>
+                        <Button color="primary" type="button" onClick={onConfirmPrintOrder}>SI</Button>
+                    </Col>
+                </Row>
+            </CustomModal>
 
             <CustomModal title={"Modificar cliente"} size="lg" showFooter={false} isOpen={openCustomerModal} onClose={onCloseModal}>
                 <OrderCustomer showAsModal={true}
