@@ -13,6 +13,10 @@ import {
     UPDATE_DELIVERY_LOCALITY_FAILED,
 } from "./actionTypes";
 
+export const getAllDeliveryLocalities = () => {
+    return getDeliveryLocalities(null, null, 0);
+}
+
 export const getDeliveryLocalities = (conditional, limit, offset) => ({
     type: GET_DELIVERY_LOCALITIES,
     conditional: conditional,

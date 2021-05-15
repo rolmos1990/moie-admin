@@ -65,7 +65,6 @@ function* fetch({conditional, limit, offset}) {
 
         const cond = Conditionals.getConditionalFormat(conditional);
         const query = Conditionals.buildHttpGetQuery(cond, limit, offset);
-
         const response = yield call(LIST_API_REQUEST, query)
         yield put(LIST_SUCCESS_ACTION(response.data, response.meta));
     } catch (error) {

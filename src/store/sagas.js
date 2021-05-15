@@ -9,6 +9,7 @@ import CustomerSaga from "./customer/saga"
 import ProductSaga from "./product/saga"
 import CategorySaga from "./category/saga"
 import SizeSaga from "./sizes/saga"
+import DeliveryLocalitySaga from "./deliveryLocality/saga"
 import ProductImageSaga from "./productImages/saga"
 import ProductSizeSaga from "./productSize/saga"
 import LocationSaga from "./location/saga"
@@ -27,6 +28,7 @@ export default function* rootSaga() {
     ProductSaga(),
     CategorySaga(),
     SizeSaga(),
+    DeliveryLocalitySaga(),
     ProductImageSaga(),
     ProductSizeSaga(),
     LocationSaga(),

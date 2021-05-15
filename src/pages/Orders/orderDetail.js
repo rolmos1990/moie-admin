@@ -64,7 +64,8 @@ const OrderDetail = (props) => {
                     cost: parseFloat(orderDelivery.deliveryCost) || 0,
                     paymentType: order.paymentMode,
                     pieces: order.piecesForChanges || 0,
-                    tracking: orderDelivery.tracking || 0
+                    tracking: orderDelivery.tracking || '',
+                    deliveryLocality: orderDelivery.deliveryLocality || null
                 },
                 products: [],
                 isEdit: true
@@ -148,6 +149,7 @@ const OrderDetail = (props) => {
                 chargeOnDelivery: car.deliveryOptions.type === 3,
                 origen: car.deliveryOptions.origin,
                 tracking: car.deliveryOptions.tracking,
+                deliveryLocality: car.deliveryOptions.deliveryLocality,
                 deliveryType: parseInt(car.deliveryOptions.type),
             };
 

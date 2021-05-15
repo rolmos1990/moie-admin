@@ -80,6 +80,8 @@ const CreateOrder = (props) => {
         if(DELIVERY_METHODS_PAYMENT_TYPES.includes(order.deliveryMethod)){
             order.piecesForChanges = parseInt(car.deliveryOptions.pieces);
             order.paymentMode = car.deliveryOptions.paymentType === PAYMENT_TYPES.CASH? 1:2;
+        } else {
+            order.deliveryLocality = car.deliveryOptions.deliveryLocality;
         }
 
         console.log('order payload', order);

@@ -15,6 +15,7 @@ import Product from "./product/reducer"
 import Location from "./location/reducer"
 import Category from "./category/reducer"
 import Sizes from "./sizes/reducer"
+import DeliveryLocalities from "./deliveryLocality/reducer"
 import ProductImage from "./productImages/reducer"
 import ProductSize from "./productSize/reducer"
 import FieldOption from "./fieldOptions/reducer"
@@ -29,6 +30,7 @@ const rootReducer = combineReducers({
   Product,
   Category,
   Sizes,
+  DeliveryLocalities,
   ProductImage,
   ProductSize,
   FieldOption,
