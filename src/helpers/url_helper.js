@@ -51,6 +51,9 @@ export const GET_CONTACTS = "/contacts"
 export const GET_MESSAGES = "/messages"
 export const ADD_MESSAGE = "/add/messages"
 
+//TEMPLATES
+export const TEMPLATES = "/template"
+
 //ORDERS
 export const ORDERS = "/order"
 export const DELIVERY_METHODS = "/deliveryMethod"
