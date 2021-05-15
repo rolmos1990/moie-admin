@@ -117,7 +117,7 @@ const Navbar = props => {
                       to="/orders"
                   >
                     <i className="uil-shopping-cart-alt me-2"></i>
-                    {" "}{props.t("Ordenes")}
+                    {" "}{props.t("Pedidos")}
                   </Link>
                 </li>
 
@@ -234,6 +234,11 @@ const Navbar = props => {
                         </Link>*/}
                       </div>
                     </div>
+                    <li className="nav-item">
+                      <Link to="/templates" className="dropdown-item">
+                          {props.t("Plantillas")}
+                      </Link>
+                    </li>
 
 
                   </div>

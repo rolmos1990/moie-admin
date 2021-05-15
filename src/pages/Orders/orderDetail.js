@@ -10,7 +10,7 @@ import NoDataIndication from "../../components/Common/NoDataIndication";
 import {getOrder, nextStatusOrder, updateCard, updateOrder} from "../../store/order/actions";
 import CustomModal from "../../components/Modal/CommosModal";
 import OrderDeliveryOptions from "./create/orderDeliveryOptions";
-import {DELIVERY_METHODS_PAYMENT_TYPES, DELIVERY_TYPES, PAYMENT_TYPES} from "../../common/constants";
+import {DELIVERY_METHODS_PAYMENT_TYPES, DELIVERY_TYPES, ORDER_STATUS, PAYMENT_TYPES} from "../../common/constants";
 import {map} from "lodash";
 import Images from "../../components/Common/Image";
 import OrderCustomer from "./create/orderCustomer";
@@ -20,6 +20,7 @@ import {getProductsByIds} from "../../store/product/actions";
 import {HtmlTooltip} from "../../components/Common/HtmlTooltip";
 
 import * as htmlToImage from 'html-to-image';
+import {StatusField} from "../../components/StatusField";
 // import {toPng, toJpeg, toBlob, toPixelData, toSvg} from 'html-to-image';
 
 
@@ -35,6 +36,12 @@ const OrderDetail = (props) => {
 
     const productSummaryRef = React.createRef();
 
+    const getStatusLabelAndColor = (statusId) => {
+        const item = ORDER_STATUS[statusId];
+        const choice = {color: 'bg-soft-' + item.color, name: item.name};
+        return choice;
+    }
+
     useEffect(() => {
         if (props.match.params && props.match.params.id) {
             onGetOrder(props.match.params.id);
@@ -44,15 +51,16 @@ const OrderDetail = (props) => {
 
     useEffect(() => {
         if (order && order.id) {
+            const orderDelivery = order.orderDelivery;
 
             let newCar = {
                 ...car,
                 customer: {id: order.customer.id},
                 deliveryOptions: {
                     origin: order.origen,
-                    type: order.deliveryType,
+                    type: orderDelivery.deliveryType,
                     method: order.deliveryMethod.name,
-                    cost: parseFloat(order.deliveryCost) || 0,
+                    cost: parseFloat(orderDelivery.deliveryCost) || 0,
                     paymentType: order.paymentMode,
                     pieces: order.piecesForChanges || 0
                 },
@@ -291,7 +299,7 @@ const OrderDetail = (props) => {
                                             </Col>
                                             <Col md={12}>
                                                 <label>Tipo de pedido: </label>
-                                                <span className="p-1">{getDeliveryType(orderData.deliveryType)}</span>
+                                                <span className="p-1">{getDeliveryType(orderData?.orderDelivery?.deliveryType)}</span>
                                             </Col>
                                             <Col md={12}>
                                                 <label>Metodo de envio: </label>
@@ -299,7 +307,7 @@ const OrderDetail = (props) => {
                                             </Col>
                                             <Col md={12}>
                                                 <label>Costo del envio: </label>
-                                                <span className="p-1">{orderData.deliveryCost}</span>
+                                                <span className="p-1">{orderData?.orderDelivery?.deliveryCost}</span>
                                             </Col>
                                             {DELIVERY_METHODS_PAYMENT_TYPES.includes(orderData.deliveryMethod.name) && (
                                                 <>
@@ -321,6 +329,11 @@ const OrderDetail = (props) => {
                         <Col md={8}>
                             <Row className="row mb-2">
                                 <Col md={12}>
+                                    <div className={"mb-3 float-md-start"}>
+                                        <StatusField color={ORDER_STATUS[order.status].color} className={"font-size-16"}>
+                                            {ORDER_STATUS[order.status].name}
+                                        </StatusField>
+                                    </div>
                                     <div className="mb-3 float-md-end">
                                         <Button type="button" color="primary" className="btn-sm btn-rounded waves-effect waves-light">
                                             <i className={"mdi mdi-delete"}> </i> Anular
@@ -456,7 +469,7 @@ const OrderDetail = (props) => {
                                                             </tr>
                                                             <tr>
                                                                 <td>Envio:</td>
-                                                                <td className="text-end">{priceFormat(orderData.deliveryCost)}</td>
+                                                                <td className="text-end">{priceFormat(orderData.orderDelivery.deliveryCost)}</td>
                                                             </tr>
                                                             <tr className="bg-light">
                                                                 <th className="font-size-16">Total :</th>
