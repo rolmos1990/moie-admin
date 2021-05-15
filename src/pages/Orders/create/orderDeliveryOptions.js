@@ -3,7 +3,7 @@ import {Col, Label, Row} from "reactstrap"
 import {withRouter} from "react-router-dom"
 import {connect} from "react-redux";
 import PropTypes from "prop-types";
-import {FieldNumber, FieldSelect} from "../../../components/Fields";
+import {FieldNumber, FieldSelect, FieldText} from "../../../components/Fields";
 import {getProduct} from "../../../store/product/actions";
 import {AvForm} from "availity-reactstrap-validation";
 import {getFieldOptionByGroup} from "../../../store/fieldOptions/actions";
@@ -13,8 +13,10 @@ import {getEmptyOptions} from "../../../common/converters";
 import {Button} from "@material-ui/core";
 
 const OrderDeliveryOptions = (props) => {
-    const {onUpdateCar, car, fieldOptions, onGetFieldOptions, onGetDeliveryMethods, onGetDeliveryQuote, deliveryMethods, deliveryQuote,
-        showAsModal, onCloseModal, onAcceptModal, pOriginOrder} = props;
+    const {
+        onUpdateCar, car, fieldOptions, onGetFieldOptions, onGetDeliveryMethods, onGetDeliveryQuote, deliveryMethods, deliveryQuote,
+        showAsModal, onCloseModal, onAcceptModal, pOriginOrder
+    } = props;
 
     const [initComponent, setInitComponent] = useState(true);
     const [deliveryMethodList, setDeliveryMethodList] = useState([]);
@@ -25,6 +27,7 @@ const OrderDeliveryOptions = (props) => {
     const [deliveryType, setDeliveryType] = useState(null);
     const [paymentTypes, setPaymentTypes] = useState(null);
     const [paymentType, setPaymentType] = useState(null);
+    const [tracking, setTracking] = useState(null);
     const [deliveryCost, setDeliveryCost] = useState(0);
     const [pieceToChange, setPieceToChange] = useState(0);
     const [showPaymentType, setShowPaymentType] = useState(false);
@@ -36,7 +39,7 @@ const OrderDeliveryOptions = (props) => {
         setPaymentTypes([getEmptyOptions(), ...PAYMENT_TYPES_LIST]);
         onGetFieldOptions();
         onGetDeliveryMethods();
-        if(car.reset){
+        if (car.reset) {
             setDeliveryMethod(null);
             setOriginOrder(null);
             setDeliveryType(null);
@@ -45,6 +48,7 @@ const OrderDeliveryOptions = (props) => {
             setPieceToChange(0);
             setShowPaymentType(false);
             setProductQty(0);
+            setTracking(0);
         }
     }, [onGetFieldOptions, car.reset]);
 
@@ -55,7 +59,7 @@ const OrderDeliveryOptions = (props) => {
 
     useEffect(() => {
         const list = deliveryMethods || [];
-        const ot = deliveryType +'';
+        const ot = deliveryType + '';
         setDeliveryMethodList([getEmptyOptions(), ...list.filter(op => (op.settings.includes(ot))).map(op => ({label: op.name, value: op.code}))]);
         onChangeDeliveryOptions();
     }, [deliveryType]);
@@ -84,7 +88,7 @@ const OrderDeliveryOptions = (props) => {
     }, [car.products]);
 
     useEffect(() => {
-        if(car.isEdit && car.deliveryOptions && car.deliveryOptions.origin && initComponent){
+        if (car.isEdit && car.deliveryOptions && car.deliveryOptions.origin && initComponent) {
             setInitComponent(false);
 
             setDeliveryMethod(car.deliveryOptions.method);
@@ -92,10 +96,11 @@ const OrderDeliveryOptions = (props) => {
             setDeliveryType(car.deliveryOptions.type);
             setDeliveryCost(car.deliveryOptions.cost);
             setPieceToChange(car.deliveryOptions.pieces);
+            setTracking(car.deliveryOptions.tracking);
             setShowPaymentType(DELIVERY_METHODS_PAYMENT_TYPES.includes(car.deliveryOptions.method));
 
-            if(car.deliveryOptions.paymentType)
-                setPaymentType(car.deliveryOptions.paymentType === 1 ?PAYMENT_TYPES.CASH:PAYMENT_TYPES.TRANSFER);
+            if (car.deliveryOptions.paymentType)
+                setPaymentType(car.deliveryOptions.paymentType === 1 ? PAYMENT_TYPES.CASH : PAYMENT_TYPES.TRANSFER);
             //getQuote()
         }
     }, [car.deliveryOptions]);
@@ -111,7 +116,15 @@ const OrderDeliveryOptions = (props) => {
     }
 
     const onChangeDeliveryOptions = () => {
-        let deliveryOps = {origin: originOrder, type: deliveryType, method: deliveryMethod, cost: (parseFloat(deliveryCost) || 0), paymentType: paymentType, pieces: pieceToChange};
+        let deliveryOps = {
+            origin: originOrder,
+            type: deliveryType,
+            method: deliveryMethod,
+            cost: (parseFloat(deliveryCost) || 0),
+            paymentType: paymentType,
+            pieces: pieceToChange,
+            tracking: tracking
+        };
         //console.log(deliveryOps, paymentType)
         onUpdateCar({...car, deliveryOptions: deliveryOps});
     }
@@ -198,10 +211,18 @@ const OrderDeliveryOptions = (props) => {
                             </Col>
                         </>
                     )}
-
+                    <Col md={6}>
+                        <Label htmlFor="weight">Guia número</Label>
+                        <FieldText
+                            id={"tracking"}
+                            name={"tracking"}
+                            value={tracking}
+                            onChange={item => setTracking(item.target.value)}
+                        />
+                    </Col>
                 </Row>
             </AvForm>
-            {showAsModal  && (
+            {showAsModal && (
                 <>
                     <hr/>
                     <Row>

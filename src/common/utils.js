@@ -2,6 +2,7 @@ import {BOOLEAN_STRING} from "./constants";
 import React from "react";
 import moment from "moment";
 import {baseImagePath, baseImagePathNew} from "../helpers/api_helper";
+import {showMessage} from "../components/MessageToast/ShowToastMessages";
 
 export const BOOLEAN_STRING_OPTIONS = [
     {label: '-', value: null},
@@ -112,4 +113,36 @@ export const buildNumericOptions = (qty, sk=1, start=0) => {
         i+= sk;
     }
     return valueList;
+}
+
+//REF: https://komsciguy.com/js/a-better-way-to-copy-text-to-clipboard-in-javascript/
+export const  copyToClipboard =(text)=> {
+    const listener = function(ev) {
+        ev.preventDefault();
+        ev.clipboardData.setData('text/plain', text);
+        showMessage.success("Copiado");
+    };
+    document.addEventListener('copy', listener);
+    document.execCommand('copy');
+    document.removeEventListener('copy', listener);
+}
+
+export const printPartOfPage=(htmlToPrint) => {
+    const iframeId = new Date().getTime();
+    let pri
+    if (document.getElementById(iframeId)) {
+        pri = document.getElementById(iframeId).contentWindow
+    } else {
+        const iframe = document.createElement('iframe')
+        iframe.setAttribute('title', iframeId)
+        iframe.setAttribute('id', iframeId)
+        iframe.setAttribute('style', 'height: 0px; width: 0px; position: absolute;')
+        document.body.appendChild(iframe)
+        pri = iframe.contentWindow
+    }
+    pri.document.open()
+    pri.document.write(htmlToPrint)
+    pri.document.close()
+    pri.focus()
+    pri.print()
 }

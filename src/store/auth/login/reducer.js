@@ -9,6 +9,7 @@ import {
 const initialState = {
   error: "",
   loading: false,
+  user: {}
 }
 
 const login = (state = initialState, action) => {
@@ -23,13 +24,18 @@ const login = (state = initialState, action) => {
       state = {
         ...state,
         loading: false,
+        user: action.payload
       }
       break
     case LOGOUT_USER:
       state = { ...state }
       break
     case LOGOUT_USER_SUCCESS:
-      state = { ...state }
+      state = {
+        ...state,
+        loading: false,
+        user: {}
+      }
       break
     case API_ERROR:
       state = { ...state, error: action.payload, loading: false }

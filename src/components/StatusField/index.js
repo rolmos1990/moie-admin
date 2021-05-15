@@ -8,16 +8,25 @@ export const STATUS_COLORS = {
 };
 
 export const StatusField = (props) => {
+    const className = "badge rounded-pill p-2 " + (props.className ? props.className: '');
+
+    let bg = '';
     switch(props.color){
         case STATUS_COLORS.DANGER:
-            return <span className="badge rounded-pill bg-soft-danger  p-2">{props.children}</span>
+            bg='bg-soft-danger';
+            break;
         case STATUS_COLORS.SUCCESS:
-            return <span className="badge rounded-pill bg-soft-success  p-2">{props.children}</span>
+            bg='bg-soft-success';
+            break;
         case STATUS_COLORS.WARNING:
-            return <span className="badge rounded-pill bg-soft-warning  p-2">{props.children}</span>
+            bg='bg-soft-warning';
+            break;
         case STATUS_COLORS.INFO:
-            return <span className="badge rounded-pill bg-soft-info  p-2">{props.children}</span>
+            bg='bg-soft-info';
+            break;
         default:
-            return <span className="badge rounded-pill bg-light  p-2">{props.children}</span>
+            bg='bg-light';
     }
+
+    return <span className={`${className} ${bg}`}>{props.children}</span>
 }

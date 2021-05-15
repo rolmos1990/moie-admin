@@ -1,4 +1,5 @@
 import {
+    RESUME_ORDER,
     GET_DELIVERY_METHODS, GET_DELIVERY_METHODS_FAILED, GET_DELIVERY_METHODS_SUCCESS, GET_DELIVERY_QUOTE, GET_DELIVERY_QUOTE_FAILED, GET_DELIVERY_QUOTE_SUCCESS,
     GET_ORDER,
     GET_ORDER_FAILED,
@@ -10,7 +11,7 @@ import {
     REGISTER_ORDER_FAILED,
     REGISTER_ORDER_SUCCESS, RESET_CAR, UPDATE_CAR,
     UPDATE_ORDER, UPDATE_ORDER_FAILED,
-    UPDATE_ORDER_SUCCESS
+    UPDATE_ORDER_SUCCESS, PRINT_ORDER, CUSTOM_ORDER_SUCCESS, CUSTOM_ORDER_FAILED
 } from "./actionTypes";
 
 const initialState = {
@@ -37,6 +38,11 @@ const initialState = {
         summary: {},
         reset: true,
         isEdit: false,
+    },
+    custom:{
+        data: {},
+        meta: {},
+        loading: false
     }
 }
 
@@ -184,6 +190,43 @@ const order = (state = initialState, action) => {
                     ...state.deliveryQuote,
                     error: action.payload,
                     loading: false,
+                }
+            }
+        case RESUME_ORDER:
+            return {
+                ...state,
+                custom:{
+                    ...state.custom,
+                    loading:true
+                }
+            }
+        case PRINT_ORDER:
+            return {
+                ...state,
+                custom:{
+                    ...state.custom,
+                    loading:true
+                }
+            }
+        case CUSTOM_ORDER_FAILED:
+            return {
+                ...state,
+                custom: {
+                    ...state.custom,
+                    error: action.payload,
+                    loading: false,
+                }
+            }
+        case CUSTOM_ORDER_SUCCESS:
+            const data = {...state.custom.data};
+            data[action.node] = action.payload;
+            return {
+                ...state,
+                custom: {
+                    ...state.custom,
+                    data: data,
+                    meta: action.meta,
+                    loading: false
                 }
             }
         default:

@@ -1,22 +1,23 @@
 import React, {useEffect} from "react";
 import {Col, Row} from "reactstrap";
-import {withRouter} from "react-router-dom";
+import {Link, withRouter} from "react-router-dom";
 import {connect} from "react-redux";
 import PropTypes from "prop-types";
 import {Card} from "@material-ui/core";
 import {map} from "lodash";
 import {pendingProducts} from "../../store/product/actions";
+import {StatusField} from "../../components/StatusField";
+import {ORDER_STATUS} from "../../common/constants";
 
-const ProductsPendingList = (props) => {
-
-    const {onGetProductsPending, product, productsPending=[]} = props;
+const ProductsPendingList = ({onGetProductsPending, product, pendingProducts}) => {
 
     useEffect(() => {
         if(product && product.id) {
             onGetProductsPending(product.id);
-            //TODO revisar porque no retorna ordenes para el product codigo A1
         }
     }, [product]);
+
+    console.log('productsPending', pendingProducts)
 
     return (
         <React.Fragment>
@@ -40,17 +41,25 @@ const ProductsPendingList = (props) => {
                            </tr>
                            </thead>
                            <tbody>
-                           {map(productsPending, (prod, key) => (
+                           {map(pendingProducts, (prod, key) => (
                                <tr key={key}>
-                                   <td className="text-center">{prod.order.id}</td>
+                                   <td className="text-center">
+                                       <Link to={`/order/${prod.order.id}`} className="text-primary">
+                                           <small className="font-weight-600 text-info">{prod.order.id}</small>
+                                       </Link>
+                                   </td>
                                    <td className="text-center">{prod.color}</td>
                                    <td className="text-center">{prod.size}</td>
                                    <td className="text-center">{prod.quantity}</td>
                                    <td className="text-center">{prod.customer.name}</td>
-                                   <td className="text-center">{prod.order.status}</td>
+                                   <td className="text-center">
+                                       <StatusField color={ORDER_STATUS[prod.order.status].color} className={"font-size-16"}>
+                                           {ORDER_STATUS[prod.order.status].name}
+                                       </StatusField>
+                                   </td>
                                </tr>
                            ))}
-                           {productsPending.length === 0 && (
+                           {pendingProducts.length === 0 && (
                                <tr>
                                    <td colSpan={8} className="text-center text-muted">No hay ordenes pendientes</td>
                                </tr>
@@ -65,8 +74,9 @@ const ProductsPendingList = (props) => {
 }
 
 const mapStateToProps = state => {
-    const {error, product, loading} = state.Product
-    return {error, product, loading}
+    const {error, product, custom, loading} = state.Product
+    const pendingProducts = custom.data && custom.data.pendingProducts ? custom.data.pendingProducts:[];
+    return {error, product, pendingProducts: pendingProducts, loading}
 }
 
 const mapDispatchToProps = dispatch => ({

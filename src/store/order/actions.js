@@ -19,7 +19,7 @@ import {
     GET_DELIVERY_QUOTE_FAILED,
     RESET_CAR,
     UPDATE_CAR,
-    NEXT_STATUS_ORDER,
+    NEXT_STATUS_ORDER, RESUME_ORDER, print_ORDER, PRINT_ORDER, CUSTOM_ORDER_SUCCESS, CUSTOM_ORDER_FAILED,
 } from "./actionTypes";
 
 export const getOrders = (conditional, limit, offset) => ({
@@ -61,6 +61,32 @@ export const nextStatusOrder = (data, history) => {
         payload: { data, history },
     }
 }
+export const resumeOrder = (id, history) => {
+    return {
+        type: RESUME_ORDER,
+        payload: { id, history },
+    }
+}
+export const printOrder = (id, history) => {
+    return {
+        type: PRINT_ORDER,
+        payload: { id, history },
+    }
+}
+export const customOrderSuccess = (data, node) => {
+    return {
+        type: CUSTOM_ORDER_SUCCESS,
+        payload: data,
+        node: node,
+    }
+}
+export const customOrderFailed = data => {
+    return {
+        type: CUSTOM_ORDER_FAILED,
+        payload: data,
+    }
+}
+
 export const registerOrder = (data, history) => {
     return {
         type: REGISTER_ORDER,
@@ -70,7 +96,7 @@ export const registerOrder = (data, history) => {
 
 export const registerOrderSuccess = data => {
     return {
-        type: REGISTER_ORDER_SUCCESS,
+        type: CUSTOM_ORDER_SUCCESS,
         payload: data.order,
     }
 }
@@ -78,7 +104,7 @@ export const registerOrderSuccess = data => {
 
 export const registerOrderFailed = data => {
     return {
-        type: REGISTER_ORDER_FAILED,
+        type: CUSTOM_ORDER_FAILED,
         payload: data,
     }
 }

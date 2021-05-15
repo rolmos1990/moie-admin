@@ -111,6 +111,7 @@ const OrderProducts = (props) => {
                                 urlStr={GET_PRODUCT}
                                 placeholder="Código del producto"
                                 defaultValue={productReferenceDefault}
+                                hasWild={true}
                                 conditionalOptions={{fieldName: 'reference', operator: Conditionals.OPERATORS.EQUAL}}
                                 onChange={(d) => {
                                     onGetProduct(d.value);

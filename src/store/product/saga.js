@@ -87,7 +87,7 @@ function* queryData({params ={}, node='products'}) {
 function* getPendingProducts({id}) {
     try {
         const response = yield call(PENDING_PRODUCTS_API_REQUEST, id)
-        yield put(QUERY_SUCCESS_ACTION(response.data, response.meta, 'pendingProducts'));
+        yield put(QUERY_SUCCESS_ACTION(response.products, response.meta, 'pendingProducts'));
     } catch (error) {
         yield put(QUERY_FAILED_ACTION(error))
     }

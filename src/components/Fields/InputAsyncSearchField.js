@@ -7,6 +7,7 @@ import {getData} from "../../helpers/service";
 import {arrayToOptions, arrayToOptionsByFieldName, getEmptyOptions} from "../../common/converters";
 import {AvBaseInput} from "availity-reactstrap-validation";
 import messages from "./messages";
+import Conditionals from "../../common/conditionals";
 
 const InputAsyncSearchField = (props) => {
     const {defaultValue, conditionalOptions} = props;
@@ -20,6 +21,7 @@ const InputAsyncSearchField = (props) => {
         <AvAsyncSearchInput
             validate={{required: {value: props.required === true, errorMessage: messages.required}}}
             name={props.name}
+            hasWild={props.hasWild || false}
             value={selected}
             placeholder={props.placeholder}
             urlStr={props.urlStr}
@@ -41,7 +43,7 @@ InputAsyncSearchField.propTypes = {
 
 class AvAsyncSearchInput extends AvBaseInput {
     render() {
-        const {name, value, onChange, validate, urlStr, conditionalOptions, placeholder, helpMessage} = this.props;
+        const {name, value, onChange, validate,hasWild, urlStr, conditionalOptions, placeholder, helpMessage} = this.props;
         const validation = this.context.FormCtrl.getInputState(this.props.name);
         const feedback = validation.errorMessage ? (<div className="invalid-feedback" style={{display: "block"}}>{validation.errorMessage}</div>) : null;
         const help = helpMessage ? (<FormText>{helpMessage}</FormText>) : null;
@@ -58,7 +60,13 @@ class AvAsyncSearchInput extends AvBaseInput {
                         onChange={onChange}
                         placeholder={placeholder}
                         loadOptions={inputValue => {
-                            return getData(urlStr, inputValue, conditionalOptions).then(response => {
+                            const cond = {...conditionalOptions};
+                            let textSearch = inputValue +'';
+                            if(hasWild && inputValue.includes("*")){
+                                cond.operator = Conditionals.OPERATORS.LIKE;
+                                textSearch = textSearch.replace('*', '')
+                            }
+                            return getData(urlStr, textSearch, cond).then(response => {
                                 const fieldName = conditionalOptions && conditionalOptions.fieldName ? conditionalOptions.fieldName:'name';
                                 const options = arrayToOptionsByFieldName(response.data, fieldName);
                                 options.unshift(getEmptyOptions());

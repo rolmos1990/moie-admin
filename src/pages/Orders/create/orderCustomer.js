@@ -99,7 +99,7 @@ const OrderCustomer = (props) => {
                                 urlStr={GET_CUSTOMER}
                                 placeholder="Buscar por documento"
                                 defaultValue={customerDocumentDefault}
-                                conditionalOptions={{fieldName: 'document', operator: Conditionals.OPERATORS.EQUAL}}
+                                conditionalOptions={{fieldName: 'document', operator: Conditionals.OPERATORS.LIKE}}
                                 onChange={(c) => {
                                     onGetCustomer(c.value);
                                     setCustomerDefault(getEmptyOptions());

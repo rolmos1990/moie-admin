@@ -1,7 +1,7 @@
 import {all, call, fork, put, takeEvery} from "redux-saga/effects"
 
 //Account Redux states
-import {GET_ORDERS, GET_ORDER, REGISTER_ORDER, UPDATE_ORDER, GET_DELIVERY_METHODS, GET_DELIVERY_QUOTE, NEXT_STATUS_ORDER} from "./actionTypes"
+import {GET_ORDERS, GET_ORDER, REGISTER_ORDER, UPDATE_ORDER, GET_DELIVERY_METHODS, GET_DELIVERY_QUOTE, NEXT_STATUS_ORDER, RESUME_ORDER, PRINT_ORDER} from "./actionTypes"
 
 import {
     getOrdersSuccess,
@@ -11,14 +11,14 @@ import {
     getOrderFailed,
     registerOrderFailed,
     updateOrderSuccess,
-    updateOrderFail, getDeliveryMethodsSuccess, getDeliveryMethodsFailed, getDeliveryQuoteSuccess, getDeliveryQuoteFailed
+    updateOrderFail, getDeliveryMethodsSuccess, getDeliveryMethodsFailed, getDeliveryQuoteSuccess, getDeliveryQuoteFailed, customOrderSuccess, customOrderFailed
 } from "./actions"
 
 import {
     registerOrderApi,
     updateOrderApi,
     fetchOrderApi,
-    fetchOrdersApi, fetchDeliveryMethodsApi, fetchDeliveryQuoteApi, nextStatusOrderApi
+    fetchOrdersApi, fetchDeliveryMethodsApi, fetchDeliveryQuoteApi, nextStatusOrderApi, printOrderApi, resumeOrderApi
 } from "../../helpers/backend_helper"
 
 import Conditionals from "../../common/conditionals";
@@ -33,6 +33,8 @@ const ACTION_NAME_GET       =   GET_ORDER;
 const ACTION_NAME_CREATE    =   REGISTER_ORDER;
 const ACTION_NAME_UPDATE    =   UPDATE_ORDER;
 
+const PRINT_ORDER_API       =   printOrderApi;
+const RESUME_ORDER_API      =   resumeOrderApi;
 const LIST_API_REQUEST      =   fetchOrdersApi;
 const NEXT_STATUS_API_REQUEST   =   nextStatusOrderApi;
 const GET_API_REQUEST       =   fetchOrderApi;
@@ -40,6 +42,8 @@ const POST_API_REQUEST      =   registerOrderApi;
 const PUT_API_REQUEST       =   updateOrderApi;
 
 //actions
+const CUSTOM_SUCCESS_ACTION =   customOrderSuccess;
+const CUSTOM_FAILED_ACTION  =   customOrderFailed;
 const LIST_SUCCESS_ACTION   =   getOrdersSuccess;
 const LIST_FAILED_ACTION    =   getOrdersFailed;
 const GET_SUCCESS_ACTION    =   getOrderSuccess;
@@ -93,6 +97,23 @@ function* nextStatus({ payload: { data, history } }) {
     }
 }
 
+function* printOrder({ payload: { id, history } }) {
+    try {
+        const response = yield call(PRINT_ORDER_API, id)
+        yield put(CUSTOM_SUCCESS_ACTION(response.html, "print"))
+    } catch (error) {
+        yield put(CUSTOM_FAILED_ACTION(error))
+    }
+}
+function* resumeOrder({ payload: { id, history } }) {
+    try {
+        const response = yield call(RESUME_ORDER_API, id)
+        yield put(CUSTOM_SUCCESS_ACTION(response.text, "resume"))
+    } catch (error) {
+        yield put(CUSTOM_FAILED_ACTION(error))
+    }
+}
+
 function* update({ payload: { id, data, history } }) {
     try {
         const response = yield call(PUT_API_REQUEST, id, data)
@@ -129,6 +150,8 @@ export function* watchOrder() {
     yield takeEvery(GET_DELIVERY_METHODS, fetchDeliveryMethods)
     yield takeEvery(GET_DELIVERY_QUOTE, fetchDeliveryQuote)
     yield takeEvery(NEXT_STATUS_ORDER, nextStatus)
+    yield takeEvery(RESUME_ORDER, resumeOrder)
+    yield takeEvery(PRINT_ORDER, printOrder)
 }
 
 function* orderSaga() {

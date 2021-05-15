@@ -1,13 +1,13 @@
 import React, {useEffect, useState} from "react"
 import {Col, Container, Row} from "reactstrap"
 import {Button, Card, Tooltip} from "@material-ui/core";
-import {Link, withRouter} from "react-router-dom"
+import { withRouter} from "react-router-dom"
 import {connect} from "react-redux";
 import PropTypes from "prop-types";
-import {getImageByQuality, priceFormat} from "../../common/utils";
+import {copyToClipboard, getImageByQuality, priceFormat, printPartOfPage} from "../../common/utils";
 import NoDataIndication from "../../components/Common/NoDataIndication";
 
-import {getOrder, nextStatusOrder, updateCard, updateOrder} from "../../store/order/actions";
+import {getOrder, nextStatusOrder, printOrder, resumeOrder, updateCard, updateOrder} from "../../store/order/actions";
 import CustomModal from "../../components/Modal/CommosModal";
 import OrderDeliveryOptions from "./create/orderDeliveryOptions";
 import {DELIVERY_METHODS_PAYMENT_TYPES, DELIVERY_TYPES, ORDER_STATUS, PAYMENT_TYPES} from "../../common/constants";
@@ -19,15 +19,18 @@ import OrderCar from "./create/orderCar";
 import {getProductsByIds} from "../../store/product/actions";
 import {HtmlTooltip} from "../../components/Common/HtmlTooltip";
 
-import * as htmlToImage from 'html-to-image';
 import {StatusField} from "../../components/StatusField";
+import * as htmlToImage from 'html-to-image';
+import Breadcrumb from "../../components/Common/Breadcrumb";
 // import {toPng, toJpeg, toBlob, toPixelData, toSvg} from 'html-to-image';
 
 
 const OrderDetail = (props) => {
 
-    const {onGetOrder, onUpdateCar, onUpdateOrder, onGetProducts, onNextStatusOrder, order, car, products} = props;
+    const {onGetOrder, onUpdateCar, onUpdateOrder, onGetProducts, onNextStatusOrder, onResumeOrder, onPrintOrder, print, resume, order, car, products} = props;
     const [orderData, setOrderData] = useState({});
+    const [orderResume, setOrderResume] = useState('');
+    const [orderPrint, setOrderPrint] = useState('');
     const [downloadingPhoto, setDownloadingPhoto] = useState(false);
 
     const [openCustomerModal, setOpenCustomerModal] = useState(false);
@@ -35,12 +38,6 @@ const OrderDetail = (props) => {
     const [openProductsModal, setOpenProductsModal] = useState(false);
 
     const productSummaryRef = React.createRef();
-
-    const getStatusLabelAndColor = (statusId) => {
-        const item = ORDER_STATUS[statusId];
-        const choice = {color: 'bg-soft-' + item.color, name: item.name};
-        return choice;
-    }
 
     useEffect(() => {
         if (props.match.params && props.match.params.id) {
@@ -51,6 +48,9 @@ const OrderDetail = (props) => {
 
     useEffect(() => {
         if (order && order.id) {
+            onResumeOrder(order.id);
+            onPrintOrder(order.id);
+
             const orderDelivery = order.orderDelivery;
 
             let newCar = {
@@ -62,7 +62,8 @@ const OrderDetail = (props) => {
                     method: order.deliveryMethod.name,
                     cost: parseFloat(orderDelivery.deliveryCost) || 0,
                     paymentType: order.paymentMode,
-                    pieces: order.piecesForChanges || 0
+                    pieces: order.piecesForChanges || 0,
+                    tracking: orderDelivery.tracking || 0
                 },
                 products: [],
                 isEdit: true
@@ -96,6 +97,28 @@ const OrderDetail = (props) => {
         //console.log(order);
     }, [order]);
 
+    useEffect(() => {
+        if (resume) {
+            setOrderResume(resume);
+        }
+    }, [resume]);
+
+    useEffect(() => {
+        if (print) {
+            setOrderPrint(print);
+        }
+    }, [print]);
+
+    const copyResume = () => {
+        console.log('copyToClipboard', resume)
+        copyToClipboard(resume);
+    }
+
+    const printOrder = () => {
+        console.log('printOrder', orderPrint)
+        printPartOfPage( orderPrint);
+    }
+
     const toggleModal = () => {
         setOpenCustomerModal(!openCustomerModal);
     }
@@ -124,6 +147,7 @@ const OrderDetail = (props) => {
                 deliveryCost: car.deliveryOptions.cost,
                 chargeOnDelivery: car.deliveryOptions.type === 3,
                 origen: car.deliveryOptions.origin,
+                tracking: car.deliveryOptions.tracking,
                 deliveryType: parseInt(car.deliveryOptions.type),
             };
 
@@ -191,13 +215,7 @@ const OrderDetail = (props) => {
         setDownloadingPhoto(true);
         htmlToImage.toPng(productSummaryRef.current)
             .then(function (dataUrl) {
-                // var img = new Image();
-                // img.src = dataUrl;
-                // document.body.appendChild(img);
-
                 setDownloadingPhoto(false);
-
-                console.log('paso 2')
                 var link = document.createElement('a');
                 link.download = `pedido_${order.id}.png`;
                 link.href = dataUrl;
@@ -207,23 +225,52 @@ const OrderDetail = (props) => {
                 console.error('oops, something went wrong!', error);
                 setDownloadingPhoto(false);
             })
-
     }
 
     return orderData.id ? (
         <React.Fragment>
             <div className="page-content">
                 <Container fluid>
+                    <Breadcrumb hasBack path="/orders" title={`Pedido ${orderData.id}`} item={"Pedidos"}/>
+
+                    <Row className="row mb-2">
+                        <Col md={12}>
+                            <div className={"mb-3 float-md-start"}>
+                                <StatusField color={ORDER_STATUS[order.status].color} className={"font-size-16"}>
+                                    {ORDER_STATUS[order.status].name}
+                                </StatusField>
+                            </div>
+                            <div className="mb-3 float-md-end">
+                                <Button type="button" color="primary" className="btn-sm btn-rounded waves-effect waves-light">
+                                    <i className={"mdi mdi-delete"}> </i> Anular
+                                </Button>
+                                {(order && order.status === 1) && (
+                                    <Button type="button" color="primary" className="btn-sm btn-rounded waves-effect waves-light" onClick={() => onNextStatusOrder(order.id)}>
+                                        <i className={"mdi mdi-check"}> </i> Confirmar
+                                    </Button>
+                                )}
+                                <Button type="button" color="primary" className="btn-sm btn-rounded waves-effect waves-light" onClick={() => printOrder()}>
+                                    <i className={"mdi mdi-printer"}> </i> Imprimir
+                                </Button>
+                                <Button type="button" color="primary" className="btn-sm btn-rounded waves-effect waves-light" onClick={() => copyResume()}>
+                                    <i className={"mdi mdi-content-copy"}> </i> Copiar resumen
+                                </Button>
+                                <Button type="button" color="primary" className="btn-sm btn-rounded waves-effect waves-light" onClick={() => takePhoto()}>
+                                    <i className={"mdi mdi-camera"}> </i> {downloadingPhoto ? 'Descargando...' : 'Descargar foto'}
+                                </Button>
+                            </div>
+                        </Col>
+                    </Row>
                     <Row>
                         <Col md={4}>
                             <Row>
                                 <Col md={12} className="mb-3">
                                     <Card id={'customer-detail'} className="p-3">
                                         <Row>
-                                            <Col md={10}>
+                                            <Col xs={10}>
                                                 <h4 className="card-title text-info"><i className="uil-users-alt me-2"> </i> Datos del cliente</h4>
                                             </Col>
-                                            <Col md={2} className="text-right">
+                                            <Col xs={2} className="text-right">
                                                 <Tooltip placement="bottom" title="Editar cliente" aria-label="add">
                                                     <button type="button"
                                                             size="small"
@@ -276,10 +323,10 @@ const OrderDetail = (props) => {
                                 <Col md={12}>
                                     <Card id={'delivery-options'} className="p-3">
                                         <Row>
-                                            <Col md={10}>
+                                            <Col xs={10}>
                                                 <h4 className="card-title text-info"><i className="uil-archive me-2"> </i> Datos de envio</h4>
                                             </Col>
-                                            <Col md={2} className="text-right">
+                                            <Col xs={2} className="text-right">
                                                 <Tooltip placement="bottom" title="Editar envio" aria-label="add">
                                                     <button type="button"
                                                             size="small"
@@ -327,43 +374,15 @@ const OrderDetail = (props) => {
                             </Row>
                         </Col>
                         <Col md={8}>
-                            <Row className="row mb-2">
-                                <Col md={12}>
-                                    <div className={"mb-3 float-md-start"}>
-                                        <StatusField color={ORDER_STATUS[order.status].color} className={"font-size-16"}>
-                                            {ORDER_STATUS[order.status].name}
-                                        </StatusField>
-                                    </div>
-                                    <div className="mb-3 float-md-end">
-                                        <Button type="button" color="primary" className="btn-sm btn-rounded waves-effect waves-light">
-                                            <i className={"mdi mdi-delete"}> </i> Anular
-                                        </Button>
-                                        {(order && order.status === 1) && (
-                                            <Button type="button" color="primary" className="btn-sm btn-rounded waves-effect waves-light" onClick={() => onNextStatusOrder(order.id)}>
-                                                <i className={"mdi mdi-check"}> </i> Confirmar
-                                            </Button>
-                                        )}
-                                        <Button type="button" color="primary" className="btn-sm btn-rounded waves-effect waves-light">
-                                            <i className={"mdi mdi-printer"}> </i> Imprimir
-                                        </Button>
-                                        <Button type="button" color="primary" className="btn-sm btn-rounded waves-effect waves-light">
-                                            <i className={"mdi mdi-content-copy"}> </i> Copiar resumen
-                                        </Button>
-                                        <Button type="button" color="primary" className="btn-sm btn-rounded waves-effect waves-light" onClick={() => takePhoto()}>
-                                            <i className={"mdi mdi-camera"}> </i> {downloadingPhoto ? 'Descargando...' : 'Descargar foto'}
-                                        </Button>
-                                    </div>
-                                </Col>
-                            </Row>
                             <div id={"products-summary"} ref={productSummaryRef}>
                                 <Row>
                                     <Col md={12} className="mb-3">
                                         <Card id={'products'} className="p-3">
                                             <Row>
-                                                <Col md={11}>
+                                                <Col xs={11}>
                                                     <h4 className="card-title text-info"><i className="uil-box me-2"> </i> Productos</h4>
                                                 </Col>
-                                                <Col md={1} className="text-right">
+                                                <Col xs={1} className="text-right">
                                                     <Tooltip placement="bottom" title="Editar products" aria-label="add">
                                                         <button type="button"
                                                                 size="small"
@@ -378,16 +397,16 @@ const OrderDetail = (props) => {
                                             </Row>
                                             <Row>
                                                 {map(orderData.orderDetails, (product, k) => (
-                                                    <div key={k} className="col-md-6">
+                                                    <div key={k} className="col-md-6 mb-2">
                                                         <div className="prod-box">
                                                             <Row>
-                                                                <Col md={2} className="text-center" style={{padding: '2px 0 2px 8px'}}>
+                                                                <Col xs={2} className="text-center" style={{padding: '2px 0 2px 8px'}}>
                                                                     <HtmlTooltip
                                                                         placement={'right-end'}
                                                                         title={
                                                                             <React.Fragment>
                                                                                 <Images src={`${getImageByQuality(product.product.productImage.length > 0 ? product.product.productImage[0] : {}, 'medium')}`}
-                                                                                        alt={product.product.reference}
+                                                                                        alt={""}
                                                                                         height={120}
                                                                                         className="img-fluid mx-auto d-block tab-img rounded"/>
                                                                             </React.Fragment>
@@ -395,16 +414,16 @@ const OrderDetail = (props) => {
                                                                         <div className={`border-1`} id={`product-${k}`} role="tabpanel">
                                                                             {/*<div style={imageAsStyle(getImageByQuality(product.product.productImage[0], 'medium'))}></div>*/}
                                                                             <Images src={`${getImageByQuality(product.product.productImage[0], 'medium')}`}
-                                                                                    alt={product.product.productImage[0].filename}
+                                                                                    alt={""}
                                                                                     height={80}
                                                                                     className="img-fluid mx-auto d-block"
                                                                                     data-zoom={`${product.product.productImage[0].path}`}
-                                                                                    styles={{height: '83px', borderRadius: '8px'}}
+                                                                                    styles={{height: '83px', width: '53px', borderRadius: '8px'}}
                                                                             />
                                                                         </div>
                                                                     </HtmlTooltip>
                                                                 </Col>
-                                                                <Col md={5} className="p-1">
+                                                                <Col xs={5} className="p-1">
                                                                     <Row>
                                                                         <Col md={12}>
                                                                             <b className="text-info">{product.product.reference}</b>
@@ -422,7 +441,7 @@ const OrderDetail = (props) => {
                                                                         </Col>
                                                                     </Row>
                                                                 </Col>
-                                                                <Col md={5} className="p-1">
+                                                                <Col xs={5} className="p-1">
                                                                     <Row>
                                                                         <Col md={12}>
                                                                             <small><span className="font-weight-600">Precio:</span> {priceFormat(product.price)}</small>
@@ -531,8 +550,10 @@ const OrderDetail = (props) => {
 
 const mapStateToProps = state => {
     const {products} = state.Product
-    const {error, car, order, loading} = state.Order;
-    return {error, car, order, products, loading}
+    const {error, car, order, loading, custom} = state.Order;
+    const print = custom.data && custom.data.print ? custom.data.print : null;
+    const resume = custom.data && custom.data.resume ? custom.data.resume : null;
+    return {error, car, order, products, print, resume, loading}
 }
 
 const mapDispatchToProps = dispatch => ({
@@ -541,6 +562,8 @@ const mapDispatchToProps = dispatch => ({
     onUpdateCar: (data) => dispatch(updateCard(data)),
     onGetProducts: (ids = []) => dispatch(getProductsByIds(ids)),
     onNextStatusOrder: (id = []) => dispatch(nextStatusOrder({order: id})),
+    onResumeOrder: (id = []) => dispatch(resumeOrder(id)),
+    onPrintOrder: (id = []) => dispatch(printOrder(id)),
 })
 
 export default withRouter(
