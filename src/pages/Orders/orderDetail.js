@@ -238,6 +238,17 @@ const OrderDetail = (props) => {
         onUpdateOrder(orderData.id, {refreshAddress: true});
     }
 
+    const getDeliveryAddress = (orderDelivery) => {
+        let address = null;
+        if(orderDelivery.deliveryState){
+            address = orderDelivery.deliveryState;
+        }
+        if(orderDelivery.deliveryMunicipality){
+            address = (address ? address + '/'  : '') + orderDelivery.deliveryMunicipality;
+        }
+        return address ? address : '';
+    }
+
     return orderData.id ? (
         <React.Fragment>
             <div className="page-content">
@@ -379,7 +390,7 @@ const OrderDetail = (props) => {
                                             )}
                                             <Col md={12}>
                                                 <label>Dirección del envio: </label>
-                                                <span className="p-1">{orderData?.orderDelivery?.address}</span>
+                                                <span className="p-1">{getDeliveryAddress(orderData.orderDelivery)}</span>
                                             </Col>
                                             <Col md={12}>
                                                 <Tooltip placement="bottom" title="Refrescar dirección" aria-label="add">
