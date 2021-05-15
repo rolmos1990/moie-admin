@@ -15,6 +15,7 @@ export * from "./productImages/actions"
 export * from "./productSize/actions"
 export * from "./productSize/actions"
 export * from "./order/actions"
+export * from "./template/actions"
 
 //System
 export * from "./location/actions"

@@ -78,6 +78,12 @@ const resumeOrderApi = id => get(`${url.ORDERS}/${id}/boardResume`, {}, {});
 const updateOrderApi = (id, data) => put(`${url.ORDERS}/${id}`, data);
 const deleteOrderApi = (id) => del(`${url.ORDERS}/${id}`);
 
+//templates
+const fetchTemplatesApi = data => get(url.TEMPLATES, {}, data);
+const fetchTemplateApi = (id) => get(`${url.TEMPLATES}/${id}`,{});
+const registerTemplateApi = data => post(url.TEMPLATES, data);
+const updateTemplateApi = (id, data) => put(`${url.TEMPLATES}/${id}`, data);
+
 const fetchDeliveryMethodsApi = () => get(`${url.DELIVERY_METHODS}`,{});
 const fetchDeliveryQuoteApi = (data) => post(`${url.DELIVERY_METHODS}/quote`,data);
 
@@ -156,6 +162,11 @@ export {
     registerOrderApi,
     updateOrderApi,
     deleteOrderApi,
+
+    fetchTemplatesApi,
+    fetchTemplateApi,
+    registerTemplateApi,
+    updateTemplateApi,
 
     fetchDeliveryMethodsApi,
     fetchDeliveryQuoteApi,

@@ -14,7 +14,7 @@ import ForgetPwd from "../pages/Authentication/ForgetPassword"
 import UserProfile from "../pages/Authentication/user-profile"
 import Product from "../pages/Product";
 import ProductEdit from "../pages/ProductEdit";
-//Estates
+//Menu Components
 import States from "../pages/State";
 import StateEdit from "../pages/StateEdit";
 import Municipalities from "../pages/Municipality";
@@ -27,6 +27,8 @@ import Configs from "../pages/FieldOption";
 import Orders from "../pages/Orders";
 import CreateOrder from "../pages/Orders/create";
 import OrderDetail from "../pages/Orders/orderDetail";
+import Templates from "../pages/Template";
+import TemplateEdit from "../pages/TemplateEdit";
 
 const userRoutes = [
   { path: "/dashboard", component: Dashboard },
@@ -51,6 +53,9 @@ const userRoutes = [
   { path: "/orders", component: Orders },
   { path: "/order/:id", component: OrderDetail },
   { path: "/orders/create", component: CreateOrder },
+  { path: "/templates", component: Templates },
+  { path: "/template/:id", component: TemplateEdit },
+  { path: "/template", component: TemplateEdit },
 
   // //profile
   { path: "/profile", component: UserProfile },
