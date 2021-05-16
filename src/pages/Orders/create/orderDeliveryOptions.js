@@ -146,6 +146,8 @@ const OrderDeliveryOptions = (props) => {
         onAcceptModal(car);
     }
 
+    const showGuia = () => car.status && car.status > 1 && car.status < 6
+
     return (
         <React.Fragment>
             <AvForm className="needs-validation" autoComplete="off">
@@ -237,7 +239,7 @@ const OrderDeliveryOptions = (props) => {
                             </Col>
                         </>
                     )}
-                    {showAsModal && (
+                    {showGuia() && (
                         <Col md={6} className="p-1">
                             <Label htmlFor="weight">Guia número</Label>
                             <FieldText

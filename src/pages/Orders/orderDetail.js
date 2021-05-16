@@ -263,17 +263,21 @@ const OrderDetail = (props) => {
                                 </StatusField>
                             </div>
                             <div className="mb-3 float-md-end">
-                                <Button type="button" color="primary" className="btn-sm btn-rounded waves-effect waves-light">
-                                    <i className={"mdi mdi-delete"}> </i> Anular
-                                </Button>
+                                {(order && (order.status === 1 || order.status === 2)) && (
+                                    <Button type="button" color="primary" className="btn-sm btn-rounded waves-effect waves-light">
+                                        <i className={"mdi mdi-delete"}> </i> Anular
+                                    </Button>
+                                )}
                                 {(order && order.status === 1) && (
                                     <Button type="button" color="primary" className="btn-sm btn-rounded waves-effect waves-light" onClick={() => onNextStatusOrder(order.id)}>
                                         <i className={"mdi mdi-check"}> </i> Confirmar
                                     </Button>
                                 )}
-                                <Button type="button" color="primary" className="btn-sm btn-rounded waves-effect waves-light" onClick={() => printOrder()}>
-                                    <i className={"mdi mdi-printer"}> </i> Imprimir
-                                </Button>
+                                {(order && order.status === 2) && (
+                                    <Button type="button" color="primary" className="btn-sm btn-rounded waves-effect waves-light" onClick={() => printOrder()}>
+                                        <i className={"mdi mdi-printer"}> </i> Imprimir
+                                    </Button>
+                                )}
                                 <Button type="button" color="primary" className="btn-sm btn-rounded waves-effect waves-light" onClick={() => copyResume()}>
                                     <i className={"mdi mdi-content-copy"}> </i> Copiar resumen
                                 </Button>
@@ -542,7 +546,7 @@ const OrderDetail = (props) => {
                 </Container>
             </div>
 
-            <CustomModal title={"Confirmar impresión de la orden"} showFooter={false} isOpen={order.status === 1 && openPrintConfirmModal} onClose={() => setOpenPrintConfirmModal(false)}>
+            <CustomModal title={"Confirmar impresión de la orden"} showFooter={false} isOpen={order.status === 2 && openPrintConfirmModal} onClose={() => setOpenPrintConfirmModal(false)}>
                 <Row>
                     <Col md={12}>
                         ¿Logró imprimir la orden?
