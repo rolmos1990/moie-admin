@@ -105,6 +105,7 @@ const TemplateEdit = (props) => {
                                                         value={templateData.template}
                                                         minLength={3}
                                                         maxLength={10000}
+                                                        className="h-250"
                                                         required
                                                     />
                                                 </div>

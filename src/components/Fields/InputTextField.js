@@ -12,7 +12,7 @@ const TextField = (props) => (
         onChange={props.onChange ? props.onChange : null}
         onBlur={props.onBlur ? props.onBlur : null}
         type={props.type ? props.type : "text"}
-        className="form-control"
+        className={`form-control ${props.className ? props.className : ''}` }
         validate={
             {
                 required: { value: props.required ? true : false, errorMessage: messages.required },
