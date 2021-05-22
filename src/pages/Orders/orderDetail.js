@@ -4,7 +4,7 @@ import {Button, Card, Tooltip} from "@material-ui/core";
 import { withRouter} from "react-router-dom"
 import {connect} from "react-redux";
 import PropTypes from "prop-types";
-import {copyToClipboard, getImageByQuality, priceFormat, printPartOfPage} from "../../common/utils";
+import {copyToClipboard, getImageByQuality, priceFormat, printPartOfPage, threeDots} from "../../common/utils";
 import NoDataIndication from "../../components/Common/NoDataIndication";
 
 import {getOrder, nextStatusOrder, printOrder, resumeOrder, updateCard, updateOrder} from "../../store/order/actions";
@@ -192,27 +192,6 @@ const OrderDetail = (props) => {
         return order.paymentMode === 1 ? PAYMENT_TYPES.CASH : PAYMENT_TYPES.TRANSFER;
     }
 
-    const colorThreeDots = (product) => {
-        if (product.color.length > 20) {
-            return product.color.substr(0, 22) + "...";
-        }
-        return product.color;
-    }
-
-    const imageAsStyle = (imgSrc) => {
-        // /logo512.png
-        return {
-            backgroundImage: `url(${imgSrc})`,
-            backgroundColor: '#ffffff',
-            height: '83px',
-            backgroundRepeat: 'no-repeat',
-            backgroundSize: 'contain',
-            margin: 'auto',
-            backgroundPosition: 'center',
-            borderRadius: '20px 0 0 20px',
-        };
-    }
-
     const takePhoto = () => {
         setDownloadingPhoto(true);
         htmlToImage.toPng(productSummaryRef.current)
@@ -232,10 +211,6 @@ const OrderDetail = (props) => {
     const onConfirmPrintOrder = () => {
         setOpenPrintConfirmModal(false);
         onNextStatusOrder(order.id);
-    }
-
-    const onRefreshAddress = () => {
-        onUpdateOrder(orderData.id, {refreshAddress: true});
     }
 
     const getDeliveryAddress = (orderDelivery) => {
@@ -396,16 +371,6 @@ const OrderDetail = (props) => {
                                                 <label>Dirección del envio: </label>
                                                 <span className="p-1">{getDeliveryAddress(orderData.orderDelivery)}</span>
                                             </Col>
-                                            <Col md={12}>
-                                                <Tooltip placement="bottom" title="Refrescar dirección" aria-label="add">
-                                                    <button type="button"
-                                                            size="small"
-                                                            className="btn btn-sm text-primary"
-                                                            onClick={onRefreshAddress}>
-                                                        <i className="uil uil-refresh"> Refrescar dirección</i>
-                                                    </button>
-                                                </Tooltip>
-                                            </Col>
                                         </Row>
                                     </Card>
                                 </Col>
@@ -468,7 +433,7 @@ const OrderDetail = (props) => {
                                                                         </Col>
                                                                         <Col md={12}>
                                                                             <Tooltip placement="bottom" title={product.color} aria-label="add">
-                                                                                <small> {colorThreeDots(product)}</small>
+                                                                                <small> {threeDots(product.color, 22)}</small>
                                                                             </Tooltip>
                                                                         </Col>
                                                                         <Col md={12}>

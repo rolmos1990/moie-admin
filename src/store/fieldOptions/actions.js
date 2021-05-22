@@ -21,9 +21,15 @@ export const getFieldOptions = (conditional, limit, offset) => ({
     offset: offset
 })
 
-export const getFieldOptionByGroup = (groups, limit, offset) => {
+export const getFieldOptionByGroups = (groups, limit, offset) => {
     const conditions = new Conditionals.Condition;
     if(groups.length > 0) conditions.add("groups", groups.join("::"), Conditionals.OPERATORS.IN);
+    return getFieldOptions(conditions.all(), limit, offset);
+}
+
+export const getFieldOptionByGroup = (group, limit, offset) => {
+    const conditions = new Conditionals.Condition;
+    conditions.add("groups", group, Conditionals.OPERATORS.EQUAL);
     return getFieldOptions(conditions.all(), limit, offset);
 }
 

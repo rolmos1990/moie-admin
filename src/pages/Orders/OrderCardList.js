@@ -33,7 +33,8 @@ const OrderCardList = (props) => {
         //console.log('orders', orders)
     }, [orders]);
 
-    const getDeliveryType = (deliveryType) => {
+    const getDeliveryType = (delivery) => {
+        const deliveryType = delivery ? delivery.deliveryType : '';
         let find = DELIVERY_TYPES.find(dt => dt.id === deliveryType);
         return find ? find.label : '';
     }
@@ -55,7 +56,7 @@ const OrderCardList = (props) => {
                                     <br/>
                                     <small><span className="font-weight-600">Origen:</span> {order.origen}</small>
                                     <br/>
-                                    <small><span className="font-weight-600">Tipo de entrega:</span> {getDeliveryType(order.deliveryType)}</small>
+                                    <small><span className="font-weight-600">Tipo de entrega:</span> {getDeliveryType(order.orderDelivery)}</small>
                                     <br/>
                                     <small><span className="font-weight-600">Método de entrega:</span> {order.deliveryMethod.name}</small>
                                 </div>

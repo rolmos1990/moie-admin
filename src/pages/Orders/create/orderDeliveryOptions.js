@@ -6,7 +6,7 @@ import PropTypes from "prop-types";
 import {FieldNumber, FieldSelect, FieldText} from "../../../components/Fields";
 import {getProduct} from "../../../store/product/actions";
 import {AvForm} from "availity-reactstrap-validation";
-import {getFieldOptionByGroup} from "../../../store/fieldOptions/actions";
+import {getFieldOptionByGroups} from "../../../store/fieldOptions/actions";
 import {DELIVERY_METHODS_PAYMENT_TYPES, DELIVERY_TYPES, GROUPS, PAYMENT_TYPES, PAYMENT_TYPES_LIST} from "../../../common/constants";
 import {getDeliveryMethods, getDeliveryQuote, updateCard} from "../../../store/order/actions";
 import {arrayToOptions, getEmptyOptions} from "../../../common/converters";
@@ -279,7 +279,7 @@ OrderDeliveryOptions.propTypes = {
 
 const mapDispatchToProps = dispatch => ({
     onGetProduct: (id) => dispatch(getProduct(id)),
-    onGetFieldOptions: (conditional = null, limit = 500, page) => dispatch(getFieldOptionByGroup([GROUPS.ORDERS_ORIGIN], limit, page)),
+    onGetFieldOptions: (conditional = null, limit = 500, page) => dispatch(getFieldOptionByGroups([GROUPS.ORDERS_ORIGIN], limit, page)),
     onGetDeliveryLocalities: () => dispatch(getAllDeliveryLocalities()),
     onGetDeliveryMethods: (conditional = null, limit = 50, page) => dispatch(getDeliveryMethods(conditional, limit, page)),
     onGetDeliveryQuote: (request) => dispatch(getDeliveryQuote(request)),

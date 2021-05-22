@@ -12,21 +12,40 @@ import OrderCardList from "../Orders/OrderCardList";
 import {STATUS_COLORS, StatusField} from "../../components/StatusField";
 import {ConverterCustomerStatus} from "../Customer/customer_status";
 import Observations from "./Observations";
+import {deleteFieldOption, getFieldOptionByGroup, registerFieldOption, updateFieldOption} from "../../store/fieldOptions/actions";
+import {GROUPS} from "../../common/constants";
 
 const CustomerDetail = (props) => {
 
-    const {getCustomer, customer} = props;
+    const {onGetCustomer, onGetByGroup, customer, fieldOptions} = props;
     const [customerData, setCustomerData] = useState({});
+    const [observationsSuggested, setObservationsSuggested] = useState([]);
 
     useEffect(() => {
-        getCustomer(props.match.params.id);
-    }, [getCustomer]);
+        onGetCustomer(props.match.params.id);
+        onGetByGroup(GROUPS.CUSTOMER_OBSERVATIONS);
+    }, [onGetCustomer]);
 
     useEffect(() => {
         if (customer.id) {
             setCustomerData(customer);
         }
     }, [customer]);
+
+    useEffect(() => {
+        if (fieldOptions && fieldOptions.length > 0) {
+            setObservationsSuggested(fieldOptions.filter(item => item.groups === GROUPS.CUSTOMER_OBSERVATIONS).map(item => item.value))
+        }
+        console.log(fieldOptions)
+    }, [fieldOptions])
+
+    const onDeleteObservation = (observation) => {
+        console.log('onDeleteObservation', observation);
+    }
+
+    const onAddObservation = (observation) => {
+        console.log('onAddObservation', observation);
+    }
 
     return customerData.id ? (
         <React.Fragment>
@@ -119,7 +138,11 @@ const CustomerDetail = (props) => {
                                     </Col>
                                 </Row>
                             </Card>
-                            <Observations/>
+                            <Observations
+                                observations={[]}
+                                onAddObservation={onAddObservation}
+                                onDeleteObservation={onDeleteObservation}
+                                observationsSuggested={observationsSuggested}/>
                         </Col>
                         <Col md={5}>
                             <Card id={'orders'} className="p-3">
@@ -135,11 +158,17 @@ const CustomerDetail = (props) => {
 
 const mapStateToProps = state => {
     const {error, customer, loading} = state.Customer
-    return {error, customer, loading}
+    const {fieldOptions} = state.FieldOption
+    return {error, customer,fieldOptions, loading}
 }
 
+const mapDispatchToProps = dispatch => ({
+    onGetCustomer: (id) => dispatch(getCustomer(id)),
+    onGetByGroup: (group) => dispatch(getFieldOptionByGroup(group, 500, 0)),
+})
+
 export default withRouter(
-    connect(mapStateToProps, {getCustomer})(CustomerDetail)
+    connect(mapStateToProps, mapDispatchToProps)(CustomerDetail)
 )
 
 CustomerDetail.propTypes = {

@@ -146,3 +146,19 @@ export const printPartOfPage=(htmlToPrint) => {
     pri.focus()
     pri.print()
 }
+
+export const threeDots = (text, length) => {
+    if (text.trim().length > length) {
+        return text.trim().substr(0, length).trim() + "...";
+    }
+    return text;
+}
+export const sortArray = (a,b, asc) => {
+    if(a === b){
+        return 0;
+    }
+    if(asc){
+        return a.id < b.id ? -1:1
+    }
+    return a.id > b.id ? 1:-1
+}

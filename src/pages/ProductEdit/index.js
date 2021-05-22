@@ -5,7 +5,7 @@ import {Link, withRouter} from "react-router-dom";
 import {connect} from "react-redux";
 import PropTypes from "prop-types";
 import {getProduct, getProducts, registerProduct, updateProduct} from "../../store/product/actions";
-import {getFieldOptionByGroup, registerFieldOption} from "../../store/fieldOptions/actions";
+import {getFieldOptionByGroups, registerFieldOption} from "../../store/fieldOptions/actions";
 import {resetProductImages} from "../../store/productImages/actions";
 import {resetProductSize} from "../../store/productSize/actions";
 import {AvForm} from "availity-reactstrap-validation";
@@ -506,7 +506,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => ({
     onGetCategories: (conditional = null, limit = 100, page) => dispatch(getCategories(conditional, limit, page)),
     onGetSizes: (conditional = null, limit = 100, page) => dispatch(getSizes(conditional, limit, page)),
-    onGetFieldOptions: (conditional = null, limit = 500, page) => dispatch(getFieldOptionByGroup([GROUPS.MATERIALS, GROUPS.PROVIDERS, GROUPS.REFERENCE_KEY], limit, page)),
+    onGetFieldOptions: (conditional = null, limit = 500, page) => dispatch(getFieldOptionByGroups([GROUPS.MATERIALS, GROUPS.PROVIDERS, GROUPS.REFERENCE_KEY], limit, page)),
     onGetProduct: (id) => dispatch(getProduct(id)),
     onCreateProduct: (data, history) => dispatch(registerProduct(data, history)),
     onUpdateProduct: (data, history) => dispatch(updateProduct(data, history)),
