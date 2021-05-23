@@ -233,6 +233,7 @@ const OrderDetail = (props) => {
                     <Row className="row mb-2">
                         <Col md={12}>
                             <div className={"mb-3 float-md-start"}>
+                                <small className="badge rounded-pill bg-soft-info font-size-16 mr-5 p-2">Operador: {order.user?.name}</small>
                                 <StatusField color={ORDER_STATUS[order.status].color} className={"font-size-16"}>
                                     {ORDER_STATUS[order.status].name}
                                 </StatusField>

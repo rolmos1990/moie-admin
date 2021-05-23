@@ -73,10 +73,9 @@ class AvSearchInput extends AvBaseInput {
                         classNamePrefix="select2-selection"
                         isSearchable={isSearchable || false}
                         isDisabled={disabled || false}
-                        styles={{
-                            // Fixes the overlapping problem of the component
-                            menu: (styles) => ({...styles, zIndex: 2000})
-                        }}
+                        menuPortalTarget={document.body}
+                        menuPosition={'fixed'}
+                        styles={{ menuPortal: base => ({ ...base, zIndex: 9999 }) }}
                     />
                 </div>
                 {feedback}
