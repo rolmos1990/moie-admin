@@ -31,6 +31,7 @@ import Templates from "../pages/Template";
 import TemplateEdit from "../pages/TemplateEdit";
 import Bills from "../pages/Bill";
 import Reports from "../pages/Reports";
+import PageNotFount from "../pages/commons/404";
 
 const userRoutes = [
   { path: "/dashboard", component: Dashboard },
@@ -60,6 +61,7 @@ const userRoutes = [
   { path: "/template", component: TemplateEdit },
   { path: "/bills", component: Bills },
   { path: "/reports", component: Reports },
+  { path: "/404", component: PageNotFount },
 
   // //profile
   { path: "/profile", component: UserProfile },

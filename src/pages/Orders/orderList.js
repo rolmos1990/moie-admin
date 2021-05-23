@@ -3,24 +3,25 @@ import PropTypes from "prop-types"
 import {connect} from "react-redux"
 import {Card, CardBody, Col, Row} from "reactstrap"
 import paginationFactory, {PaginationListStandalone, PaginationProvider,} from "react-bootstrap-table2-paginator"
-import ToolkitProvider, {Search} from "react-bootstrap-table2-toolkit"
+import ToolkitProvider from "react-bootstrap-table2-toolkit"
 import BootstrapTable from "react-bootstrap-table-next"
 
 import {Link} from "react-router-dom"
 import {DEFAULT_PAGE_LIMIT} from "../../common/pagination";
-import {ConfirmationModalAction} from "../../components/Modal/ConfirmationModal";
 import {TableFilter} from "../../components/TableFilter";
 import {normalizeColumnsList} from "../../common/converters";
 import NoDataIndication from "../../components/Common/NoDataIndication";
 import orderColumns from "./orderColumn";
 import {Button, Tooltip} from "@material-ui/core";
 import {getOrders} from "../../store/order/actions";
+import OrderEdit from "./orderEdit";
 
 const OrderList = props => {
     const {orders, meta, onGetOrders, loading, refresh} = props;
     const [statesList, setStatesList] = useState([])
     const [filter, setFilter] = useState(false);
     const [conditional, setConditional] = useState(null);
+    const [orderSelected, setOrderSelected] = useState(null);
 
     const pageOptions = {
         sizePerPage: DEFAULT_PAGE_LIMIT,
@@ -50,7 +51,8 @@ const OrderList = props => {
         onGetOrders(condition, DEFAULT_PAGE_LIMIT, 0);
     }
 
-    const columns = orderColumns();
+    const columns = orderColumns(setOrderSelected);
+    console.log('orderSelected', orderSelected)
 
     return (
         <Row>
@@ -128,6 +130,7 @@ const OrderList = props => {
                     </CardBody>
                 </Card>
             </Col>
+            <OrderEdit orderId={orderSelected} showOrderOverlay={true}/>
         </Row>
     )
 }

@@ -104,7 +104,7 @@ const customerListColumns = (onDelete = false) => [
                 {onDelete && (
                     <li className="list-inline-item">
                         <button size="small" className="btn btn-sm text-danger" onClick={() => onDelete(item.id)}>
-                            <i className="uil uil-trash-alt font-size-18"></i>
+                            <i className="uil uil-trash-alt font-size-18"> </i>
                         </button>
                     </li>
                 )}

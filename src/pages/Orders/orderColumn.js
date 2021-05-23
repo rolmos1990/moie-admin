@@ -14,16 +14,25 @@ statusOptions.unshift(getEmptyOptions);
 const deliveryMethodsOptions = DELIVERY_METHODS_LIST;
 deliveryMethodsOptions.unshift(getEmptyOptions);
 
-const orderColumns = () => [
+const orderColumns = (onSelectedOrder) => [
     {
         text: "Pedido #",
         dataField: "id",
         sort: true,
-        formatter: (cellContent, item) => (
-            <Link to={`/order/${item.id}`} className="text-body">
-               <b className="text-info">{item.id}</b>
-            </Link>
-        ),
+        formatter: (cellContent, item) => {
+            if(onSelectedOrder){
+                return (
+                    <button className="btn btn-outline-default" onClick={() => onSelectedOrder(item.id)}>
+                        <b className="text-info">{item.id}</b>
+                    </button>
+                );
+            }
+            return  (
+                <Link to={`/order/${item.id}`} className="text-body">
+                    <b className="text-info">{item.id}</b>
+                </Link>
+            );
+        },
         filter: true,
         filterType: "text",
         filterCondition: Conditionals.OPERATORS.EQUAL,

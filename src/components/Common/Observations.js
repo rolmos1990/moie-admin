@@ -5,10 +5,9 @@ import {Card, Tooltip} from "@material-ui/core";
 import {withRouter} from "react-router-dom"
 import {connect} from "react-redux";
 import PropTypes from "prop-types";
-import {getCustomer} from "../../store/customer/actions";
-import CustomizedTimeline from "./TimeLine";
-import ButtonSubmit from "../../components/Common/ButtonSubmit";
-import {ConfirmationModalAction} from "../../components/Modal/ConfirmationModal";
+import CustomizedTimeline from "../../pages/CustomerEdit/TimeLine";
+import ButtonSubmit from "./ButtonSubmit";
+import {ConfirmationModalAction} from "../Modal/ConfirmationModal";
 import {sortArray, threeDots} from "../../common/utils";
 
 const Observations = (props) => {
@@ -112,7 +111,7 @@ const mapStateToProps = state => {
 }
 
 export default withRouter(
-    connect(mapStateToProps, {getCustomer})(Observations)
+    connect(mapStateToProps, {})(Observations)
 )
 
 Observations.propTypes = {
