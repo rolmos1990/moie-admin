@@ -229,18 +229,21 @@ const OrderEdit = (props) => {
                 <Col md={12}>
                     <div className={"mb-3 float-md-start"}>
                         {showOrderOverlay && (
-                            <Tooltip placement="bottom" title="Ocultar" aria-label="add">
-                                <button className="btn btn-outline-default mr-5" onClick={() => setOrderData({})}>
-                                    <i className="uil uil-arrow-to-right"> </i>
-                                </button>
-                            </Tooltip>
+                            <>
+                                <Tooltip placement="bottom" title="Ocultar" aria-label="add">
+                                    <button className="btn btn-outline-default mr-5" onClick={() => setOrderData({})}>
+                                        <i className="uil uil-arrow-to-right"> </i>
+                                    </button>
+                                </Tooltip>
+                                <small className="badge rounded-pill bg-info font-size-14 mr-5 p-2">Pedido# {order.id}</small>
+                            </>
                         )}
-                        <small className="badge rounded-pill bg-soft-info font-size-16 mr-5 p-2">Operador: {order.user?.name}</small>
-                        <StatusField color={ORDER_STATUS[order.status].color} className={"font-size-16"}>
+                        <StatusField color={ORDER_STATUS[order.status].color} className={"font-size-14 mr-5"}>
                             {ORDER_STATUS[order.status].name}
                         </StatusField>
+                        <small className="badge rounded-pill bg-soft-info font-size-14 mr-5 p-2">Operador: {order.user?.name}</small>
                     </div>
-                    <div className="mb-3 float-md-end">
+                    <div className={"mb-3 float-md-end"}>
                         {(order && (order.status === 1 || order.status === 2)) && (
                             <Button type="button" color="primary" className="btn-sm btn-rounded waves-effect waves-light">
                                 <i className={"mdi mdi-delete"}> </i> Anular
