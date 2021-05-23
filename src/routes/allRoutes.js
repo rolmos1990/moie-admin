@@ -29,6 +29,8 @@ import CreateOrder from "../pages/Orders/create";
 import OrderDetail from "../pages/Orders/orderDetail";
 import Templates from "../pages/Template";
 import TemplateEdit from "../pages/TemplateEdit";
+import Bills from "../pages/Bill";
+import Reports from "../pages/Reports";
 
 const userRoutes = [
   { path: "/dashboard", component: Dashboard },
@@ -56,6 +58,8 @@ const userRoutes = [
   { path: "/templates", component: Templates },
   { path: "/template/:id", component: TemplateEdit },
   { path: "/template", component: TemplateEdit },
+  { path: "/bills", component: Bills },
+  { path: "/reports", component: Reports },
 
   // //profile
   { path: "/profile", component: UserProfile },
