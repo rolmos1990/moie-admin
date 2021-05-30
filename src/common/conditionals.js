@@ -28,12 +28,14 @@ function buildHttpGetQuery(cond = null, limit = null, offset = null) {
     if (limit) {
         data.limit = limit;
     }
-    if (offset || offset == 0) {
+    if (offset || offset === 0) {
         data.offset = offset;
     }
 
-    const searchParams = new URLSearchParams(data);
-    return searchParams;
+    return urlSearchParams(data);
+}
+function urlSearchParams(data) {
+    return new URLSearchParams(data);
 }
 
 function buildCondition(field, value, operator = null, moreValues = []) {
@@ -65,6 +67,7 @@ class Condition {
 
 const OPERATORS = {
     EQUAL: '::',
+    NOT_EQUAL: '$ne',
     NULL: '$null',
     NOT_NULL: '$nnull',
     TRUE: '$true',
@@ -80,11 +83,13 @@ const OPERATORS = {
     GREATER_THAN_OR_EQUAL: '$gte',
     GREATER_THAN: '$gt',
     NOT_IN: '$nin',
-    IN: '$in'
+    IN: '$in',
+    COUNT: 'count',
 };
 
 const Conditionals = {
     Condition,
+    urlSearchParams,
     buildHttpGetQuery,
     getConditionalFormat,
     OPERATORS,

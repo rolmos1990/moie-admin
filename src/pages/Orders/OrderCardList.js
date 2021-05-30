@@ -76,8 +76,8 @@ const OrderCardList = (props) => {
                                         </span>
                                     </div>
                                     <div className="m-1">
-                                        <Tooltip placement="bottom" title="Cantidad de piezas" aria-label="add">
-                                             <small className="badge rounded-pill bg-light p-2"><span className="font-weight-600">Cant. piezas :</span> {order.quantity}</small>
+                                        <Tooltip placement="bottom" title="Cantidad de prendas" aria-label="add">
+                                             <small className="badge rounded-pill bg-light p-2"><span className="font-weight-600">Cant. prendas :</span> {order.quantity}</small>
                                         </Tooltip>
                                     </div>
                                     <div>

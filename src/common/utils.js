@@ -68,6 +68,14 @@ export const formatDateToServer =(date) =>{
     }
     return "";
 }
+export const getMoment =() =>{
+    try {
+        return moment();
+    }catch (e){
+        console.log(e)
+    }
+    return "";
+}
 
 export const getImageByQuality = (imgData, quality) => {
     if(!imgData) return null;

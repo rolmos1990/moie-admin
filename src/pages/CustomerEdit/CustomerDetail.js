@@ -12,14 +12,17 @@ import OrderCardList from "../Orders/OrderCardList";
 import {STATUS_COLORS, StatusField} from "../../components/StatusField";
 import {ConverterCustomerStatus} from "../Customer/customer_status";
 import CustomerObservations from "./CustomerObservations";
+import {hasCustomerOpenOrders} from "../../helpers/service";
 
 const CustomerDetail = (props) => {
 
     const {onGetCustomer, customer} = props;
     const [customerData, setCustomerData] = useState({});
+    const [hasPendingOrders, setHasPendingOrders] = useState(false);
 
     useEffect(() => {
         onGetCustomer(props.match.params.id);
+        hasCustomerOpenOrders(customer.id).then(resp => setHasPendingOrders(resp && resp.data && resp.data.length > 0));
     }, [onGetCustomer]);
 
     useEffect(() => {
@@ -36,20 +39,17 @@ const CustomerDetail = (props) => {
                     <Row>
                         <Col md={7}>
                             <Card id={'details'} className="mb-3 p-3">
+
                                 <Row>
-                                    <Col md={12}>
-                                        <Row>
-                                            <Col xs={10}>
-                                                <h4 className="card-title text-info">Descripción del cliente</h4>
-                                            </Col>
-                                            <Col md={2} className="text-right">
-                                                <li className="list-inline-item">
-                                                    <Link to={`/customer/${customerData.id}`} className="px-2 text-primary">
-                                                        <i className="uil uil-pen font-size-18"> </i>
-                                                    </Link>
-                                                </li>
-                                            </Col>
-                                        </Row>
+                                    <Col xs={10}>
+                                        <h4 className="card-title text-info">Descripción del cliente</h4>
+                                    </Col>
+                                    <Col md={2} className="text-right">
+                                        <li className="list-inline-item">
+                                            <Link to={`/customer/${customerData.id}`} className="px-2 text-primary">
+                                                <i className="uil uil-pen font-size-18"> </i>
+                                            </Link>
+                                        </li>
                                     </Col>
                                 </Row>
                                 <Row>
@@ -118,6 +118,13 @@ const CustomerDetail = (props) => {
                                         </Tooltip>
                                     </Col>
                                 </Row>
+                                {hasPendingOrders && (
+                                    <Row>
+                                        <Col>
+                                            <div className="alert alert-warning mb-0 mt-3"><i className="uil uil-exclamation-triangle"> </i> Este cliente tiene pedidos por completar.</div>
+                                        </Col>
+                                    </Row>
+                                )}
                             </Card>
                             <CustomerObservations customerId={customerData.id}/>
                         </Col>
@@ -136,10 +143,11 @@ const CustomerDetail = (props) => {
 const mapStateToProps = state => {
     const {error, customer, loading} = state.Customer
     const {fieldOptions} = state.FieldOption
-    return {error, customer,fieldOptions, loading}
+    return {error, customer, fieldOptions, loading}
 }
 
 const mapDispatchToProps = dispatch => ({
+    hasCustomerOpenOrders,
     onGetCustomer: (id) => dispatch(getCustomer(id)),
 })
 

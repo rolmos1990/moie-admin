@@ -50,7 +50,7 @@ const options1 = {
     }
 };
 
-const StatusWidgetCard = props => {
+const WidgetCard1 = props => {
     const {statusGroup, title} = props;
     const [dataCard, setDataCard] = useState({});
 
@@ -92,9 +92,9 @@ const StatusWidgetCard = props => {
 }
 
 
-StatusWidgetCard.propTypes = {
+WidgetCard1.propTypes = {
     statusGroup: PropTypes.object.isRequired,
     title: PropTypes.string.isRequired
 }
 
-export default StatusWidgetCard
+export default WidgetCard1

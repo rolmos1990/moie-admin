@@ -130,7 +130,7 @@ const OrderList = props => {
                     </CardBody>
                 </Card>
             </Col>
-            <OrderEdit orderId={orderSelected} showOrderOverlay={true}/>
+            {orderSelected && (<OrderEdit orderId={orderSelected} showOrderOverlay={true}/>)}
         </Row>
     )
 }

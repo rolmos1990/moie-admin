@@ -55,6 +55,7 @@ const OrderEdit = (props) => {
 
             let newCar = {
                 ...car,
+                orderId: order.id,
                 customer: {id: order.customer.id},
                 deliveryOptions: {
                     origin: order.origen,
@@ -254,7 +255,12 @@ const OrderEdit = (props) => {
                                 <i className={"mdi mdi-check"}> </i> Confirmar
                             </Button>
                         )}
-                        {(order && order.status === 2) && (
+                        {(order && order.status === 3) && (
+                            <Button type="button" color="primary" className="btn-sm btn-rounded waves-effect waves-light" onClick={() => onNextStatusOrder(order.id)}>
+                                <i className={"mdi mdi-check"}> </i> Confirmar envio
+                            </Button>
+                        )}
+                        {(order && order.status < 5) && (
                             <Button type="button" color="primary" className="btn-sm btn-rounded waves-effect waves-light" onClick={() => printOrder()}>
                                 <i className={"mdi mdi-printer"}> </i> Imprimir
                             </Button>

@@ -3,18 +3,18 @@ import {Link} from "react-router-dom";
 import PropTypes from "prop-types";
 import {DEFAULT_PAGE_LIMIT} from "../../../common/pagination";
 import {connect} from "react-redux";
-import {countProductByStatus, getProducts} from "../../../store/product/actions";
+import {getProducts} from "../../../store/product/actions";
 import React, {useEffect, useState} from "react";
 import {TableFilter} from "../../../components/TableFilter";
 import paginationFactory, {PaginationListStandalone, PaginationProvider} from "react-bootstrap-table2-paginator";
-import ToolkitProvider, {Search} from "react-bootstrap-table2-toolkit";
+import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import {normalizeColumnsList} from "../../../common/converters";
 import {Button, Tooltip} from "@material-ui/core";
 import BootstrapTable from "react-bootstrap-table-next";
 import NoDataIndication from "../../../components/Common/NoDataIndication";
 import productColumns from "./productColumn";
-import WidgetCard from "../../../components/Common/WidgetCard";
-import StatusWidgetCard from "../../../components/Common/StatusWidgetCard";
+import StatsStatusCard from "../../../components/Common/StatsStatusCard";
+import {countProductsByStatus} from "../../../helpers/service";
 
 
 const series2 = [70]
@@ -141,9 +141,8 @@ const reportss = [
 
 const ProductList = props => {
 
-    const {refresh, onGetProducts, onCountProducts, products, meta, customData} = props;
+    const {refresh, onGetProducts, countProductsByStatus, products, meta} = props;
     const [productList, setProductList] = useState([]);
-    const [statusGroup, setStatusGroup] = useState(null);
     const [filter, setFilter] = useState(false);
     const [conditional, setConditional] = useState(null);
 
@@ -159,22 +158,11 @@ const ProductList = props => {
 
     useEffect(() => {
         onGetProducts();
-        onCountProducts();
     }, [onGetProducts])
 
     useEffect(() => {
         setProductList(products)
     }, [products])
-
-    useEffect(() => {
-        if (customData && customData.data && customData.data.statusGroup) {
-            const group = {};
-            customData.data.statusGroup.forEach(prod => {
-                group[prod.status] = prod.id;
-            });
-            setStatusGroup(group);
-        }
-    }, [customData])
 
     const onFilterAction = (condition) => {
         setConditional(condition);
@@ -191,7 +179,7 @@ const ProductList = props => {
         <>
             <Row className="text-center">
                 <Col md={4}>
-                    <StatusWidgetCard title="Productos" statusGroup={statusGroup}/>
+                    <StatsStatusCard title="Productos" getData={countProductsByStatus}/>
                 </Col>
             </Row>
             <Row>
@@ -293,7 +281,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => ({
     onGetProducts: (conditional = null, limit = DEFAULT_PAGE_LIMIT, page) => dispatch(getProducts(conditional, limit, page)),
-    onCountProducts: () => dispatch(countProductByStatus()),
+    countProductsByStatus,
 })
 
 export default connect(

@@ -18,7 +18,7 @@ const Observations = (props) => {
 
     useEffect(() => {
         if (observations) {
-            setObservationList(observations);
+            setObservationList(observations.sort((a, b) => sortArray(a.id, b.id, false)));
         }
     }, [observations]);
 
@@ -42,7 +42,7 @@ const Observations = (props) => {
         const list = [...observationList];
         let item = {id: new Date().getTime(), user: user.username, userId: user.id, comment: obs, date: new Date()};
         list.push(item);
-        setObservationList(list);//TODO delete this line after adding the service
+        setObservationList(list.sort((a, b) => sortArray(a.id, b.id, false)));//TODO delete this line after adding the service
 
         if(onAddObservation) onAddObservation(item);
     }
@@ -97,7 +97,7 @@ const Observations = (props) => {
                         <h4 className="card-title text-info">Observaciones</h4>
                     </Col>
                     <Col md={12}>
-                        {observationList.length > 0 ? (<CustomizedTimeline data={observationList.sort((a, b) => sortArray(a.id, b.id, false))} onDelete={onDelete}/>) : "No hay observaciones"}
+                        {observationList.length > 0 ? (<CustomizedTimeline data={observationList} onDelete={onDelete}/>) : "No hay observaciones"}
                     </Col>
                 </Row>
             </Card>

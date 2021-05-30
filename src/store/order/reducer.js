@@ -38,6 +38,7 @@ const initialState = {
         summary: {},
         reset: true,
         isEdit: false,
+        orderId: null,
     },
     custom:{
         data: {},

@@ -196,7 +196,6 @@ const OrderDeliveryOptions = (props) => {
                             id={"deliveryCost"}
                             name={"deliveryCost"}
                             value={deliveryCost}
-                            disabled={deliveryQuote.hasCharge}
                             onChange={item => setDeliveryCost(item.target.value)}
                             required/>
                     </Col>
@@ -229,7 +228,7 @@ const OrderDeliveryOptions = (props) => {
                                 />
                             </Col>
                             <Col md={6} className="p-1">
-                                <Label htmlFor="weight">Piezas para cambio</Label>
+                                <Label htmlFor="weight">Prendas para cambio</Label>
                                 <FieldNumber
                                     id={"pieceToChange"}
                                     name={"pieceToChange"}

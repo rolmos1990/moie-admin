@@ -28,7 +28,7 @@ export const NAMES = {
 export const DELIVERY_TYPES = [
     {id: 1, name: "PREVIOUS_PAYMENT", label: "PREVIO PAGO"},
     {id: 2, name: "PAY_ONLY_DELIVERY", label: "PREVIO PAGO COD"},
-    {id: 3, name: "CHARGE_ON_DELIVERY", label: "CONTRA ENTREGA"}
+    {id: 3, name: "CHARGE_ON_DELIVERY", label: "CONTRA PAGO"}
 ]
 
 export const DELIVERY_METHODS_PAYMENT_TYPES = ['MENSAJERO'];

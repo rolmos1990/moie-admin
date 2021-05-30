@@ -6,29 +6,32 @@ import PropTypes from "prop-types";
 import {FieldAsyncSelect, FieldSelect} from "../../../components/Fields";
 import {GET_CUSTOMER} from "../../../helpers/url_helper";
 import {getCustomer} from "../../../store/customer/actions";
-import {getEmptyOptions} from "../../../common/converters";
+import {arrayToOptionsByFieldName, getEmptyOptions} from "../../../common/converters";
 import {AvForm} from "availity-reactstrap-validation";
 import {Button, Tooltip} from "@material-ui/core";
 import Conditionals from "../../../common/conditionals";
 import CustomModal from "../../../components/Modal/CommosModal";
 import CustomerForm from "../../CustomerEdit/CustomerForm";
 import {updateCard} from "../../../store/order/actions";
+import {DEFAULT_PAGE_LIMIT} from "../../../common/pagination";
+import {hasCustomerOpenOrders} from "../../../helpers/service";
 
-const searchByOptions = [{label:"Documento", value:"doc"},{label:"Nombre", value:"name"},{label:"Correo", value:"email"}];
+const searchByOptions = [{label: "Documento", value: "doc"}, {label: "Nombre", value: "name"}, {label: "Correo", value: "email"}];
 
 const OrderCustomer = (props) => {
-    const {car, customer, onGetCustomer, onUpdateCar, showAsModal} = props;
+    const {car, customer, onGetCustomer, hasCustomerOpenOrders, onUpdateCar, showAsModal} = props;
     const [initComponent, setInitComponent] = useState(true);
     const [searchBy, setSearchBy] = useState(searchByOptions[0].value);
     const [editCustomer, setEditCustomer] = useState(false);
     const [openCustomerModal, setOpenCustomerModal] = useState(false);
+    const [hasPendingOrders, setHasPendingOrders] = useState(false);
     const [customerData, setCustomerData] = useState({});
     const [customerDefault, setCustomerDefault] = useState(getEmptyOptions());
     const [customerEmailDefault, setCustomerEmailDefault] = useState(getEmptyOptions());
     const [customerDocumentDefault, setCustomerDocumentDefault] = useState(getEmptyOptions());
 
     useEffect(() => {
-        if(showAsModal && car.isEdit && car.customer && car.customer.id && initComponent){
+        if (showAsModal && car.isEdit && car.customer && car.customer.id && initComponent) {
             setInitComponent(false);
             onGetCustomer(car.customer.id);
         }
@@ -38,6 +41,7 @@ const OrderCustomer = (props) => {
         if (customer.id) {
             setCustomerData(customer);
             onUpdateCar({...car, customer})
+            if (car && !car.orderId) hasCustomerOpenOrders(customer.id).then(resp => setHasPendingOrders(resp && resp.data && resp.data.length > 0));
         } else {
             resetData();
         }
@@ -52,6 +56,7 @@ const OrderCustomer = (props) => {
         setCustomerEmailDefault(getEmptyOptions());
         setCustomerDocumentDefault(getEmptyOptions());
         setCustomerData({})
+        setHasPendingOrders(false)
     }
 
     const onCloseCustomerModal = () => {
@@ -64,7 +69,7 @@ const OrderCustomer = (props) => {
         setCustomerDefault(getEmptyOptions());
         setCustomerEmailDefault(getEmptyOptions());
         setCustomerDocumentDefault(getEmptyOptions());
-        if(editCustomer){
+        if (editCustomer) {
             onGetCustomer(customer.id);
         }
         setEditCustomer(false);
@@ -185,6 +190,7 @@ const OrderCustomer = (props) => {
                                 <span className="p-1">{customerData.phone}</span>
                             </Col>
                         </Row>
+
                     </Col>
                     <Col md={1} className="text-right">
                         <Tooltip placement="bottom" title="Editar cliente" aria-label="add">
@@ -201,24 +207,32 @@ const OrderCustomer = (props) => {
 
                     </Col>
 
-                    {showAsModal  && (
-                       <>
-                           <hr/>
-                           <Row>
-                               <Col md={12} className="text-right">
-                                   {props.onCloseModal && (
-                                       <button type="button" className="btn btn-light" onClick={() => props.onCloseModal()}>Cancelar</button>
-                                   )}
-                                   {props.onAcceptModal && (
-                                       <Button color="primary" type="button" onClick={() => props.onAcceptModal()}>Guardar</Button>
-                                   )}
-                               </Col>
-                           </Row>
-                       </>
+                    {hasPendingOrders && (
+                        <Col md={12} >
+                            <div className="alert alert-warning m-0">
+                                <i className="uil uil-exclamation-triangle"> </i> Existe un pedido abierto para el cliente seleccionado, este pedido no será enviado hasta que se complete el pedido anterior.
+                            </div>
+                        </Col>
+                    )}
+
+                    {showAsModal && (
+                        <>
+                            <hr/>
+                            <Row>
+                                <Col md={12} className="text-right">
+                                    {props.onCloseModal && (
+                                        <button type="button" className="btn btn-light" onClick={() => props.onCloseModal()}>Cancelar</button>
+                                    )}
+                                    {props.onAcceptModal && (
+                                        <Button color="primary" type="button" onClick={() => props.onAcceptModal()}>Guardar</Button>
+                                    )}
+                                </Col>
+                            </Row>
+                        </>
                     )}
                 </Row>
             )}
-            <CustomModal title={editCustomer ? "Modificar cliente":"Nuevo cliente"} size="lg" showFooter={false} isOpen={openCustomerModal} onClose={onCloseCustomerModal}>
+            <CustomModal title={editCustomer ? "Modificar cliente" : "Nuevo cliente"} size="lg" showFooter={false} isOpen={openCustomerModal} onClose={onCloseCustomerModal}>
                 <CustomerForm customer={customerData}
                               showAsModal={true}
                               onCloseModal={onCloseCustomerModal}
@@ -241,6 +255,7 @@ const mapStateToProps = state => {
 }
 
 const mapDispatchToProps = dispatch => ({
+    hasCustomerOpenOrders,
     onGetCustomer: (id) => dispatch(getCustomer(id)),
     onUpdateCar: (data) => dispatch(updateCard(data)),
 })

@@ -8,18 +8,19 @@ import BootstrapTable from "react-bootstrap-table-next"
 
 import customerColumn from "./customerColumn"
 import {Link} from "react-router-dom"
-import {countCustomersByStatus, deleteCustomer, getCustomers} from "../../../store/customer/actions";
+import {deleteCustomer, getCustomers} from "../../../store/customer/actions";
 import {Button, Tooltip} from "@material-ui/core";
 import {DEFAULT_PAGE_LIMIT} from "../../../common/pagination";
 import {ConfirmationModalAction} from "../../../components/Modal/ConfirmationModal";
 import NoDataIndication from "../../../components/Common/NoDataIndication";
 import {normalizeColumnsList} from "../../../common/converters";
 import {TableFilter} from "../../../components/TableFilter";
-import StatusWidgetCard from "../../../components/Common/StatusWidgetCard";
+import {countCustomersByStatus, statsCustomerRegistered, statsCustomerRegisteredToday} from "../../../helpers/service";
+import StatsStatusCard from "../../../components/Common/StatsStatusCard";
+import StatsRegisteredCard from "../../../components/Common/StatsRegisteredCard";
 
 const CustomersList = props => {
-    const {customers, meta, onGetCustomers, onDeleteCustomer,  refresh, onCountCustomers, customData} = props;
-    const [statusGroup, setStatusGroup] = useState(null);
+    const {customers, meta, onGetCustomers, onDeleteCustomer,  refresh, countCustomersByStatus, statsCustomerRegistered, statsCustomerRegisteredToday} = props;
     const [customerList, setCustomerList] = useState([])
     const [filter, setFilter] = useState(false);
     const [conditional, setConditional] = useState(null);
@@ -31,7 +32,6 @@ const CustomersList = props => {
 
     useEffect(() => {
         onGetCustomers();
-        onCountCustomers();
     }, [refresh])
 
     useEffect(() => {
@@ -41,16 +41,6 @@ const CustomersList = props => {
     useEffect(() => {
         setCustomerList(customers)
     }, [customers])
-
-    useEffect(() => {
-        if (customData && customData.data && customData.data.statusGroup) {
-            const group = {};
-            customData.data.statusGroup.forEach(prod => {
-                group[prod.status === true?1:0] = prod.id;
-            });
-            setStatusGroup(group);
-        }
-    }, [customData])
 
     // eslint-disable-next-line no-unused-vars
     const handleTableChange = (type, {page, searchText}) => {
@@ -80,7 +70,10 @@ const CustomersList = props => {
         <>
             <Row className="text-center">
                 <Col md={4}>
-                    <StatusWidgetCard title="Clientes" statusGroup={statusGroup}/>
+                    <StatsStatusCard title="Clientes" getData={countCustomersByStatus}/>
+                </Col>
+                <Col md={4}>
+                    <StatsRegisteredCard title="Clientes Registrados esta semana" getData={statsCustomerRegistered} getDataToday={statsCustomerRegisteredToday}/>
                 </Col>
             </Row>
             <Row>
@@ -179,9 +172,11 @@ const mapStateToProps = state => {
 }
 
 const mapDispatchToProps = dispatch => ({
+    countCustomersByStatus,
+    statsCustomerRegistered,
+    statsCustomerRegisteredToday,
     onGetCustomers: (conditional = null, limit = DEFAULT_PAGE_LIMIT, page) => dispatch(getCustomers(conditional, limit, page)),
-    onDeleteCustomer: (id) => dispatch(deleteCustomer(id)),
-    onCountCustomers: () => dispatch(countCustomersByStatus()),
+    onDeleteCustomer: (id) => dispatch(deleteCustomer(id))
 })
 
 export default connect(

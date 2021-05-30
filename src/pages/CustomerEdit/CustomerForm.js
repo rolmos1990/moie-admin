@@ -234,7 +234,7 @@ const CustomerForm = (props) => {
                             </Col>
                         </Row>
 
-                        {customerData.temporalAddress && (
+                        {(customerData.temporalAddress && customerData.temporalAddress.length > 0) && (
                             <Row>
                                 <hr/>
                                 <p className="alert alert-warning">Este cliente tiene una dirección de una versión anterior, es recomendable que por favor agregue la dirección en la parte superior.</p>
@@ -247,7 +247,7 @@ const CustomerForm = (props) => {
                                     <div className="mb-3">
                                         <Label htmlFor="validationCustom04">Departamento temporal</Label>
                                         <div className="form-control">
-                                            {customerData.temporalAddress.state}
+                                            {customerData.temporalAddress[0].state}
                                         </div>
                                     </div>
                                 </Col>
@@ -255,7 +255,7 @@ const CustomerForm = (props) => {
                                     <div className="mb-3">
                                         <Label htmlFor="validationCustom04">Municipio temporal</Label>
                                         <div className="form-control">
-                                            {customerData.temporalAddress.municipality}
+                                            {customerData.temporalAddress[0].municipality}
                                         </div>
                                     </div>
                                 </Col>

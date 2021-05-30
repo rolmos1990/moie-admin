@@ -8,7 +8,7 @@ const Bills = () => {
             <div className="page-content">
                 <Container fluid>
                     <Breadcrumb path="/bills" title={null} item="Facturación"/>
-                    <h1>building</h1>
+                    <h1>Coming soon</h1>
 
                 </Container>
             </div>
