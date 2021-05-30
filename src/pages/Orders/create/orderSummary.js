@@ -30,7 +30,7 @@ const OrderSummary = (props) => {
         <React.Fragment>
             <Row>
                 <Col>
-                    <h4 className="card-title text-info"><i className="uil-dollar-alt me-2"> </i> Totales</h4>
+                    <h4 className="card-title text-info"><i className="uil uil-bill"> </i> Totales</h4>
                 </Col>
             </Row>
             <Row>

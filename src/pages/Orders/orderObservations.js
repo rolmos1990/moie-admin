@@ -15,19 +15,19 @@ import Observations from "../../components/Common/Observations";
 import {deleteFieldOption, getFieldOptionByGroup, registerFieldOption, updateFieldOption} from "../../store/fieldOptions/actions";
 import {GROUPS} from "../../common/constants";
 
-const CustomerObservations = (props) => {
+const OrderObservations = (props) => {
 
-    const {onGetCustomerObservations, onGetByGroup, customerId, fieldOptions} = props;
+    const {onGetOrderObservations, onGetByGroup, orderId, fieldOptions} = props;
     const [observationsSuggested, setObservationsSuggested] = useState([]);
 
     useEffect(() => {
-        // onGetCustomerObservations(customerId);
-        onGetByGroup(GROUPS.CUSTOMER_OBSERVATIONS);
-    }, [onGetCustomerObservations]);
+        // onGetOrderObservations(orderId);
+        onGetByGroup(GROUPS.ORDER_OBSERVATIONS);
+    }, [onGetOrderObservations]);
 
     useEffect(() => {
         if (fieldOptions && fieldOptions.length > 0) {
-            setObservationsSuggested(fieldOptions.filter(item => item.groups === GROUPS.CUSTOMER_OBSERVATIONS).map(item => item.value))
+            setObservationsSuggested(fieldOptions.filter(item => item.groups === GROUPS.ORDER_OBSERVATIONS).map(item => item.value))
         }
     }, [fieldOptions])
 
@@ -57,16 +57,16 @@ const mapStateToProps = state => {
 }
 
 const mapDispatchToProps = dispatch => ({
-    onGetCustomerObservations: (id) => dispatch(getCustomer(id)),
+    onGetOrderObservations: (id) => dispatch(getCustomer(id)),
     onGetByGroup: (group) => dispatch(getFieldOptionByGroup(group, 500, 0)),
 })
 
 export default withRouter(
-    connect(mapStateToProps, mapDispatchToProps)(CustomerObservations)
+    connect(mapStateToProps, mapDispatchToProps)(OrderObservations)
 )
 
-CustomerObservations.propTypes = {
-    customerId: PropTypes.number.isRequired,
+OrderObservations.propTypes = {
+    orderId: PropTypes.number.isRequired,
     error: PropTypes.any,
     history: PropTypes.object
 }

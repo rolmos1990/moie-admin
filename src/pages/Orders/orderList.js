@@ -52,7 +52,6 @@ const OrderList = props => {
     }
 
     const columns = orderColumns(setOrderSelected);
-    console.log('orderSelected', orderSelected)
 
     return (
         <Row>
@@ -130,7 +129,7 @@ const OrderList = props => {
                     </CardBody>
                 </Card>
             </Col>
-            {orderSelected && (<OrderEdit orderId={orderSelected} showOrderOverlay={true}/>)}
+            {orderSelected && (<OrderEdit orderId={orderSelected} showOrderOverlay={true} onCloseOverlay={() => setOrderSelected(null)}/>)}
         </Row>
     )
 }

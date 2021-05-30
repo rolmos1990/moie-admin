@@ -1,10 +1,10 @@
 import React, {useEffect, useState} from "react"
-import {Col, Container, Row} from "reactstrap"
+import {Col, Row} from "reactstrap"
 import {Button, Card, Tooltip} from "@material-ui/core";
 import {withRouter} from "react-router-dom"
 import {connect} from "react-redux";
 import PropTypes from "prop-types";
-import {copyToClipboard, getImageByQuality, priceFormat, printPartOfPage, threeDots} from "../../common/utils";
+import {buildNumericOptions, copyToClipboard, getImageByQuality, priceFormat, printPartOfPage, threeDots} from "../../common/utils";
 import NoDataIndication from "../../components/Common/NoDataIndication";
 
 import {getOrder, nextStatusOrder, printOrder, resumeOrder, updateCard, updateOrder} from "../../store/order/actions";
@@ -21,17 +21,20 @@ import {HtmlTooltip} from "../../components/Common/HtmlTooltip";
 
 import {StatusField} from "../../components/StatusField";
 import * as htmlToImage from 'html-to-image';
-import Breadcrumb from "../../components/Common/Breadcrumb";
+import OrderObservations from "./orderObservations";
+import {FieldDecimalNumber, FieldSelect} from "../../components/Fields";
 // import {toPng, toJpeg, toBlob, toPixelData, toSvg} from 'html-to-image';
 
 
 const OrderEdit = (props) => {
 
-    const {orderId, onGetOrder, onUpdateCar, onUpdateOrder, onGetProducts, onNextStatusOrder, onResumeOrder, onPrintOrder, print, resume, order, car, products, showOrderOverlay = false} = props;
+    const {orderId, onGetOrder, onUpdateCar, onUpdateOrder, onCloseOverlay, onNextStatusOrder, onResumeOrder, onPrintOrder, print, resume, order, car, products, showOrderOverlay = false} = props;
     const [orderData, setOrderData] = useState({});
     const [orderResume, setOrderResume] = useState('');
+    const [showAsTable, setShowAsTable] = useState(false);
     const [orderPrint, setOrderPrint] = useState('');
     const [downloadingPhoto, setDownloadingPhoto] = useState(false);
+    const [activeTab, setActiveTab] = useState(1);
 
     const [openPrintConfirmModal, setOpenPrintConfirmModal] = useState(false);
     const [openCustomerModal, setOpenCustomerModal] = useState(false);
@@ -226,14 +229,14 @@ const OrderEdit = (props) => {
 
     return orderData.id ? (
         <div className={showOrderOverlay ? 'orderDetail-overlay pt-2' : ''}>
-            <Row className="row mb-2">
+            <Row className="mb-2">
                 <Col md={12}>
                     <div className={"mb-3 float-md-start"}>
                         {showOrderOverlay && (
                             <>
                                 <Tooltip placement="bottom" title="Ocultar" aria-label="add">
-                                    <button className="btn btn-outline-default mr-5" onClick={() => setOrderData({})}>
-                                        <i className="uil uil-arrow-to-right"> </i>
+                                    <button className="btn btn-outline-default mr-5" onClick={() => onCloseOverlay()}>
+                                        <i className="uil uil-arrow-to-right font-size-16"> </i>
                                     </button>
                                 </Tooltip>
                                 <small className="badge rounded-pill bg-info font-size-14 mr-5 p-2">Pedido# {order.id}</small>
@@ -274,7 +277,7 @@ const OrderEdit = (props) => {
                     </div>
                 </Col>
             </Row>
-            <Row>
+            <Row className="mb-3">
                 <Col md={showOrderOverlay ? 12 : 4}>
                     <Row>
                         <Col md={showOrderOverlay ? 6 : 12} className="mb-3">
@@ -337,7 +340,7 @@ const OrderEdit = (props) => {
                             <Card id={'delivery-options'} className="p-3">
                                 <Row>
                                     <Col xs={10}>
-                                        <h4 className="card-title text-info"><i className="uil-archive me-2"> </i> Datos de envio</h4>
+                                        <h4 className="card-title text-info"><i className="uil uil-truck"> </i> Datos de envio</h4>
                                     </Col>
                                     <Col xs={2} className="text-right">
                                         <Tooltip placement="bottom" title="Editar envio" aria-label="add">
@@ -393,11 +396,31 @@ const OrderEdit = (props) => {
                         <Row>
                             <Col md={12} className="mb-3">
                                 <Card id={'products'} className="p-3">
-                                    <Row>
-                                        <Col xs={11}>
+                                    <Row className="mb-2">
+                                        <Col xs={6}>
                                             <h4 className="card-title text-info"><i className="uil-box me-2"> </i> Productos</h4>
                                         </Col>
-                                        <Col xs={1} className="text-right">
+                                        <Col xs={6} className="text-right">
+                                            <Tooltip placement="bottom" title="Mostar como tabla" aria-label="add">
+                                                <button type="button"
+                                                        size="small"
+                                                        className="btn btn-sm text-primary"
+                                                        onClick={() => {
+                                                            setShowAsTable(true);
+                                                        }}>
+                                                    <i className="fa fa-list font-size-18"> </i>
+                                                </button>
+                                            </Tooltip>
+                                            <Tooltip placement="bottom" title="Mostrar como tarjetas" aria-label="add">
+                                                <button type="button"
+                                                        size="small"
+                                                        className="btn btn-sm text-primary"
+                                                        onClick={() => {
+                                                            setShowAsTable(false);
+                                                        }}>
+                                                    <i className="fa fa-th font-size-18"> </i>
+                                                </button>
+                                            </Tooltip>
                                             <Tooltip placement="bottom" title="Editar products" aria-label="add">
                                                 <button type="button"
                                                         size="small"
@@ -410,70 +433,118 @@ const OrderEdit = (props) => {
                                             </Tooltip>
                                         </Col>
                                     </Row>
-                                    <Row>
-                                        {map(orderData.orderDetails, (product, k) => (
-                                            <div key={k} className="col-md-6 mb-2">
-                                                <div className="prod-box">
-                                                    <Row>
-                                                        <Col xs={2} className="text-center" style={{padding: '2px 0 2px 8px'}}>
-                                                            <div className={`border-1`} id={`product-${k}`} role="tabpanel">
-                                                                <Images src={`${getImageByQuality(product.product.productImage[0], 'medium')}`}
-                                                                        alt={""}
-                                                                        height={80}
-                                                                        className="img-fluid mx-auto d-block"
-                                                                        data-zoom={`${product.product.productImage[0].path}`}
-                                                                        styles={{height: '83px', width: '53px', borderRadius: '8px'}}
-                                                                />
-                                                            </div>
-                                                        </Col>
-                                                        <Col xs={5} className="p-1">
-                                                            <Row>
-                                                                <Col md={12}>
-                                                                    <HtmlTooltip
-                                                                        placement={'right-end'}
-                                                                        title={
-                                                                            <React.Fragment>
-                                                                                <Images src={`${getImageByQuality(product.product.productImage.length > 0 ? product.product.productImage[0] : {}, 'medium')}`}
-                                                                                        alt={""}
-                                                                                        height={120}
-                                                                                        className="img-fluid mx-auto d-block tab-img rounded"/>
-                                                                            </React.Fragment>
-                                                                        }>
-                                                                        <b className="text-info">{product.product.reference}</b>
-                                                                    </HtmlTooltip>
-                                                                </Col>
-                                                                <Col md={12}>
-                                                                    <Tooltip placement="bottom" title={product.color} aria-label="add">
-                                                                        <small> {threeDots(product.color, 22)}</small>
-                                                                    </Tooltip>
-                                                                </Col>
-                                                                <Col md={12}>
-                                                                    <small><span className="font-weight-600">Cantidad:</span> {product.quantity}</small>
-                                                                </Col>
-                                                                <Col md={12}>
-                                                                    <small className="badge rounded-pill bg-soft-info">Talla: {product.size}</small>
-                                                                </Col>
-                                                            </Row>
-                                                        </Col>
-                                                        <Col xs={5} className="p-1">
-                                                            <Row>
-                                                                <Col md={12}>
-                                                                    <small><span className="font-weight-600">Precio:</span> {priceFormat(product.price)}</small>
-                                                                </Col>
-                                                                <Col md={12}>
-                                                                    <small><span className="font-weight-600">Desc.:</span> <span
-                                                                        className="text-danger">-{priceFormat(product.discount)} ({product.discountPercent}%)</span></small>
-                                                                </Col>
-                                                                <Col md={12}>
-                                                                    <div className="font-weight-600 font-size-12"><b>Total: {priceFormat(product.total)}</b></div>
-                                                                </Col>
-                                                            </Row>
-                                                        </Col>
-                                                    </Row>
+                                    {!showAsTable && (
+                                        <Row>
+                                            {map(orderData.orderDetails, (product, k) => (
+                                                <div key={k} className="col-md-6 mb-2">
+                                                    <div className="prod-box">
+                                                        <Row>
+                                                            <Col xs={2} className="text-center" style={{padding: '2px 0 2px 8px'}}>
+                                                                <div className={`border-1`} id={`product-${k}`} role="tabpanel">
+                                                                    <Images src={`${getImageByQuality(product.product.productImage[0], 'medium')}`}
+                                                                            alt={""}
+                                                                            height={80}
+                                                                            className="img-fluid d-block"
+                                                                            data-zoom={`${product.product.productImage[0].path}`}
+                                                                            styles={{height: '83px', width: '53px', borderRadius: '8px', 'margin-left': '4px'}}
+                                                                    />
+                                                                </div>
+                                                            </Col>
+                                                            <Col xs={5} className="p-1">
+                                                                <Row>
+                                                                    <Col md={12}>
+                                                                        <HtmlTooltip
+                                                                            placement={'right-end'}
+                                                                            title={
+                                                                                <React.Fragment>
+                                                                                    <Images src={`${getImageByQuality(product.product.productImage.length > 0 ? product.product.productImage[0] : {}, 'medium')}`}
+                                                                                            alt={""}
+                                                                                            height={120}
+                                                                                            className="img-fluid mx-auto d-block tab-img rounded"/>
+                                                                                </React.Fragment>
+                                                                            }>
+                                                                            <b className="text-info">{product.product.reference}</b>
+                                                                        </HtmlTooltip>
+                                                                    </Col>
+                                                                    <Col md={12}>
+                                                                        <Tooltip placement="bottom" title={product.color} aria-label="add">
+                                                                            <small> {threeDots(product.color, 22)}</small>
+                                                                        </Tooltip>
+                                                                    </Col>
+                                                                    <Col md={12}>
+                                                                        <small><span className="font-weight-600">Cantidad:</span> {product.quantity}</small>
+                                                                    </Col>
+                                                                    <Col md={12}>
+                                                                        <small className="badge rounded-pill bg-soft-info">Talla: {product.size}</small>
+                                                                    </Col>
+                                                                </Row>
+                                                            </Col>
+                                                            <Col xs={5} className="p-1">
+                                                                <Row>
+                                                                    <Col md={12}>
+                                                                        <small><span className="font-weight-600">Precio:</span> {priceFormat(product.price)}</small>
+                                                                    </Col>
+                                                                    <Col md={12}>
+                                                                        <small><span className="font-weight-600">Desc.:</span> <span
+                                                                            className="text-danger">-{priceFormat(product.discount)} ({product.discountPercentage}%)</span></small>
+                                                                    </Col>
+                                                                    <Col md={12}>
+                                                                        <div className="font-weight-600 font-size-12"><b>Total: {priceFormat(product.total)}</b></div>
+                                                                    </Col>
+                                                                </Row>
+                                                            </Col>
+                                                        </Row>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        ))}
-                                    </Row>
+                                            ))}
+                                        </Row>
+                                    )}
+                                    {showAsTable && (
+                                        <Row>
+                                            <Col md={12}>
+                                                <table className="table table-sm table-striped table-bordered table-centered table-nowrap font-size-11">
+                                                    <thead>
+                                                    <tr>
+                                                        <th className="text-center">Código</th>
+                                                        <th className="text-center">Color</th>
+                                                        <th className="text-center">Talla</th>
+                                                        <th className="text-center">Cantidad</th>
+                                                        <th className="text-center">Precio Unit.</th>
+                                                        <th className="text-center">% Desc.</th>
+                                                        <th className="text-center">Total Desc.</th>
+                                                        <th className="text-center">SubTotal</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    {map(orderData.orderDetails, (product, key) => (
+                                                        <tr key={key}>
+                                                            <td style={{width: '10%'}}>
+                                                                <HtmlTooltip
+                                                                    title={
+                                                                        <React.Fragment>
+                                                                            <Images src={`${getImageByQuality(product.product.productImage.length > 0 ? product.product.productImage[0] : {}, 'medium')}`}
+                                                                                    alt={product.product.reference}
+                                                                                    height={100}
+                                                                                    className="img-fluid mx-auto d-block tab-img rounded"/>
+                                                                        </React.Fragment>
+                                                                    }>
+                                                                    <div className="text-info">{product.product.reference}</div>
+                                                                </HtmlTooltip>
+                                                            </td>
+                                                            <td style={{width: '25%'}} className="text-start">{product.color}</td>
+                                                            <td style={{width: '15%'}} className="text-center">{product.size}</td>
+                                                            <td style={{width: '10%'}} className="text-center">{product.quantity}</td>
+                                                            <td style={{width: '10%'}} className="text-end">{priceFormat(product.price)}</td>
+                                                            <td style={{width: '10%'}} className="text-center">{product.discountPercentage || 0}%</td>
+                                                            <td style={{width: '10%'}} className="text-end">{priceFormat(product.discount)}</td>
+                                                            <td style={{width: '15%'}} className="text-end">{priceFormat(product.total)}</td>
+                                                        </tr>
+                                                    ))}
+                                                    </tbody>
+                                                </table>
+                                            </Col>
+                                        </Row>
+                                    )}
                                 </Card>
                             </Col>
                         </Row>
@@ -482,7 +553,7 @@ const OrderEdit = (props) => {
                                 <Card id={'summary-detail'} className="p-3">
                                     <Row>
                                         <Col md={12}>
-                                            <h4 className="card-title text-info"><i className="uil-dollar-alt me-2"> </i> Totales</h4>
+                                            <h4 className="card-title text-info"><i className="uil uil-bill"> </i> Totales</h4>
                                         </Col>
                                         <Col md={12}>
                                             <div className="table-responsive">
@@ -517,6 +588,37 @@ const OrderEdit = (props) => {
                             </Col>
                         </Row>
                     </div>
+                </Col>
+            </Row>
+
+            <Row className="mb-3">
+                <Col md={12}>
+                    <Card id={'order-tabs'} className="p-3">
+                        <ul className="nav nav-tabs nav-tabs-custom nav-justified" role="tablist">
+                            <li className="nav-item">
+                                <a className={`nav-link ${activeTab === 1? 'active': ''}`} data-bs-toggle="tab" href="#tab1" role="tab" aria-selected="false" onClick={() => setActiveTab(1)}>
+                                    <span className="d-block d-sm-none"><i className="fas fa-home"> </i></span>
+                                    <span className="d-none d-sm-block">Historial</span>
+                                </a>
+                            </li>
+                            <li className="nav-item">
+                                <a className={`nav-link ${activeTab === 2? 'active': ''}`} data-bs-toggle="tab" href="#tab2" role="tab" aria-selected="false" onClick={() => setActiveTab(2)}>
+                                    <span className="d-block d-sm-none"><i className="far fa-user"> </i></span>
+                                    <span className="d-none d-sm-block">Observaciones</span>
+                                </a>
+                            </li>
+                        </ul>
+                        <div className="tab-content p-3 text-muted">
+                            <div className={`tab-pane ${activeTab === 1? 'active': ''}`} id="tab1" role="tabpanel">
+                                <p className="mb-0">
+                                   <h1>HISTORIAL</h1>
+                                </p>
+                            </div>
+                            <div className={`tab-pane ${activeTab === 2? 'active': ''}`} id="tab2" role="tabpanel">
+                                <OrderObservations orderId={orderData.id}/>
+                            </div>
+                        </div>
+                    </Card>
                 </Col>
             </Row>
 
@@ -600,6 +702,7 @@ export default withRouter(
 OrderEdit.propTypes = {
     orderId: PropTypes.number.isRequired,
     showOrderOverlay: PropTypes.bool,
+    onCloseOverlay: PropTypes.func,
     error: PropTypes.any,
     history: PropTypes.object
 }

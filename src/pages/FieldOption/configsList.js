@@ -110,8 +110,6 @@ const ConfigsList = props => {
         }
     };
 
-    console.log(fieldOption, fieldOptionEdited)
-
     return (
         <Row>
             <Col md={5}>
