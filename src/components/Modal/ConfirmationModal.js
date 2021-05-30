@@ -46,7 +46,7 @@ ConfirmationModal.propTypes = {
     description: PropTypes.string,
     isOpen: PropTypes.bool,
     scrollable: PropTypes.bool,
-    id: PropTypes.bool,
+    id: PropTypes.string,
     onClose: PropTypes.func,
     onConfirm: PropTypes.func
 }

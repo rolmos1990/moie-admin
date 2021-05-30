@@ -34,7 +34,7 @@ const CustomizedTimeline = ({data, onDelete}) => {
             {map(data, (tl, key) => (
                 <TimelineItem key={key}>
                     <TimelineOppositeContent>
-                        <p className="text-muted">{formatDate(tl.date)}</p>
+                        <p className="text-muted">{formatDate(tl.createdAt)}</p>
                     </TimelineOppositeContent>
                     <TimelineSeparator>
                         <TimelineDot>

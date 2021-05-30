@@ -21,6 +21,7 @@ import ProductSize from "./productSize/reducer"
 import FieldOption from "./fieldOptions/reducer"
 import Order from "./order/reducer"
 import Template from "./template/reducer"
+import Comment from "./comment/reducer"
 
 const rootReducer = combineReducers({
   // public
@@ -39,7 +40,8 @@ const rootReducer = combineReducers({
   Account,
   ForgetPassword,
   Profile,
-  Template
+  Template,
+  Comment
 })
 
 export default rootReducer

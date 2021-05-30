@@ -9,6 +9,7 @@ import CustomerSaga from "./customer/saga"
 import ProductSaga from "./product/saga"
 import CategorySaga from "./category/saga"
 import SizeSaga from "./sizes/saga"
+import CommentSaga from "./comment/saga"
 import DeliveryLocalitySaga from "./deliveryLocality/saga"
 import ProductImageSaga from "./productImages/saga"
 import ProductSizeSaga from "./productSize/saga"
@@ -35,6 +36,7 @@ export default function* rootSaga() {
     FieldOptionSaga(),
     OrderSaga(),
     TemplateSaga(),
+    CommentSaga(),
     ForgetSaga(),
     fork(LayoutSaga)
   ])

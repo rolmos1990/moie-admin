@@ -4,7 +4,7 @@ import {withRouter} from "react-router-dom"
 import {connect} from "react-redux";
 import PropTypes from "prop-types";
 import {FieldAsyncSelect, FieldSelect} from "../../../components/Fields";
-import {GET_CUSTOMER, GET_PRODUCT} from "../../../helpers/url_helper";
+import {GET_CUSTOMER, PRODUCT} from "../../../helpers/url_helper";
 import {getProduct} from "../../../store/product/actions";
 import {getEmptyOptions} from "../../../common/converters";
 import {AvForm} from "availity-reactstrap-validation";
@@ -108,7 +108,7 @@ const OrderProducts = (props) => {
                             <Label htmlFor="product">Código</Label>
                             <FieldAsyncSelect
                                 name={"productCode"}
-                                urlStr={GET_PRODUCT}
+                                urlStr={PRODUCT}
                                 placeholder="Código del producto"
                                 defaultValue={productReferenceDefault}
                                 hasWild={true}
@@ -125,7 +125,7 @@ const OrderProducts = (props) => {
                             <Label htmlFor="product">Nombre</Label>
                             <FieldAsyncSelect
                                 name={"productName"}
-                                urlStr={GET_PRODUCT}
+                                urlStr={PRODUCT}
                                 placeholder="Nombre del producto"
                                 defaultValue={productDefault}
                                 onChange={(d) => {

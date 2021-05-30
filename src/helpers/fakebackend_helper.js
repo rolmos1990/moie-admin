@@ -114,7 +114,7 @@ export const getOrders = () => get(url.ORDERS)
 export const getCartData = () => get(url.GET_CART_DATA)
 
 // get customers
-export const getCustomers = () => get(url.GET_CUSTOMERS)
+export const getCustomers = () => get(url.CUSTOMER)
 
 // get shops
 export const getShops = () => get(url.GET_SHOPS)

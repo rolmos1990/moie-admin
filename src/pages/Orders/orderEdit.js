@@ -10,7 +10,7 @@ import NoDataIndication from "../../components/Common/NoDataIndication";
 import {getOrder, nextStatusOrder, printOrder, resumeOrder, updateCard, updateOrder} from "../../store/order/actions";
 import CustomModal from "../../components/Modal/CommosModal";
 import OrderDeliveryOptions from "./create/orderDeliveryOptions";
-import {DELIVERY_METHODS_PAYMENT_TYPES, DELIVERY_TYPES, ORDER_STATUS, PAYMENT_TYPES} from "../../common/constants";
+import {COMMENT_ENTITIES, DELIVERY_METHODS_PAYMENT_TYPES, DELIVERY_TYPES, GROUPS, ORDER_STATUS, PAYMENT_TYPES} from "../../common/constants";
 import {map} from "lodash";
 import Images from "../../components/Common/Image";
 import OrderCustomer from "./create/orderCustomer";
@@ -23,6 +23,7 @@ import {StatusField} from "../../components/StatusField";
 import * as htmlToImage from 'html-to-image';
 import OrderObservations from "./orderObservations";
 import {FieldDecimalNumber, FieldSelect} from "../../components/Fields";
+import Observations from "../../components/Common/Observations";
 // import {toPng, toJpeg, toBlob, toPixelData, toSvg} from 'html-to-image';
 
 
@@ -604,7 +605,13 @@ const OrderEdit = (props) => {
                             <li className="nav-item">
                                 <a className={`nav-link ${activeTab === 2? 'active': ''}`} data-bs-toggle="tab" href="#tab2" role="tab" aria-selected="false" onClick={() => setActiveTab(2)}>
                                     <span className="d-block d-sm-none"><i className="far fa-user"> </i></span>
-                                    <span className="d-none d-sm-block">Observaciones</span>
+                                    <span className="d-none d-sm-block">Observaciones del pedido</span>
+                                </a>
+                            </li>
+                            <li className="nav-item">
+                                <a className={`nav-link ${activeTab === 3? 'active': ''}`} data-bs-toggle="tab" href="#tab2" role="tab" aria-selected="false" onClick={() => setActiveTab(3)}>
+                                    <span className="d-block d-sm-none"><i className="far fa-user"> </i></span>
+                                    <span className="d-none d-sm-block">Observaciones del cliente</span>
                                 </a>
                             </li>
                         </ul>
@@ -615,7 +622,16 @@ const OrderEdit = (props) => {
                                 </p>
                             </div>
                             <div className={`tab-pane ${activeTab === 2? 'active': ''}`} id="tab2" role="tabpanel">
-                                <OrderObservations orderId={orderData.id}/>
+                                <Observations
+                                    entitySuggested={GROUPS.ORDER_OBSERVATIONS}
+                                    entity={COMMENT_ENTITIES.ORDER}
+                                    entityId={orderData.id}/>
+                            </div>
+                            <div className={`tab-pane ${activeTab === 3? 'active': ''}`} id="tab2" role="tabpanel">
+                                <Observations
+                                    entitySuggested={GROUPS.CUSTOMER_OBSERVATIONS}
+                                    entity={COMMENT_ENTITIES.CUSTOMER}
+                                    entityId={orderData.customer?.id}/>
                             </div>
                         </div>
                     </Card>

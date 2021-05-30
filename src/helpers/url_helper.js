@@ -9,14 +9,10 @@ export const POST_FAKE_JWT_PASSWORD_FORGET = "/jwt-forget-pwd"
 export const SOCIAL_LOGIN = "/social-login"
 
 //CUSTOMER
-export const POST_CUSTOMER = "/customer"
-export const GET_CUSTOMER = "/customer"
-export const PUT_CUSTOMER = "/customer"
+export const CUSTOMER = "/customer"
 
 //PRODUCT
-export const POST_PRODUCT = "/product"
-export const GET_PRODUCT = "/product"
-export const PUT_PRODUCT = "/product"
+export const PRODUCT = "/product"
 
 export const CATEGORY = "/category"
 export const SIZE = "/size"
@@ -85,3 +81,5 @@ export const GET_TASKS = "/tasks"
 //CONTACTS
 export const GET_USERS = "/users"
 export const GET_USER_PROFILE = "/user"
+
+export const COMMENT = "/comment"

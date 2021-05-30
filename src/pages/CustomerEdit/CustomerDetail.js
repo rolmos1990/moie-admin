@@ -13,6 +13,8 @@ import {STATUS_COLORS, StatusField} from "../../components/StatusField";
 import {ConverterCustomerStatus} from "../Customer/customer_status";
 import CustomerObservations from "./CustomerObservations";
 import {hasCustomerOpenOrders} from "../../helpers/service";
+import {COMMENT_ENTITIES, GROUPS} from "../../common/constants";
+import Observations from "../../components/Common/Observations";
 
 const CustomerDetail = (props) => {
 
@@ -126,7 +128,10 @@ const CustomerDetail = (props) => {
                                     </Row>
                                 )}
                             </Card>
-                            <CustomerObservations customerId={customerData.id}/>
+                            <Observations
+                                entitySuggested={GROUPS.CUSTOMER_OBSERVATIONS}
+                                entity={COMMENT_ENTITIES.CUSTOMER}
+                                entityId={customerData.id}/>
                         </Col>
                         <Col md={5}>
                             <Card id={'orders'} className="p-3">

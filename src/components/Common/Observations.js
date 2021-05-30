@@ -8,17 +8,27 @@ import PropTypes from "prop-types";
 import CustomizedTimeline from "../../pages/CustomerEdit/TimeLine";
 import ButtonSubmit from "./ButtonSubmit";
 import {ConfirmationModalAction} from "../Modal/ConfirmationModal";
-import {sortArray, threeDots} from "../../common/utils";
+import {threeDots} from "../../common/utils";
+import {deleteComment, getCommentsByEntity, registerComment} from "../../store/comment/actions";
+import {findFieldOptionByGroup} from "../../helpers/service";
 
 const Observations = (props) => {
 
-    const {observations, observationsSuggested, user, onAddObservation, onDeleteObservation} = props;
+    const {user, observations, onGetObservations, onCreateObservation, onDeleteObservation, onGetCommentSuggested, entitySuggested, entity, entityId} = props;
     const [observation, setObservation] = useState(undefined);
+    const [observationsSuggested, setObservationsSuggested] = useState([]);
     const [observationList, setObservationList] = useState([]);
 
     useEffect(() => {
-        if (observations) {
-            setObservationList(observations.sort((a, b) => sortArray(a.id, b.id, false)));
+        onGetObservations(entity, entityId);
+        if(entitySuggested) onGetCommentSuggested(entitySuggested).then(data => setObservationsSuggested(data.map(item => item.value)));
+    }, [entityId]);
+
+    useEffect(() => {
+        if (observations && observations.length > 0) {
+            if(observations.some(o => o.entity === entity)) setObservationList(observations.filter(o => o.entity === entity).map(o => ({...o, userName: user.username})));
+        }else{
+            setObservationList([]);
         }
     }, [observations]);
 
@@ -28,26 +38,17 @@ const Observations = (props) => {
             description: 'Usted está eliminado este registro, una vez eliminado no podrá ser recuperado.',
             id: '_observationsModal',
             onConfirm: () => {
-                const list = [...observationList];
-                const item = list.find(cl => cl.id === id);
-                list.splice(list.indexOf(item), 1);
-                setObservationList(list);//TODO delete this line after adding the service
-
+                const item = observationList.find(cl => cl.id === id);
                 if(onDeleteObservation) onDeleteObservation(item);
             }
         });
     }
 
-    const onAdd = (obs) => {
-        const list = [...observationList];
-        let item = {id: new Date().getTime(), user: user.username, userId: user.id, comment: obs, date: new Date()};
-        list.push(item);
-        setObservationList(list.sort((a, b) => sortArray(a.id, b.id, false)));//TODO delete this line after adding the service
-
-        if(onAddObservation) onAddObservation(item);
+    const onAdd = (comment) => {
+        if(onCreateObservation) onCreateObservation(entityId, {entity: entity, comment: comment});
     }
 
-    const handleValidSubmit = (event, values) => {
+    const handleValidSubmit = (event) => {
         if (!observation || observation === '') return;
         setObservation(undefined);
         event.target.reset();
@@ -96,7 +97,7 @@ const Observations = (props) => {
                         <hr/>
                         <h4 className="card-title text-info">Observaciones</h4>
                     </Col>
-                    <Col md={12}>
+                    <Col md={12} style={{maxHeight: '500px', overflowY: 'auto'}}>
                         {observationList.length > 0 ? (<CustomizedTimeline data={observationList} onDelete={onDelete}/>) : "No hay observaciones"}
                     </Col>
                 </Row>
@@ -107,18 +108,23 @@ const Observations = (props) => {
 
 const mapStateToProps = state => {
     const {user} = state.Login
-    return {user}
+    const {comments} = state.Comment
+    return {user, observations: comments}
 }
 
+const mapDispatchToProps = dispatch => ({
+    onGetObservations: (entity, idRelated) => dispatch(getCommentsByEntity(entity, idRelated)),
+    onCreateObservation: (entityId, comment) => dispatch(registerComment(entityId, comment)),
+    onDeleteObservation: (comment) => dispatch(deleteComment(comment)),
+    onGetCommentSuggested: findFieldOptionByGroup,
+})
+
 export default withRouter(
-    connect(mapStateToProps, {})(Observations)
+    connect(mapStateToProps, mapDispatchToProps)(Observations)
 )
 
 Observations.propTypes = {
-    onAddObservation: PropTypes.func,
-    onRemoveObservation: PropTypes.func,
-    observationsSuggested: PropTypes.array,
-    observations: PropTypes.array,
-    error: PropTypes.any,
-    history: PropTypes.object
+    entitySuggested: PropTypes.string,
+    entity: PropTypes.string.isRequired,
+    entityId: PropTypes.number.isRequired,
 }

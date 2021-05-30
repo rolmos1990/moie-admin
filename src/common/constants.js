@@ -24,6 +24,10 @@ export const GROUPS = {
 export const NAMES = {
     PRODUCT: 'PRODUCT',
 };
+export const COMMENT_ENTITIES = {
+    CUSTOMER: 'customer',
+    ORDER: 'order',
+};
 
 export const DELIVERY_TYPES = [
     {id: 1, name: "PREVIOUS_PAYMENT", label: "PREVIO PAGO"},

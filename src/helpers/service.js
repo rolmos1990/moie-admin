@@ -4,7 +4,7 @@ import {showMessage} from "../components/MessageToast/ShowToastMessages";
 import {DEFAULT_PAGE_LIMIT} from "../common/pagination";
 import * as url from "./url_helper";
 import {queryCustomers} from "../store/customer/actions";
-import {GET_CUSTOMER, GET_CUSTOMERS, GET_PRODUCT} from "./url_helper";
+import {CUSTOMER, CUSTOMERS, FIELD_OPTIONS, PRODUCT} from "./url_helper";
 import {formatDateToServer, getMoment} from "../common/utils";
 
 export const getData = (urlStr, name, conditionalOptions) => {
@@ -43,11 +43,11 @@ export const hasCustomerOpenOrders = (customerId) => {
 }
 
 export const countCustomersByStatus = () => {
-    return countByStatus(url.GET_CUSTOMER);
+    return countByStatus(url.CUSTOMER);
 }
 
 export const countProductsByStatus = () => {
-    return countByStatus(url.GET_PRODUCT);
+    return countByStatus(url.PRODUCT);
 }
 
 const countByStatus = (urlString) => {
@@ -65,13 +65,13 @@ const countByStatus = (urlString) => {
 export const statsCustomerRegisteredToday = () => {
     const conditions = new Conditionals.Condition;
     conditions.add('createdAt', formatDateToServer(getMoment().startOf('day')), Conditionals.OPERATORS.GREATER_THAN_OR_EQUAL)
-    return statsRegistered(url.GET_CUSTOMER, conditions);
+    return statsRegistered(url.CUSTOMER, conditions);
 }
 
 export const statsCustomerRegistered = () => {
     const conditions = new Conditionals.Condition;
     conditions.add('createdAt',formatDateToServer(getMoment().isoWeekday(1)), Conditionals.OPERATORS.GREATER_THAN_OR_EQUAL)
-    return statsRegistered(url.GET_CUSTOMER, conditions);
+    return statsRegistered(url.CUSTOMER, conditions);
 }
 
 export const statsRegistered = (urlString, conditions) => {
@@ -85,4 +85,12 @@ export const statsRegistered = (urlString, conditions) => {
         }
         return data;
     });
+}
+
+export const findFieldOptionByGroup = (group, limit = null, offset = null) => {
+    const conditions = new Conditionals.Condition;
+    conditions.add('groups', group, Conditionals.OPERATORS.EQUAL);
+    const cond = Conditionals.getConditionalFormat(conditions.all());
+    const query = Conditionals.buildHttpGetQuery(cond, limit, offset);
+    return fetchDataApi(url.FIELD_OPTIONS, query).then(resp => (resp.data || []));
 }

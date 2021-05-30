@@ -6,7 +6,7 @@ import {DELIVERY_METHODS_LIST, ORDER_STATUS, ORDER_STATUS_LIST} from "../../comm
 import Conditionals from "../../common/conditionals";
 import {formatDate} from "../../common/utils";
 import {Tooltip} from "@material-ui/core";
-import {GET_CUSTOMER} from "../../helpers/url_helper";
+import {CUSTOMER} from "../../helpers/url_helper";
 
 const statusOptions = ORDER_STATUS_LIST;
 statusOptions.unshift(getEmptyOptions);
@@ -43,7 +43,7 @@ const orderColumns = (onSelectedOrder) => [
         sort: true,
         filter: true,
         filterType: "asyncSelect",
-        urlStr: GET_CUSTOMER,
+        urlStr: CUSTOMER,
         formatter: (cellContent, item) => (
             <Link to={`/customer/detail/${item.customer.id}`} className="text-body">
                 {item.customer.name}

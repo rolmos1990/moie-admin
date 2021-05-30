@@ -1,27 +1,27 @@
 // Login Method
 import {del, get, post, put} from "./api_helper";
 import * as url from "./url_helper";
-import {DELIVERY_METHODS} from "./url_helper";
+import {COMMENT, CUSTOMER, DELIVERY_METHODS} from "./url_helper";
 
 const postLogin = data => post(url.POST_LOGIN, data);
 
-const registerCustomer = data => post(url.POST_CUSTOMER, data);
+const registerCustomer = data => post(url.CUSTOMER, data);
 
-const updateCustomer = (id, data) => put(`${url.PUT_CUSTOMER}/${id}`, data);
+const updateCustomer = (id, data) => put(`${url.CUSTOMER}/${id}`, data);
 
 //customers
-const fetchCustomersApi = data => get(url.GET_CUSTOMER, {}, data);
-const fetchCustomer = data => get((data && data.id) ? `${url.GET_CUSTOMER}/${data.id}` : url.GET_CUSTOMER, data);
-const deleteCustomerApi = (id) => del(`${url.PUT_CUSTOMER}/${id}`);
+const fetchCustomersApi = data => get(url.CUSTOMER, {}, data);
+const fetchCustomer = data => get((data && data.id) ? `${url.CUSTOMER}/${data.id}` : url.CUSTOMER, data);
+const deleteCustomerApi = (id) => del(`${url.CUSTOMER}/${id}`);
 
 //products
-const fetchProductsApi = params => get(url.GET_PRODUCT, {}, params);
-const fetchProductApi = data => get((data && data.id) ? `${url.GET_PRODUCT}/${data.id}` : url.GET_PRODUCT, data);
-const registerProductApi = data => post(url.POST_PRODUCT, data);
-const updateProductApi = (id, data) => put(`${url.PUT_PRODUCT}/${id}`, data);
+const fetchProductsApi = params => get(url.PRODUCT, {}, params);
+const fetchProductApi = data => get((data && data.id) ? `${url.PRODUCT}/${data.id}` : url.PRODUCT, data);
+const registerProductApi = data => post(url.PRODUCT, data);
+const updateProductApi = (id, data) => put(`${url.PRODUCT}/${id}`, data);
 //const deleteProductApi = (id) => del(`${url.DELETE_PRODUCT}/${id}`);
-const updateProductSizeListApi = (productId, data) => post(`${url.POST_PRODUCT}/${productId}/changeSize`, data);
-const getProductsPendingApi = (productId) => get(`${url.POST_PRODUCT}/${productId}/productPendings`, {}, {});
+const updateProductSizeListApi = (productId, data) => post(`${url.PRODUCT}/${productId}/changeSize`, data);
+const getProductsPendingApi = (productId) => get(`${url.PRODUCT}/${productId}/productPendings`, {}, {});
 
 //Categories
 const fetchCategoriesApi = data => get(url.CATEGORY, {}, data);
@@ -40,6 +40,13 @@ const fetchProductSizesApi = data => get(url.PRODUCT_SIZE, {}, data);
 const fetchProductSizeApi = (id) => get(`${url.PRODUCT_SIZE}/${id}`,{});
 const registerProductSizeApi = data => post(url.PRODUCT_SIZE, data);
 const updateProductSizeApi = (id, data) => put(`${url.PRODUCT_SIZE}/${id}`, data);
+
+//Comments
+const fetchCommentsApi = data => get(url.COMMENT, {}, data);
+const fetchCommentApi = (id) => get(`${url.COMMENT}/${id}`,{});
+const registerCommentApi = (idRelated, data) => post(`${url.COMMENT}/${idRelated}`, data);
+const updateCommentApi = (id, data) => put(`${url.COMMENT}/${id}`, data);
+const deleteCommentApi = (id) => del(`${url.COMMENT}/${id}`);
 
 
 //Product images
@@ -173,4 +180,10 @@ export {
 
     printOrderApi,
     resumeOrderApi,
+
+    fetchCommentsApi,
+    fetchCommentApi,
+    registerCommentApi,
+    updateCommentApi,
+    deleteCommentApi,
 }

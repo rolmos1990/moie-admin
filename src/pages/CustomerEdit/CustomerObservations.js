@@ -13,17 +13,18 @@ import {STATUS_COLORS, StatusField} from "../../components/StatusField";
 import {ConverterCustomerStatus} from "../Customer/customer_status";
 import Observations from "../../components/Common/Observations";
 import {deleteFieldOption, getFieldOptionByGroup, registerFieldOption, updateFieldOption} from "../../store/fieldOptions/actions";
-import {GROUPS} from "../../common/constants";
+import {COMMENT_ENTITIES, GROUPS} from "../../common/constants";
+import {deleteComment, getCommentsByEntity, registerComment} from "../../store/comment/actions";
 
 const CustomerObservations = (props) => {
 
-    const {onGetCustomerObservations, onGetByGroup, customerId, fieldOptions} = props;
+    const {onGetObservations, onCreateObservations, onDeleteObservations, onGetByGroup, customerId, fieldOptions} = props;
     const [observationsSuggested, setObservationsSuggested] = useState([]);
 
     useEffect(() => {
-        // onGetCustomerObservations(customerId);
+        onGetObservations(customerId);
         onGetByGroup(GROUPS.CUSTOMER_OBSERVATIONS);
-    }, [onGetCustomerObservations]);
+    }, [onGetObservations]);
 
     useEffect(() => {
         if (fieldOptions && fieldOptions.length > 0) {
@@ -33,19 +34,17 @@ const CustomerObservations = (props) => {
 
     const onDeleteObservation = (observation) => {
         console.log('onDeleteObservation', observation);
+        onDeleteObservations(observation.id);
     }
 
     const onAddObservation = (observation) => {
         console.log('onAddObservation', observation);
+        onCreateObservations(observation);
     }
 
     return (
         <React.Fragment>
-            <Observations
-                observations={[]}
-                onAddObservation={onAddObservation}
-                onDeleteObservation={onDeleteObservation}
-                observationsSuggested={observationsSuggested}/>
+
         </React.Fragment>
     ) ;
 }
@@ -57,8 +56,10 @@ const mapStateToProps = state => {
 }
 
 const mapDispatchToProps = dispatch => ({
-    onGetCustomerObservations: (id) => dispatch(getCustomer(id)),
-    onGetByGroup: (group) => dispatch(getFieldOptionByGroup(group, 500, 0)),
+    onGetObservations: (idRelated) => dispatch(getCommentsByEntity(COMMENT_ENTITIES.CUSTOMER, idRelated)),
+    onCreateObservations: (comment) => dispatch(registerComment(comment)),
+    onDeleteObservations: (commentId) => dispatch(deleteComment(commentId)),
+    onGetCommentSuggested: (group) => dispatch(getFieldOptionByGroup(group, 500, 0)),
 })
 
 export default withRouter(

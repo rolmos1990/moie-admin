@@ -4,7 +4,7 @@ import {withRouter} from "react-router-dom"
 import {connect} from "react-redux";
 import PropTypes from "prop-types";
 import {FieldAsyncSelect, FieldSelect} from "../../../components/Fields";
-import {GET_CUSTOMER} from "../../../helpers/url_helper";
+import {CUSTOMER} from "../../../helpers/url_helper";
 import {getCustomer} from "../../../store/customer/actions";
 import {arrayToOptionsByFieldName, getEmptyOptions} from "../../../common/converters";
 import {AvForm} from "availity-reactstrap-validation";
@@ -101,7 +101,7 @@ const OrderCustomer = (props) => {
                             <Label htmlFor="product">Documento</Label>
                             <FieldAsyncSelect
                                 name={"product"}
-                                urlStr={GET_CUSTOMER}
+                                urlStr={CUSTOMER}
                                 placeholder="Buscar por documento"
                                 defaultValue={customerDocumentDefault}
                                 conditionalOptions={{fieldName: 'document', operator: Conditionals.OPERATORS.LIKE}}
@@ -117,7 +117,7 @@ const OrderCustomer = (props) => {
                             <Label htmlFor="customer">Nombre</Label>
                             <FieldAsyncSelect
                                 name={"customer"}
-                                urlStr={GET_CUSTOMER}
+                                urlStr={CUSTOMER}
                                 placeholder="Buscar por nombre"
                                 defaultValue={customerDefault}
                                 onChange={(c) => {
@@ -132,7 +132,7 @@ const OrderCustomer = (props) => {
                             <Label htmlFor="customer">Correo</Label>
                             <FieldAsyncSelect
                                 name={"email"}
-                                urlStr={GET_CUSTOMER}
+                                urlStr={CUSTOMER}
                                 placeholder="Buscar por correo"
                                 defaultValue={customerEmailDefault}
                                 conditionalOptions={{fieldName: 'email', operator: Conditionals.OPERATORS.LIKE}}
