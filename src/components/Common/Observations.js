@@ -26,7 +26,7 @@ const Observations = (props) => {
 
     useEffect(() => {
         if (observations && observations.length > 0) {
-            if(observations.some(o => o.entity === entity)) setObservationList(observations.filter(o => o.entity === entity).map(o => ({...o, userName: user.username})));
+            if(observations.some(o => o.entity === entity)) setObservationList(observations.filter(o => o.entity === entity));
         }else{
             setObservationList([]);
         }
