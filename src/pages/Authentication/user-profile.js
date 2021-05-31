@@ -1,146 +1,115 @@
 import PropTypes from 'prop-types'
-import React, { useState, useEffect } from "react"
+import React, {useState, useEffect} from "react"
 import {
-  Container,
-  Row,
-  Col,
-  Card,
-  Alert,
-  CardBody,
-  Media,
-  Button,
+    Container,
+    Row,
+    Col,
+    Card,
+    Alert,
+    CardBody,
+    Media,
+    Button,
 } from "reactstrap"
 
 // availity-reactstrap-validation
-import { AvForm, AvField } from "availity-reactstrap-validation"
+import {AvForm, AvField} from "availity-reactstrap-validation"
 
 // Redux
-import { connect } from "react-redux"
-import { withRouter } from "react-router-dom"
+import {connect} from "react-redux"
+import {withRouter} from "react-router-dom"
 
 //Import Breadcrumb
 import Breadcrumb from "../../components/Common/Breadcrumb"
 
 import avatar from "../../assets/images/users/avatar-1.jpg"
 // actions
-import { editProfile, resetProfileFlag } from "../../store/actions"
+import {editProfile, resetProfileFlag} from "../../store/actions"
 
 const UserProfile = props => {
-  const [email, setemail] = useState("")
-  const [name, setname] = useState("")
-  const [idx, setidx] = useState(1)
+    const {user} = props;
 
-  useEffect(() => {
-    if (localStorage.getItem("authUser")) {
-      const obj = JSON.parse(localStorage.getItem("authUser"))
-      if (process.env.REACT_APP_DEFAULTAUTH === "firebase") {
-        setname(obj.displayName)
-        setemail(obj.email)
-        setidx(obj.uid)
-      } else if (
-        process.env.REACT_APP_DEFAULTAUTH === "fake" ||
-        process.env.REACT_APP_DEFAULTAUTH === "jwt"
-      ) {
-        setname(obj.username)
-        setemail(obj.email)
-        setidx(obj.uid)
-      }
-      setTimeout(() => {
-        props.resetProfileFlag();
-      }, 3000);
-    }
-  }, [props.success,props])
 
-  function handleValidSubmit(event, values) {
-    props.editProfile(values)
-  }
+    console.log('user', user)
 
-  return (
-    <React.Fragment>
-      <div className="page-content">
-        <Container fluid>
-          {/* Render Breadcrumb */}
-          <Breadcrumb title="Lucy Moie" item="Profile" />
+    return (
+        <React.Fragment>
+            <div className="page-content">
+                <Container fluid>
+                    <Breadcrumb title="Mi perfil" item={`${user.name} ${user.lastname}`}/>
 
-          <Row>
-            <Col lg="12">
-              {props.error && props.error ? (
-                <Alert color="danger">{props.error}</Alert>
-              ) : null}
-              {props.success && props.success ? (
-                <Alert color="success">{props.success}</Alert>
-              ) : null}
 
-              <Card>
-                <CardBody>
-                  <Media className="d-flex">
-                    <div className="ms-3">
-                      <img
-                        src={avatar}
-                        alt=""
-                        className="avatar-md rounded-circle img-thumbnail"
-                      />
+                    <div className="row mb-4">
+                        <div className="col-md-offset-4 col-md-4">
+                            <div className="card h-100">
+                                <div className="card-body">
+                                    <div className="text-center">
+                                        <div>
+                                            <img src={avatar} alt="" className="avatar-lg rounded-circle img-thumbnail" />
+                                        </div>
+                                        <h5 className="mt-3 mb-1">{`${user.name} ${user.lastname}`}</h5>
+                                        <p className="text-muted">{user.email}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/*<div className="col-xl-8">
+                            <div className="card mb-0">
+                                <ul className="nav nav-tabs nav-tabs-custom nav-justified" role="tablist">
+                                    <li className="nav-item">
+                                        <a className="nav-link active" data-bs-toggle="tab" role="tab">
+                                            <i className="uil-shopping-cart-alt me-2 font-size-20"> </i>
+                                            <span className="d-none d-sm-block">Mis Pedidos</span>
+                                        </a>
+                                    </li>
+                                    <li className="nav-item">
+                                        <a className="nav-link" data-bs-toggle="tab" href="#tasks" role="tab">
+                                            <i className="uil uil-clipboard-notes font-size-20"></i>
+                                            <span className="d-none d-sm-block">Tasks</span>
+                                        </a>
+                                    </li>
+                                    <li className="nav-item">
+                                        <a className="nav-link" data-bs-toggle="tab" href="#messages" role="tab">
+                                            <i className="uil uil-envelope-alt font-size-20"></i>
+                                            <span className="d-none d-sm-block">Messages</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                                <div className="tab-content p-4">
+                                    <div className="tab-pane active" id="orders" role="tabpanel">
+                                        Lista de pedidos
+                                    </div>
+                                    <div className="tab-pane" id="tasks" role="tabpanel">
+                                        <div>
+                                            task
+                                        </div>
+                                    </div>
+                                    <div className="tab-pane" id="messages" role="tabpanel">
+                                        messages
+                                    </div>
+                                </div>
+                            </div>
+                        </div>*/}
                     </div>
-                    <Media className="flex-1 align-self-center">
-                      <div className="text-muted">
-                        <h5>{name}</h5>
-                        <p className="mb-1">{email}</p>
-                        <p className="mb-0">Id no: #{idx}</p>
-                      </div>
-                    </Media>
-                  </Media>
-                </CardBody>
-              </Card>
-            </Col>
-          </Row>
 
-          <h4 className="card-title mb-4">Change User Name</h4>
-
-          <Card>
-            <CardBody>
-              <AvForm
-                className="form-horizontal"
-                onValidSubmit={(e, v) => {
-                  handleValidSubmit(e, v)
-                }}
-              >
-                <div className="form-group">
-                  <AvField
-                    name="username"
-                    label="User Name"
-                    value={name}
-                    className="form-control"
-                    placeholder="Enter User Name"
-                    type="text"
-                    required
-                  />
-                  <AvField name="idx" value={idx} type="hidden" />
-                </div>
-                <div className="text-center mt-4">
-                  <Button type="submit" color="danger">
-                    Update User Name
-                  </Button>
-                </div>
-              </AvForm>
-            </CardBody>
-          </Card>
-        </Container>
-      </div>
-    </React.Fragment>
-  )
+                </Container>
+            </div>
+        </React.Fragment>
+    )
 }
 
 UserProfile.propTypes = {
-  editProfile: PropTypes.func,
-  error: PropTypes.any,
-  success: PropTypes.any
+    editProfile: PropTypes.func,
+    error: PropTypes.any,
+    success: PropTypes.any
 }
 
 const mapStatetoProps = state => {
-  const { error, success } = state.Profile
-  return { error, success }
+    const {error, success} = state.Profile
+    const {user} = state.Login
+    return {user, error, success}
 }
 
 export default withRouter(
-  connect(mapStatetoProps, { editProfile, resetProfileFlag })(UserProfile)
+    connect(mapStatetoProps, {editProfile, resetProfileFlag})(UserProfile)
 )

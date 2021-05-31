@@ -11,11 +11,12 @@ const InputSearchField = (props) => {
     const {defaultValue, options} = props;
 
     useEffect(() => {
-        if (options && options.length > 0) {
+        if (defaultValue === -1) {
+            setSelected(null);
+
+        } else if (options && options.length > 0) {
             const selected = options.filter(item => item.value === defaultValue);
-            if (selected && selected.length > 0) {
-                setSelected(selected[0]);
-            }
+            if (selected && selected.length > 0) setSelected(selected[0]);
         }
     }, [options, defaultValue]);
 

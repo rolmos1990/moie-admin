@@ -42,7 +42,7 @@ const OrderSummary = (props) => {
                                 <table className="table table-sm mb-0">
                                     <tbody>
                                     <tr>
-                                        <td>Piezas:</td>
+                                        <td>Prendas:</td>
                                         <td className="text-end">{summary.quantity}</td>
                                     </tr>
                                     <tr>

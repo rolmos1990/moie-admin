@@ -29,6 +29,7 @@ const OrderProducts = (props) => {
     const [color, setColor] = useState({});
     const [sizes, setSizes] = useState([]);
     const [size, setSize] = useState({});
+    const [defaultQuantity, setDefaultQuantity] = useState({});
 
     useEffect(() => {
         if (product.id) {
@@ -46,9 +47,12 @@ const OrderProducts = (props) => {
 
             let productSizeColors = Object.keys(map).map(k => ({label: k, value: k}));
             setColors(productSizeColors);
-            if (productSizeColors.length === 1) {
-                setColor(productSizeColors[0].value);
-            }
+
+            setColor(-1);
+            setSize(-1);
+            setSizes([]);
+            setQuantityAvailable(0);
+            setDefaultQuantity(-1);
         } else {
             resetData();
         }
@@ -161,8 +165,7 @@ const OrderProducts = (props) => {
                                                     <Images src={`${getImageByQuality(img, 'medium')}`}
                                                             alt={img.filename}
                                                             className="img-fluid mx-auto d-block"
-                                                            width={200}
-                                                            data-zoom={`${img.path}`}/>
+                                                            width={200}/>
                                                 </div>
                                             </div>
                                         ))}
@@ -214,7 +217,7 @@ const OrderProducts = (props) => {
                                         id={"color"}
                                         name={"color"}
                                         options={colors}
-                                        value={color}
+                                        defaultValue={color}
                                         onChange={(e) => {
                                             setSizes(colorsMap[e.label]);
                                             setColor(colors.find(s => s.id === e.value));
@@ -241,7 +244,8 @@ const OrderProducts = (props) => {
                                         id={"quantity"}
                                         name={"quantity"}
                                         options={buildNumericOptions(quantityAvailable, 1, 1)}
-                                        defaultValue={0}
+                                        defaultValue={defaultQuantity}
+                                        onChange={(e) => setDefaultQuantity(e.value)}
                                         required
                                     />
                                 </Col>

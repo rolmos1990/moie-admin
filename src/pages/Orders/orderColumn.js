@@ -81,7 +81,7 @@ const orderColumns = (onSelectedOrder) => [
         ),
     },
     {
-        text: "Piezas",
+        text: "Prendas",
         dataField: "quantity",
         sort: false,
         filter: false,

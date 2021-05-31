@@ -99,6 +99,7 @@ const OrderEdit = (props) => {
             // onGetProducts(newCar.products.map(prod => prod.origin.id))
             onUpdateCar(newCar)
             setOrderData(order);
+            setShowAsTable(order.orderDetails.length > 8);
         }
         //console.log(order);
     }, [order]);
@@ -378,7 +379,7 @@ const OrderEdit = (props) => {
                                                 <span className="p-1">{getPaymentType()}</span>
                                             </Col>
                                             <Col md={12}>
-                                                <label>Piezas para cambio: </label>
+                                                <label>Prendas para cambio: </label>
                                                 <span className="p-1">{orderData.piecesForChanges || 0}</span>
                                             </Col>
                                         </>
@@ -446,7 +447,6 @@ const OrderEdit = (props) => {
                                                                             alt={""}
                                                                             height={80}
                                                                             className="img-fluid d-block"
-                                                                            data-zoom={`${product.product.productImage[0].path}`}
                                                                             styles={{height: '83px', width: '53px', borderRadius: '8px', 'margin-left': '4px'}}
                                                                     />
                                                                 </div>

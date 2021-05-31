@@ -209,8 +209,8 @@ const OrderCustomer = (props) => {
 
                     {hasPendingOrders && (
                         <Col md={12} >
-                            <div className="alert alert-warning m-0">
-                                <i className="uil uil-exclamation-triangle"> </i> Existe un pedido abierto para el cliente seleccionado, este pedido no será enviado hasta que se complete el pedido anterior.
+                            <div className="alert alert-warning m-0 font-size-16">
+                                <i className="uil uil-exclamation-triangle"> </i> <b>Existe un pedido abierto para el cliente seleccionado, este pedido no será enviado hasta que se complete el pedido anterior.</b>
                             </div>
                         </Col>
                     )}
