@@ -63,9 +63,17 @@ const Login = (props) => {
   const facebookResponse = response => {
     signIn(response, "facebook")
   }
+  const removeAttr = attr => {
+    if(document.body.hasAttribute(attr)){
+      document.body.removeAttribute(attr)
+    }
+  }
 
   useEffect(() => {
     document.body.className = "authentication-bg";
+    removeAttr('data-layout');
+    removeAttr('data-layout-size');
+
     // remove classname when component will unmount
     return function cleanup() {
       document.body.className = "";
