@@ -16,6 +16,7 @@ import ProductSizeSaga from "./productSize/saga"
 import LocationSaga from "./location/saga"
 import FieldOptionSaga from "./fieldOptions/saga"
 import OrderSaga from "./order/saga"
+import UserSaga from "./user/saga"
 import TemplateSaga from "./template/saga"
 import LayoutSaga from "./layout/saga"
 
@@ -35,6 +36,7 @@ export default function* rootSaga() {
     LocationSaga(),
     FieldOptionSaga(),
     OrderSaga(),
+    UserSaga(),
     TemplateSaga(),
     CommentSaga(),
     ForgetSaga(),

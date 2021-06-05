@@ -21,6 +21,8 @@ import Municipalities from "../pages/Municipality";
 import MunicipalityEdit from "../pages/MunicipalityEdit";
 import Categories from "../pages/Category";
 import CategoryEdit from "../pages/CategoryEdit";
+import Users from "../pages/User";
+import UserEdit from "../pages/UserEdit";
 import ProductDetail from "../pages/ProductEdit/ProductDetail";
 import CustomerDetail from "../pages/CustomerEdit/CustomerDetail";
 import Configs from "../pages/FieldOption";
@@ -46,6 +48,9 @@ const userRoutes = [
   { path: "/categories", component: Categories },
   { path: "/category", component: CategoryEdit },
   { path: "/category/:id", component: CategoryEdit },
+  { path: "/users", component: Users },
+  { path: "/user", component: UserEdit },
+  { path: "/user/:id", component: UserEdit },
   { path: "/states", component: States },
   { path: "/state", component: StateEdit },
   { path: "/state/:id", component: StateEdit },

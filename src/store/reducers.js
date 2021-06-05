@@ -20,6 +20,7 @@ import ProductImage from "./productImages/reducer"
 import ProductSize from "./productSize/reducer"
 import FieldOption from "./fieldOptions/reducer"
 import Order from "./order/reducer"
+import User from "./user/reducer"
 import Template from "./template/reducer"
 import Comment from "./comment/reducer"
 
@@ -37,6 +38,7 @@ const rootReducer = combineReducers({
   FieldOption,
   Location,
   Order,
+  User,
   Account,
   ForgetPassword,
   Profile,

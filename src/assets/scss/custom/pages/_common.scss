@@ -204,3 +204,9 @@ h1 small {
   background: #f8f9fa;
   overflow-y: auto;
 }
+
+@media (max-width: 767px) {
+  .orderDetail-overlay {
+    width: 100%;
+  }
+}

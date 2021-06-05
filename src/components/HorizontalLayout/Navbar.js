@@ -170,7 +170,7 @@ const Navbar = props => {
                       <div
                           className={classname("dropdown-menu", { show: auth })}
                       >
-                        <Link to="#" className="dropdown-item">
+                        <Link to="/users" className="dropdown-item">
                           {props.t("Usuarios")}
                         </Link>
                         <Link to="#" className="dropdown-item">

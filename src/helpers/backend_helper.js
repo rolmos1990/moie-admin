@@ -1,7 +1,7 @@
 // Login Method
 import {del, get, post, put} from "./api_helper";
 import * as url from "./url_helper";
-import {COMMENT, CUSTOMER, DELIVERY_METHODS} from "./url_helper";
+import {COMMENT, CUSTOMER, DELIVERY_METHODS, GET_USERS, USER} from "./url_helper";
 
 const postLogin = data => post(url.POST_LOGIN, data);
 
@@ -28,6 +28,12 @@ const fetchCategoriesApi = data => get(url.CATEGORY, {}, data);
 const fetchCategoryApi = (id) => get(`${url.CATEGORY}/${id}`,{});
 const registerCategoryApi = data => post(url.CATEGORY, data);
 const updateCategoryApi = (id, data) => put(`${url.CATEGORY}/${id}`, data);
+
+//Users
+const fetchUsersApi = data => get(url.USER, {}, data);
+const fetchUserApi = (id) => get(`${url.USER}/${id}`,{});
+const registerUserApi = data => post(url.USER, data);
+const updateUserApi = (id, data) => put(`${url.USER}/${id}`, data);
 
 //Sizes template
 const fetchSizesApi = data => get(url.SIZE, {}, data);
@@ -186,4 +192,9 @@ export {
     registerCommentApi,
     updateCommentApi,
     deleteCommentApi,
+
+    fetchUsersApi,
+    fetchUserApi,
+    registerUserApi,
+    updateUserApi,
 }

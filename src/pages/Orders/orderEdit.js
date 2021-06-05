@@ -22,6 +22,8 @@ import {HtmlTooltip} from "../../components/Common/HtmlTooltip";
 import {StatusField} from "../../components/StatusField";
 import * as htmlToImage from 'html-to-image';
 import Observations from "../../components/Common/Observations";
+import {isMobile} from "react-device-detect";
+
 // import {toPng, toJpeg, toBlob, toPixelData, toSvg} from 'html-to-image';
 
 
@@ -97,7 +99,9 @@ const OrderEdit = (props) => {
             // onGetProducts(newCar.products.map(prod => prod.origin.id))
             onUpdateCar(newCar)
             setOrderData(order);
+
             //setShowAsTable(order.orderDetails.length > 8);
+            setShowAsTable(!isMobile);
         }
         //console.log(order);
     }, [order]);
@@ -401,26 +405,30 @@ const OrderEdit = (props) => {
                                             <h4 className="card-title text-info"><i className="uil-box me-2"> </i> Productos</h4>
                                         </Col>
                                         <Col xs={6} className="text-right">
-                                            <Tooltip placement="bottom" title="Mostar como tabla" aria-label="add">
-                                                <button type="button"
-                                                        size="small"
-                                                        className="btn btn-sm text-primary"
-                                                        onClick={() => {
-                                                            setShowAsTable(true);
-                                                        }}>
-                                                    <i className="fa fa-list font-size-18"> </i>
-                                                </button>
-                                            </Tooltip>
-                                            <Tooltip placement="bottom" title="Mostrar como tarjetas" aria-label="add">
-                                                <button type="button"
-                                                        size="small"
-                                                        className="btn btn-sm text-primary"
-                                                        onClick={() => {
-                                                            setShowAsTable(false);
-                                                        }}>
-                                                    <i className="fa fa-th font-size-18"> </i>
-                                                </button>
-                                            </Tooltip>
+                                            {!isMobile && (
+                                                <>
+                                                    <Tooltip placement="bottom" title="Mostar como tabla" aria-label="add">
+                                                        <button type="button"
+                                                                size="small"
+                                                                className="btn btn-sm text-primary"
+                                                                onClick={() => {
+                                                                    setShowAsTable(true);
+                                                                }}>
+                                                            <i className="fa fa-list font-size-18"> </i>
+                                                        </button>
+                                                    </Tooltip>
+                                                    <Tooltip placement="bottom" title="Mostrar como tarjetas" aria-label="add">
+                                                        <button type="button"
+                                                                size="small"
+                                                                className="btn btn-sm text-primary"
+                                                                onClick={() => {
+                                                                    setShowAsTable(false);
+                                                                }}>
+                                                            <i className="fa fa-th font-size-18"> </i>
+                                                        </button>
+                                                    </Tooltip>
+                                                </>
+                                            )}
                                             <Tooltip placement="bottom" title="Editar products" aria-label="add">
                                                 <button type="button"
                                                         size="small"
@@ -595,37 +603,37 @@ const OrderEdit = (props) => {
                     <Card id={'order-tabs'} className="p-3">
                         <ul className="nav nav-tabs nav-tabs-custom nav-justified" role="tablist">
                             <li className="nav-item">
-                                <a className={`nav-link ${activeTab === 1? 'active': ''}`} data-bs-toggle="tab" href="#tab1" role="tab" aria-selected="false" onClick={() => setActiveTab(1)}>
+                                <a className={`nav-link ${activeTab === 1 ? 'active' : ''}`} data-bs-toggle="tab" href="#tab1" role="tab" aria-selected="false" onClick={() => setActiveTab(1)}>
                                     <span className="d-block d-sm-none"><i className="fas fa-home"> </i></span>
                                     <span className="d-none d-sm-block">Historial</span>
                                 </a>
                             </li>
                             <li className="nav-item">
-                                <a className={`nav-link ${activeTab === 2? 'active': ''}`} data-bs-toggle="tab" href="#tab2" role="tab" aria-selected="false" onClick={() => setActiveTab(2)}>
+                                <a className={`nav-link ${activeTab === 2 ? 'active' : ''}`} data-bs-toggle="tab" href="#tab2" role="tab" aria-selected="false" onClick={() => setActiveTab(2)}>
                                     <span className="d-block d-sm-none"><i className="far fa-user"> </i></span>
                                     <span className="d-none d-sm-block">Observaciones del pedido</span>
                                 </a>
                             </li>
                             <li className="nav-item">
-                                <a className={`nav-link ${activeTab === 3? 'active': ''}`} data-bs-toggle="tab" href="#tab2" role="tab" aria-selected="false" onClick={() => setActiveTab(3)}>
+                                <a className={`nav-link ${activeTab === 3 ? 'active' : ''}`} data-bs-toggle="tab" href="#tab2" role="tab" aria-selected="false" onClick={() => setActiveTab(3)}>
                                     <span className="d-block d-sm-none"><i className="far fa-user"> </i></span>
                                     <span className="d-none d-sm-block">Observaciones del cliente</span>
                                 </a>
                             </li>
                         </ul>
                         <div className="tab-content p-3 text-muted">
-                            <div className={`tab-pane ${activeTab === 1? 'active': ''}`} id="tab1" role="tabpanel">
+                            <div className={`tab-pane ${activeTab === 1 ? 'active' : ''}`} id="tab1" role="tabpanel">
                                 <p className="mb-0">
-                                   <h1>HISTORIAL</h1>
+                                    <h1>HISTORIAL</h1>
                                 </p>
                             </div>
-                            <div className={`tab-pane ${activeTab === 2? 'active': ''}`} id="tab2" role="tabpanel">
+                            <div className={`tab-pane ${activeTab === 2 ? 'active' : ''}`} id="tab2" role="tabpanel">
                                 <Observations
                                     entitySuggested={GROUPS.ORDER_OBSERVATIONS}
                                     entity={COMMENT_ENTITIES.ORDER}
                                     entityId={orderData.id}/>
                             </div>
-                            <div className={`tab-pane ${activeTab === 3? 'active': ''}`} id="tab2" role="tabpanel">
+                            <div className={`tab-pane ${activeTab === 3 ? 'active' : ''}`} id="tab2" role="tabpanel">
                                 <Observations
                                     entitySuggested={GROUPS.CUSTOMER_OBSERVATIONS}
                                     entity={COMMENT_ENTITIES.CUSTOMER}

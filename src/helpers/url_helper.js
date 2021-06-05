@@ -79,6 +79,7 @@ export const GET_PROJECT_DETAIL = "/project"
 export const GET_TASKS = "/tasks"
 
 //CONTACTS
+export const USER = "/user"
 export const GET_USERS = "/users"
 export const GET_USER_PROFILE = "/user"
 
