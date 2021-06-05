@@ -11,20 +11,29 @@ import {getCustomer} from "../../store/customer/actions";
 import OrderCardList from "../Orders/OrderCardList";
 import {STATUS_COLORS, StatusField} from "../../components/StatusField";
 import {ConverterCustomerStatus} from "../Customer/customer_status";
-import CustomerObservations from "./CustomerObservations";
-import {hasCustomerOpenOrders} from "../../helpers/service";
-import {COMMENT_ENTITIES, GROUPS} from "../../common/constants";
+import {customerCategoryStats, customerOrdersStats, customerProductStats, hasCustomerOpenOrders} from "../../helpers/service";
+import {COMMENT_ENTITIES, GROUPS, ORDER_STATUS} from "../../common/constants";
 import Observations from "../../components/Common/Observations";
+import PieChart from "../../components/Common/PieChart";
+import Conditionals from "../../common/conditionals";
+import moment from "moment";
 
 const CustomerDetail = (props) => {
 
     const {onGetCustomer, customer} = props;
     const [customerData, setCustomerData] = useState({});
     const [hasPendingOrders, setHasPendingOrders] = useState(false);
+    const [activeTab, setActiveTab] = useState(1);
+    const [productChart, setProductChart] = useState({series: [], labels:[]});
+    const [categoryChart, setCategoryChart] = useState({series: [], labels:[]});
+    const [orderChart, setOrderChart] = useState({series: [], labels:[]});
 
     useEffect(() => {
-        onGetCustomer(props.match.params.id);
-        hasCustomerOpenOrders(customer.id).then(resp => setHasPendingOrders(resp && resp.data && resp.data.length > 0));
+        if (props.match.params.id) {
+            onGetCustomer(props.match.params.id);
+            hasCustomerOpenOrders(props.match.params.id).then(resp => setHasPendingOrders(resp && resp.data && resp.data.length > 0));
+            getStats(props.match.params.id);
+        }
     }, [onGetCustomer]);
 
     useEffect(() => {
@@ -33,12 +42,48 @@ const CustomerDetail = (props) => {
         }
     }, [customer]);
 
+    const getStats = (customerId) => {
+        customerProductStats(customerId, moment()).then(resp => {
+            const chartData = {series: [], labels:[]};
+            console.log('customerProductStats', resp)
+            if(resp){
+                resp.forEach(pc => {
+                    chartData.series.push(pc.qty);
+                    chartData.labels.push(pc.name);
+                })
+            }
+            setProductChart(chartData);
+        });
+        customerCategoryStats(customerId, moment()).then(resp => {
+            const chartData = {series: [], labels:[]};
+            console.log('customerCategoryStats', resp)
+            if(resp){
+                resp.forEach(pc => {
+                    chartData.series.push(pc.qty);
+                    chartData.labels.push(pc.name);
+                })
+            }
+            setCategoryChart(chartData);
+        });
+        customerOrdersStats(customerId, moment()).then(resp => {
+            const chartData = {series: [], labels:[]};
+            console.log('customerOrdersStats', resp)
+            if(resp){
+                resp.forEach(pc => {
+                    chartData.series.push(pc.qty);
+                    chartData.labels.push(ORDER_STATUS[pc.status].name);
+                })
+            }
+            setOrderChart(chartData);
+        });
+    }
+
     return customerData.id ? (
         <React.Fragment>
             <div className="page-content">
                 <Container fluid className="pb-3">
                     <Breadcrumb hasBack path="/customers" title={customerData.name} item={"Cliente"}/>
-                    <Row>
+                    <Row className="mb-3">
                         <Col md={7}>
                             <Card id={'details'} className="mb-3 p-3">
 
@@ -128,14 +173,57 @@ const CustomerDetail = (props) => {
                                     </Row>
                                 )}
                             </Card>
-                            <Observations
-                                entitySuggested={GROUPS.CUSTOMER_OBSERVATIONS}
-                                entity={COMMENT_ENTITIES.CUSTOMER}
-                                entityId={customerData.id}/>
                         </Col>
                         <Col md={5}>
                             <Card id={'orders'} className="p-3">
                                 <OrderCardList customerId={customerData.id}/>
+                            </Card>
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col>
+                            <Card id={'order-tabs'} className="p-3">
+                                <ul className="nav nav-tabs nav-tabs-custom nav-justified" role="tablist">
+                                    <li className="nav-item">
+                                        <a className={`nav-link ${activeTab === 1 ? 'active' : ''}`} data-bs-toggle="tab" href="#tab1" role="tab" aria-selected="false" onClick={() => setActiveTab(1)}>
+                                            <span className="d-block d-sm-none"><i className="fas fa-home"> </i></span>
+                                            <span className="d-none d-sm-block">Historial de compras</span>
+                                        </a>
+                                    </li>
+                                    <li className="nav-item">
+                                        <a className={`nav-link ${activeTab === 2 ? 'active' : ''}`} data-bs-toggle="tab" href="#tab2" role="tab" aria-selected="false" onClick={() => setActiveTab(2)}>
+                                            <span className="d-block d-sm-none"><i className="far fa-user"> </i></span>
+                                            <span className="d-none d-sm-block">Historico de pedidos</span>
+                                        </a>
+                                    </li>
+                                    <li className="nav-item">
+                                        <a className={`nav-link ${activeTab === 3 ? 'active' : ''}`} data-bs-toggle="tab" href="#tab2" role="tab" aria-selected="false" onClick={() => setActiveTab(3)}>
+                                            <span className="d-block d-sm-none"><i className="far fa-user"> </i></span>
+                                            <span className="d-none d-sm-block">Observaciones</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                                <div className="tab-content p-3 text-muted">
+                                    <div className={`tab-pane ${activeTab === 1 ? 'active' : ''}`} id="tab1" role="tabpanel">
+                                        <Row>
+                                            <Col md={6}>
+                                                <PieChart data={productChart}/>
+                                            </Col>
+                                            <Col md={6}>
+                                                <PieChart data={categoryChart}/>
+                                            </Col>
+                                        </Row>
+                                    </div>
+                                    <div className={`tab-pane ${activeTab === 2 ? 'active' : ''}`} id="tab2" role="tabpanel">
+                                        <PieChart data={orderChart}/>
+                                    </div>
+                                    <div className={`tab-pane ${activeTab === 3 ? 'active' : ''}`} id="tab2" role="tabpanel">
+                                        <Observations
+                                            entitySuggested={GROUPS.CUSTOMER_OBSERVATIONS}
+                                            entity={COMMENT_ENTITIES.CUSTOMER}
+                                            entityId={customerData.id}/>
+                                    </div>
+                                </div>
                             </Card>
                         </Col>
                     </Row>
@@ -153,6 +241,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => ({
     hasCustomerOpenOrders,
+    customerProductStats,
+    customerCategoryStats,
     onGetCustomer: (id) => dispatch(getCustomer(id)),
 })
 

@@ -94,3 +94,13 @@ export const findFieldOptionByGroup = (group, limit = null, offset = null) => {
     const query = Conditionals.buildHttpGetQuery(cond, limit, offset);
     return fetchDataApi(url.FIELD_OPTIONS, query).then(resp => (resp.data || []));
 }
+
+export const customerOrdersStats = (customerId, date) => {
+    return fetchDataApi(`${url.CUSTOMER}/${customerId}/order_stats?beforeDate=${date.format("YYYY-MM-DD")}`, {});
+}
+export const customerProductStats = (customerId, date) => {
+    return fetchDataApi(`${url.CUSTOMER}/${customerId}/stats?beforeDate=${date.format("YYYY-MM-DD")}`, {});
+}
+export const customerCategoryStats = (customerId, date) => {
+    return fetchDataApi(`${url.CUSTOMER}/${customerId}/stats?beforeDate=${date.format("YYYY-MM-DD")}&categoryMode=true`, {});
+}
