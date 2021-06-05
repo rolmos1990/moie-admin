@@ -4,7 +4,7 @@ import {Button, Card, Tooltip} from "@material-ui/core";
 import {withRouter} from "react-router-dom"
 import {connect} from "react-redux";
 import PropTypes from "prop-types";
-import {buildNumericOptions, copyToClipboard, getImageByQuality, priceFormat, printPartOfPage, threeDots} from "../../common/utils";
+import {copyToClipboard, getImageByQuality, priceFormat, printPartOfPage, threeDots} from "../../common/utils";
 import NoDataIndication from "../../components/Common/NoDataIndication";
 
 import {getOrder, nextStatusOrder, printOrder, resumeOrder, updateCard, updateOrder} from "../../store/order/actions";
@@ -21,8 +21,6 @@ import {HtmlTooltip} from "../../components/Common/HtmlTooltip";
 
 import {StatusField} from "../../components/StatusField";
 import * as htmlToImage from 'html-to-image';
-import OrderObservations from "./orderObservations";
-import {FieldDecimalNumber, FieldSelect} from "../../components/Fields";
 import Observations from "../../components/Common/Observations";
 // import {toPng, toJpeg, toBlob, toPixelData, toSvg} from 'html-to-image';
 
@@ -99,7 +97,7 @@ const OrderEdit = (props) => {
             // onGetProducts(newCar.products.map(prod => prod.origin.id))
             onUpdateCar(newCar)
             setOrderData(order);
-            setShowAsTable(order.orderDetails.length > 8);
+            //setShowAsTable(order.orderDetails.length > 8);
         }
         //console.log(order);
     }, [order]);
@@ -338,7 +336,7 @@ const OrderEdit = (props) => {
                                 </Row>
                             </Card>
                         </Col>
-                        <Col md={showOrderOverlay ? 6 : 12}>
+                        <Col md={showOrderOverlay ? 6 : 12} className="mb-3">
                             <Card id={'delivery-options'} className="p-3">
                                 <Row>
                                     <Col xs={10}>

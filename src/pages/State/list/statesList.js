@@ -141,7 +141,7 @@ const StatesList = props => {
                                                     </div>
                                                 </Col>
                                             </Row>
-                                            <div className="float-sm-end">
+                                            <div className="float-sm-start">
                                                 <PaginationListStandalone {...paginationProps} />
                                             </div>
                                         </React.Fragment>
