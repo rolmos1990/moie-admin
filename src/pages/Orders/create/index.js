@@ -93,7 +93,7 @@ const CreateOrder = (props) => {
             <div className="page-content">
                 <Container fluid>
                     <Breadcrumb hasBack path="/orders" title="Crear pedido" item={"Pedido"}/>
-                    <Card>
+                    <Card className="mb-3">
                         <CardBody>
                             <Row>
                                 <Col md={12}>

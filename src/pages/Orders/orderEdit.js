@@ -101,7 +101,8 @@ const OrderEdit = (props) => {
             setOrderData(order);
 
             //setShowAsTable(order.orderDetails.length > 8);
-            setShowAsTable(!isMobile);
+            setShowAsTable(isMobile);
+
         }
         //console.log(order);
     }, [order]);
@@ -624,7 +625,22 @@ const OrderEdit = (props) => {
                         <div className="tab-content p-3 text-muted">
                             <div className={`tab-pane ${activeTab === 1 ? 'active' : ''}`} id="tab1" role="tabpanel">
                                 <p className="mb-0">
-                                    <h1>HISTORIAL</h1>
+                                    <table className="table table-sm table-striped table-bordered table-centered table-nowrap">
+                                        <thead>
+                                        <tr>
+                                            <th className="text-center">Estado</th>
+                                            <th className="text-center">Usuario</th>
+                                            <th className="text-center">Fecha</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr>
+                                            <td colSpan={3}>
+                                                No se encontraron datos.
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
                                 </p>
                             </div>
                             <div className={`tab-pane ${activeTab === 2 ? 'active' : ''}`} id="tab2" role="tabpanel">

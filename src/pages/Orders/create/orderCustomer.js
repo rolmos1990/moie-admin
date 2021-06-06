@@ -40,7 +40,7 @@ const OrderCustomer = (props) => {
     useEffect(() => {
         if (customer.id) {
             setCustomerData(customer);
-            onUpdateCar({...car, customer})
+            if(customer.status) onUpdateCar({...car, customer});
             if (car && !car.orderId) hasCustomerOpenOrders(customer.id).then(resp => setHasPendingOrders(resp && resp.data && resp.data.length > 0));
         } else {
             resetData();
@@ -209,8 +209,16 @@ const OrderCustomer = (props) => {
 
                     {hasPendingOrders && (
                         <Col md={12} >
-                            <div className="alert alert-warning m-0 font-size-16">
+                            <div className="alert alert-warning m-0 font-size-14">
                                 <i className="uil uil-exclamation-triangle"> </i> <b>Existe un pedido apartado para el cliente seleccionado, Solicite autorización para realizar este pedido.</b>
+                            </div>
+                        </Col>
+                    )}
+
+                    {!customer.status && (
+                        <Col md={12} >
+                            <div className="alert alert-danger m-0 font-size-14">
+                                <i className="uil uil-exclamation-triangle"> </i> <b>Este cliente no puede generar pedidos nuevos debido a que se encuentra inactivo.</b>
                             </div>
                         </Col>
                     )}
