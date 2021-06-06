@@ -10,16 +10,17 @@ const PieChart = props => {
         options: {
             chart: {
                 type: 'donut',
-                width: 50,
+
             },
             labels: props.data.labels,
             responsive: [{
-                breakpoint: 480,
+                breakpoint: 600,
                 options: {
                     size: '95%',
                     expandOnClick: false,
                     chart: {
                         type: 'donut',
+                        width: "100%",
                     },
                     legend: {
                         position: 'bottom'

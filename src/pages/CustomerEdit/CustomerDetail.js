@@ -207,15 +207,22 @@ const CustomerDetail = (props) => {
                                     <div className={`tab-pane ${activeTab === 1 ? 'active' : ''}`} id="tab1" role="tabpanel">
                                         <Row>
                                             <Col md={6}>
+                                                <h4 className="card-title text-info">Productos</h4>
                                                 <PieChart data={productChart}/>
                                             </Col>
                                             <Col md={6}>
+                                                <h4 className="card-title text-info">Categorias</h4>
                                                 <PieChart data={categoryChart}/>
                                             </Col>
                                         </Row>
                                     </div>
                                     <div className={`tab-pane ${activeTab === 2 ? 'active' : ''}`} id="tab2" role="tabpanel">
-                                        <PieChart data={orderChart}/>
+                                        <Row>
+                                            <Col md={6}>
+                                                <h4 className="card-title text-info">Pedidos</h4>
+                                                <PieChart data={orderChart}/>
+                                            </Col>
+                                        </Row>
                                     </div>
                                     <div className={`tab-pane ${activeTab === 3 ? 'active' : ''}`} id="tab2" role="tabpanel">
                                         <Observations
