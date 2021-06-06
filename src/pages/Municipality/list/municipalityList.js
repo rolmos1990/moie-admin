@@ -26,7 +26,7 @@ const MunicipalityList = props => {
 
     const pageOptions = {
         sizePerPage: DEFAULT_PAGE_LIMIT,
-        //totalSize: meta.totalRegisters, // replace later with size(users),
+        //totalSize: meta?.totalRegisters, // replace later with size(users),
         custom: true,
     }
     const {SearchBar} = Search

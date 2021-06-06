@@ -25,7 +25,7 @@ const StatesList = props => {
 
     const pageOptions = {
         sizePerPage: DEFAULT_PAGE_LIMIT,
-        totalSize: meta.totalRegisters,
+        totalSize: meta?.totalRegisters,
         custom: true,
     }
     const {SearchBar} = Search
