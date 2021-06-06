@@ -4,6 +4,7 @@ import {Breadcrumbs} from "@material-ui/core";
 import MiniWidget from "./mini-widget";
 import TopVendors from "./top-vendors";
 import LatestTransaction from "./latest-transaction";
+import TopUsers from "./top-users";
 
 const series1 = [{
     data: [25, 66, 41, 89, 63, 25, 44, 20, 36, 40, 54]
@@ -242,7 +243,7 @@ const Dashboard = () => {
             </Row>
             <Row>
                 <Col xl={4}>
-                <TopVendors></TopVendors>
+                <TopUsers/>
                 </Col>
                 <Col xl={8}>
                     <LatestTransaction />
