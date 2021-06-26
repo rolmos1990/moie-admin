@@ -119,7 +119,7 @@ const MunicipalityList = props => {
                                         <React.Fragment>
                                             <Row className="row mb-2">
                                                 <Col md={6}>
-                                                    <div className="form-inline mb-3">
+                                                    {/*<div className="form-inline mb-3">
                                                         <div className="search-box ms-2">
                                                             {!filter && (
                                                                 <div className="position-relative">
@@ -128,7 +128,7 @@ const MunicipalityList = props => {
                                                                 </div>
                                                             )}
                                                         </div>
-                                                    </div>
+                                                    </div>*/}
                                                 </Col>
                                                 <Col md={6}>
                                                     <div className="mb-3 float-md-end">
