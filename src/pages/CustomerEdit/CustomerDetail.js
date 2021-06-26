@@ -66,12 +66,13 @@ const CustomerDetail = (props) => {
             setCategoryChart(chartData);
         });
         customerOrdersStats(customerId, moment()).then(resp => {
-            const chartData = {series: [], labels:[]};
+            const chartData = {series: [], labels:[], colors: []};
             console.log('customerOrdersStats', resp)
             if(resp){
                 resp.forEach(pc => {
                     chartData.series.push(pc.qty);
                     chartData.labels.push(ORDER_STATUS[pc.status].name);
+                    chartData.colors.push(ORDER_STATUS[pc.status].colorCss);
                 })
             }
             setOrderChart(chartData);
@@ -191,12 +192,6 @@ const CustomerDetail = (props) => {
                                         </a>
                                     </li>
                                     <li className="nav-item">
-                                        <a className={`nav-link ${activeTab === 2 ? 'active' : ''}`} data-bs-toggle="tab" href="#tab2" role="tab" aria-selected="false" onClick={() => setActiveTab(2)}>
-                                            <span className="d-block d-sm-none"><i className="far fa-user"> </i></span>
-                                            <span className="d-none d-sm-block">Historico de pedidos</span>
-                                        </a>
-                                    </li>
-                                    <li className="nav-item">
                                         <a className={`nav-link ${activeTab === 3 ? 'active' : ''}`} data-bs-toggle="tab" href="#tab2" role="tab" aria-selected="false" onClick={() => setActiveTab(3)}>
                                             <span className="d-block d-sm-none"><i className="far fa-user"> </i></span>
                                             <span className="d-none d-sm-block">Observaciones</span>
@@ -206,21 +201,23 @@ const CustomerDetail = (props) => {
                                 <div className="tab-content p-3 text-muted">
                                     <div className={`tab-pane ${activeTab === 1 ? 'active' : ''}`} id="tab1" role="tabpanel">
                                         <Row>
-                                            <Col md={6}>
-                                                <h4 className="card-title text-info">Productos</h4>
-                                                <PieChart data={productChart}/>
-                                            </Col>
-                                            <Col md={6}>
-                                                <h4 className="card-title text-info">Categorias</h4>
-                                                <PieChart data={categoryChart}/>
-                                            </Col>
-                                        </Row>
-                                    </div>
-                                    <div className={`tab-pane ${activeTab === 2 ? 'active' : ''}`} id="tab2" role="tabpanel">
-                                        <Row>
-                                            <Col md={6}>
+                                            <Col md={6} className="mb-3">
                                                 <h4 className="card-title text-info">Pedidos</h4>
-                                                <PieChart data={orderChart}/>
+                                                <div style={{background: '#f6f6f6'}}>
+                                                    <PieChart data={orderChart}/>
+                                                </div>
+                                            </Col>
+                                            <Col md={6} className="mb-3">
+                                                <h4 className="card-title text-info">Productos</h4>
+                                                <div style={{background: '#f6f6f6'}}>
+                                                    <PieChart data={productChart}/>
+                                                </div>
+                                            </Col>
+                                            <Col md={6} className="mb-3">
+                                                <h4 className="card-title text-info">Categorias</h4>
+                                                <div style={{background: '#f6f6f6'}}>
+                                                    <PieChart data={categoryChart}/>
+                                                </div>
                                             </Col>
                                         </Row>
                                     </div>

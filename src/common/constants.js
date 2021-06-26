@@ -51,12 +51,12 @@ export const PAYMENT_TYPES = {
 export const PAYMENT_TYPES_LIST = Object.keys(PAYMENT_TYPES).map(k => ({label: PAYMENT_TYPES[k], value: PAYMENT_TYPES[k]}));
 
 export const ORDER_STATUS = {
-    1: {name: 'Reservada', color:'danger'},
-    2: {name: 'Confirmada', color:'success'},
-    3: {name: 'Impresa', color:'warning'},
-    4: {name: 'Enviada', color:'warning'},
-    5: {name: 'Conciliada', color:'info'},
-    6: {name: 'Anulada', color:'info'},
+    1: {name: 'Reservada', color:'danger', colorCss: "#f44336"},
+    2: {name: 'Confirmada', color:'success', colorCss: "#4caf50"},
+    3: {name: 'Impresa', color:'warning', colorCss: "#ffeb3b"},
+    4: {name: 'Enviada', color:'warning', colorCss: "#ffeb3b"},
+    5: {name: 'Conciliada', color:'info', colorCss: "#2196f3"},
+    6: {name: 'Anulada', color:'info', colorCss: "#2196f3"},
 };
 
 export const ORDER_STATUS_LIST = Object.keys(ORDER_STATUS).map(s => ({label:ORDER_STATUS[s].name, value:s}))

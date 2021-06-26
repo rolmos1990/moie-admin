@@ -1,5 +1,4 @@
 import React from "react"
-import imageNotFound from "../../assets/images/image-not-found.png"
 import ReactApexChart from "react-apexcharts";
 import PropTypes from "prop-types";
 
@@ -10,33 +9,36 @@ const PieChart = props => {
         options: {
             chart: {
                 type: 'donut',
-
             },
             labels: props.data.labels,
             responsive: [{
-                breakpoint: 600,
+                breakpoint: 480,
                 options: {
-                    size: '95%',
-                    expandOnClick: false,
                     chart: {
-                        type: 'donut',
-                        width: "100%",
+                        width: 200,
                     },
-                    legend: {
-                        position: 'bottom'
-                    }
                 }
-            }]
+            }],
+            legend: {
+                position: 'bottom',
+                horizontalAlign: 'center',
+                offsetY: 5,
+                height: 80,
+                fontSize: '0.8em',
+            }
         },
     };
+
+    if (props.data.colors) {
+        pieData.options.colors = props.data.colors;
+    }
+
     return (
         <>
             <ReactApexChart
                 options={pieData.options}
                 series={pieData.series}
                 type={pieData.options.chart.type}
-                width={450}
-                height={450}
             />
         </>
     );

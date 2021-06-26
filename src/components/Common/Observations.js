@@ -67,8 +67,8 @@ const Observations = (props) => {
                             {observationsSuggested.map((suggest, k) => (
                                 <Tooltip placement="bottom" title={suggest} aria-label="add">
                                     <button className="btn bg-light m-1" onClick={() => onAdd(suggest)}>
-                                        <span className="font-sm m-0"><i className={"uil uil-star"}></i> &nbsp;
-                                                {threeDots(suggest, 30)}
+                                        <span className="font-sm m-0"><i className={"uil uil-star"}> </i> &nbsp;
+                                             {threeDots(suggest, 30)}
                                         </span>
                                     </button>
                                 </Tooltip>
