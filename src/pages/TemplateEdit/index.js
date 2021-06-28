@@ -1,43 +1,56 @@
-import React, {useTemplate, useEffect, useState} from "react"
-import {CardBody, Col, Container, Label, Row, Spinner} from "reactstrap"
-import {AvForm, AvField} from "availity-reactstrap-validation"
-import {Button, Card} from "@material-ui/core";
-import {withRouter, Link} from "react-router-dom"
+import React, {useEffect, useState} from "react"
+import {CardBody, Col, Container, Label, Row} from "reactstrap"
+import {AvForm} from "availity-reactstrap-validation"
+import {Card} from "@material-ui/core";
+import {withRouter} from "react-router-dom"
 import {connect} from "react-redux";
-import {apiError} from "../../store/auth/login/actions";
 import PropTypes from "prop-types";
 import {getTemplate, registersTemplate, updateTemplate} from "../../store/template/actions";
 import {FieldSwitch, FieldText} from "../../components/Fields";
 import Breadcrumb from "../../components/Common/Breadcrumb";
-import {STATUS} from "../../common/constants";
+import {GROUPS, STATUS} from "../../common/constants";
 import ButtonSubmit from "../../components/Common/ButtonSubmit";
+import useHookValue from "../../components/mentions/useHookValue";
+import MultiMention from "../../components/mentions/MultiMention";
+import {getFieldOptionByGroups} from "../../store/fieldOptions/actions";
 
 const TemplateEdit = (props) => {
-    const {getTemplate, template} = props;
-    const [templateData, setTemplateData] = useState({_status:STATUS.ACTIVE});
+    const {onGetTemplate, template, onGetMentions, mentions} = props;
+    const [templateData, setTemplateData] = useState({_status: STATUS.ACTIVE});
+    const [dataMentions, setDataMentions] = useState([]);
     const isEdit = props.match.params.id;
+    const [sourceValue, onSourceChange, onSourceAdd, setSourceValue] = useHookValue('');
 
     //carga inicial
     useEffect(() => {
-        if (isEdit && getTemplate) {
-            getTemplate(props.match.params.id);
+        if (isEdit && onGetTemplate) {
+            onGetTemplate(props.match.params.id);
+            onGetMentions();
         }
-    }, [getTemplate]);
+    }, [onGetTemplate]);
 
     //cargar la información de plantilla
     useEffect(() => {
         if (template.id && isEdit) {
-            setTemplateData({...template, _status:template.status});
+            setTemplateData({...template, _status: template.status});
+            setSourceValue(template.template);
         }
     }, [template]);
 
+    useEffect(() => {
+        if (mentions && mentions.length > 0) {
+            setDataMentions(mentions.map(m => ({id: '{{' + m.value + '}}', display: m.value,})))
+        }
+    }, [mentions]);
+
     const handleValidSubmit = (event, values) => {
-        const data = Object.assign({},values, {status:values._status});
+        const data = Object.assign({}, values, {status: values._status, template: sourceValue});
         delete data._status;
+
         if (!isEdit) {
-            props.registersTemplate(data, props.history)
+            props.onRegistersTemplate(data, props.history)
         } else {
-            props.updateTemplate(props.match.params.id, data, props.history)
+            props.onUpdateTemplate(props.match.params.id, data, props.history)
         }
     }
     return (
@@ -51,7 +64,7 @@ const TemplateEdit = (props) => {
                                 handleValidSubmit(e, v)
                             }}>
                         <Row>
-                            <Col xl="8">
+                            <Col xl="12">
                                 <Card>
                                     <CardBody>
                                         <div className={"mt-1 mb-5"} style={{position: "relative"}}>
@@ -61,7 +74,7 @@ const TemplateEdit = (props) => {
                                                         ¿Activo?
                                                     </Col>
                                                     <Col>
-                                                        <FieldSwitch defaultValue={templateData._status} name={"_status"} />
+                                                        <FieldSwitch defaultValue={templateData._status} name={"_status"}/>
                                                     </Col>
                                                 </Row>
                                             </div>
@@ -98,22 +111,18 @@ const TemplateEdit = (props) => {
                                             <Col md="12">
                                                 <div className="mb-3">
                                                     <Label htmlFor="field_name">Contenido <span className="text-danger">*</span></Label>
-                                                    <FieldText
-                                                        id={"field_template"}
-                                                        name={"template"}
-                                                        type={"textarea"}
-                                                        value={templateData.template}
-                                                        minLength={3}
-                                                        maxLength={10000}
-                                                        className="h-250"
-                                                        required
+                                                    <MultiMention
+                                                        value={sourceValue}
+                                                        data={dataMentions}
+                                                        onChange={onSourceChange}
+                                                        onAdd={onSourceAdd}
                                                     />
                                                 </div>
                                             </Col>
                                         </Row>
                                         <Row>
                                             <Col md={12} className="text-right">
-                                                <ButtonSubmit loading={props.loading} />
+                                                <ButtonSubmit loading={props.loading}/>
                                             </Col>
                                         </Row>
                                     </CardBody>
@@ -129,12 +138,18 @@ const TemplateEdit = (props) => {
 
 const mapTemplateToProps = state => {
     const {error, loading, template} = state.Template
-    return {error, template, loading}
+    const {fieldOptions} = state.FieldOption
+    return {error, template, loading, mentions: fieldOptions}
 }
 
-export default withRouter(
-    connect(mapTemplateToProps, {apiError, registersTemplate, updateTemplate, getTemplate})(TemplateEdit)
-)
+const mapDispatchToProps = dispatch => ({
+    onRegistersTemplate: (data, history) => dispatch(registersTemplate(data, history)),
+    onUpdateTemplate: (id, data, history) => dispatch(updateTemplate(id, data, history)),
+    onGetTemplate: (id) => dispatch(getTemplate(id)),
+    onGetMentions: (conditional = null, limit = 100, page) => dispatch(getFieldOptionByGroups([GROUPS.TEMPLATE_MENTIONS], limit, page)),
+})
+
+export default withRouter(connect(mapTemplateToProps, mapDispatchToProps)(TemplateEdit))
 
 TemplateEdit.propTypes = {
     error: PropTypes.any,

@@ -12,7 +12,7 @@ const templateColumns = (onDelete = false) => [
         dataField: "reference",
         sort: true,
         formatter: (cellContent, item) => (
-            <Link to={`/category/${item.id}`}>
+            <Link to={`/template/${item.id}`}>
                 {item.reference}
             </Link>
         ),
