@@ -29,6 +29,7 @@ import slack from "../../assets/images/brands/slack.png"
 
 //i18n
 import { withTranslation } from "react-i18next"
+import UsersSalesDropdown from "../CommonForBoth/TopbarDropdown/UsersSalesDropdown";
 
 
 const Header = props => {
@@ -222,8 +223,8 @@ const Header = props => {
               </button>
             </div>
 
+            <UsersSalesDropdown />
             <NotificationDropdown />
-
             <ProfileMenu />
 
 {/*            <div className="dropdown d-inline-block">

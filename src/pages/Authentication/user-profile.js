@@ -24,6 +24,7 @@ import Breadcrumb from "../../components/Common/Breadcrumb"
 import avatar from "../../assets/images/users/avatar-1.jpg"
 // actions
 import {editProfile, resetProfileFlag} from "../../store/actions"
+import user4 from "../../assets/images/users/avatar-7.jpg";
 
 const UserProfile = props => {
     const {user} = props;
@@ -44,7 +45,7 @@ const UserProfile = props => {
                                 <div className="card-body">
                                     <div className="text-center">
                                         <div>
-                                            <img src={avatar} alt="" className="avatar-lg rounded-circle img-thumbnail" />
+                                            <img src={user4} alt="" className="avatar-lg rounded-circle img-thumbnail" />
                                         </div>
                                         <h5 className="mt-3 mb-1">{`${user.name} ${user.lastname}`}</h5>
                                         <p className="text-muted">{user.email}</p>

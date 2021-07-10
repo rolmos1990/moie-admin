@@ -35,6 +35,7 @@ import {
   toggleLeftmenu,
   changeSidebarType,
 } from "../../store/actions"
+import UsersSalesDropdown from "../CommonForBoth/TopbarDropdown/UsersSalesDropdown";
 
 const Header = props => {
   const [search, setsearch] = useState(false)
@@ -229,19 +230,16 @@ const Header = props => {
               </button>
             </Dropdown>
 
+            <UsersSalesDropdown />
             <NotificationDropdown />
-
             <ProfileMenu />
 
-            <div onClick={() => {
-              props.showRightSidebarAction(!props.showRightSidebar)
-            }}
+            <div onClick={() => props.showRightSidebarAction(!props.showRightSidebar)}
               className="dropdown d-inline-block">
               <button type="button" className="btn header-item noti-icon right-bar-toggle waves-effect">
-                <i className="uil-cog"></i>
+                <i className="uil-cog"> </i>
               </button>
             </div>
-
           </div>
         </div>
       </header>

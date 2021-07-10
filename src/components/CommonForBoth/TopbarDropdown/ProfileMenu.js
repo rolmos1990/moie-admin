@@ -14,7 +14,7 @@ import { connect } from "react-redux"
 import { withRouter, Link } from "react-router-dom"
 
 // users
-import user4 from "../../../assets/images/users/avatar-7.jpg"
+import userImage from "../../../assets/images/users/user.png"
 
 const ProfileMenu = props => {
   // Declare a new state variable, which we'll call "menu"
@@ -51,7 +51,7 @@ const ProfileMenu = props => {
         >
           <img
             className="rounded-circle header-profile-user"
-            src={user4}
+            src={userImage}
             alt="Header Avatar"
           />
           <span className="d-none d-xl-inline-block ms-1 fw-medium font-size-15">{username}</span>{" "}
