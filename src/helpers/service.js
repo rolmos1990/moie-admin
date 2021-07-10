@@ -77,16 +77,14 @@ export const countMayoristas = () => {
 export const countUsersOrders = () => {
     const conditions = new Conditionals.Condition;
     conditions.add('status', '1::5', Conditionals.OPERATORS.BETWEEN);
+    conditions.add('createdAt', formatDateToServer(getMoment().startOf('day')), Conditionals.OPERATORS.GREATER_THAN_OR_EQUAL)
 
     const query = {};
     query.conditional = Conditionals.getConditionalFormat(conditions.all());
-    query.operation = 'id::count';
+    query.operation = 'id::count,totalAmount::sum';
     query.group = 'user_id'
 
-    return fetchDataApi(url.ORDERS, Conditionals.urlSearchParams(query)).then(resp => {
-        console.log('countUsersOrders', resp);
-        return resp;
-    });
+    return fetchDataApi(url.ORDERS, Conditionals.urlSearchParams(query));
 }
 
 export const statsCustomerRegisteredToday = () => {

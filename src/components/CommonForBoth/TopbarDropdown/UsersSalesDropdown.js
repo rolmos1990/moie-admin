@@ -19,7 +19,9 @@ const UsersSalesDropdown = ({data}) => {
   const [users, setUsers] = useState([])
 
   useEffect(() => {
-    // countUsersOrders();
+    countUsersOrders().then(resp => {
+      console.log('countUsersOrders', resp)
+    });
     const u = [];
     u.push({name: 'Lina Battaglia', sales: 8, image: avatar5});
     u.push({name: 'Juan Favaro', sales: 5, image: avatar3});
