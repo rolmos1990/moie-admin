@@ -53,13 +53,10 @@ const ForgetPasswordPage = props => {
                   <CardBody className="p-4">
 
                     <div className="text-center mt-2">
-                      <h5 className="text-primary">Reset Password</h5>
-                      <p className="text-muted">Reset Password with Lucy Moie.</p>
+                      <h5 className="text-primary">Recuperar contraseña</h5>
                     </div>
                     <div className="p-2 mt-4">
-                      <div className="alert alert-success text-center mb-4" role="alert">
-                        Enter your Email and instructions will be sent to you!
-                                        </div>
+                      <div className="alert alert-success text-center mb-4" role="alert"> Ingrese su correo electronico!</div>
                       {props.forgetError && props.forgetError ? (
                         <Alert color="danger" className="text-center mb-4" style={{ marginTop: "13px" }}>
                           {props.forgetError}
@@ -96,7 +93,7 @@ const ForgetPasswordPage = props => {
                           </Col>
                         </Row>
                         <div className="mt-4 text-center">
-                          <p className="mb-0">Remember It ? <Link to="/login" className="fw-medium text-primary"> Signin </Link></p>
+                          <p className="mb-0">Recuerda su contraseña ? <Link to="/login" className="fw-medium text-primary"> Iniciar sesión </Link></p>
                         </div>
                       </AvForm>
                     </div>
