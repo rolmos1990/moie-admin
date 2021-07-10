@@ -58,11 +58,10 @@ const ProfileMenu = props => {
           <i className="uil-angle-down d-none d-xl-inline-block font-size-15"></i>
         </DropdownToggle>
         <DropdownMenu className="dropdown-menu-end">
-          <DropdownItem tag="a" href="/profile">
-            {" "}
+          <Link to="/profile" className="dropdown-item">
             <i className="uil uil-user-circle font-size-18 align-middle text-muted me-1"></i>
-            {props.t("My Profile")}{" "}
-          </DropdownItem>
+            <span>{props.t("Mi perfil")}</span>
+          </Link>
           <div className="dropdown-divider" />
           <Link to="/login" className="dropdown-item">
             <i className="uil uil-sign-out-alt font-size-18 align-middle me-1 text-muted"></i>

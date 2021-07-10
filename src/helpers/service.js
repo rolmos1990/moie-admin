@@ -62,6 +62,18 @@ const countByStatus = (urlString) => {
     });
 }
 
+export const countMayoristas = () => {
+    const query = {};
+    query.operation = 'id::count';
+    query.group = 'isMayorist'
+
+    return fetchDataApi(url.CUSTOMER, Conditionals.urlSearchParams(query)).then(resp => {
+        const group = {};
+        resp.data.forEach(item => group[item.isMayorist ? 1 : 0] = item.id);
+        return group;
+    });
+}
+
 export const statsCustomerRegisteredToday = () => {
     const conditions = new Conditionals.Condition;
     conditions.add('createdAt', formatDateToServer(getMoment().startOf('day')), Conditionals.OPERATORS.GREATER_THAN_OR_EQUAL)

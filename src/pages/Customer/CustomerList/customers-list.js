@@ -15,15 +15,18 @@ import {ConfirmationModalAction} from "../../../components/Modal/ConfirmationMod
 import NoDataIndication from "../../../components/Common/NoDataIndication";
 import {normalizeColumnsList} from "../../../common/converters";
 import {TableFilter} from "../../../components/TableFilter";
-import {countCustomersByStatus, statsCustomerRegistered, statsCustomerRegisteredToday} from "../../../helpers/service";
+import {countCustomersByStatus, countMayoristas, statsCustomerRegistered, statsCustomerRegisteredToday} from "../../../helpers/service";
 import StatsStatusCard from "../../../components/Common/StatsStatusCard";
 import StatsRegisteredCard from "../../../components/Common/StatsRegisteredCard";
+import CountUp from "react-countup";
+import ReactApexChart from "react-apexcharts";
 
 const CustomersList = props => {
     const {customers, meta, onGetCustomers, onDeleteCustomer,  refresh, countCustomersByStatus, statsCustomerRegistered, statsCustomerRegisteredToday} = props;
     const [customerList, setCustomerList] = useState([])
     const [filter, setFilter] = useState(false);
     const [conditional, setConditional] = useState(null);
+    const [countMayorista, setCountMayorista] = useState(0);
     const pageOptions = {
         sizePerPage: DEFAULT_PAGE_LIMIT,
         totalSize: meta?.totalRegisters,
@@ -32,6 +35,11 @@ const CustomersList = props => {
 
     useEffect(() => {
         onGetCustomers();
+        countMayoristas().then(data => {
+            if(data[1]){
+                setCountMayorista(data[1])
+            }
+        })
     }, [refresh])
 
     useEffect(() => {
@@ -74,6 +82,25 @@ const CustomersList = props => {
                 </Col>
                 <Col md={4}>
                     <StatsRegisteredCard title="Clientes Registrados esta semana" getData={statsCustomerRegistered} getDataToday={statsCustomerRegisteredToday}/>
+                </Col>
+                <Col md={4}>
+                    <Card>
+                        <CardBody>
+                            <div className="float-end mt-2">
+                                <Tooltip placement="bottom" title="Clientes mayoristas" aria-label="add">
+                                    <i className="mdi mdi-crown font-size-24 mr-1 text-warning p-3"> </i>
+                                </Tooltip>
+                            </div>
+                           <div>
+                               <h4 className="mb-1 mt-2">
+                                   <CountUp end={countMayorista} separator="," decimals={0}/>
+                               </h4>
+                               <p className="text-muted mb-0">{"Clientes mayoristas"}</p>
+                           </div>
+                            <p className="text-muted mb-0 mt-3">
+                            </p>
+                        </CardBody>
+                    </Card>
                 </Col>
             </Row>
             <Row>
@@ -173,6 +200,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => ({
     countCustomersByStatus,
+    countMayoristas,
     statsCustomerRegistered,
     statsCustomerRegisteredToday,
     onGetCustomers: (conditional = null, limit = DEFAULT_PAGE_LIMIT, page) => dispatch(getCustomers(conditional, limit, page)),
