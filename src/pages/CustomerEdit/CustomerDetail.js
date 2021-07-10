@@ -11,12 +11,11 @@ import {getCustomer} from "../../store/customer/actions";
 import OrderCardList from "../Orders/OrderCardList";
 import {STATUS_COLORS, StatusField} from "../../components/StatusField";
 import {ConverterCustomerStatus} from "../Customer/customer_status";
-import {customerCategoryStats, customerOrdersStats, customerProductStats, hasCustomerOpenOrders} from "../../helpers/service";
-import {COMMENT_ENTITIES, GROUPS, ORDER_STATUS} from "../../common/constants";
+import {customerCategoryStats, customerProductStats, hasCustomerOpenOrders} from "../../helpers/service";
+import {COMMENT_ENTITIES, GROUPS} from "../../common/constants";
 import Observations from "../../components/Common/Observations";
-import PieChart from "../../components/Common/PieChart";
-import Conditionals from "../../common/conditionals";
-import moment from "moment";
+import OrdersPieChart from "./OrdersPieChart";
+import CategoriesPieChart from "./CategoriesPieChart";
 
 const CustomerDetail = (props) => {
 
@@ -25,8 +24,6 @@ const CustomerDetail = (props) => {
     const [hasPendingOrders, setHasPendingOrders] = useState(false);
     const [activeTab, setActiveTab] = useState(1);
     const [productChart, setProductChart] = useState({series: [], labels:[]});
-    const [categoryChart, setCategoryChart] = useState({series: [], labels:[]});
-    const [orderChart, setOrderChart] = useState({series: [], labels:[]});
 
     useEffect(() => {
         if (props.match.params.id) {
@@ -43,7 +40,7 @@ const CustomerDetail = (props) => {
     }, [customer]);
 
     const getStats = (customerId) => {
-        customerProductStats(customerId, moment()).then(resp => {
+        /*customerProductStats(customerId, moment()).then(resp => {
             const chartData = {series: [], labels:[]};
             console.log('customerProductStats', resp)
             if(resp){
@@ -53,30 +50,7 @@ const CustomerDetail = (props) => {
                 })
             }
             setProductChart(chartData);
-        });
-        customerCategoryStats(customerId, moment()).then(resp => {
-            const chartData = {series: [], labels:[]};
-            console.log('customerCategoryStats', resp)
-            if(resp){
-                resp.forEach(pc => {
-                    chartData.series.push(pc.qty);
-                    chartData.labels.push(pc.name);
-                })
-            }
-            setCategoryChart(chartData);
-        });
-        customerOrdersStats(customerId, moment()).then(resp => {
-            const chartData = {series: [], labels:[], colors: []};
-            console.log('customerOrdersStats', resp)
-            if(resp){
-                resp.forEach(pc => {
-                    chartData.series.push(pc.qty);
-                    chartData.labels.push(ORDER_STATUS[pc.status].name);
-                    chartData.colors.push(ORDER_STATUS[pc.status].colorCss);
-                })
-            }
-            setOrderChart(chartData);
-        });
+        });*/
     }
 
     return customerData.id ? (
@@ -202,22 +176,16 @@ const CustomerDetail = (props) => {
                                     <div className={`tab-pane ${activeTab === 1 ? 'active' : ''}`} id="tab1" role="tabpanel">
                                         <Row>
                                             <Col md={6} className="mb-3">
-                                                <h4 className="card-title text-info">Pedidos</h4>
-                                                <div style={{background: '#f6f6f6'}}>
-                                                    <PieChart data={orderChart}/>
-                                                </div>
+                                                <OrdersPieChart customerId={customerData.id}/>
                                             </Col>
-                                            <Col md={6} className="mb-3">
+                                            {/*<Col md={6} className="mb-3">
                                                 <h4 className="card-title text-info">Productos</h4>
                                                 <div style={{background: '#f6f6f6'}}>
                                                     <PieChart data={productChart}/>
                                                 </div>
-                                            </Col>
+                                            </Col>*/}
                                             <Col md={6} className="mb-3">
-                                                <h4 className="card-title text-info">Categorias</h4>
-                                                <div style={{background: '#f6f6f6'}}>
-                                                    <PieChart data={categoryChart}/>
-                                                </div>
+                                                <CategoriesPieChart customerId={customerData.id}/>
                                             </Col>
                                         </Row>
                                     </div>

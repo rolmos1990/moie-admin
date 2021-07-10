@@ -65,13 +65,15 @@ const Observations = (props) => {
                         </Col>
                         <Col md={12}>
                             {observationsSuggested.map((suggest, k) => (
-                                <Tooltip placement="bottom" title={suggest} aria-label="add">
-                                    <button className="btn bg-light m-1" onClick={() => onAdd(suggest)}>
+                               <span key={k}>
+                                   <Tooltip placement="bottom" title={suggest} aria-label="add">
+                                       <button className="btn bg-light m-1" onClick={() => onAdd(suggest)}>
                                         <span className="font-sm m-0"><i className={"uil uil-star"}> </i> &nbsp;
-                                             {threeDots(suggest, 30)}
+                                            {threeDots(suggest, 30)}
                                         </span>
-                                    </button>
-                                </Tooltip>
+                                       </button>
+                                   </Tooltip>
+                               </span>
                             ))}
                         </Col>
                         <hr/>

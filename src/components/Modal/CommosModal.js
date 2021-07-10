@@ -21,8 +21,8 @@ const CustomModal = (props) => {
             </div>
             {showFooter && (
                 <div className="modal-footer">
-                    <button type="button" className="btn btn-light" onClick={() => onClose()}>Cancelar</button>
-                    <button type="button" className="btn btn-primary" onClick={() => onAccept()}>Aceptar</button>
+                    {onClose &&  (<button type="button" className="btn btn-light" onClick={() => onClose()}> {onAccept ? 'Cancelar' : 'Cerrar'}</button>)}
+                    {onAccept && (<button type="button" className="btn btn-primary" onClick={() => onAccept()}>Aceptar</button>)}
                 </div>
             )}
         </Modal>
@@ -34,7 +34,7 @@ CustomModal.propTypes = {
     title: PropTypes.string,
     isOpen: PropTypes.bool,
     scrollable: PropTypes.bool,
-    onClose: PropTypes.func,
+    onClose: PropTypes.func.isRequired,
     onAccept: PropTypes.func
 }
 

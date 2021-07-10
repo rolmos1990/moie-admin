@@ -15,6 +15,8 @@ import CustomerForm from "../../CustomerEdit/CustomerForm";
 import {updateCard} from "../../../store/order/actions";
 import {DEFAULT_PAGE_LIMIT} from "../../../common/pagination";
 import {hasCustomerOpenOrders} from "../../../helpers/service";
+import OrdersPieChart from "../../CustomerEdit/OrdersPieChart";
+import CategoriesPieChart from "../../CustomerEdit/CategoriesPieChart";
 
 const searchByOptions = [{label: "Documento", value: "doc"}, {label: "Nombre", value: "name"}, {label: "Correo", value: "email"}];
 
@@ -24,6 +26,7 @@ const OrderCustomer = (props) => {
     const [searchBy, setSearchBy] = useState(searchByOptions[0].value);
     const [editCustomer, setEditCustomer] = useState(false);
     const [openCustomerModal, setOpenCustomerModal] = useState(false);
+    const [openCustomerStatsModal, setOpenCustomerStatsModal] = useState(false);
     const [hasPendingOrders, setHasPendingOrders] = useState(false);
     const [customerData, setCustomerData] = useState({});
     const [customerDefault, setCustomerDefault] = useState(getEmptyOptions());
@@ -47,6 +50,9 @@ const OrderCustomer = (props) => {
         }
     }, [customer]);
 
+    const toggleCustomerStatsModal = () => {
+        setOpenCustomerStatsModal(!openCustomerStatsModal);
+    }
     const toggleModal = () => {
         setOpenCustomerModal(!openCustomerModal);
     }
@@ -204,6 +210,16 @@ const OrderCustomer = (props) => {
                                 <i className="uil uil-pen font-size-18"> </i>
                             </button>
                         </Tooltip>
+                        <Tooltip placement="bottom" title="Estadisticas del cliente" aria-label="add">
+                            <button type="button"
+                                    size="small"
+                                    className="btn btn-sm text-primary"
+                                    onClick={() => {
+                                        toggleCustomerStatsModal();
+                                    }}>
+                                <i className="uil uil-chart font-size-18"> </i>
+                            </button>
+                        </Tooltip>
 
                     </Col>
 
@@ -246,6 +262,16 @@ const OrderCustomer = (props) => {
                               onCloseModal={onCloseCustomerModal}
                               onAcceptModal={onAcceptCustomerModal}
                 />
+            </CustomModal>
+            <CustomModal title={"Estadisticas del cliente"} size="lg" isOpen={openCustomerStatsModal} onClose={toggleCustomerStatsModal}>
+                <Row>
+                    <Col md={6} className="mb-3">
+                        <OrdersPieChart customerId={customerData.id}/>
+                    </Col>
+                    <Col md={6} className="mb-3">
+                        <CategoriesPieChart customerId={customerData.id}/>
+                    </Col>
+                </Row>
             </CustomModal>
         </React.Fragment>
     )

@@ -84,6 +84,13 @@ const OrderDeliveryOptions = (props) => {
     }, [deliveryMethod]);
 
     useEffect(() => {
+        if (deliveryMethods) {
+            const ot = deliveryType ? deliveryType + '' : null;
+            setDeliveryMethodList([getEmptyOptions(), ...deliveryMethods.filter(op => (!ot || op.settings.includes(ot))).map(op => ({label: op.name, value: op.code}))]);
+        }
+    }, [deliveryMethods]);
+
+    useEffect(() => {
         if (deliveryMethod && deliveryQuote) {
             setDeliveryCost(parseFloat(deliveryQuote.amount || 0));
             onChangeDeliveryOptions();
@@ -135,9 +142,12 @@ const OrderDeliveryOptions = (props) => {
             cost: (parseFloat(deliveryCost) || 0),
             paymentType: paymentType,
             pieces: pieceToChange,
-            deliveryLocality: deliveryLocality,
-            tracking: tracking
+            deliveryLocality: deliveryLocality
         };
+
+        if(tracking && tracking !== ''){
+            deliveryOps.tracking = tracking;
+        }
         //console.log(deliveryOps, paymentType)
         onUpdateCar({...car, deliveryOptions: deliveryOps});
     }
@@ -238,15 +248,16 @@ const OrderDeliveryOptions = (props) => {
                             </Col>
                         </>
                     )}
-                    {showGuia() && (
+                    {!!(showGuia() && tracking && tracking !== '') && (
                         <Col md={6} className="p-1">
                             <Label htmlFor="weight">Guia número</Label>
-                            <FieldText
+                            <div className="form-control">{tracking}</div>
+                           {/* <FieldText
                                 id={"tracking"}
                                 name={"tracking"}
                                 value={tracking}
                                 onChange={item => setTracking(item.target.value)}
-                            />
+                            />*/}
                         </Col>
                     )}
                 </Row>

@@ -253,32 +253,47 @@ const OrderEdit = (props) => {
                         <small className="badge rounded-pill bg-soft-info font-size-14 mr-5 p-2">Operador: {order.user?.name}</small>
                     </div>
                     <div className={"mb-3 float-md-end"}>
-                        {(order && (order.status === 1 || order.status === 2)) && (
-                            <Button type="button" color="primary" className="btn-sm btn-rounded waves-effect waves-light">
-                                <i className={"mdi mdi-delete"}> </i> Anular
-                            </Button>
-                        )}
-                        {(order && order.status === 1) && (
-                            <Button type="button" color="primary" className="btn-sm btn-rounded waves-effect waves-light" onClick={() => onNextStatusOrder(order.id)}>
-                                <i className={"mdi mdi-check"}> </i> Confirmar
-                            </Button>
-                        )}
-                        {(order && order.status === 3) && (
-                            <Button type="button" color="primary" className="btn-sm btn-rounded waves-effect waves-light" onClick={() => onNextStatusOrder(order.id)}>
-                                <i className={"mdi mdi-check"}> </i> Confirmar envio
-                            </Button>
-                        )}
-                        {(order && order.status < 5) && (
-                            <Button type="button" color="primary" className="btn-sm btn-rounded waves-effect waves-light" onClick={() => printOrder()}>
-                                <i className={"mdi mdi-printer"}> </i> Imprimir
-                            </Button>
-                        )}
-                        <Button type="button" color="primary" className="btn-sm btn-rounded waves-effect waves-light" onClick={() => copyResume()}>
-                            <i className={"mdi mdi-content-copy"}> </i> Copiar resumen
-                        </Button>
-                        <Button type="button" color="primary" className="btn-sm btn-rounded waves-effect waves-light" onClick={() => takePhoto()}>
-                            <i className={"mdi mdi-camera"}> </i> {downloadingPhoto ? 'Descargando...' : 'Descargar foto'}
-                        </Button>
+                        <div className="button-items">
+                            {(order && (order.status === 1 || order.status === 2)) && (
+                                <Tooltip placement="bottom" title="Anular" aria-label="add">
+                                    <button type="button" color="primary" className="btn-sm btn btn-outline-danger waves-effect waves-light">
+                                        <i className={"mdi mdi-delete"}> </i>
+                                    </button>
+                                </Tooltip>
+                            )}
+                            {(order && order.status === 1) && (
+                                <Tooltip placement="bottom" title="Confirmar" aria-label="add">
+                                    <button type="button" color="primary" className="btn-sm btn btn-outline-success waves-effect waves-light" onClick={() => onNextStatusOrder(order.id)}>
+                                        <i className={"mdi mdi-check"}> </i>
+                                    </button>
+                                </Tooltip>
+                            )}
+                            {(order && order.status === 3) && (
+                                <Tooltip placement="bottom" title="Confirmar envio" aria-label="add">
+                                    <button type="button" color="primary" className="btn-sm btn btn-outline-success waves-effect waves-light" onClick={() => onNextStatusOrder(order.id)}>
+                                        <i className={"mdi mdi-check"}> </i>
+                                    </button>
+                                </Tooltip>
+                            )}
+                            {(order && order.status < 5) && (
+                                <Tooltip placement="bottom" title="Imprimir" aria-label="add">
+                                    <button type="button" color="primary" className="btn-sm btn btn-outline-info waves-effect waves-light" onClick={() => printOrder()}>
+                                        <i className={"mdi mdi-printer"}> </i>
+                                    </button>
+                                </Tooltip>
+
+                            )}
+                            <Tooltip placement="bottom" title="Copiar resumen" aria-label="add">
+                                <button type="button" color="primary" className="btn-sm btn btn-outline-info waves-effect waves-light" onClick={() => copyResume()}>
+                                    <i className={"mdi mdi-content-copy"}> </i>
+                                </button>
+                            </Tooltip>
+                            <Tooltip placement="bottom" title="Descargar foto" aria-label="add">
+                                <button type="button" color="primary" className="btn-sm btn btn-outline-info waves-effect waves-light" onClick={() => takePhoto()}>
+                                    <i className={"mdi mdi-camera"}> </i> {downloadingPhoto ? 'Descargando...' : ''}
+                                </button>
+                            </Tooltip>
+                        </div>
                     </div>
                 </Col>
             </Row>
