@@ -4,10 +4,8 @@ import {Route, Redirect} from "react-router-dom"
 import {connect} from "react-redux";
 import {loginSuccess} from "../../store/auth/login/actions";
 
-const authUser = localStorage.getItem("authUser");
-
 const Authmiddleware = ({component: Component, layout: Layout, isAuthProtected, loginSuccess,user, ...rest}) => {
-
+    const authUser = localStorage.getItem("authUser");
     if(authUser && (!user || !user.id)){
         try {
             let usr = JSON.parse(authUser);
