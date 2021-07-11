@@ -1,7 +1,7 @@
 import {all, call, fork, put, takeEvery} from "redux-saga/effects"
 
 //Account Redux states
-import {GET_USERS, GET_USER, REGISTER_USER, UPDATE_USER} from "./actionTypes"
+import {GET_USERS, GET_USER, REGISTER_USER, UPDATE_USER, CHANGE_PASSWORD} from "./actionTypes"
 
 import {
     getUsersSuccess,
@@ -11,14 +11,14 @@ import {
     getUserFailed,
     registerUserFailed,
     updateUserSuccess,
-    updateUserFail
+    updateUserFail, changePasswordSuccess, changePasswordFailed
 } from "./actions"
 
 import {
     registerUserApi,
     updateUserApi,
     fetchUserApi,
-    fetchUsersApi
+    fetchUsersApi, changePasswordApi
 } from "../../helpers/backend_helper"
 
 import Conditionals from "../../common/conditionals";
@@ -32,11 +32,13 @@ const ACTION_NAME_LIST      =   GET_USERS;
 const ACTION_NAME_GET       =   GET_USER;
 const ACTION_NAME_CREATE    =   REGISTER_USER;
 const ACTION_NAME_UPDATE    =   UPDATE_USER;
+const ACTION_NAME_CHANGE_PASSWORD    =   CHANGE_PASSWORD;
 
 const LIST_API_REQUEST      =   fetchUsersApi;
 const GET_API_REQUEST       =   fetchUserApi;
 const POST_API_REQUEST      =   registerUserApi;
 const PUT_API_REQUEST       =   updateUserApi;
+const CHANGE_PASSWORD_API_REQUEST  =   changePasswordApi;
 
 //actions
 const LIST_SUCCESS_ACTION   =   getUsersSuccess;
@@ -47,6 +49,8 @@ const CREATE_SUCCESS_ACTION =   registerUserSuccess;
 const CREATE_FAILED_ACTION  =   registerUserFailed;
 const UPDATE_SUCCESS_ACTION =   updateUserSuccess;
 const UPDATE_FAILED_ACTION  =   updateUserFail;
+const CHANGE_PASSWORD_SUCCESS_ACTION =   changePasswordSuccess;
+const CHANGE_PASSWORD_FAILED_ACTION  =   changePasswordFailed;
 
 
 const LIST_URL = "/users";
@@ -98,11 +102,22 @@ function* update({ payload: { id, data, history } }) {
     }
 }
 
+function* changePassword({ payload }) {
+    try {
+        const response = yield call(CHANGE_PASSWORD_API_REQUEST, payload)
+        showResponseMessage(response, (response.code === 200 ? "Contraseña actualizada!": response.error));
+        yield put(CHANGE_PASSWORD_SUCCESS_ACTION(response))
+    } catch (error) {
+        yield put(CHANGE_PASSWORD_FAILED_ACTION(error))
+    }
+}
+
 export function* watchUser() {
     yield takeEvery(ACTION_NAME_CREATE, register);
     yield takeEvery(ACTION_NAME_UPDATE, update);
     yield takeEvery(ACTION_NAME_LIST, fetch);
     yield takeEvery(ACTION_NAME_GET, get)
+    yield takeEvery(ACTION_NAME_CHANGE_PASSWORD, changePassword)
 }
 
 function* userSaga() {

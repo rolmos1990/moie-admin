@@ -5,8 +5,9 @@ import {ConverterStatus} from "../../../common/converters";
 import {STATUS} from "../../../common/constants";
 import Conditionals from "../../../common/conditionals";
 import {STATUS_OPTIONS} from "../../../common/utils";
+import {Tooltip} from "@material-ui/core";
 
-const userColumns = (onDelete = false) => [
+const userColumns = (onSelect = false) => [
     {
         text: "Nombre",
         dataField: "name",
@@ -65,9 +66,20 @@ const userColumns = (onDelete = false) => [
         formatter: (cellContent, item) => (
             <ul className="list-inline font-size-20 contact-links mb-0">
                 <li className="list-inline-item">
-                    <Link to={`/user/${item.id}`} className="px-2 text-primary">
-                        <i className="uil uil-pen font-size-18"> </i>
-                    </Link>
+                    <Tooltip placement="bottom" title="Editar usuario" aria-label="add">
+                        <Link to={`/user/${item.id}`} className="px-2 text-primary">
+                            <i className="uil uil-pen font-size-18"> </i>
+                        </Link>
+                    </Tooltip>
+                </li>
+                <li className="list-inline-item">
+                    <li className="list-inline-item">
+                        <Tooltip placement="bottom" title="Cambiar contraseña" aria-label="add">
+                            <button size="small" className="btn btn-sm text-primary" onClick={() => onSelect(item)}>
+                                <i className="fa fa-user-lock"> </i>
+                            </button>
+                        </Tooltip>
+                    </li>
                 </li>
             </ul>
         ),

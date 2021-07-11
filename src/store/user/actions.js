@@ -10,7 +10,7 @@ import {
     REGISTER_USER_FAILED,
     UPDATE_USER,
     UPDATE_USER_SUCCESS,
-    UPDATE_USER_FAILED,
+    UPDATE_USER_FAILED, CHANGE_PASSWORD_FAILED, CHANGE_PASSWORD_SUCCESS, CHANGE_PASSWORD, RESET_CHANGE_PASSWORD, USER_CHANGE_PASSWORD,
 } from "./actionTypes";
 
 export const getUsers = (conditional, limit, offset) => ({
@@ -87,5 +87,36 @@ export const updateUserFail = error => {
     return {
         type: UPDATE_USER_FAILED,
         payload: error,
+    }
+}
+
+//CHANGE PASSWORD
+export const resetPasswordState = () => {
+    return {
+        type: RESET_CHANGE_PASSWORD
+    }
+}
+export const setUserToChangePassword = (user) => {
+    return {
+        type: USER_CHANGE_PASSWORD,
+        user:  user ,
+    }
+}
+export const changePassword = (data) => {
+    return {
+        type: CHANGE_PASSWORD,
+        payload:  data ,
+    }
+}
+export const changePasswordSuccess = data => {
+    return {
+        type: CHANGE_PASSWORD_SUCCESS,
+        success: true,
+    }
+}
+export const changePasswordFailed = error => {
+    return {
+        type: CHANGE_PASSWORD_FAILED,
+        error: error,
     }
 }

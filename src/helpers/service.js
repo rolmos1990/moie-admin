@@ -28,7 +28,7 @@ export const findOrders = (conditions, limit = null, offset = null) => {
 }
 
 export const showResponseMessage = (response, message) => {
-    if (response.status === 200) {
+    if (response.status === 200 || response.code === 200) {
         showMessage.success(message);
     } else {
         showMessage.error(message);
@@ -77,11 +77,11 @@ export const countMayoristas = () => {
 export const countUsersOrders = () => {
     const conditions = new Conditionals.Condition;
     conditions.add('status', '1::5', Conditionals.OPERATORS.BETWEEN);
-    conditions.add('createdAt', formatDateToServer(getMoment().startOf('day')), Conditionals.OPERATORS.GREATER_THAN_OR_EQUAL)
+    // conditions.add('createdAt', formatDateToServer(getMoment().startOf('day')), Conditionals.OPERATORS.GREATER_THAN_OR_EQUAL)
 
     const query = {};
     query.conditional = Conditionals.getConditionalFormat(conditions.all());
-    query.operation = 'id::count,totalAmount::sum';
+    query.operation = 'origen::count,totalAmount::sum';
     query.group = 'user_id'
 
     return fetchDataApi(url.ORDERS, Conditionals.urlSearchParams(query));

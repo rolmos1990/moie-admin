@@ -1,4 +1,5 @@
 import {
+    CHANGE_PASSWORD, CHANGE_PASSWORD_FAILED, CHANGE_PASSWORD_SUCCESS,
     GET_USER,
     GET_USER_FAILED,
     GET_USER_SUCCESS,
@@ -7,9 +8,9 @@ import {
     GET_USERS_SUCCESS,
     REGISTER_USER,
     REGISTER_USER_FAILED,
-    REGISTER_USER_SUCCESS,
+    REGISTER_USER_SUCCESS, RESET_CHANGE_PASSWORD,
     UPDATE_USER, UPDATE_USER_FAILED,
-    UPDATE_USER_SUCCESS
+    UPDATE_USER_SUCCESS, USER_CHANGE_PASSWORD
 } from "./actionTypes";
 
 const initialState = {
@@ -18,7 +19,13 @@ const initialState = {
     meta: {},
     users: [],
     user: {},
-    refresh: false
+    refresh: false,
+    changePassword: {
+        user: null,
+        loading: false,
+        success: null,
+        error: null,
+    }
 }
 
 const user = (state = initialState, action) => {
@@ -92,6 +99,61 @@ const user = (state = initialState, action) => {
             state = {
                 ...state,
                 loading: false,
+            }
+            break
+        case USER_CHANGE_PASSWORD:
+            state = {
+                ...state,
+                changePassword: {
+                    ...state.changePassword,
+                    user: action.user,
+                }
+            }
+            break
+        case RESET_CHANGE_PASSWORD:
+            state = {
+                ...state,
+                changePassword: {
+                    ...state.changePassword,
+                    user: null,
+                    loading: false,
+                    success: null,
+                    error: null,
+                }
+            }
+            break
+        case CHANGE_PASSWORD:
+            state = {
+                ...state,
+                changePassword: {
+                    ...state.changePassword,
+                    loading: true,
+                    success: null,
+                    error: null,
+                }
+            }
+            break
+        case CHANGE_PASSWORD_SUCCESS:
+            state = {
+                ...state,
+                changePassword: {
+                    ...state.changePassword,
+                    user: null,
+                    loading: false,
+                    success: true,
+                    error: null,
+                }
+            }
+            break
+        case CHANGE_PASSWORD_FAILED:
+            state = {
+                ...state,
+                changePassword: {
+                    ...state.changePassword,
+                    error: action.error,
+                    success: null,
+                    loading: false,
+                }
             }
             break
         default:

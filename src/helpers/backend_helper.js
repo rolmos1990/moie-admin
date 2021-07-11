@@ -34,6 +34,7 @@ const fetchUsersApi = data => get(url.USER, {}, data);
 const fetchUserApi = (id) => get(`${url.USER}/${id}`,{});
 const registerUserApi = data => post(url.USER, data);
 const updateUserApi = (id, data) => put(`${url.USER}/${id}`, data);
+const changePasswordApi = (data) => post(`${url.USER}/changePassword`, data);
 
 //Sizes template
 const fetchSizesApi = data => get(url.SIZE, {}, data);
@@ -197,4 +198,5 @@ export {
     fetchUserApi,
     registerUserApi,
     updateUserApi,
+    changePasswordApi,
 }
