@@ -5,29 +5,35 @@ import {Col, Dropdown, DropdownMenu, DropdownToggle, Row} from "reactstrap"
 import SimpleBar from "simplebar-react"
 
 //Import images
-import avatar3 from "../../../assets/images/users/avatar-3.jpg"
 import avatar5 from "../../../assets/images/users/avatar-5.jpg";
 
 //i18n
-
 import {connect} from "react-redux";
 import {countUsersOrders} from "../../../helpers/service";
+import {priceFormat} from "../../../common/utils";
 
 const UsersSalesDropdown = ({data}) => {
 
   const [menu, setMenu] = useState(false)
   const [users, setUsers] = useState([])
+  const [mainUser, setMainUser] = useState({})
 
   useEffect(() => {
-    countUsersOrders().then(resp => {
-      console.log('countUsersOrders', resp)
-    });
-    const u = [];
-    u.push({name: 'Lina Battaglia', sales: 8, image: avatar5});
-    u.push({name: 'Juan Favaro', sales: 5, image: avatar3});
-    setUsers(u);
-
+    findData();
   }, [data])
+
+  const findData = () => {
+    countUsersOrders().then(resp => {
+      //console.log('countUsersOrders', resp)
+      if(resp && resp.data && resp.data.length > 0){
+        let u = [];
+        resp.data.forEach(o => u.push({name: o.user.name, sales: o.origen, amount: priceFormat(o.totalAmount), image: avatar5}))
+        u = u.sort((a, b) => a.sales === b.sales ? 0: (a.sales > b.sales) ? -1: 1);
+        setUsers(u);
+        setMainUser(u[0]);
+      }
+    });
+  }
 
   return (
     <>
@@ -42,15 +48,20 @@ const UsersSalesDropdown = ({data}) => {
           tag="button"
           id="page-header-notifications-dropdown"
         >
-          <img className="rounded-circle header-profile-user" src={avatar5} alt="Header Avatar" />
-          <span className="badge bg-info rounded-pill">!</span>
+          <img className="rounded-circle header-profile-user" src={mainUser.image} alt="Header Avatar" />
+          <span className="badge bg-info rounded-pill">{mainUser.sales}</span>
         </DropdownToggle>
 
         <DropdownMenu className="dropdown-menu-lg dropdown-menu-end p-0">
           <div className="p-3">
             <Row className="align-items-center">
-              <Col>
+              <Col md={8}>
                 <h6 className="m-0 font-size-16"> Ventas por usuarios</h6>
+              </Col>
+              <Col md={4} className="text-right">
+                <button size="small" className="btn btn-sm text-primary" onClick={() => findData()}>
+                  <i className="uil uil-refresh"> </i>
+                </button>
               </Col>
             </Row>
           </div>
