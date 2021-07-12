@@ -91,6 +91,7 @@ const printOrderApi = id => get(`${url.ORDERS}/${id}/print`, {}, {});
 const resumeOrderApi = id => get(`${url.ORDERS}/${id}/boardResume`, {}, {});
 const updateOrderApi = (id, data) => put(`${url.ORDERS}/${id}`, data);
 const deleteOrderApi = (id) => del(`${url.ORDERS}/${id}`);
+const batchPrintRequestApi = (data) => get(`${url.ORDERS}/batch/printRequest`,{}, data);
 
 //templates
 const fetchTemplatesApi = data => get(url.TEMPLATES, {}, data);
@@ -176,6 +177,7 @@ export {
     registerOrderApi,
     updateOrderApi,
     deleteOrderApi,
+    batchPrintRequestApi,
 
     fetchTemplatesApi,
     fetchTemplateApi,

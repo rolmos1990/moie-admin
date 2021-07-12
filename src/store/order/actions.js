@@ -19,7 +19,17 @@ import {
     GET_DELIVERY_QUOTE_FAILED,
     RESET_CAR,
     UPDATE_CAR,
-    NEXT_STATUS_ORDER, RESUME_ORDER, print_ORDER, PRINT_ORDER, CUSTOM_ORDER_SUCCESS, CUSTOM_ORDER_FAILED,
+    NEXT_STATUS_ORDER,
+    RESUME_ORDER,
+    print_ORDER,
+    PRINT_ORDER,
+    CUSTOM_ORDER_SUCCESS,
+    CUSTOM_ORDER_FAILED,
+    DO_BATCH_REQUEST,
+    RESET_BATCH_REQUEST,
+    PRINT_BATCH_REQUEST_SUCCESS,
+    PRINT_BATCH_REQUEST_FAILED,
+    PRINT_BATCH_REQUEST,
 } from "./actionTypes";
 
 export const getOrders = (conditional, limit, offset) => ({
@@ -167,4 +177,27 @@ export const resetCar = () => ({type: RESET_CAR});
 export const updateCard = (payload) => ({
     type: UPDATE_CAR,
     payload
+})
+
+
+//BATCH_REQUEST
+export const doPrintBatchRequest = (conditionals) => ({
+    type: DO_BATCH_REQUEST,
+    conditionals: conditionals
+})
+export const resetBatchRequest = () => ({
+    type: RESET_BATCH_REQUEST
+})
+export const printBatchRequest = (conditionals) => ({
+    type: PRINT_BATCH_REQUEST,
+    conditionals: conditionals
+})
+export const printBatchRequestSuccess = (data, meta) => ({
+    type: PRINT_BATCH_REQUEST_SUCCESS,
+    meta: meta,
+    data: data,
+})
+export const printBatchRequestFailed = error => ({
+    type: PRINT_BATCH_REQUEST_FAILED,
+    error: error,
 })

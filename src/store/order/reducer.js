@@ -11,7 +11,7 @@ import {
     REGISTER_ORDER_FAILED,
     REGISTER_ORDER_SUCCESS, RESET_CAR, UPDATE_CAR,
     UPDATE_ORDER, UPDATE_ORDER_FAILED,
-    UPDATE_ORDER_SUCCESS, PRINT_ORDER, CUSTOM_ORDER_SUCCESS, CUSTOM_ORDER_FAILED
+    UPDATE_ORDER_SUCCESS, PRINT_ORDER, CUSTOM_ORDER_SUCCESS, CUSTOM_ORDER_FAILED, PRINT_BATCH_REQUEST, RESET_BATCH_REQUEST, PRINT_BATCH_REQUEST_SUCCESS, DO_BATCH_REQUEST, PRINT_BATCH_REQUEST_FAILED
 } from "./actionTypes";
 
 const initialState = {
@@ -44,6 +44,14 @@ const initialState = {
         data: {},
         meta: {},
         loading: false
+    },
+    batchRequest: {
+        data: null,
+        error: null,
+        meta: {},
+        conditionals: null,
+        loading: false,
+        doRequest: false
     }
 }
 
@@ -227,6 +235,57 @@ const order = (state = initialState, action) => {
                     ...state.custom,
                     data: data,
                     meta: action.meta,
+                    loading: false
+                }
+            }
+        case DO_BATCH_REQUEST:
+            return {
+                ...state,
+                batchRequest: {
+                    ...state.batchRequest,
+                    conditionals: action.conditionals,
+                    doRequest: true
+                }
+            }
+        case PRINT_BATCH_REQUEST:
+            return {
+                ...state,
+                batchRequest: {
+                    ...state.batchRequest,
+                    conditionals: action.conditionals,
+                    doRequest: false,
+                    loading: true
+                }
+            }
+        case PRINT_BATCH_REQUEST_SUCCESS:
+            return {
+                ...state,
+                batchRequest: {
+                    ...state.batchRequest,
+                    meta: action.meta,
+                    data: action.data,
+                    loading: false
+                }
+            }
+        case PRINT_BATCH_REQUEST_FAILED:
+            return {
+                ...state,
+                batchRequest: {
+                    ...state.batchRequest,
+                    error: action.error,
+                    loading: false
+                }
+            }
+        case RESET_BATCH_REQUEST:
+            return {
+                ...state,
+                batchRequest: {
+                    ...state.batchRequest,
+                    data: null,
+                    meta: {},
+                    error: null,
+                    conditionals: null,
+                    doRequest: false,
                     loading: false
                 }
             }

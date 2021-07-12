@@ -30,6 +30,7 @@ import slack from "../../assets/images/brands/slack.png"
 //i18n
 import { withTranslation } from "react-i18next"
 import UsersSalesDropdown from "../CommonForBoth/TopbarDropdown/UsersSalesDropdown";
+import PrintBatchRequest from "../Common/PrintBatchRequest";
 
 
 const Header = props => {
@@ -224,6 +225,7 @@ const Header = props => {
             </div>
 
             <UsersSalesDropdown />
+            <PrintBatchRequest />
             <NotificationDropdown />
             <ProfileMenu />
 

@@ -27,11 +27,11 @@ export const findOrders = (conditions, limit = null, offset = null) => {
     return fetchDataApi(url.ORDERS, query);
 }
 
-export const showResponseMessage = (response, message) => {
+export const showResponseMessage = (response, message, errorMessage) => {
     if (response.status === 200 || response.code === 200) {
         showMessage.success(message);
     } else {
-        showMessage.error(message);
+        showMessage.error(errorMessage || message);
     }
 }
 

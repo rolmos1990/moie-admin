@@ -13,8 +13,9 @@ import {normalizeColumnsList} from "../../common/converters";
 import NoDataIndication from "../../components/Common/NoDataIndication";
 import orderColumns from "./orderColumn";
 import {Button, Tooltip} from "@material-ui/core";
-import {getOrders} from "../../store/order/actions";
+import {doPrintBatchRequest, getOrders} from "../../store/order/actions";
 import OrderEdit from "./orderEdit";
+import Conditionals from "../../common/conditionals";
 
 const OrderList = props => {
     const {orders, meta, onGetOrders, loading, refresh} = props;
@@ -22,6 +23,7 @@ const OrderList = props => {
     const [filter, setFilter] = useState(false);
     const [conditional, setConditional] = useState(null);
     const [orderSelected, setOrderSelected] = useState(null);
+    const [printOrderIds, setPrintOrderIds] = useState([]);
 
     const pageOptions = {
         sizePerPage: DEFAULT_PAGE_LIMIT,
@@ -43,7 +45,7 @@ const OrderList = props => {
 
     // eslint-disable-next-line no-unused-vars
     const handleTableChange = (type, {page, searchText}) => {
-        onGetOrders(conditional, DEFAULT_PAGE_LIMIT, (page - 1)*DEFAULT_PAGE_LIMIT);
+        onGetOrders(conditional, DEFAULT_PAGE_LIMIT, (page - 1) * DEFAULT_PAGE_LIMIT);
     }
 
     const onFilterAction = (condition) => {
@@ -51,7 +53,41 @@ const OrderList = props => {
         onGetOrders(condition, DEFAULT_PAGE_LIMIT, 0);
     }
 
+    const printOrders = () => {
+        let conditionals = conditional || [];
+        console.log('conditionals', conditionals);
+
+        if(printOrderIds && printOrderIds.length === 1){
+            conditionals.push({field:'id', value:printOrderIds[0], operator: Conditionals.OPERATORS.EQUAL});
+        }
+        if(printOrderIds && printOrderIds.length > 1){
+            conditionals.push({field:'id', value:printOrderIds.join('::'), operator: Conditionals.OPERATORS.IN});
+        }
+
+        props.onPrintBatchRequest(conditionals);
+    }
+
     const columns = orderColumns(setOrderSelected);
+
+    var selectRowProp = {
+        mode: "checkbox",
+        clickToSelect: true,
+        onSelect: (row) => {
+            let list = [...printOrderIds]
+
+            const index = list.indexOf(row.id);
+            if(index >= 0){
+                list.splice(index, 1);
+            } else{
+                list.push(row.id);
+            }
+            console.log('row', row, list);
+            setPrintOrderIds(list);
+        },
+        onSelectAll: (rows) => {
+            console.log('rows', rows);
+        }
+    };
 
     return (
         <Row>
@@ -92,6 +128,12 @@ const OrderList = props => {
                                                                 </Button>
                                                             </Tooltip>
                                                         )}
+                                                        <Tooltip placement="bottom" title="Impresión multiple" aria-label="add">
+                                                            <Button color="primary" onClick={() => printOrders()}>
+                                                                <i className="mdi mdi-printer"> </i> Impresión multiple
+                                                            </Button>
+                                                        </Tooltip>
+
                                                         <Link to={"/orders/create"} className="btn btn-primary waves-effect waves-light text-light">
                                                             <i className="mdi mdi-plus"> </i> Crear pedido
                                                         </Link>
@@ -102,6 +144,7 @@ const OrderList = props => {
                                                 <Col xl="12">
                                                     <div className="table-responsive mb-4">
                                                         <BootstrapTable
+                                                            selectRow={selectRowProp}
                                                             remote
                                                             responsive
                                                             loading={true}
@@ -147,6 +190,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => ({
     onGetOrders: (conditional = null, limit = DEFAULT_PAGE_LIMIT, page) => dispatch(getOrders(conditional, limit, page)),
+    onPrintBatchRequest: (conditional ) => dispatch(doPrintBatchRequest(conditional)),
 })
 
 export default connect(

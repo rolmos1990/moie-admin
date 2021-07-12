@@ -36,6 +36,7 @@ import {
   changeSidebarType,
 } from "../../store/actions"
 import UsersSalesDropdown from "../CommonForBoth/TopbarDropdown/UsersSalesDropdown";
+import PrintBatchRequest from "../Common/PrintBatchRequest";
 
 const Header = props => {
   const [search, setsearch] = useState(false)
@@ -230,6 +231,7 @@ const Header = props => {
               </button>
             </Dropdown>
 
+            <PrintBatchRequest />
             <UsersSalesDropdown />
             <NotificationDropdown />
             <ProfileMenu />
