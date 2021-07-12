@@ -675,10 +675,10 @@ const OrderEdit = (props) => {
                 </Col>
             </Row>
 
-            <CustomModal title={"Confirmar impresión de la orden"} showFooter={false} isOpen={order.status === 2 && openPrintConfirmModal} onClose={() => setOpenPrintConfirmModal(false)}>
+            <CustomModal title={"Confirmar"} showFooter={false} isOpen={order.status === 2 && openPrintConfirmModal} onClose={() => setOpenPrintConfirmModal(false)}>
                 <Row>
                     <Col md={12}>
-                        ¿Logró imprimir la orden?
+                        ¿Logró imprimir el pedido?
                     </Col>
                 </Row>
                 <hr/>

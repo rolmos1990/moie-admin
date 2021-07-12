@@ -29,15 +29,13 @@ const UsersSalesDropdown = ({data}) => {
         setLoading(true);
         countUsersOrders().then(resp => {
             setLoading(false);
-            console.log('countUsersOrders', resp)
+            // console.log('countUsersOrders', resp)
             if (resp && resp.data && resp.data.length > 0) {
                 let u = [];
-                resp.data.forEach(o => u.push({name: o.user.name, sales: o.origen, amount: priceFormat(o.totalAmount), image: avatar3}))
-                resp.data.forEach(o => u.push({name: o.user.name, sales: o.origen, amount: priceFormat(o.totalAmount), image: avatar3}))
-                resp.data.forEach(o => u.push({name: o.user.name, sales: o.origen, amount: priceFormat(o.totalAmount), image: avatar3}))
+                resp.data.filter(o => o.user && o.user.id).forEach(o => u.push({name: o.user.name, sales: o.origen, amount: priceFormat(o.totalAmount), image: avatar3}))
                 u = u.sort((a, b) => a.sales === b.sales ? 0 : (a.sales > b.sales) ? -1 : 1);
-                if(u.length > 7){
-                    u.splice(7);
+                if(u.length > 6){
+                    u.splice(6);
                 }
                 setUsers(u);
                 setMainUser(u[0]);
