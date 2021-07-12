@@ -210,3 +210,23 @@ h1 small {
     width: 100%;
   }
 }
+
+@media (max-width: 1830px) {
+  .user-sales-list {
+    display: none;
+  }
+  .user-sales-dropdown-menu {
+    display: block !important;
+  }
+}
+
+.user-sales-list {
+  position: fixed;
+  width: 250px;
+  bottom: 50px;
+  left: 10px;
+}
+
+.user-sales-dropdown-menu {
+  display: none;
+}

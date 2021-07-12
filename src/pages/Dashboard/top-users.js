@@ -38,7 +38,7 @@ const TopUsers = (props) => {
                             <Table className="table-borderless table-centered table-nowrap">
                                 <tbody>
                                 {usersList.map((user, k) => (
-                                    <tr>
+                                    <tr key={k}>
                                         <td style={{width: "20px"}}>
                                             <i className="mdi mdi-account-circle m-0 font-size-20 text-primary"></i>
                                         </td>

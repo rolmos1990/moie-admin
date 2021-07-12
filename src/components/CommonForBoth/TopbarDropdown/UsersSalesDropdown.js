@@ -1,102 +1,151 @@
 import React, {useEffect, useState} from "react"
 import PropTypes from 'prop-types'
 import {Link} from "react-router-dom"
-import {Col, Dropdown, DropdownMenu, DropdownToggle, Row} from "reactstrap"
+import {Card, CardBody, Col, Dropdown, DropdownMenu, DropdownToggle, Row} from "reactstrap"
 import SimpleBar from "simplebar-react"
 
 //Import images
-import avatar5 from "../../../assets/images/users/avatar-5.jpg";
+import avatar3 from "../../../assets/images/users/avatar-3.jpg";
+import userImage from "../../../assets/images/users/user.png"
 
 //i18n
 import {connect} from "react-redux";
 import {countUsersOrders} from "../../../helpers/service";
 import {priceFormat} from "../../../common/utils";
+import {Tooltip} from "@material-ui/core";
 
 const UsersSalesDropdown = ({data}) => {
 
-  const [menu, setMenu] = useState(false)
-  const [users, setUsers] = useState([])
-  const [mainUser, setMainUser] = useState({})
+    const [loading, setLoading] = useState(false)
+    const [menu, setMenu] = useState(false)
+    const [users, setUsers] = useState([])
+    const [mainUser, setMainUser] = useState({})
 
-  useEffect(() => {
-    findData();
-  }, [data])
+    useEffect(() => {
+        findData();
+    }, [data])
 
-  const findData = () => {
-    countUsersOrders().then(resp => {
-      //console.log('countUsersOrders', resp)
-      if(resp && resp.data && resp.data.length > 0){
-        let u = [];
-        resp.data.forEach(o => u.push({name: o.user.name, sales: o.origen, amount: priceFormat(o.totalAmount), image: avatar5}))
-        u = u.sort((a, b) => a.sales === b.sales ? 0: (a.sales > b.sales) ? -1: 1);
-        setUsers(u);
-        setMainUser(u[0]);
-      }
-    });
-  }
+    const findData = () => {
+        setLoading(true);
+        countUsersOrders().then(resp => {
+            setLoading(false);
+            console.log('countUsersOrders', resp)
+            if (resp && resp.data && resp.data.length > 0) {
+                let u = [];
+                resp.data.forEach(o => u.push({name: o.user.name, sales: o.origen, amount: priceFormat(o.totalAmount), image: avatar3}))
+                resp.data.forEach(o => u.push({name: o.user.name, sales: o.origen, amount: priceFormat(o.totalAmount), image: avatar3}))
+                resp.data.forEach(o => u.push({name: o.user.name, sales: o.origen, amount: priceFormat(o.totalAmount), image: avatar3}))
+                u = u.sort((a, b) => a.sales === b.sales ? 0 : (a.sales > b.sales) ? -1 : 1);
+                if(u.length > 7){
+                    u.splice(7);
+                }
+                setUsers(u);
+                setMainUser(u[0]);
+            }
+        });
+    }
 
-  return (
-    <>
-      <Dropdown
-        isOpen={menu}
-        toggle={() => setMenu(!menu)}
-        className="dropdown d-inline-block"
-        tag="li"
-      >
-        <DropdownToggle
-          className="btn header-item noti-icon waves-effect"
-          tag="button"
-          id="page-header-notifications-dropdown"
-        >
-          <img className="rounded-circle header-profile-user" src={mainUser.image} alt="Header Avatar" />
-          <span className="badge bg-info rounded-pill">{mainUser.sales}</span>
-        </DropdownToggle>
+    return (
+        <>
+            <div className="user-sales-list">
+                <Card>
+                    <CardBody className="p-2">
+                        <Row className="align-items-center">
+                            <Col xs={10}>
+                                <h6 className="m-0 font-size-16"> Ventas por usuarios</h6>
+                            </Col>
+                            <Col xs={2} className="text-right">
+                                <button size="small" className="btn btn-sm text-primary" onClick={() => findData()}>
+                                    {!loading && <i className="uil uil-refresh"> </i>}
+                                    {loading && <i className="fa fa-spinner fa-spin"> </i>}
+                                </button>
+                            </Col>
+                        </Row>
+                        <div style={{height: "284px", overflowY: "auto"}}>
+                            {users.map((user, k) => (
+                                <Tooltip placement="bottom" title={user.amount} aria-label="add">
+                                    <div key={k} className="text-reset notification-item">
+                                        <div className="d-flex p-1">
+                                            <img src={user.image} className="me-3 rounded-circle avatar-xs" alt="user-pic"/>
+                                            <div className="flex-1">
+                                                <h6 className="mt-0 mb-1">{user.name}</h6>
+                                                <div className="font-size-12 text-muted">
+                                                    <p className="m-0">Pedidos: <b>{user.sales}</b></p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </Tooltip>
+                            ))}
+                        </div>
+                    </CardBody>
+                </Card>
+            </div>
 
-        <DropdownMenu className="dropdown-menu-lg dropdown-menu-end p-0">
-          <div className="p-3">
-            <Row className="align-items-center">
-              <Col md={8}>
-                <h6 className="m-0 font-size-16"> Ventas por usuarios</h6>
-              </Col>
-              <Col md={4} className="text-right">
-                <button size="small" className="btn btn-sm text-primary" onClick={() => findData()}>
-                  <i className="uil uil-refresh"> </i>
-                </button>
-              </Col>
-            </Row>
-          </div>
-          <SimpleBar style={{ height: "260px" }}>
-            {users.map((user, k) => (
-                <Link to="" key={k} className="text-reset notification-item">
-                  <div className="d-flex">
-                    <img
-                        src={user.image}
-                        className="me-3 rounded-circle avatar-xs"
-                        alt="user-pic"
-                    />
-                    <div className="flex-1">
-                      <h6 className="mt-0 mb-1">{user.name}</h6>
-                      <div className="font-size-12 text-muted">
-                        <p className="mb-1">
-                          Pedidos completados {user.sales}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </Link>
-            ))}
-          </SimpleBar>
-        </DropdownMenu>
-      </Dropdown>
-    </>
-  )
+            <div className="user-sales-dropdown-menu">
+                <Dropdown
+                    isOpen={menu}
+                    toggle={() => setMenu(!menu)}
+                    className="dropdown d-inline-block"
+                    tag="li"
+                >
+                    <DropdownToggle
+                        className="btn header-item noti-icon waves-effect"
+                        tag="button"
+                        id="page-header-notifications-dropdown"
+                    >
+                        <img className="rounded-circle header-profile-user" src={mainUser.image || userImage} alt="Header Avatar"/>
+                        <span className="badge bg-info rounded-pill">{mainUser.sales || 0}</span>
+                    </DropdownToggle>
+
+                    <DropdownMenu className="dropdown-menu-lg dropdown-menu-end p-0">
+                        <div className="p-3">
+                            <Row className="align-items-center">
+                                <Col xs={10}>
+                                    <h6 className="m-0 font-size-16"> Ventas por usuarios</h6>
+                                </Col>
+                                <Col xs={2} className="text-right">
+                                    <Tooltip placement="bottom" title="Refrescar" aria-label="add">
+                                        <button size="small" className="btn btn-sm text-primary" onClick={() => findData()}>
+                                            {!loading && <i className="uil uil-refresh"> </i>}
+                                            {loading && <i className="fa fa-spinner fa-spin"> </i>}
+                                        </button>
+                                    </Tooltip>
+                                </Col>
+                            </Row>
+                        </div>
+                        <SimpleBar style={{height: "284px"}}>
+                            {users.map((user, k) => (
+                                <Link to="" key={k} className="text-reset notification-item">
+                                    <div className="d-flex p-1">
+                                        <img  src={user.image} className="me-3 rounded-circle avatar-xs" alt="user-pic"/>
+                                        <div className="flex-1">
+                                            <h6 className="mt-0 mb-1">{user.name}</h6>
+                                            <div className="font-size-12 text-muted">
+                                                <p className="mb-1">
+                                                    Pedidos completados {user.sales}
+                                                </p>
+                                                <p className="mb-0">
+                                                    <i className="fa fa-dollar-sign"/>{" "} {user.amount}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </Link>
+                            ))}
+                        </SimpleBar>
+                    </DropdownMenu>
+                </Dropdown>
+            </div>
+        </>
+    )
 }
 
 const mapStateToProps = state => {
-  return {}
+    return {}
 }
 const mapDispatchToProps = dispatch => ({
-  countUsersOrders,
+    countUsersOrders,
 })
 
 export default connect(
@@ -105,5 +154,5 @@ export default connect(
 )(UsersSalesDropdown)
 
 UsersSalesDropdown.propTypes = {
-  t: PropTypes.any
+    t: PropTypes.any
 }
