@@ -47,6 +47,7 @@ const UsersSalesDropdown = ({data}) => {
 
     return (
         <>
+            {/* > 1832px */}
             <div className="user-sales-list">
                 <Card>
                     <CardBody className="p-2">
@@ -82,6 +83,7 @@ const UsersSalesDropdown = ({data}) => {
                 </Card>
             </div>
 
+            {/* < 1832px */}
             <div className="user-sales-dropdown-menu">
                 <Dropdown
                     isOpen={menu}
