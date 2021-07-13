@@ -104,6 +104,16 @@ const Navbar = props => {
                 <li className="nav-item">
                   <Link
                       className="nav-link"
+                      to="/categories"
+                  >
+                    <i className="uil-box me-2"></i>
+                    {" "}{props.t("Categorias")}
+                  </Link>
+                </li>
+
+                <li className="nav-item">
+                  <Link
+                      className="nav-link"
                       to="/customers"
                   >
                     <i className="uil-users-alt me-2"></i>
@@ -218,7 +228,7 @@ const Navbar = props => {
                       >
                         {props.t("Productos")} <div className="arrow-down"></div>
                       </Link>
-                      <div
+                      {/*<div
                           className={classname("dropdown-menu", {
                             show: utility,
                           })}
@@ -226,10 +236,10 @@ const Navbar = props => {
                         <Link to="/categories" className="dropdown-item">
                           {props.t("Categorias")}
                         </Link>
-                        {/*<Link to="#" className="dropdown-item">
+                        <Link to="#" className="dropdown-item">
                           {props.t("Proveedores")}
-                        </Link>*/}
-                      </div>
+                        </Link>
+                      </div>*/}
                     </div>
                     <li className="nav-item">
                       <Link to="/templates" className="dropdown-item">

@@ -11,8 +11,9 @@ import {
     REGISTER_ORDER_FAILED,
     REGISTER_ORDER_SUCCESS, RESET_CAR, UPDATE_CAR,
     UPDATE_ORDER, UPDATE_ORDER_FAILED,
-    UPDATE_ORDER_SUCCESS, PRINT_ORDER, CUSTOM_ORDER_SUCCESS, CUSTOM_ORDER_FAILED, PRINT_BATCH_REQUEST, RESET_BATCH_REQUEST, PRINT_BATCH_REQUEST_SUCCESS, DO_BATCH_REQUEST, PRINT_BATCH_REQUEST_FAILED
+    UPDATE_ORDER_SUCCESS, PRINT_ORDER, CUSTOM_ORDER_SUCCESS, CUSTOM_ORDER_FAILED, PRINT_BATCH_REQUEST, RESET_BATCH_REQUEST, PRINT_BATCH_REQUEST_SUCCESS, DO_BATCH_REQUEST, PRINT_BATCH_REQUEST_FAILED, REFRESH_ORDER
 } from "./actionTypes";
+import {refreshOrders} from "./actions";
 
 const initialState = {
     error: "",
@@ -20,7 +21,7 @@ const initialState = {
     meta: {},
     orders: [],
     order: {},
-    refresh: false,
+    refresh: null,
     deliveryMethods: {
         data: [],
         loading: false,
@@ -288,6 +289,11 @@ const order = (state = initialState, action) => {
                     doRequest: false,
                     loading: false
                 }
+            }
+        case REFRESH_ORDER:
+            return {
+                ...state,
+                refresh: !state.refresh,
             }
         default:
             state = {...state}

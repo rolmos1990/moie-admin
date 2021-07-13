@@ -1,4 +1,4 @@
-import {all, call, fork, put, takeEvery} from "redux-saga/effects"
+import {all, call, fork, put, takeEvery, select} from "redux-saga/effects"
 
 //Account Redux states
 import {GET_ORDERS, GET_ORDER, REGISTER_ORDER, UPDATE_ORDER, GET_DELIVERY_METHODS, GET_DELIVERY_QUOTE, NEXT_STATUS_ORDER, RESUME_ORDER, PRINT_ORDER, PRINT_BATCH_REQUEST} from "./actionTypes"
@@ -20,7 +20,7 @@ import {
     customOrderFailed,
     printBatchRequestFailed,
     printBatchRequestSuccess,
-    printBatchRequest
+    printBatchRequest, refreshOrders
 } from "./actions"
 
 import {
@@ -104,6 +104,7 @@ function* register({payload: {data, history}}) {
 function* nextStatus({payload: {data, history}}) {
     try {
         const response = yield call(NEXT_STATUS_API_REQUEST, data)
+        if(response.status === 200) yield put(refreshOrders());
         showResponseMessage(response, "Operación exitosa!");
         yield put(UPDATE_SUCCESS_ACTION(response.order))
     } catch (error) {

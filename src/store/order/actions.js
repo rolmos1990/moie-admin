@@ -29,7 +29,7 @@ import {
     RESET_BATCH_REQUEST,
     PRINT_BATCH_REQUEST_SUCCESS,
     PRINT_BATCH_REQUEST_FAILED,
-    PRINT_BATCH_REQUEST,
+    PRINT_BATCH_REQUEST, REFRESH_ORDER,
 } from "./actionTypes";
 
 export const getOrders = (conditional, limit, offset) => ({
@@ -201,3 +201,10 @@ export const printBatchRequestFailed = error => ({
     type: PRINT_BATCH_REQUEST_FAILED,
     error: error,
 })
+
+
+export const refreshOrders = () => {
+    return {
+        type: REFRESH_ORDER
+    }
+}

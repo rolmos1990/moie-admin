@@ -17,7 +17,7 @@ import CustomModal from "../Modal/CommosModal";
 
 const PrintBatchRequest = (props) => {
 
-    const {data, error, meta, conditionals, doRequest, loading} = props;
+    const {batch, error, meta, conditionals, doRequest, loading} = props;
     const [orderPrint, setOrderPrint] = useState('');
     const [openPrintConfirmModal, setOpenPrintConfirmModal] = useState(false);
 
@@ -28,19 +28,19 @@ const PrintBatchRequest = (props) => {
     }, [conditionals, doRequest]);
 
     useEffect(() => {
-        if (data && data.body) {
+        if (batch && batch.body) {
             let html = null;
-            data.body.forEach((body) => {
-                if(html){
+            batch.body.forEach((body) => {
+                if (html) {
                     html += '<br/>';
-                }else{
+                } else {
                     html = '';
                 }
                 html += body.html;
             })
             printOrder(html)
         }
-    }, [data]);
+    }, [batch]);
 
     const printOrder = (text) => {
         printPartOfPage(text || orderPrint);
@@ -50,7 +50,7 @@ const PrintBatchRequest = (props) => {
     const onConfirmPrintOrder = () => {
         setOpenPrintConfirmModal(false);
         console.log('onConfirmPrintOrder');
-       // props.onNextStatusOrder(order.id);
+        props.onNextStatusOrder(batch.id);
     }
 
     return (
@@ -76,12 +76,12 @@ const PrintBatchRequest = (props) => {
 const mapStateToProps = state => {
     const {batchRequest} = state.Order
     const {data, error, meta, conditionals, doRequest, loading} = batchRequest
-    return {data, error, meta, conditionals, doRequest, loading}
+    return {batch: data, error, meta, conditionals, doRequest, loading}
 }
 
 const mapDispatchToProps = dispatch => ({
-    onPrintBatchRequest: (conditional ) => dispatch(printBatchRequest(conditional)),
-    onNextStatusOrder: (id = []) => dispatch(nextStatusOrder({order: id})),
+    onPrintBatchRequest: (conditional) => dispatch(printBatchRequest(conditional)),
+    onNextStatusOrder: (id = []) => dispatch(nextStatusOrder({batch: id})),
 })
 
 export default withRouter(
@@ -89,5 +89,5 @@ export default withRouter(
 )
 
 PrintBatchRequest.propTypes = {
-    conditionals: PropTypes.string.isRequired,
+    conditionals: PropTypes.array.isRequired,
 }

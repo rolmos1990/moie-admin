@@ -67,7 +67,7 @@ const UsersSalesDropdown = ({data}) => {
                                         <div className="d-flex p-1">
                                             <img src={user.image} className="me-3 rounded-circle avatar-xs" alt="user-pic"/>
                                             <div className="flex-1">
-                                                <h6 className="mt-0 mb-1">{user.name}</h6>
+                                                <h6 className="mt-0 mb-1">{k === 0 && <i className={"mdi mdi-crown font-size-18 mr-1 text-warning"}> </i>}{user.name}</h6>
                                                 <div className="font-size-12 text-muted">
                                                     <p className="m-0">Pedidos: <b>{user.sales}</b></p>
                                                 </div>
@@ -95,7 +95,7 @@ const UsersSalesDropdown = ({data}) => {
                         id="page-header-notifications-dropdown"
                     >
                         <img className="rounded-circle header-profile-user" src={mainUser.image || userImage} alt="Header Avatar"/>
-                        <span className="badge bg-info rounded-pill">{mainUser.sales || 0}</span>
+                        <span className="badge rounded-pill"><i className={"mdi mdi-crown font-size-18 mr-1 text-warning"}> </i></span>
                     </DropdownToggle>
 
                     <DropdownMenu className="dropdown-menu-lg dropdown-menu-end p-0">
@@ -120,7 +120,7 @@ const UsersSalesDropdown = ({data}) => {
                                     <div className="d-flex p-1">
                                         <img  src={user.image} className="me-3 rounded-circle avatar-xs" alt="user-pic"/>
                                         <div className="flex-1">
-                                            <h6 className="mt-0 mb-1">{user.name}</h6>
+                                            <h6 className="mt-0 mb-1">{k === 0 && <i className={"mdi mdi-crown font-size-18 mr-1 text-warning"}> </i>}{user.name}</h6>
                                             <div className="font-size-12 text-muted">
                                                 <p className="mb-1">
                                                     Pedidos completados {user.sales}

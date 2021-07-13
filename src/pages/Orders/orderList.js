@@ -24,6 +24,7 @@ const OrderList = props => {
     const [conditional, setConditional] = useState(null);
     const [orderSelected, setOrderSelected] = useState(null);
     const [printOrderIds, setPrintOrderIds] = useState([]);
+    const [currentPage, setCurrentPage] = useState(null);
 
     const pageOptions = {
         sizePerPage: DEFAULT_PAGE_LIMIT,
@@ -32,7 +33,7 @@ const OrderList = props => {
     }
 
     useEffect(() => {
-        onGetOrders();
+        if(null !== refresh) onGetOrders(conditional, DEFAULT_PAGE_LIMIT, currentPage * DEFAULT_PAGE_LIMIT);
     }, [refresh])
 
     useEffect(() => {
@@ -45,7 +46,9 @@ const OrderList = props => {
 
     // eslint-disable-next-line no-unused-vars
     const handleTableChange = (type, {page, searchText}) => {
-        onGetOrders(conditional, DEFAULT_PAGE_LIMIT, (page - 1) * DEFAULT_PAGE_LIMIT);
+        let p = page - 1;
+        setCurrentPage(p);
+        onGetOrders(conditional, DEFAULT_PAGE_LIMIT, p * DEFAULT_PAGE_LIMIT);
     }
 
     const onFilterAction = (condition) => {
@@ -86,6 +89,7 @@ const OrderList = props => {
         },
         onSelectAll: (rows) => {
             console.log('rows', rows);
+            setPrintOrderIds([]);
         }
     };
 
@@ -129,8 +133,8 @@ const OrderList = props => {
                                                             </Tooltip>
                                                         )}
                                                         <Tooltip placement="bottom" title="Impresión multiple" aria-label="add">
-                                                            <Button color="primary" onClick={() => printOrders()}>
-                                                                <i className="mdi mdi-printer"> </i> Impresión multiple
+                                                            <Button color="primary" onClick={() => printOrders()} disabled={printOrderIds.length === 0 && (!conditional || conditional.length === 0)}>
+                                                                <i className="mdi mdi-printer"> </i>
                                                             </Button>
                                                         </Tooltip>
 
