@@ -12,13 +12,12 @@ import {printPartOfPage, threeDots} from "../../common/utils";
 import {deleteComment, getCommentsByEntity, registerComment} from "../../store/comment/actions";
 import {findFieldOptionByGroup} from "../../helpers/service";
 import order from "../../store/order/reducer";
-import {doPrintBatchRequest, nextStatusOrder, printBatchRequest} from "../../store/order/actions";
+import {doPrintBatchRequest, nextStatusOrder, printBatchRequest, resetBatchRequest} from "../../store/order/actions";
 import CustomModal from "../Modal/CommosModal";
 
 const PrintBatchRequest = (props) => {
 
-    const {batch, error, meta, conditionals, doRequest, loading} = props;
-    const [orderPrint, setOrderPrint] = useState('');
+    const {batch, conditionals, doRequest} = props;
     const [openPrintConfirmModal, setOpenPrintConfirmModal] = useState(false);
 
     useEffect(() => {
@@ -43,19 +42,23 @@ const PrintBatchRequest = (props) => {
     }, [batch]);
 
     const printOrder = (text) => {
-        printPartOfPage(text || orderPrint);
+        printPartOfPage(text);
         setTimeout(() => setOpenPrintConfirmModal(true), 3000);
     }
 
     const onConfirmPrintOrder = () => {
         setOpenPrintConfirmModal(false);
-        console.log('onConfirmPrintOrder');
         props.onNextStatusOrder(batch.id);
+    }
+
+    const onCancelPrintOrder = () => {
+        setOpenPrintConfirmModal(false);
+        props.onResetBatchRequest();
     }
 
     return (
         <React.Fragment>
-            <CustomModal title={"Confirmar impresión de la(s) orden(s)"} showFooter={false} isOpen={openPrintConfirmModal} onClose={() => setOpenPrintConfirmModal(false)}>
+            <CustomModal title={"Confirmar impresión de la(s) orden(s)"} showFooter={false} isOpen={openPrintConfirmModal} onClose={() => onCancelPrintOrder()}>
                 <Row>
                     <Col md={12}>
                         ¿Logró imprimir lo(s) pedidos(s)?
@@ -64,7 +67,7 @@ const PrintBatchRequest = (props) => {
                 <hr/>
                 <Row>
                     <Col md={12} className="text-right">
-                        <button type="button" className="btn btn-light" onClick={() => setOpenPrintConfirmModal(false)}>NO</button>
+                        <button type="button" className="btn btn-light" onClick={() => onCancelPrintOrder()}>NO</button>
                         <Button color="primary" type="button" onClick={onConfirmPrintOrder}>SI</Button>
                     </Col>
                 </Row>
@@ -75,13 +78,14 @@ const PrintBatchRequest = (props) => {
 
 const mapStateToProps = state => {
     const {batchRequest} = state.Order
-    const {data, error, meta, conditionals, doRequest, loading} = batchRequest
-    return {batch: data, error, meta, conditionals, doRequest, loading}
+    const {batch, error, meta, conditionals, doRequest, loading} = batchRequest
+    return {batch, error, meta, conditionals, doRequest, loading}
 }
 
 const mapDispatchToProps = dispatch => ({
     onPrintBatchRequest: (conditional) => dispatch(printBatchRequest(conditional)),
     onNextStatusOrder: (id = []) => dispatch(nextStatusOrder({batch: id})),
+    onResetBatchRequest: (id = []) => dispatch(resetBatchRequest()),
 })
 
 export default withRouter(

@@ -47,7 +47,7 @@ const initialState = {
         loading: false
     },
     batchRequest: {
-        data: null,
+        batch: null,
         error: null,
         meta: {},
         conditionals: null,
@@ -264,7 +264,7 @@ const order = (state = initialState, action) => {
                 batchRequest: {
                     ...state.batchRequest,
                     meta: action.meta,
-                    data: action.data,
+                    batch: action.data,
                     loading: false
                 }
             }
@@ -282,7 +282,7 @@ const order = (state = initialState, action) => {
                 ...state,
                 batchRequest: {
                     ...state.batchRequest,
-                    data: null,
+                    batch: null,
                     meta: {},
                     error: null,
                     conditionals: null,
