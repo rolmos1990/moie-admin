@@ -58,7 +58,6 @@ const OrderList = props => {
 
     const printOrders = () => {
         let conditionals = conditional || [];
-        console.log('conditionals', conditionals);
 
         if(printOrderIds && printOrderIds.length === 1){
             conditionals.push({field:'id', value:printOrderIds[0], operator: Conditionals.OPERATORS.EQUAL});
@@ -84,11 +83,9 @@ const OrderList = props => {
             } else{
                 list.push(row.id);
             }
-            console.log('row', row, list);
             setPrintOrderIds(list);
         },
         onSelectAll: (rows) => {
-            console.log('rows', rows);
             setPrintOrderIds([]);
         }
     };

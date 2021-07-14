@@ -33,12 +33,10 @@ const CustomerObservations = (props) => {
     }, [fieldOptions])
 
     const onDeleteObservation = (observation) => {
-        console.log('onDeleteObservation', observation);
         onDeleteObservations(observation.id);
     }
 
     const onAddObservation = (observation) => {
-        console.log('onAddObservation', observation);
         onCreateObservations(observation);
     }
 

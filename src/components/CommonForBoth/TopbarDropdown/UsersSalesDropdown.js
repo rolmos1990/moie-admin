@@ -29,7 +29,6 @@ const UsersSalesDropdown = ({data}) => {
         setLoading(true);
         countUsersOrders().then(resp => {
             setLoading(false);
-            // console.log('countUsersOrders', resp)
             if (resp && resp.data && resp.data.length > 0) {
                 let u = [];
                 resp.data.filter(o => o.user && o.user.id).forEach(o => u.push({name: o.user.name, sales: o.origen, amount: priceFormat(o.totalAmount), image: avatar3}))
@@ -62,19 +61,17 @@ const UsersSalesDropdown = ({data}) => {
                         </Row>
                         <div style={{height: "284px", overflowY: "auto"}}>
                             {users.map((user, k) => (
-                                <Tooltip placement="bottom" title={user.amount} aria-label="add">
-                                    <div key={k} className="text-reset notification-item">
-                                        <div className="d-flex p-1">
-                                            <img src={user.image} className="me-3 rounded-circle avatar-xs" alt="user-pic"/>
-                                            <div className="flex-1">
-                                                <h6 className="mt-0 mb-1">{k === 0 && <i className={"mdi mdi-crown font-size-18 mr-1 text-warning"}> </i>}{user.name}</h6>
-                                                <div className="font-size-12 text-muted">
-                                                    <p className="m-0">Pedidos: <b>{user.sales}</b></p>
-                                                </div>
+                                <div key={k} className="text-reset notification-item">
+                                    <div className="d-flex p-1">
+                                        <img src={user.image} className="me-3 rounded-circle avatar-xs" alt="user-pic"/>
+                                        <div className="flex-1">
+                                            <h6 className="mt-0 mb-1">{k === 0 && <i className={"mdi mdi-crown font-size-18 mr-1 text-warning"}> </i>}{user.name}</h6>
+                                            <div className="font-size-12 text-muted">
+                                                <p className="m-0">Pedidos: <b>{user.sales}</b></p>
                                             </div>
                                         </div>
                                     </div>
-                                </Tooltip>
+                                </div>
                             ))}
                         </div>
                     </CardBody>

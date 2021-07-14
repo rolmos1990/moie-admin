@@ -1,7 +1,7 @@
 import {all, call, fork, put, takeEvery} from "redux-saga/effects"
 
 //Account Redux states
-import {GET_CATEGORIES, GET_CATEGORY, REGISTER_CATEGORY, UPDATE_CATEGORY} from "./actionTypes"
+import {GET_CATEGORIES, GET_CATEGORY, REGISTER_CATEGORY, UPDATE_CATEGORY, CATALOG_PRINT_BATCH_REQUEST} from "./actionTypes"
 
 import {
     getCategoriesSuccess,
@@ -11,14 +11,17 @@ import {
     getCategoryFailed,
     registerCategoryFailed,
     updateCategorySuccess,
-    updateCategoryFail
+    updateCategoryFail,
+    printCatalogBatchRequestFailed,
+    printCatalogBatchRequestSuccess
 } from "./actions"
 
 import {
     registerCategoryApi,
     updateCategoryApi,
     fetchCategoryApi,
-    fetchCategoriesApi
+    fetchCategoriesApi,
+    catalogBatchPrintRequestApi
 } from "../../helpers/backend_helper"
 
 import Conditionals from "../../common/conditionals";
@@ -37,6 +40,7 @@ const LIST_API_REQUEST      =   fetchCategoriesApi;
 const GET_API_REQUEST       =   fetchCategoryApi;
 const POST_API_REQUEST      =   registerCategoryApi;
 const PUT_API_REQUEST       =   updateCategoryApi;
+const BATCH_REQUEST_API_REQUEST = catalogBatchPrintRequestApi;
 
 //actions
 const LIST_SUCCESS_ACTION   =   getCategoriesSuccess;
@@ -47,6 +51,9 @@ const CREATE_SUCCESS_ACTION =   registerCategorySuccess;
 const CREATE_FAILED_ACTION  =   registerCategoryFailed;
 const UPDATE_SUCCESS_ACTION =   updateCategorySuccess;
 const UPDATE_FAILED_ACTION  =   updateCategoryFail;
+
+const PRINT_BATCH_REQUEST_SUCCESS_ACTION = printCatalogBatchRequestSuccess;
+const PRINT_BATCH_REQUEST_FAILED_ACTION = printCatalogBatchRequestFailed;
 
 
 const LIST_URL = "/categories";
@@ -97,12 +104,24 @@ function* update({ payload: { id, data, history } }) {
         yield put(UPDATE_FAILED_ACTION(error))
     }
 }
+function* catalogBatchRequest({conditionals}) {
+    try {
+        const cond = Conditionals.getConditionalFormat(conditionals);
+        const query = Conditionals.buildHttpGetQuery(cond);
+        const response = yield call(BATCH_REQUEST_API_REQUEST, query)
+        showResponseMessage(response, "Operación en curso!", response.error);
+        yield put(PRINT_BATCH_REQUEST_SUCCESS_ACTION(response.batch, response.meta))
+    } catch (error) {
+        yield put(PRINT_BATCH_REQUEST_FAILED_ACTION(error))
+    }
+}
 
 export function* watchCategory() {
     yield takeEvery(ACTION_NAME_CREATE, register);
     yield takeEvery(ACTION_NAME_UPDATE, update);
     yield takeEvery(ACTION_NAME_LIST, fetch);
     yield takeEvery(ACTION_NAME_GET, get)
+    yield takeEvery(CATALOG_PRINT_BATCH_REQUEST, catalogBatchRequest)
 }
 
 function* categorySaga() {

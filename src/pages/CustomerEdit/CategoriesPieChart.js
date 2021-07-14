@@ -13,7 +13,6 @@ const CategoriesPieChart = ({customerId}) => {
         if (customerId) {
             customerCategoryStats(customerId, moment()).then(resp => {
                 const chartData = {series: [], labels:[]};
-                console.log('customerCategoryStats', resp)
                 if(resp){
                     resp.forEach(pc => {
                         chartData.series.push(pc.qty);

@@ -61,7 +61,6 @@ const WidgetCard4 = props => {
         if(reportData){
             rData = {...reportData};
         }
-        console.log(rData);
 
         const data = {
             id: 4,

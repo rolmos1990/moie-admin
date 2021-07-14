@@ -10,6 +10,7 @@ export const SOCIAL_LOGIN = "/social-login"
 
 //CUSTOMER
 export const CUSTOMER = "/customer"
+export const BATCH_REQUEST = "/batchRequest"
 
 //PRODUCT
 export const PRODUCT = "/product"

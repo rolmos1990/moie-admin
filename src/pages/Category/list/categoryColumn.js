@@ -4,7 +4,7 @@ import {STATUS_COLORS, StatusField} from "../../../components/StatusField";
 import {ConverterStatus} from "../../../common/converters";
 import {STATUS} from "../../../common/constants";
 import Conditionals from "../../../common/conditionals";
-import {isValidOption, STATUS_OPTIONS} from "../../../common/utils";
+import {formatDate, isValidOption, STATUS_OPTIONS} from "../../../common/utils";
 
 const categoryColumns = (onDelete = false) => [
     {
@@ -21,11 +21,16 @@ const categoryColumns = (onDelete = false) => [
         filterCondition: Conditionals.OPERATORS.LIKE,
     },
     {
-        text: "Prefijo",
-        dataField: "prefix",
+        text: "Fecha creación",
+        dataField: "createdAt",
         sort: true,
         filter: true,
-        filterType: "text",
+        filterType: "dateRange",
+        formatter: (cellContent, item) => (
+            <div>
+                {formatDate(item.createdAt)}
+            </div>
+        ),
     },
     /*{
         text: "Código DIAN",

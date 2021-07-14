@@ -26,7 +26,6 @@ import {facebook, google} from "../../config"
 const Login = (props) => {
    // handleValidSubmit
    const handleValidSubmit = (event, values) => {
-    console.log(values)
     props.loginUser(values, props.history)
   }
 

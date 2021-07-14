@@ -29,9 +29,6 @@ import user4 from "../../assets/images/users/avatar-7.jpg";
 const UserProfile = props => {
     const {user} = props;
 
-
-    console.log('user', user)
-
     return (
         <React.Fragment>
             <div className="page-content">

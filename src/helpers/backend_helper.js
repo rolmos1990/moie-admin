@@ -28,6 +28,7 @@ const fetchCategoriesApi = data => get(url.CATEGORY, {}, data);
 const fetchCategoryApi = (id) => get(`${url.CATEGORY}/${id}`,{});
 const registerCategoryApi = data => post(url.CATEGORY, data);
 const updateCategoryApi = (id, data) => put(`${url.CATEGORY}/${id}`, data);
+const catalogBatchPrintRequestApi = (data) => get(`${url.CATEGORY}/batch/printRequest`,{}, data);
 
 //Users
 const fetchUsersApi = data => get(url.USER, {}, data);
@@ -141,6 +142,7 @@ export {
     fetchCategoryApi,
     registerCategoryApi,
     updateCategoryApi,
+    catalogBatchPrintRequestApi,
 
     fetchSizesApi,
     fetchSizeApi,

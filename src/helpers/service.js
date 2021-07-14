@@ -4,7 +4,7 @@ import {showMessage} from "../components/MessageToast/ShowToastMessages";
 import {DEFAULT_PAGE_LIMIT} from "../common/pagination";
 import * as url from "./url_helper";
 import {queryCustomers} from "../store/customer/actions";
-import {CUSTOMER, CUSTOMERS, FIELD_OPTIONS, PRODUCT} from "./url_helper";
+import {BATCH_REQUEST, CUSTOMER, CUSTOMERS, FIELD_OPTIONS, PRODUCT} from "./url_helper";
 import {formatDateToServer, getMoment} from "../common/utils";
 
 export const getData = (urlStr, name, conditionalOptions) => {
@@ -110,6 +110,17 @@ export const statsRegistered = (urlString, conditions) => {
         }
         return data;
     });
+}
+
+export const getCatalogBatchRequest = () => {
+    const conditions = new Conditionals.Condition;
+    conditions.add('createdAt', formatDateToServer(getMoment().startOf('day')), Conditionals.OPERATORS.GREATER_THAN_OR_EQUAL)
+    conditions.add('type', 2, Conditionals.OPERATORS.EQUAL);
+    conditions.add('status', 2, Conditionals.OPERATORS.EQUAL);
+
+    const cond = Conditionals.getConditionalFormat(conditions.all());
+    const query = Conditionals.buildHttpGetQuery(cond, 15);
+    return fetchDataApi(url.BATCH_REQUEST, Conditionals.urlSearchParams(query));
 }
 
 export const findFieldOptionByGroup = (group, limit = null, offset = null) => {

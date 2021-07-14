@@ -13,7 +13,6 @@ const OrdersPieChart = ({customerId}) => {
         if (customerId) {
             customerOrdersStats(customerId, moment()).then(resp => {
                 const chartData = {series: [], labels:[], colors: []};
-                console.log('customerOrdersStats', resp)
                 if(resp){
                     //CONCILIADAS Y ANULADAS
                     resp.filter(pc => pc.status === 5 && pc.status === 6).forEach(pc => {

@@ -84,7 +84,6 @@ const CreateOrder = (props) => {
             order.deliveryLocality = car.deliveryOptions.deliveryLocality;
         }
 
-        console.log('order payload', order);
         onRegisterOrder(order, props.history);
     }
 

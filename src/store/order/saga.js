@@ -63,7 +63,6 @@ const CREATE_FAILED_ACTION = registerOrderFailed;
 const UPDATE_SUCCESS_ACTION = updateOrderSuccess;
 const UPDATE_FAILED_ACTION = updateOrderFail;
 
-const PRINT_BATCH_REQUEST_ACTION = printBatchRequest;
 const PRINT_BATCH_REQUEST_SUCCESS_ACTION = printBatchRequestSuccess;
 const PRINT_BATCH_REQUEST_FAILED_ACTION = printBatchRequestFailed;
 
@@ -164,7 +163,7 @@ function* batchRequest({conditionals}) {
         const cond = Conditionals.getConditionalFormat(conditionals);
         const query = Conditionals.buildHttpGetQuery(cond);
         const response = yield call(BATCH_REQUEST_API_REQUEST, query)
-        showResponseMessage(response, "Batch creado!", response.error);
+        showResponseMessage(response, "Operación en curso!", response.error);
         yield put(PRINT_BATCH_REQUEST_SUCCESS_ACTION(response.batch, response.meta))
     } catch (error) {
         yield put(PRINT_BATCH_REQUEST_FAILED_ACTION(error))

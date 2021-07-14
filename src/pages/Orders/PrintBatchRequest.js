@@ -5,15 +5,15 @@ import {Button, Card, Tooltip} from "@material-ui/core";
 import {withRouter} from "react-router-dom"
 import {connect} from "react-redux";
 import PropTypes from "prop-types";
-import CustomizedTimeline from "../../pages/CustomerEdit/TimeLine";
-import ButtonSubmit from "./ButtonSubmit";
-import {ConfirmationModalAction} from "../Modal/ConfirmationModal";
+import CustomizedTimeline from "../CustomerEdit/TimeLine";
+import ButtonSubmit from "../../components/Common/ButtonSubmit";
+import {ConfirmationModalAction} from "../../components/Modal/ConfirmationModal";
 import {printPartOfPage, threeDots} from "../../common/utils";
 import {deleteComment, getCommentsByEntity, registerComment} from "../../store/comment/actions";
 import {findFieldOptionByGroup} from "../../helpers/service";
 import order from "../../store/order/reducer";
 import {doPrintBatchRequest, nextStatusOrder, printBatchRequest, resetBatchRequest} from "../../store/order/actions";
-import CustomModal from "../Modal/CommosModal";
+import CustomModal from "../../components/Modal/CommosModal";
 
 const PrintBatchRequest = (props) => {
 

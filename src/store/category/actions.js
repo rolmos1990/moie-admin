@@ -11,6 +11,11 @@ import {
     UPDATE_CATEGORY,
     UPDATE_CATEGORY_SUCCESS,
     UPDATE_CATEGORY_FAILED,
+    CATALOG_PRINT_BATCH_REQUEST,
+    CATALOG_PRINT_BATCH_REQUEST_SUCCESS,
+    CATALOG_PRINT_BATCH_REQUEST_FAILED,
+    CATALOG_RESET_BATCH_REQUEST,
+    CATALOG_DO_BATCH_REQUEST, REFRESH_CATEGORIES,
 } from "./actionTypes";
 
 export const getCategories = (conditional, limit, offset) => ({
@@ -89,3 +94,30 @@ export const updateCategoryFail = error => {
         payload: error,
     }
 }
+export const refreshCategory = () => {
+    return {type: REFRESH_CATEGORIES}
+}
+
+
+//BATCH_REQUEST
+export const doCatalogPrintBatchRequest = (conditionals, catalog) => ({
+    type: CATALOG_DO_BATCH_REQUEST,
+    conditionals: conditionals,
+    batch: catalog,
+})
+export const resetCatalogBatchRequest = () => ({
+    type: CATALOG_RESET_BATCH_REQUEST
+})
+export const printCatalogBatchRequest = (conditionals) => ({
+    type: CATALOG_PRINT_BATCH_REQUEST,
+    conditionals: conditionals
+})
+export const printCatalogBatchRequestSuccess = (data, meta) => ({
+    type: CATALOG_PRINT_BATCH_REQUEST_SUCCESS,
+    meta: meta,
+    data: data,
+})
+export const printCatalogBatchRequestFailed = error => ({
+    type: CATALOG_PRINT_BATCH_REQUEST_FAILED,
+    error: error,
+})

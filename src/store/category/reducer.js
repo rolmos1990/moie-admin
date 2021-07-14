@@ -9,8 +9,14 @@ import {
     REGISTER_CATEGORY_FAILED,
     REGISTER_CATEGORY_SUCCESS,
     UPDATE_CATEGORY, UPDATE_CATEGORY_FAILED,
-    UPDATE_CATEGORY_SUCCESS
+    UPDATE_CATEGORY_SUCCESS,
+    CATALOG_PRINT_BATCH_REQUEST,
+    CATALOG_PRINT_BATCH_REQUEST_SUCCESS,
+    CATALOG_PRINT_BATCH_REQUEST_FAILED,
+    CATALOG_RESET_BATCH_REQUEST,
+    CATALOG_DO_BATCH_REQUEST, REFRESH_CATEGORIES,
 } from "./actionTypes";
+
 
 const initialState = {
     error: "",
@@ -18,7 +24,15 @@ const initialState = {
     meta: {},
     categories: [],
     category: {},
-    refresh: false
+    refresh: false,
+    batchRequest: {
+        batch: null,
+        error: null,
+        meta: {},
+        conditionals: null,
+        loading: false,
+        doRequest: false
+    }
 }
 
 const category = (state = initialState, action) => {
@@ -94,6 +108,63 @@ const category = (state = initialState, action) => {
                 loading: false,
             }
             break
+        case CATALOG_DO_BATCH_REQUEST:
+            return {
+                ...state,
+                batchRequest: {
+                    ...state.batchRequest,
+                    conditionals: action.conditionals,
+                    batch: action.batch,
+                    doRequest: true
+                }
+            }
+        case CATALOG_PRINT_BATCH_REQUEST:
+            return {
+                ...state,
+                batchRequest: {
+                    ...state.batchRequest,
+                    conditionals: action.conditionals,
+                    doRequest: false,
+                    loading: true
+                }
+            }
+        case CATALOG_PRINT_BATCH_REQUEST_SUCCESS:
+            return {
+                ...state,
+                batchRequest: {
+                    ...state.batchRequest,
+                    meta: action.meta,
+                    batch: action.data,
+                    loading: false
+                }
+            }
+        case CATALOG_PRINT_BATCH_REQUEST_FAILED:
+            return {
+                ...state,
+                batchRequest: {
+                    ...state.batchRequest,
+                    error: action.error,
+                    loading: false
+                }
+            }
+        case CATALOG_RESET_BATCH_REQUEST:
+            return {
+                ...state,
+                batchRequest: {
+                    ...state.batchRequest,
+                    batch: null,
+                    meta: {},
+                    error: null,
+                    conditionals: null,
+                    doRequest: false,
+                    loading: false
+                }
+            }
+        case REFRESH_CATEGORIES:
+            return {
+                ...state,
+                refresh: !state.refresh,
+            }
         default:
             state = { ...state }
             break
