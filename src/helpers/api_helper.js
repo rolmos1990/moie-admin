@@ -5,19 +5,14 @@ import authHeader from "./jwt-token-access/auth-token-header";
 //pass new generated access token here
 const token = authHeader().Authorization || accessToken;
 
-export const baseImagePath = "http://lucymodas.com/";
+export const baseImagePath = process.env.REACT_APP_BASE_PATH_IMAGE;
+export const baseImagePathNew = process.env.REACT_APP_BASE_PATH_IMAGE_NEW;
 // export const baseImagePathNew = "http://54.226.170.69:18210/";
-export const baseImagePathNew = "http://localhost:18210/";
 
-//apply base url for axios
-// const API_URL = "http://54.226.170.69:18210";
-const API_URL = "http://localhost:18210";
-
-// const API_URL = process.env.REACT_APP_SERVICE; //"http://54.226.170.69:18210";
-// console.log('process.env.REACT_APP_SERVICE', API_URL)
+console.log('process.env', process.env)
 
 const axiosApi = axios.create({
-  baseURL: API_URL,
+  baseURL: process.env.REACT_APP_BASE_SERVICE,
   timeout: 30000,
 })
 
