@@ -1,8 +1,9 @@
 import axios from "axios";
 import accessToken from "./jwt-token-access/accessToken";
+import authHeader from "./jwt-token-access/auth-token-header";
 
 //pass new generated access token here
-const token = accessToken;
+const token = authHeader().Authorization || accessToken;
 
 export const baseImagePath = "http://lucymodas.com/";
 // export const baseImagePathNew = "http://54.226.170.69:18210/";
