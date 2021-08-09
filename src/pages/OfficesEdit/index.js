@@ -58,7 +58,7 @@ const OfficeEdit = (props) => {
     }, [getOffice]);
 
     useEffect(() => {
-        if (orders && orders.length > 0) {
+        if (orders && orders.length > 0 && isEdit) {
             setOrdersList(orders);
         }
     }, [orders]);
