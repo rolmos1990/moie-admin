@@ -6,7 +6,14 @@ import {withRouter, Link} from "react-router-dom"
 import {connect} from "react-redux";
 import {apiError} from "../../store/auth/login/actions";
 import PropTypes from "prop-types";
-import {confirmOffice, deleteOffice, getOffice, registerOffice, updateOffice} from "../../store/office/actions";
+import {
+    addOrderOffice,
+    confirmOffice,
+    deleteOffice,
+    getOffice,
+    registerOffice,
+    updateOffice
+} from "../../store/office/actions";
 import {FieldDate, FieldSelect, FieldSwitch, FieldText} from "../../components/Fields";
 import Breadcrumb from "../../components/Common/Breadcrumb";
 import {DATE_FORMAT, formatDate} from "../../common/utils";
@@ -18,19 +25,25 @@ import {
 import ButtonSubmit from "../../components/Common/ButtonSubmit";
 import {DATE_MODES} from "../../components/Fields/InputDate";
 import {getEmptyOptions} from "../../common/converters";
-import {getDeliveryMethods} from "../../store/order/actions";
+import {getDeliveryMethods, getOrders} from "../../store/order/actions";
 import {getFieldOptionByGroups} from "../../store/fieldOptions/actions";
 import {StatusField} from "../../components/StatusField";
 import {ConfirmationModalAction} from "../../components/Modal/ConfirmationModal";
+import CustomModal from "../../components/Modal/CommosModal";
+import OrderList from "../Orders/orderList";
+import Conditionals from "../../common/conditionals";
 
 const OfficeEdit = (props) => {
-    const {getOffice, office, deliveryMethods} = props;
+    const {getOffice, office, deliveryMethods, orders} = props;
     const [officeData, setOfficeData] = useState({_status: STATUS.ACTIVE});
     const isEdit = props.match.params.id;
     const [deliveryMethodList, setDeliveryMethodList] = useState([]);
     const [deliveryTypes, setDeliveryTypes] = useState(null);
     const [deliveryMethod, setDeliveryMethod] = useState(null);
     const [deliveryType, setDeliveryType] = useState(null);
+    const [openCustomerModal, setOpenCustomerModal] = useState(false);
+    const [ordersList, setOrdersList] = useState([]);
+
 
     //carga inicial
     useEffect(() => {
@@ -44,12 +57,23 @@ const OfficeEdit = (props) => {
         onGetDeliveryMethods();
     }, [getOffice]);
 
-    //cargar la información del municipio
+    useEffect(() => {
+        if (orders && orders.length > 0) {
+            setOrdersList(orders);
+        }
+    }, [orders]);
+
     useEffect(() => {
         if (office.id && isEdit) {
             setOfficeData({...office, _status:office.status});
             setDeliveryType(office.type);
             setDeliveryMethod(office.deliveryMethod);
+
+            /** GET ORDERS */
+            const conditions = new Conditionals.Condition;
+            conditions.add("office", props.match.params.id, Conditionals.OPERATORS.EQUAL);
+            console.log("DEBUG - BUSCANDO ORDENES", conditions.all());
+            onGetOrders(conditions);
         }
     }, [office]);
 
@@ -92,15 +116,30 @@ const OfficeEdit = (props) => {
             onConfirm: () => onConfirmOffice(id, props.history)
         });
     };
+    const onCloseModal = () => {
+        setOpenCustomerModal(false);
+    };
+
+    const onAcceptModal = (conditionals) => {
+        props.addOrderOffice(officeData.id, {id: 123}, conditionals, props.history);
+    };
 
     const onConfirmDelete = (id, history) => props.deleteOffice(id, history);
     const onConfirmOffice = (id, history) => props.confirmOffice(id, history);
     const onGetDeliveryMethods = (conditional = null, limit = 50, page) => props.getDeliveryMethods(conditional, limit, page);
     const onGetFieldOptions = (conditional = null, limit = 500, page) => props.getFieldOptionByGroups([GROUPS.ORDERS_ORIGIN], limit, page);
+    const onGetOrders = (conditions) => props.getOrders(conditions.all(), 200, 0);
 
 
     return (
         <React.Fragment>
+            <CustomModal title={"Agregar pedidos"} size="lg" showFooter={false} isOpen={openCustomerModal} onClose={onCloseModal}>
+                <OrderList customActions={onAcceptModal} />
+                {/*<OrderCustomer showAsModal={true}
+                               onCloseModal={onCloseModal}
+                               onAcceptModal={onAcceptModal}
+                />*/}
+            </CustomModal>
             <div className="page-content">
                 <Container fluid>
                     <Breadcrumb hasBack path="/offices" title={officeData.name} item={"Despachos"}/>
@@ -136,7 +175,7 @@ const OfficeEdit = (props) => {
                                         </button>
                                         </Tooltip>
                                         <Tooltip placement="bottom" title="Agregar pedidos" aria-label="add">
-                                        <button type="button" color="primary" className="btn-sm btn btn-outline-info waves-effect waves-light" onClick={() => {}}>
+                                        <button type="button" color="primary" className="btn-sm btn btn-outline-info waves-effect waves-light" onClick={() => setOpenCustomerModal(true)}>
                                         <i className={"mdi mdi-plus"}> </i>
                                         </button>
                                         </Tooltip>
@@ -243,8 +282,27 @@ const OfficeEdit = (props) => {
                                 <Card>
                                     <CardBody>
                                         <h4 className="card-title text-info"><i
-                                            className="uil-shopping-cart-alt me-2"> </i> Pedidos en despacho</h4>
-                                        <div className={"m-1 pl-2"}>No hay registros asociados</div>
+                                            className="uil-shopping-cart-alt me-2"> </i> Pedidos en despacho</h4> <br/>
+                                        {ordersList.sort((a,b) => a.id < b.id).map((order, k) => (
+                                        <div key={k} className="order-box">
+                                            <Row>
+                                                <Col md={6} className="">
+                                                    <div>
+                                                        <Link to={`/order/${order.id}`} className="text-primary">
+                                                            <small className="font-weight-600 text-info">Pedido #: {order.id}</small>
+                                                        </Link>
+                                                        <br/>
+                                                        <small><span className="font-weight-600">Cliente: </span> {order.customer.name}</small>
+                                                        <br/>
+                                                        <small><span className="font-weight-600">Peso: </span> {order.totalWeight}</small>
+                                                    </div>
+                                                </Col>
+                                            </Row>
+                                        </div>
+                                        ))}
+                                        {!ordersList && (
+                                            <div className={"m-1 pl-2"}>No hay registros asociados</div>
+                                        )}
                                     </CardBody>
                                 </Card>
                             </Col>
@@ -257,13 +315,13 @@ const OfficeEdit = (props) => {
 }
 
 const mapStateToProps = state => {
-    const {deliveryMethods} = state.Order
+    const {deliveryMethods, orders} = state.Order
     const {error, office, loading} = state.Office
-    return {error, office, loading, deliveryMethods: deliveryMethods.data}
+    return {error, office, loading, deliveryMethods: deliveryMethods.data, orders}
 }
 
 export default withRouter(
-    connect(mapStateToProps, {apiError, registerOffice, deleteOffice, confirmOffice, updateOffice, getOffice, getDeliveryMethods, getFieldOptionByGroups})(OfficeEdit)
+    connect(mapStateToProps, {apiError, registerOffice, deleteOffice, confirmOffice, updateOffice, getOffice, getDeliveryMethods, getFieldOptionByGroups, addOrderOffice, getOrders})(OfficeEdit)
 )
 
 OfficeEdit.propTypes = {

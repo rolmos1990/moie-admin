@@ -101,6 +101,7 @@ const registerOfficeApi = data => post(url.OFFICES, data);
 const updateOfficeApi = (id, data) => put(`${url.OFFICES}/${id}`, data);
 const deleteOfficeApi = (id) => del(`${url.OFFICES}/${id}`);
 const confirmOfficeApi = (id) => post(`${url.OFFICES}/${id}/confirm`);
+const addOrderOfficeApi = (id, data, params) => post(`${url.OFFICES}/${id}/addOrder`, data, {params: params});
 
 //templates
 const fetchTemplatesApi = data => get(url.TEMPLATES, {}, data);
@@ -217,5 +218,6 @@ export {
     registerOfficeApi,
     updateOfficeApi,
     deleteOfficeApi,
-    confirmOfficeApi
+    confirmOfficeApi,
+    addOrderOfficeApi
 }

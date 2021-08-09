@@ -20,7 +20,7 @@ import {
     DELETE_OFFICE_SUCCESS,
     CONFIRM_OFFICE,
     CONFIRM_OFFICE_SUCCESS,
-    CONFIRM_OFFICE_FAILED
+    CONFIRM_OFFICE_FAILED, ADD_ORDER_OFFICE, ADD_ORDER_OFFICE_SUCCESS, ADD_ORDER_OFFICE_FAILED
 } from "./actionTypes";
 import Conditionals from "../../common/conditionals";
 
@@ -163,3 +163,25 @@ export const queryOfficesSuccess = (data, meta, node) => ({
     payload: data,
     node: node,
 })
+
+export const addOrderOffice = (id, data, conditional, history) => {
+    return {
+        type: ADD_ORDER_OFFICE,
+        payload: { id, data, conditional, history },
+    }
+}
+
+export const addOrderOfficeSuccess = data => {
+    return {
+        type: ADD_ORDER_OFFICE_SUCCESS,
+        payload: data.office,
+    }
+}
+
+
+export const addOrderOfficeFailed = data => {
+    return {
+        type: ADD_ORDER_OFFICE_FAILED,
+        payload: data,
+    }
+}

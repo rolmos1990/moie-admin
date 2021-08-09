@@ -18,13 +18,14 @@ import OrderEdit from "./orderEdit";
 import Conditionals from "../../common/conditionals";
 
 const OrderList = props => {
-    const {orders, meta, onGetOrders, loading, refresh} = props;
+    const {orders, meta, onGetOrders, loading, refresh, customActions} = props;
     const [statesList, setStatesList] = useState([])
     const [filter, setFilter] = useState(false);
     const [conditional, setConditional] = useState(null);
     const [orderSelected, setOrderSelected] = useState(null);
     const [printOrderIds, setPrintOrderIds] = useState([]);
     const [currentPage, setCurrentPage] = useState(null);
+    const [filterable, setFilterable] = useState(true);
 
     const pageOptions = {
         sizePerPage: DEFAULT_PAGE_LIMIT,
@@ -37,7 +38,10 @@ const OrderList = props => {
     }, [refresh])
 
     useEffect(() => {
-        onGetOrders()
+        onGetOrders();
+        if(customActions){
+            setFilterable(false);
+        }
     }, [onGetOrders])
 
     useEffect(() => {
@@ -90,15 +94,30 @@ const OrderList = props => {
         }
     };
 
+    const onPressAction = () => {
+
+        let conditionals = conditional || [];
+
+        if(printOrderIds && printOrderIds.length === 1){
+            conditionals.push({field:'id', value:printOrderIds[0], operator: Conditionals.OPERATORS.EQUAL});
+        }
+        if(printOrderIds && printOrderIds.length > 1){
+            conditionals.push({field:'id', value:printOrderIds.join('::'), operator: Conditionals.OPERATORS.IN});
+        }
+
+        /** TODO -- envio la condicion para procesar en orden superior */
+        props.customActions(conditionals);
+    };
+
     return (
         <Row>
             <TableFilter
                 onPressDisabled={() => setFilter(false)}
-                isActive={filter}
+                isActive={filter && filterable}
                 fields={columns}
                 onSubmit={onFilterAction.bind(this)}/>
 
-            <Col lg={filter ? "8" : "12"}>
+            <Col lg={filter && filterable ? "8" : "12"}>
                 <Card>
                     <CardBody>
                         <PaginationProvider pagination={paginationFactory(pageOptions)}>
@@ -120,26 +139,36 @@ const OrderList = props => {
                                                         </div>
                                                     </div>
                                                 </Col>
-                                                <Col md={6}>
+                                                {customActions ? <Col md={6}>
                                                     <div className="mb-3 float-md-end">
-                                                        {columns.some(s => s.filter) && (
-                                                            <Tooltip placement="bottom" title="Filtros Avanzados" aria-label="add">
-                                                                <Button onClick={() => setFilter(!filter)}>
-                                                                    <i className={"mdi mdi-filter"}> </i>
-                                                                </Button>
-                                                            </Tooltip>
-                                                        )}
-                                                        <Tooltip placement="bottom" title="Impresión multiple" aria-label="add">
-                                                            <Button color="primary" onClick={() => printOrders()} disabled={printOrderIds.length === 0 && (!conditional || conditional.length === 0)}>
-                                                                <i className="mdi mdi-printer"> </i>
+                                                        <Tooltip placement="bottom" title="Aceptar" aria-label="add">
+                                                            <Button onClick={() => onPressAction() } color="success">
+                                                                Aceptar &nbsp; <i className={"mdi mdi-check"}> </i>
                                                             </Button>
                                                         </Tooltip>
-
-                                                        <Link to={"/orders/create"} className="btn btn-primary waves-effect waves-light text-light">
-                                                            <i className="mdi mdi-plus"> </i> Crear pedido
-                                                        </Link>
                                                     </div>
-                                                </Col>
+                                                </Col> : (
+                                                    <Col md={6}>
+                                                        <div className="mb-3 float-md-end">
+                                                            {columns.some(s => s.filter) && (
+                                                                <Tooltip placement="bottom" title="Filtros Avanzados" aria-label="add">
+                                                                    <Button onClick={() => setFilter(!filter)}>
+                                                                        <i className={"mdi mdi-filter"}> </i>
+                                                                    </Button>
+                                                                </Tooltip>
+                                                            )}
+                                                            <Tooltip placement="bottom" title="Impresión multiple" aria-label="add">
+                                                                <Button color="primary" onClick={() => printOrders()} disabled={printOrderIds.length === 0 && (!conditional || conditional.length === 0)}>
+                                                                    <i className="mdi mdi-printer"> </i>
+                                                                </Button>
+                                                            </Tooltip>
+
+                                                            <Link to={"/orders/create"} className="btn btn-primary waves-effect waves-light text-light">
+                                                                <i className="mdi mdi-plus"> </i> Crear pedido
+                                                            </Link>
+                                                        </div>
+                                                    </Col>
+                                                )}
                                             </Row>
                                             <Row>
                                                 <Col xl="12">

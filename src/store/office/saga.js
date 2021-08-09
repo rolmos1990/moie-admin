@@ -8,7 +8,7 @@ import {
     UPDATE_OFFICE,
     QUERY_OFFICES,
     DELETE_OFFICE,
-    CONFIRM_OFFICE
+    CONFIRM_OFFICE, ADD_ORDER_OFFICE
 } from "./actionTypes"
 
 import {
@@ -27,7 +27,7 @@ import {
     registerOfficeApi,
     updateOfficeApi,
     fetchOfficeApi,
-    fetchOfficesApi, deleteOfficeApi, confirmOfficeApi
+    fetchOfficesApi, deleteOfficeApi, confirmOfficeApi, addOrderOfficeApi
 } from "../../helpers/backend_helper"
 
 import Conditionals from "../../common/conditionals";
@@ -38,12 +38,13 @@ import {showResponseMessage} from "../../helpers/service";
 */
 
 const ACTION_NAME_QUERY      =   QUERY_OFFICES;
-const ACTION_NAME_LIST      =   GET_OFFICES;
-const ACTION_NAME_GET       =   GET_OFFICE;
-const ACTION_NAME_CREATE    =   REGISTER_OFFICE;
-const ACTION_NAME_UPDATE    =   UPDATE_OFFICE;
-const ACTION_NAME_DELETE    =   DELETE_OFFICE;
-const ACTION_NAME_CONFIRM    =   CONFIRM_OFFICE;
+const ACTION_NAME_LIST      =    GET_OFFICES;
+const ACTION_NAME_GET       =    GET_OFFICE;
+const ACTION_NAME_CREATE    =    REGISTER_OFFICE;
+const ACTION_NAME_UPDATE    =    UPDATE_OFFICE;
+const ACTION_NAME_DELETE    =    DELETE_OFFICE;
+const ACTION_NAME_CONFIRM   =    CONFIRM_OFFICE;
+const ACTION_NAME_ADD_CHILD =    ADD_ORDER_OFFICE;
 
 const LIST_API_REQUEST      =   fetchOfficesApi;
 const GET_API_REQUEST       =   fetchOfficeApi;
@@ -143,6 +144,21 @@ function* officeConfirm({ payload: { id, history } }) {
     }
 }
 
+function* officeOrderAdd({ payload: { id, data, conditional, history } }) {
+    try {
+        const cond = Conditionals.getConditionalFormat(conditional);
+        const query = Conditionals.buildHttpGetQuery(cond, 0, 200);
+        yield call(addOrderOfficeApi, id, data, query)
+        yield put(deleteOfficeSuccess(id))
+        showResponseMessage({status:200}, "Despacho borrado!");
+        history.push("/office/" + id)
+
+    } catch (error) {
+        console.log("error", error);
+        yield put(deleteOfficeFailed(error))
+    }
+}
+
 export function* watchOffice() {
     yield takeEvery(ACTION_NAME_CREATE, register);
     yield takeEvery(ACTION_NAME_UPDATE, update);
@@ -151,6 +167,7 @@ export function* watchOffice() {
     yield takeEvery(ACTION_NAME_DELETE, officeDelete);
     yield takeEvery(ACTION_NAME_CONFIRM, officeConfirm);
     yield takeEvery(ACTION_NAME_QUERY, queryData);
+    yield takeEvery(ACTION_NAME_ADD_CHILD, officeOrderAdd);
 }
 
 function* officeSaga() {
