@@ -131,14 +131,32 @@ const Navbar = props => {
                   </Link>
                 </li>
 
-                <li className="nav-item">
+                <li className="nav-item dropdown">
                   <Link
-                      className="nav-link"
-                      to="/bills"
+                      className="nav-link dropdown-toggle arrow-none"
+                      to="#"
+                      onClick={e => {
+                        e.preventDefault()
+                        setextra(!extra)
+                      }}
                   >
-                    <i className="uil-bill me-2"></i>
-                    {" "}{props.t("Facturación")}
+                    <i className="uil-cog me-2"></i>
+                    {props.t("Servicios")} <div className="arrow-down"></div>
                   </Link>
+                  <div className={classname("dropdown-menu", { show: extra })}>
+                    <li className="nav-item">
+                      <Link to="/offices" className="dropdown-item">
+                        <i className="uil-truck me-2"></i>
+                        {props.t("Despachos")}
+                      </Link>
+                    </li>
+                    <li className="nav-item">
+                      <Link to="/bills" className="dropdown-item">
+                        <i className="uil-bill me-2"></i>
+                        {props.t("Facturación")}
+                      </Link>
+                    </li>
+                  </div>
                 </li>
 
                 <li className="nav-item">

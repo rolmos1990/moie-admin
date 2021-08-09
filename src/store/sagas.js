@@ -18,6 +18,7 @@ import FieldOptionSaga from "./fieldOptions/saga"
 import OrderSaga from "./order/saga"
 import UserSaga from "./user/saga"
 import TemplateSaga from "./template/saga"
+import OfficeSaga from "./office/saga"
 import LayoutSaga from "./layout/saga"
 
 export default function* rootSaga() {
@@ -39,6 +40,7 @@ export default function* rootSaga() {
     UserSaga(),
     TemplateSaga(),
     CommentSaga(),
+    OfficeSaga(),
     ForgetSaga(),
     fork(LayoutSaga)
   ])

@@ -17,6 +17,7 @@ export * from "./order/actions"
 export * from "./user/actions"
 export * from "./template/actions"
 export * from "./comment/actions"
+export * from "./office/actions"
 
 //System
 export * from "./location/actions"

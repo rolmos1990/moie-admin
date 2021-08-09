@@ -94,6 +94,14 @@ const updateOrderApi = (id, data) => put(`${url.ORDERS}/${id}`, data);
 const deleteOrderApi = (id) => del(`${url.ORDERS}/${id}`);
 const batchPrintRequestApi = (data) => get(`${url.ORDERS}/batch/printRequest`,{}, data);
 
+//offices
+const fetchOfficesApi = params => get(url.OFFICES, {}, params);
+const fetchOfficeApi = data => get((data && data.id) ? `${url.OFFICES}/${data.id}` : url.OFFICES, data);
+const registerOfficeApi = data => post(url.OFFICES, data);
+const updateOfficeApi = (id, data) => put(`${url.OFFICES}/${id}`, data);
+const deleteOfficeApi = (id) => del(`${url.OFFICES}/${id}`);
+const confirmOfficeApi = (id) => post(`${url.OFFICES}/${id}/confirm`);
+
 //templates
 const fetchTemplatesApi = data => get(url.TEMPLATES, {}, data);
 const fetchTemplateApi = (id) => get(`${url.TEMPLATES}/${id}`,{});
@@ -203,4 +211,11 @@ export {
     registerUserApi,
     updateUserApi,
     changePasswordApi,
+
+    fetchOfficesApi,
+    fetchOfficeApi,
+    registerOfficeApi,
+    updateOfficeApi,
+    deleteOfficeApi,
+    confirmOfficeApi
 }

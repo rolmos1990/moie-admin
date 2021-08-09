@@ -22,6 +22,12 @@ export const STATUS_OPTIONS = [
     {label: "Inactive", value: false}
 ];
 
+export const DATE_FORMAT = {
+    FULL_DATE: 'FULL_DATE',
+    ONLY_DATE: 'ONLY_DATE',
+    ONLY_TIME: 'ONLY_TIME'
+};
+
 export const isValidOption = (options, option) => {
     return options.filter(o => o.value !== null).map(o => o.value).includes(option);
 };
@@ -52,8 +58,18 @@ const numberWithCommas =(x) =>{
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
 
-export const formatDate =(date) =>{
+export const formatDate =(date, type = DATE_FORMAT.FULL_DATE) =>{
     try {
+        switch(type){
+            case DATE_FORMAT.FULL_DATE:
+                return moment(date, moment.ISO_8601).format('DD-MM-YYYY HH:mm:ss');
+            case DATE_FORMAT.ONLY_DATE:
+                return moment(date, moment.ISO_8601).format('DD-MM-YYYY');
+            case DATE_FORMAT.ONLY_TIME:
+                return moment(date, moment.ISO_8601).format('HH:mm:ss');
+            default:
+                return moment(date, moment.ISO_8601).format('DD-MM-YYYY HH:mm:ss');
+        }
         return moment(date, moment.ISO_8601).format('DD-MM-YYYY HH:mm:ss');
     }catch (e){
         console.log(e)

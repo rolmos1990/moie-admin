@@ -15,6 +15,9 @@ export const BATCH_REQUEST = "/batchRequest"
 //PRODUCT
 export const PRODUCT = "/product"
 
+//OFFICE
+export const OFFICES = "/office"
+
 export const CATEGORY = "/category"
 export const SIZE = "/size"
 export const PRODUCT_SIZE = "/productSize"
