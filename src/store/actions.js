@@ -18,6 +18,7 @@ export * from "./user/actions"
 export * from "./template/actions"
 export * from "./comment/actions"
 export * from "./office/actions"
+export * from "./bill/actions"
 
 //System
 export * from "./location/actions"

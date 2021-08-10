@@ -32,6 +32,7 @@ import {ConfirmationModalAction} from "../../components/Modal/ConfirmationModal"
 import CustomModal from "../../components/Modal/CommosModal";
 import OrderList from "../Orders/orderList";
 import Conditionals from "../../common/conditionals";
+import {fileOfficeTemplate} from "../../helpers/backend_helper";
 
 const OfficeEdit = (props) => {
     const {getOffice, office, deliveryMethods, orders} = props;
@@ -129,6 +130,7 @@ const OfficeEdit = (props) => {
     const onGetDeliveryMethods = (conditional = null, limit = 50, page) => props.getDeliveryMethods(conditional, limit, page);
     const onGetFieldOptions = (conditional = null, limit = 500, page) => props.getFieldOptionByGroups([GROUPS.ORDERS_ORIGIN], limit, page);
     const onGetOrders = (conditions) => props.getOrders(conditions.all(), 200, 0);
+    const handleDownloadTemplate = (id) => fileOfficeTemplate('test.xls', id);
 
 
     return (
@@ -163,7 +165,7 @@ const OfficeEdit = (props) => {
                                     {officeData.status === 1 && (
                                         <>
                                         <Tooltip placement="bottom" title="Descargar Plantilla Excel" aria-label="add">
-                                            <button type="button" color="primary" className="btn-sm btn btn-outline-info waves-effect waves-light" onClick={() => {}}>
+                                            <button type="button" color="primary" className="btn-sm btn btn-outline-info waves-effect waves-light" onClick={() => handleDownloadTemplate(officeData.id)}>
                                                 <i className={"mdi mdi-file-excel"}> </i>
                                             </button>
                                         </Tooltip>

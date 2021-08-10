@@ -19,6 +19,7 @@ import OrderSaga from "./order/saga"
 import UserSaga from "./user/saga"
 import TemplateSaga from "./template/saga"
 import OfficeSaga from "./office/saga"
+import BillSaga from "./bill/saga"
 import LayoutSaga from "./layout/saga"
 
 export default function* rootSaga() {
@@ -41,6 +42,7 @@ export default function* rootSaga() {
     TemplateSaga(),
     CommentSaga(),
     OfficeSaga(),
+    BillSaga(),
     ForgetSaga(),
     fork(LayoutSaga)
   ])

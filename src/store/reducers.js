@@ -24,6 +24,7 @@ import User from "./user/reducer"
 import Template from "./template/reducer"
 import Comment from "./comment/reducer"
 import Office from "./office/reducer"
+import Bill from "./bill/reducer"
 
 const rootReducer = combineReducers({
   // public
@@ -45,7 +46,8 @@ const rootReducer = combineReducers({
   Profile,
   Template,
   Comment,
-  Office
+  Office,
+  Bill
 })
 
 export default rootReducer

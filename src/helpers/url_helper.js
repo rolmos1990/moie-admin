@@ -18,6 +18,8 @@ export const PRODUCT = "/product"
 //OFFICE
 export const OFFICES = "/office"
 
+export const BILLS = "/bill"
+
 export const CATEGORY = "/category"
 export const SIZE = "/size"
 export const PRODUCT_SIZE = "/productSize"

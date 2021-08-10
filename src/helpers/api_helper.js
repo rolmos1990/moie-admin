@@ -1,6 +1,7 @@
 import axios from "axios";
 import accessToken from "./jwt-token-access/accessToken";
 import authHeader from "./jwt-token-access/auth-token-header";
+import {b64toBlob} from "../common/utils";
 
 //pass new generated access token here
 const token = authHeader().Authorization || accessToken;
@@ -22,6 +23,24 @@ axiosApi.interceptors.response.use(
   response => response,
   error => Promise.reject(error)
 );
+
+export async function file(filename, url, config, params) {
+  try {
+    const blob = await get(url, config, params);
+    const _url = window.URL.createObjectURL(b64toBlob(blob.data));
+    const a = document.createElement('a');
+    a.style.display = 'none';
+    a.href = _url;
+    // the filename you want
+    a.download = blob.name;
+    document.body.appendChild(a);
+    a.click();
+    window.URL.revokeObjectURL(_url);
+  }catch(e){
+    console.log("DEBUG -- error ", e.message);
+  }
+
+}
 
 export async function get(url, config = {}, params = undefined) {
   return await axiosApi.get(url, {params: params, config: config}).then(response => response.data);

@@ -1,5 +1,5 @@
 // Login Method
-import {del, get, post, put} from "./api_helper";
+import {del, get, post, put, file} from "./api_helper";
 import * as url from "./url_helper";
 import {COMMENT, CUSTOMER, DELIVERY_METHODS, GET_USERS, USER} from "./url_helper";
 
@@ -103,11 +103,23 @@ const deleteOfficeApi = (id) => del(`${url.OFFICES}/${id}`);
 const confirmOfficeApi = (id) => post(`${url.OFFICES}/${id}/confirm`);
 const addOrderOfficeApi = (id, data, params) => post(`${url.OFFICES}/${id}/addOrder`, data, {params: params});
 
+//bills
+const fetchBillsApi = params => get(url.BILLS, {}, params);
+const fetchBillApi = data => get((data && data.id) ? `${url.BILLS}/${data.id}` : url.BILLS, data);
+const registerBillApi = data => post(url.BILLS, data);
+const updateBillApi = (id, data) => put(`${url.BILLS}/${id}`, data);
+const deleteBillApi = (id) => del(`${url.BILLS}/${id}`);
+const confirmBillApi = (id) => post(`${url.BILLS}/${id}/confirm`);
+const addOrderBillApi = (id, data, params) => post(`${url.BILLS}/${id}/addOrder`, data, {params: params});
+
 //templates
 const fetchTemplatesApi = data => get(url.TEMPLATES, {}, data);
 const fetchTemplateApi = (id) => get(`${url.TEMPLATES}/${id}`,{});
 const registerTemplateApi = data => post(url.TEMPLATES, data);
 const updateTemplateApi = (id, data) => put(`${url.TEMPLATES}/${id}`, data);
+
+const fileOfficeTemplate = (filename, id) => file(filename, `${url.OFFICES}/${id}/getTemplate`, {header: 'content-type: application/vnd.ms-excel'});
+
 
 const fetchDeliveryMethodsApi = () => get(`${url.DELIVERY_METHODS}`,{});
 const fetchDeliveryQuoteApi = (data) => post(`${url.DELIVERY_METHODS}/quote`,data);
@@ -219,5 +231,15 @@ export {
     updateOfficeApi,
     deleteOfficeApi,
     confirmOfficeApi,
-    addOrderOfficeApi
+    addOrderOfficeApi,
+
+    fetchBillsApi,
+    fetchBillApi,
+    registerBillApi,
+    updateBillApi,
+    deleteBillApi,
+    confirmBillApi,
+    addOrderBillApi,
+
+    fileOfficeTemplate
 }
