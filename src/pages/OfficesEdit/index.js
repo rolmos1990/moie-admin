@@ -199,11 +199,11 @@ const OfficeEdit = (props) => {
                                 handleValidSubmit(e, v)
                             }}>
                         <Row>
-                            <Col xl="8">
+                            <Col xl="4">
                                 <Card>
                                     <CardBody>
                                         <Row>
-                                            <Col md="6">
+                                            <Col md="12">
                                                 <div className="mb-3">
                                                     <Label htmlFor="field_name">Fecha <span className="text-danger">*</span></Label>
                                                     <FieldDate
@@ -213,7 +213,7 @@ const OfficeEdit = (props) => {
                                                     />
                                                 </div>
                                             </Col>
-                                            <Col md="6">
+                                            <Col md="12">
                                                 <div className="mb-3">
                                                     <Label htmlFor="field_name">Nombre <span className="text-danger">*</span></Label>
                                                     <FieldText
@@ -228,7 +228,7 @@ const OfficeEdit = (props) => {
                                             </Col>
                                         </Row>
                                         <Row>
-                                            <Col md="4">
+                                            <Col md="12">
                                                 <div className="mb-3">
                                                     <Label htmlFor="field_name">Tipo <span className="text-danger">*</span></Label>
                                                     <FieldSelect
@@ -241,7 +241,7 @@ const OfficeEdit = (props) => {
                                                     />
                                                 </div>
                                             </Col>
-                                            <Col md="8">
+                                            <Col md="12">
                                                 <div className="mb-3">
                                                     <Label htmlFor="field_name">Metodo<span className="text-danger">*</span></Label>
                                                     <FieldSelect
@@ -280,28 +280,31 @@ const OfficeEdit = (props) => {
                                     </CardBody>
                                 </Card>
                             </Col>
-                            <Col xl="4">
+                            <Col xl="8">
                                 <Card>
                                     <CardBody>
                                         <h4 className="card-title text-info"><i
                                             className="uil-shopping-cart-alt me-2"> </i> Pedidos en despacho</h4> <br/>
+                                        <Row>
                                         {ordersList.sort((a,b) => a.id < b.id).map((order, k) => (
-                                        <div key={k} className="order-box">
-                                            <Row>
-                                                <Col md={6} className="">
-                                                    <div>
-                                                        <Link to={`/order/${order.id}`} className="text-primary">
-                                                            <small className="font-weight-600 text-info">Pedido #: {order.id}</small>
-                                                        </Link>
-                                                        <br/>
-                                                        <small><span className="font-weight-600">Cliente: </span> {order.customer.name}</small>
-                                                        <br/>
-                                                        <small><span className="font-weight-600">Peso: </span> {order.totalWeight}</small>
-                                                    </div>
-                                                </Col>
-                                            </Row>
-                                        </div>
+                                            <Col md={4} className="">
+                                                <div key={k} className="order-box">
+                                                <div>
+                                                    <Link to={`/order/${order.id}`} className="text-muted">
+                                                        <small className="font-weight-600"><span className="text-info">Pedido #: {order.id}</span></small>
+                                                    </Link>
+                                                    <Tooltip placement="bottom" title={"Peso"} aria-label="add">
+                                                    <small className="float-end text-muted" style={{"cursor": "default"}}>
+                                                        <i className="mdi mdi-weight-pound"></i> {order.totalWeight}
+                                                    </small>
+                                                    </Tooltip>
+                                                    <br/>
+                                                    <small><span className="font-weight-600">Cliente: </span> <small>{order.customer.name}</small></small>
+                                                </div>
+                                                </div>
+                                            </Col>
                                         ))}
+                                        </Row>
                                         {!ordersList && (
                                             <div className={"m-1 pl-2"}>No hay registros asociados</div>
                                         )}
