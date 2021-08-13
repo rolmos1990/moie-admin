@@ -150,7 +150,7 @@ function* officeOrderAdd({ payload: { id, data, conditional, history } }) {
         const query = Conditionals.buildHttpGetQuery(cond, 0, 200);
         yield call(addOrderOfficeApi, id, data, query)
         yield put(deleteOfficeSuccess(id))
-        showResponseMessage({status:200}, "Despacho borrado!");
+        showResponseMessage({status:200}, "Despacho creado!");
         history.push("/office/" + id)
 
     } catch (error) {

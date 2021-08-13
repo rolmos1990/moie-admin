@@ -18,7 +18,7 @@ import OrderEdit from "./orderEdit";
 import Conditionals from "../../common/conditionals";
 
 const OrderList = props => {
-    const {orders, meta, onGetOrders, loading, refresh, customActions} = props;
+    const {orders, meta, onGetOrders, loading, refresh, customActions, conditionals, showAsModal} = props;
     const [statesList, setStatesList] = useState([])
     const [filter, setFilter] = useState(false);
     const [conditional, setConditional] = useState(null);
@@ -34,7 +34,7 @@ const OrderList = props => {
     }
 
     useEffect(() => {
-        if(null !== refresh) onGetOrders(conditional, DEFAULT_PAGE_LIMIT, currentPage * DEFAULT_PAGE_LIMIT);
+        if(null !== refresh) onGetOrders(getConditionals(), DEFAULT_PAGE_LIMIT, currentPage * DEFAULT_PAGE_LIMIT);
     }, [refresh])
 
     useEffect(() => {
@@ -73,7 +73,13 @@ const OrderList = props => {
         props.onPrintBatchRequest(conditionals);
     }
 
-    const columns = orderColumns(setOrderSelected);
+    const getConditionals = () => {
+        const cond = conditional || [];
+        const extConditions = conditionals || [];
+        return [...cond, ...extConditions];
+    }
+
+    const columns = orderColumns(setOrderSelected, showAsModal);
 
     var selectRowProp = {
         mode: "checkbox",
@@ -95,7 +101,6 @@ const OrderList = props => {
     };
 
     const onPressAction = () => {
-
         let conditionals = conditional || [];
 
         if(printOrderIds && printOrderIds.length === 1){

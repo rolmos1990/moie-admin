@@ -66,29 +66,34 @@ const OfficeEdit = (props) => {
 
     useEffect(() => {
         if (office.id && isEdit) {
-            setOfficeData({...office, _status:office.status});
+            setOfficeData({...office, _status: office.status});
             setDeliveryType(office.type);
             setDeliveryMethod(office.deliveryMethod);
 
             /** GET ORDERS */
-            const conditions = new Conditionals.Condition;
-            conditions.add("office", props.match.params.id, Conditionals.OPERATORS.EQUAL);
-            console.log("DEBUG - BUSCANDO ORDENES", conditions.all());
-            onGetOrders(conditions);
+            getOrdersByConditional();
         }
     }, [office]);
 
     useEffect(() => {
+        console.log('deliveryMethods', deliveryMethods)
         if (deliveryMethods) {
-        const list = deliveryMethods || [];
-        const ot = deliveryType + '';
-        setDeliveryMethodList([getEmptyOptions(), ...list.filter(op => (op.settings.includes(ot))).map(op => ({label: op.name, value: op.code}))]);
+
+            const list = deliveryMethods || [];
+            const ot = deliveryType + '';
+            setDeliveryMethodList([getEmptyOptions(), ...list.filter(op => (op.settings.includes(ot))).map(op => ({label: op.name, value: op.code}))]);
         }
     }, [deliveryType, deliveryMethods]);
 
     const handleValidSubmit = (event, values) => {
         const selectedDelivery = deliveryMethods.filter(item => item.code === values.deliveryMethod.value)[0];
-        const data = {...values, status: values._status, deliveryMethod: selectedDelivery.id, type: values.deliveryType.value, batchDate: values.batchDate[0] ? formatDate(values.batchDate[0], DATE_FORMAT.ONLY_DATE) : null};
+        const data = {
+            ...values,
+            status: values._status,
+            deliveryMethod: selectedDelivery.id,
+            type: values.deliveryType.value,
+            batchDate: values.batchDate[0] ? formatDate(values.batchDate[0], DATE_FORMAT.ONLY_DATE) : null
+        };
 
         delete data._status;
         delete data.deliveryType;
@@ -99,6 +104,13 @@ const OfficeEdit = (props) => {
             props.updateOffice(props.match.params.id, data, props.history)
         }
     }
+
+    const getOrdersByConditional = () => {
+        const conditions = new Conditionals.Condition;
+        conditions.add("office", props.match.params.id, Conditionals.OPERATORS.EQUAL);
+        console.log("DEBUG - BUSCANDO ORDENES", conditions.all());
+        onGetOrders(conditions);
+    };
 
     const onDelete = (id) => {
         ConfirmationModalAction({
@@ -118,10 +130,12 @@ const OfficeEdit = (props) => {
         });
     };
     const onCloseModal = () => {
+        getOrdersByConditional();
         setOpenCustomerModal(false);
     };
 
     const onAcceptModal = (conditionals) => {
+        getOrdersByConditional();
         props.addOrderOffice(officeData.id, {id: 123}, conditionals, props.history);
     };
 
@@ -136,7 +150,7 @@ const OfficeEdit = (props) => {
     return (
         <React.Fragment>
             <CustomModal title={"Agregar pedidos"} size="lg" showFooter={false} isOpen={openCustomerModal} onClose={onCloseModal}>
-                <OrderList customActions={onAcceptModal} />
+                <OrderList customActions={onAcceptModal}/>
                 {/*<OrderCustomer showAsModal={true}
                                onCloseModal={onCloseModal}
                                onAcceptModal={onAcceptModal}
@@ -146,52 +160,53 @@ const OfficeEdit = (props) => {
                 <Container fluid>
                     <Breadcrumb hasBack path="/offices" title={officeData.name} item={"Despachos"}/>
                     {officeData.status && (
-                    <Row className="mb-2">
-                        <Col md={12}>
-                            <div className={"mb-3 float-md-start"}>
-                                <StatusField color={OFFICE_STATUS[officeData.status].color} className={"font-size-14 mr-5"}>
-                                    {OFFICE_STATUS[officeData.status].name}
-                                </StatusField>
-                                <small className="badge rounded-pill bg-soft-info font-size-14 mr-5 p-2">Operador: {officeData?.user?.name}</small>
-                            </div>
-                            <div className={"mb-3 float-md-end"}>
-                                <div className="button-items">
+                        <Row className="mb-2">
+                            <Col md={12}>
+                                <div className={"mb-3 float-md-start"}>
+                                    <StatusField color={OFFICE_STATUS[officeData.status].color} className={"font-size-14 mr-5"}>
+                                        {OFFICE_STATUS[officeData.status].name}
+                                    </StatusField>
+                                    <small className="badge rounded-pill bg-soft-info font-size-14 mr-5 p-2">Operador: {officeData?.user?.name}</small>
+                                </div>
+                                <div className={"mb-3 float-md-end"}>
+                                    <div className="button-items">
 
-                                    <Tooltip placement="bottom" title="Imprimir reporte" aria-label="add">
-                                        <button type="button" color="primary" className="btn-sm btn btn-outline-info waves-effect waves-light" onClick={() => {}}>
-                                            <i className={"mdi mdi-printer"}> </i>
-                                        </button>
-                                    </Tooltip>
-                                    {officeData.status === 1 && (
-                                        <>
-                                        <Tooltip placement="bottom" title="Descargar Plantilla Excel" aria-label="add">
-                                            <button type="button" color="primary" className="btn-sm btn btn-outline-info waves-effect waves-light" onClick={() => handleDownloadTemplate(officeData.id)}>
-                                                <i className={"mdi mdi-file-excel"}> </i>
+                                        <Tooltip placement="bottom" title="Imprimir reporte" aria-label="add">
+                                            <button type="button" color="primary" className="btn-sm btn btn-outline-info waves-effect waves-light" onClick={() => {
+                                            }}>
+                                                <i className={"mdi mdi-printer"}> </i>
                                             </button>
                                         </Tooltip>
-                                        &nbsp;&nbsp;
+                                        {officeData.status === 1 && (
+                                            <>
+                                                <Tooltip placement="bottom" title="Descargar Plantilla Excel" aria-label="add">
+                                                    <button type="button" color="primary" className="btn-sm btn btn-outline-info waves-effect waves-light" onClick={() => handleDownloadTemplate(officeData.id)}>
+                                                        <i className={"mdi mdi-file-excel"}> </i>
+                                                    </button>
+                                                </Tooltip>
+                                                &nbsp;&nbsp;
 
-                                        <Tooltip placement="bottom" title="Eliminar despacho" aria-label="add">
-                                        <button type="button" color="primary" className="btn-sm btn btn-outline-danger waves-effect waves-light" onClick={() => onDelete(officeData.id)}>
-                                        <i className={"mdi mdi-delete"}> </i>
-                                        </button>
-                                        </Tooltip>
-                                        <Tooltip placement="bottom" title="Agregar pedidos" aria-label="add">
-                                        <button type="button" color="primary" className="btn-sm btn btn-outline-info waves-effect waves-light" onClick={() => setOpenCustomerModal(true)}>
-                                        <i className={"mdi mdi-plus"}> </i>
-                                        </button>
-                                        </Tooltip>
-                                        <Tooltip placement="bottom" title="Finalizar" aria-label="add">
-                                        <button type="button" color="primary" className="btn-sm btn btn-outline-success waves-effect waves-light" onClick={() => onConfirm(officeData.id)}>
-                                        <i className={"mdi mdi-check"}> </i>
-                                        </button>
-                                        </Tooltip>
-                                        </>
-                                    )}
+                                                <Tooltip placement="bottom" title="Eliminar despacho" aria-label="add">
+                                                    <button type="button" color="primary" className="btn-sm btn btn-outline-danger waves-effect waves-light" onClick={() => onDelete(officeData.id)}>
+                                                        <i className={"mdi mdi-delete"}> </i>
+                                                    </button>
+                                                </Tooltip>
+                                                <Tooltip placement="bottom" title="Agregar pedidos" aria-label="add">
+                                                    <button type="button" color="primary" className="btn-sm btn btn-outline-info waves-effect waves-light" onClick={() => setOpenCustomerModal(true)}>
+                                                        <i className={"mdi mdi-plus"}> </i>
+                                                    </button>
+                                                </Tooltip>
+                                                <Tooltip placement="bottom" title="Finalizar" aria-label="add">
+                                                    <button type="button" color="primary" className="btn-sm btn btn-outline-success waves-effect waves-light" onClick={() => onConfirm(officeData.id)}>
+                                                        <i className={"mdi mdi-check"}> </i>
+                                                    </button>
+                                                </Tooltip>
+                                            </>
+                                        )}
+                                    </div>
                                 </div>
-                            </div>
-                        </Col>
-                    </Row>
+                            </Col>
+                        </Row>
                     )}
 
                     <AvForm className="needs-validation" autoComplete="off"
@@ -274,7 +289,7 @@ const OfficeEdit = (props) => {
 
                                         <Row>
                                             <Col md={12} className="text-right">
-                                                <ButtonSubmit loading={props.loading} />
+                                                <ButtonSubmit loading={props.loading}/>
                                             </Col>
                                         </Row>
                                     </CardBody>
@@ -286,24 +301,24 @@ const OfficeEdit = (props) => {
                                         <h4 className="card-title text-info"><i
                                             className="uil-shopping-cart-alt me-2"> </i> Pedidos en despacho</h4> <br/>
                                         <Row>
-                                        {ordersList.sort((a,b) => a.id < b.id).map((order, k) => (
-                                            <Col md={4} className="">
-                                                <div key={k} className="order-box">
-                                                <div>
-                                                    <Link to={`/order/${order.id}`} className="text-muted">
-                                                        <small className="font-weight-600"><span className="text-info">Pedido #: {order.id}</span></small>
-                                                    </Link>
-                                                    <Tooltip placement="bottom" title={"Peso"} aria-label="add">
-                                                    <small className="float-end text-muted" style={{"cursor": "default"}}>
-                                                        <i className="mdi mdi-weight-pound"></i> {order.totalWeight}
-                                                    </small>
-                                                    </Tooltip>
-                                                    <br/>
-                                                    <small><span className="font-weight-600">Cliente: </span> <small>{order.customer.name}</small></small>
-                                                </div>
-                                                </div>
-                                            </Col>
-                                        ))}
+                                            {ordersList.sort((a, b) => a.id < b.id).map((order, k) => (
+                                                <Col md={4} className="">
+                                                    <div key={k} className="order-box">
+                                                        <div>
+                                                            <Link to={`/order/${order.id}`} className="text-muted">
+                                                                <small className="font-weight-600"><span className="text-info">Pedido #: {order.id}</span></small>
+                                                            </Link>
+                                                            <Tooltip placement="bottom" title={"Peso"} aria-label="add">
+                                                                <small className="float-end text-muted" style={{"cursor": "default"}}>
+                                                                    <i className="mdi mdi-weight-pound"></i> {order.totalWeight}
+                                                                </small>
+                                                            </Tooltip>
+                                                            <br/>
+                                                            <small><span className="font-weight-600">Cliente: </span> <small>{order.customer.name}</small></small>
+                                                        </div>
+                                                    </div>
+                                                </Col>
+                                            ))}
                                         </Row>
                                         {!ordersList && (
                                             <div className={"m-1 pl-2"}>No hay registros asociados</div>

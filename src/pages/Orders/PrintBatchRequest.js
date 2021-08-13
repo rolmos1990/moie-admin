@@ -93,5 +93,5 @@ export default withRouter(
 )
 
 PrintBatchRequest.propTypes = {
-    conditionals: PropTypes.array.isRequired,
+    conditionals: PropTypes.array,
 }
