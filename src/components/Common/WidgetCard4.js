@@ -53,7 +53,7 @@ const options4 = {
 };
 
 const WidgetCard4 = props => {
-    const {reportData, title} = props;
+    const {reportData = {}, title} = props;
     const [dataCard, setDataCard] = useState({});
 
     useEffect(() => {

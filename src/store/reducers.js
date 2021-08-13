@@ -25,6 +25,7 @@ import Template from "./template/reducer"
 import Comment from "./comment/reducer"
 import Office from "./office/reducer"
 import Bill from "./bill/reducer"
+import PostSale from "./postSale/reducer"
 
 const rootReducer = combineReducers({
   // public
@@ -47,7 +48,8 @@ const rootReducer = combineReducers({
   Template,
   Comment,
   Office,
-  Bill
+  Bill,
+  PostSale
 })
 
 export default rootReducer

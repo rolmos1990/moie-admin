@@ -21,6 +21,7 @@ import TemplateSaga from "./template/saga"
 import OfficeSaga from "./office/saga"
 import BillSaga from "./bill/saga"
 import LayoutSaga from "./layout/saga"
+import PostSaleSaga from "./postSale/saga"
 
 export default function* rootSaga() {
   yield all([
@@ -43,6 +44,7 @@ export default function* rootSaga() {
     CommentSaga(),
     OfficeSaga(),
     BillSaga(),
+    PostSaleSaga(),
     ForgetSaga(),
     fork(LayoutSaga)
   ])

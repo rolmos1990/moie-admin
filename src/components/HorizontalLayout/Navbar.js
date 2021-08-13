@@ -156,6 +156,12 @@ const Navbar = props => {
                         {props.t("Facturación")}
                       </Link>
                     </li>
+                    <li className="nav-item">
+                      <Link to="/postSales" className="dropdown-item">
+                        <i className="uil-shopping-cart-alt me-2"></i>
+                        {props.t("Post Venta")}
+                      </Link>
+                    </li>
                   </div>
                 </li>
 
