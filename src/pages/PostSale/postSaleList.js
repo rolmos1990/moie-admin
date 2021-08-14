@@ -11,17 +11,16 @@ import {DEFAULT_PAGE_LIMIT} from "../../common/pagination";
 import {TableFilter} from "../../components/TableFilter";
 import {normalizeColumnsList} from "../../common/converters";
 import NoDataIndication from "../../components/Common/NoDataIndication";
-import orderColumns from "./postSaleColumn";
+import postSaleColumns from "./postSaleColumn";
 import {Button, Tooltip} from "@material-ui/core";
 import {doPrintBatchRequest, getOrders} from "../../store/order/actions";
 import Conditionals from "../../common/conditionals";
 
 const PostSaleList = props => {
-    const {orders, meta, onGetOrders, loading, refresh, customActions, conditionals, showAsModal} = props;
+    const {orders, meta, onGetOrders, loading, refresh, customActions} = props;
     const [statesList, setStatesList] = useState([])
     const [filter, setFilter] = useState(false);
     const [conditional, setConditional] = useState(null);
-    const [orderSelected, setOrderSelected] = useState(null);
     const [printOrderIds, setPrintOrderIds] = useState([]);
     const [currentPage, setCurrentPage] = useState(null);
     const [filterable, setFilterable] = useState(true);
@@ -33,12 +32,12 @@ const PostSaleList = props => {
     }
 
     useEffect(() => {
-        if(null !== refresh) onGetOrders(getConditionals(), DEFAULT_PAGE_LIMIT, currentPage * DEFAULT_PAGE_LIMIT);
+        if (null !== refresh) onGetOrders(getConditionals(), DEFAULT_PAGE_LIMIT, currentPage * DEFAULT_PAGE_LIMIT);
     }, [refresh])
 
     useEffect(() => {
-        onGetOrders();
-        if(customActions){
+        onGetOrders(getConditionals());
+        if (customActions) {
             setFilterable(false);
         }
     }, [onGetOrders])
@@ -51,7 +50,7 @@ const PostSaleList = props => {
     const handleTableChange = (type, {page, searchText}) => {
         let p = page - 1;
         setCurrentPage(p);
-        onGetOrders(conditional, DEFAULT_PAGE_LIMIT, p * DEFAULT_PAGE_LIMIT);
+        onGetOrders(getConditionals(), DEFAULT_PAGE_LIMIT, p * DEFAULT_PAGE_LIMIT);
     }
 
     const onFilterAction = (condition) => {
@@ -62,11 +61,11 @@ const PostSaleList = props => {
     const printOrders = () => {
         let conditionals = conditional || [];
 
-        if(printOrderIds && printOrderIds.length === 1){
-            conditionals.push({field:'id', value:printOrderIds[0], operator: Conditionals.OPERATORS.EQUAL});
+        if (printOrderIds && printOrderIds.length === 1) {
+            conditionals.push({field: 'id', value: printOrderIds[0], operator: Conditionals.OPERATORS.EQUAL});
         }
-        if(printOrderIds && printOrderIds.length > 1){
-            conditionals.push({field:'id', value:printOrderIds.join('::'), operator: Conditionals.OPERATORS.IN});
+        if (printOrderIds && printOrderIds.length > 1) {
+            conditionals.push({field: 'id', value: printOrderIds.join('::'), operator: Conditionals.OPERATORS.IN});
         }
 
         props.onPrintBatchRequest(conditionals);
@@ -74,11 +73,11 @@ const PostSaleList = props => {
 
     const getConditionals = () => {
         const cond = conditional || [];
-        const extConditions = conditionals || [];
-        return [...cond, ...extConditions];
+        // cond.push({field:'id', value:printOrderIds[0], operator: Conditionals.OPERATORS.EQUAL});
+        return [...cond];
     }
 
-    const columns = orderColumns(setOrderSelected, showAsModal);
+    const columns = postSaleColumns();
 
     var selectRowProp = {
         mode: "checkbox",
@@ -87,9 +86,9 @@ const PostSaleList = props => {
             let list = [...printOrderIds]
 
             const index = list.indexOf(row.id);
-            if(index >= 0){
+            if (index >= 0) {
                 list.splice(index, 1);
-            } else{
+            } else {
                 list.push(row.id);
             }
             setPrintOrderIds(list);
@@ -102,11 +101,11 @@ const PostSaleList = props => {
     const onPressAction = () => {
         let conditionals = conditional || [];
 
-        if(printOrderIds && printOrderIds.length === 1){
-            conditionals.push({field:'id', value:printOrderIds[0], operator: Conditionals.OPERATORS.EQUAL});
+        if (printOrderIds && printOrderIds.length === 1) {
+            conditionals.push({field: 'id', value: printOrderIds[0], operator: Conditionals.OPERATORS.EQUAL});
         }
-        if(printOrderIds && printOrderIds.length > 1){
-            conditionals.push({field:'id', value:printOrderIds.join('::'), operator: Conditionals.OPERATORS.IN});
+        if (printOrderIds && printOrderIds.length > 1) {
+            conditionals.push({field: 'id', value: printOrderIds.join('::'), operator: Conditionals.OPERATORS.IN});
         }
 
         /** TODO -- envio la condicion para procesar en orden superior */
@@ -139,54 +138,37 @@ const PostSaleList = props => {
                                                 <Col md={6}>
                                                     <div className="form-inline mb-3">
                                                         <div className="search-box ms-2">
-
+                                                            <h4 className="text-info"><i className="uil-shopping-cart-alt me-2"></i> Post Venta</h4>
                                                         </div>
                                                     </div>
                                                 </Col>
-                                                {customActions ? <Col md={6}>
+                                                <Col md={6}>
                                                     <div className="mb-3 float-md-end">
-                                                        <Tooltip placement="bottom" title="Aceptar" aria-label="add">
-                                                            <Button onClick={() => onPressAction() } color="success">
-                                                                Aceptar &nbsp; <i className={"mdi mdi-check"}> </i>
+                                                        {columns.some(s => s.filter) && (
+                                                            <Tooltip placement="bottom" title="Filtros Avanzados" aria-label="add">
+                                                                <Button onClick={() => setFilter(!filter)}>
+                                                                    <i className={"mdi mdi-filter"}> </i>
+                                                                </Button>
+                                                            </Tooltip>
+                                                        )}
+                                                        <Tooltip placement="bottom" title="Impresión multiple" aria-label="add">
+                                                            <Button color="primary" onClick={() => printOrders()} disabled={printOrderIds.length === 0 && (!conditional || conditional.length === 0)}>
+                                                                <i className="mdi mdi-printer"> </i>
                                                             </Button>
                                                         </Tooltip>
                                                     </div>
-                                                </Col> : (
-                                                    <Col md={6}>
-                                                        <div className="mb-3 float-md-end">
-                                                            {columns.some(s => s.filter) && (
-                                                                <Tooltip placement="bottom" title="Filtros Avanzados" aria-label="add">
-                                                                    <Button onClick={() => setFilter(!filter)}>
-                                                                        <i className={"mdi mdi-filter"}> </i>
-                                                                    </Button>
-                                                                </Tooltip>
-                                                            )}
-                                                            <Tooltip placement="bottom" title="Impresión multiple" aria-label="add">
-                                                                <Button color="primary" onClick={() => printOrders()} disabled={printOrderIds.length === 0 && (!conditional || conditional.length === 0)}>
-                                                                    <i className="mdi mdi-printer"> </i>
-                                                                </Button>
-                                                            </Tooltip>
-
-                                                            <Link to={"/orders/create"} className="btn btn-primary waves-effect waves-light text-light">
-                                                                <i className="mdi mdi-plus"> </i> Crear pedido
-                                                            </Link>
-                                                        </div>
-                                                    </Col>
-                                                )}
+                                                </Col>
                                             </Row>
                                             <Row>
                                                 <Col xl="12">
                                                     <div className="table-responsive mb-4">
                                                         <BootstrapTable
-                                                            selectRow={selectRowProp}
                                                             remote
                                                             responsive
                                                             loading={true}
                                                             bordered={false}
                                                             striped={true}
-                                                            classes={
-                                                                "table table-centered table-nowrap mb-0"
-                                                            }
+                                                            classes={"table table-centered table-nowrap mb-0"}
                                                             noDataIndication={() => <NoDataIndication/>}
                                                             {...toolkitProps.baseProps}
                                                             onTableChange={handleTableChange}
@@ -223,7 +205,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => ({
     onGetOrders: (conditional = null, limit = DEFAULT_PAGE_LIMIT, page) => dispatch(getOrders(conditional, limit, page)),
-    onPrintBatchRequest: (conditional ) => dispatch(doPrintBatchRequest(conditional)),
+    onPrintBatchRequest: (conditional) => dispatch(doPrintBatchRequest(conditional)),
 })
 
 export default connect(

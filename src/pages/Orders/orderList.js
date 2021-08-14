@@ -141,7 +141,7 @@ const OrderList = props => {
                                                 <Col md={6}>
                                                     <div className="form-inline mb-3">
                                                         <div className="search-box ms-2">
-
+                                                            <h4 className="text-info"><i className="uil-shopping-cart-alt me-2"></i> Pedidos</h4>
                                                         </div>
                                                     </div>
                                                 </Col>

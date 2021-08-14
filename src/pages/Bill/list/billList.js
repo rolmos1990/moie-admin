@@ -105,6 +105,11 @@ const BillList = props => {
                                         <React.Fragment>
                                             <Row className="row mb-2">
                                                 <Col md={6}>
+                                                    <div className="form-inline mb-3">
+                                                        <div className="search-box ms-2">
+                                                            <h4 className="text-info"><i className="uil-bill me-2"></i> Facturas</h4>
+                                                        </div>
+                                                    </div>
                                                 </Col>
                                                 <Col md={6}>
                                                     <div className="mb-3 float-md-end">

@@ -119,16 +119,17 @@ const MunicipalityList = props => {
                                         <React.Fragment>
                                             <Row className="row mb-2">
                                                 <Col md={6}>
-                                                    {/*<div className="form-inline mb-3">
+                                                    <div className="form-inline mb-3">
                                                         <div className="search-box ms-2">
-                                                            {!filter && (
+                                                            <h4 className="text-info"><i className="uil-shopping-cart-alt me-2"></i> Municipios</h4>
+                                                            {/*{!filter && (
                                                                 <div className="position-relative">
                                                                     <SearchBar {...toolkitProps.searchProps}/>
                                                                     <i className="mdi mdi-magnify search-icon"> </i>
                                                                 </div>
-                                                            )}
+                                                            )}*/}
                                                         </div>
-                                                    </div>*/}
+                                                    </div>
                                                 </Col>
                                                 <Col md={6}>
                                                     <div className="mb-3 float-md-end">
