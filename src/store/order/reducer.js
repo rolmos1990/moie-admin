@@ -1,6 +1,11 @@
 import {
     RESUME_ORDER,
-    GET_DELIVERY_METHODS, GET_DELIVERY_METHODS_FAILED, GET_DELIVERY_METHODS_SUCCESS, GET_DELIVERY_QUOTE, GET_DELIVERY_QUOTE_FAILED, GET_DELIVERY_QUOTE_SUCCESS,
+    GET_DELIVERY_METHODS,
+    GET_DELIVERY_METHODS_FAILED,
+    GET_DELIVERY_METHODS_SUCCESS,
+    GET_DELIVERY_QUOTE,
+    GET_DELIVERY_QUOTE_FAILED,
+    GET_DELIVERY_QUOTE_SUCCESS,
     GET_ORDER,
     GET_ORDER_FAILED,
     GET_ORDER_SUCCESS,
@@ -9,17 +14,30 @@ import {
     GET_ORDERS_SUCCESS,
     REGISTER_ORDER,
     REGISTER_ORDER_FAILED,
-    REGISTER_ORDER_SUCCESS, RESET_CAR, UPDATE_CAR,
-    UPDATE_ORDER, UPDATE_ORDER_FAILED,
-    UPDATE_ORDER_SUCCESS, PRINT_ORDER, CUSTOM_ORDER_SUCCESS, CUSTOM_ORDER_FAILED, PRINT_BATCH_REQUEST, RESET_BATCH_REQUEST, PRINT_BATCH_REQUEST_SUCCESS, DO_BATCH_REQUEST, PRINT_BATCH_REQUEST_FAILED, REFRESH_ORDER
+    REGISTER_ORDER_SUCCESS,
+    RESET_CAR,
+    UPDATE_CAR,
+    UPDATE_ORDER,
+    UPDATE_ORDER_FAILED,
+    UPDATE_ORDER_SUCCESS,
+    PRINT_ORDER,
+    CUSTOM_ORDER_SUCCESS,
+    CUSTOM_ORDER_FAILED,
+    PRINT_BATCH_REQUEST,
+    RESET_BATCH_REQUEST,
+    PRINT_BATCH_REQUEST_SUCCESS,
+    DO_BATCH_REQUEST,
+    PRINT_BATCH_REQUEST_FAILED,
+    REFRESH_ORDER,
+    GET_ORDERS_OFFICE, GET_ORDERS_OFFICE_FAILED, GET_ORDERS_OFFICE_SUCCESS
 } from "./actionTypes";
-import {refreshOrders} from "./actions";
 
 const initialState = {
     error: "",
     loading: false,
     meta: {},
     orders: [],
+    ordersByOffice: [],
     order: {},
     refresh: null,
     deliveryMethods: {
@@ -93,6 +111,24 @@ const order = (state = initialState, action) => {
             return {
                 ...state,
                 orders: action.payload,
+                meta: action.meta,
+                loading: false,
+            }
+        case GET_ORDERS_OFFICE:
+            return {
+                ...state,
+                loading: true,
+            }
+        case GET_ORDERS_OFFICE_FAILED:
+            return {
+                ...state,
+                error: action.payload,
+                loading: true,
+            }
+        case GET_ORDERS_OFFICE_SUCCESS:
+            return {
+                ...state,
+                ordersByOffice: action.payload,
                 meta: action.meta,
                 loading: false,
             }
