@@ -15,13 +15,19 @@ import postSaleColumns from "./postSaleColumn";
 import {Button, Tooltip} from "@material-ui/core";
 import {doPrintBatchRequest, getOrders} from "../../store/order/actions";
 import Conditionals from "../../common/conditionals";
+import Images from "../../components/Common/Image";
+import DropZoneIcon from "../../components/Common/DropZoneIcon";
+import {importFile} from "../../store/office/actions";
+import CustomerForm from "../CustomerEdit/CustomerForm";
+import CustomModal from "../../components/Modal/CommosModal";
+import PostSaleImportFileForm from "./PostSaleImportFileForm";
 
 const PostSaleList = props => {
     const {orders, meta, onGetOrders, loading, refresh, customActions} = props;
     const [statesList, setStatesList] = useState([])
     const [filter, setFilter] = useState(false);
     const [conditional, setConditional] = useState(null);
-    const [printOrderIds, setPrintOrderIds] = useState([]);
+    const [openImportFileModal, setOpenImportFileModal] = useState(false);
     const [currentPage, setCurrentPage] = useState(null);
     const [filterable, setFilterable] = useState(true);
 
@@ -46,7 +52,6 @@ const PostSaleList = props => {
         setStatesList(orders)
     }, [orders])
 
-    // eslint-disable-next-line no-unused-vars
     const handleTableChange = (type, {page, searchText}) => {
         let p = page - 1;
         setCurrentPage(p);
@@ -55,62 +60,24 @@ const PostSaleList = props => {
 
     const onFilterAction = (condition) => {
         setConditional(condition);
-        onGetOrders(condition, DEFAULT_PAGE_LIMIT, 0);
+        onGetOrders(getConditionals(condition), DEFAULT_PAGE_LIMIT, 0);
     }
 
-    const printOrders = () => {
-        let conditionals = conditional || [];
-
-        if (printOrderIds && printOrderIds.length === 1) {
-            conditionals.push({field: 'id', value: printOrderIds[0], operator: Conditionals.OPERATORS.EQUAL});
-        }
-        if (printOrderIds && printOrderIds.length > 1) {
-            conditionals.push({field: 'id', value: printOrderIds.join('::'), operator: Conditionals.OPERATORS.IN});
-        }
-
-        props.onPrintBatchRequest(conditionals);
+    const handleImportFile = (reload) => {
+        setOpenImportFileModal(false);
+        if(reload) onGetOrders(getConditionals(), DEFAULT_PAGE_LIMIT, currentPage * DEFAULT_PAGE_LIMIT);
     }
 
-    const getConditionals = () => {
+    const getConditionals = (condition) => {
         const cond = conditional || [];
-        // cond.push({field:'id', value:printOrderIds[0], operator: Conditionals.OPERATORS.EQUAL});
-        return [...cond];
+        if(!condition){
+            condition = [];
+        }
+        // cond.push({field:'orderDelivery.tracking', value:'', operator: Conditionals.OPERATORS.NOT_NULL});
+        return [...cond, ...condition];
     }
 
     const columns = postSaleColumns();
-
-    var selectRowProp = {
-        mode: "checkbox",
-        clickToSelect: true,
-        onSelect: (row) => {
-            let list = [...printOrderIds]
-
-            const index = list.indexOf(row.id);
-            if (index >= 0) {
-                list.splice(index, 1);
-            } else {
-                list.push(row.id);
-            }
-            setPrintOrderIds(list);
-        },
-        onSelectAll: (rows) => {
-            setPrintOrderIds([]);
-        }
-    };
-
-    const onPressAction = () => {
-        let conditionals = conditional || [];
-
-        if (printOrderIds && printOrderIds.length === 1) {
-            conditionals.push({field: 'id', value: printOrderIds[0], operator: Conditionals.OPERATORS.EQUAL});
-        }
-        if (printOrderIds && printOrderIds.length > 1) {
-            conditionals.push({field: 'id', value: printOrderIds.join('::'), operator: Conditionals.OPERATORS.IN});
-        }
-
-        /** TODO -- envio la condicion para procesar en orden superior */
-        props.customActions(conditionals);
-    };
 
     return (
         <Row>
@@ -143,7 +110,7 @@ const PostSaleList = props => {
                                                     </div>
                                                 </Col>
                                                 <Col md={6}>
-                                                    <div className="mb-3 float-md-end">
+                                                    <div className="mb-3 float-md-end d-flex">
                                                         {columns.some(s => s.filter) && (
                                                             <Tooltip placement="bottom" title="Filtros Avanzados" aria-label="add">
                                                                 <Button onClick={() => setFilter(!filter)}>
@@ -151,11 +118,12 @@ const PostSaleList = props => {
                                                                 </Button>
                                                             </Tooltip>
                                                         )}
-                                                        <Tooltip placement="bottom" title="Impresión multiple" aria-label="add">
-                                                            <Button color="primary" onClick={() => printOrders()} disabled={printOrderIds.length === 0 && (!conditional || conditional.length === 0)}>
-                                                                <i className="mdi mdi-printer"> </i>
+                                                        <Tooltip placement="bottom" title="Importar archivo" aria-label="add">
+                                                            <Button onClick={() => setOpenImportFileModal(true)}>
+                                                                <i className={"mdi mdi-file-excel"}> </i>
                                                             </Button>
                                                         </Tooltip>
+
                                                     </div>
                                                 </Col>
                                             </Row>
@@ -188,6 +156,9 @@ const PostSaleList = props => {
                     </CardBody>
                 </Card>
             </Col>
+            <CustomModal title={"Importar"} showFooter={false} isOpen={openImportFileModal} onClose={()=> setOpenImportFileModal(false)}>
+                <PostSaleImportFileForm onCloseModal={(reload) => handleImportFile(reload)}/>
+            </CustomModal>
         </Row>
     )
 }
@@ -204,6 +175,7 @@ const mapStateToProps = state => {
 }
 
 const mapDispatchToProps = dispatch => ({
+    onImportFile: (data) => dispatch(importFile(data)),
     onGetOrders: (conditional = null, limit = DEFAULT_PAGE_LIMIT, page) => dispatch(getOrders(conditional, limit, page)),
     onPrintBatchRequest: (conditional) => dispatch(doPrintBatchRequest(conditional)),
 })

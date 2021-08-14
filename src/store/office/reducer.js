@@ -4,7 +4,7 @@ import {
     GET_OFFICE,
     GET_OFFICE_FAILED,
     GET_OFFICE_SUCCESS,
-    GET_OFFICES, GET_OFFICES_FAILED, GET_OFFICES_SUCCESS, QUERY_OFFICES, QUERY_OFFICES_FAILED, QUERY_OFFICES_SUCCESS,
+    GET_OFFICES, GET_OFFICES_FAILED, GET_OFFICES_SUCCESS, IMPORT_FILE, IMPORT_FILE_FAILED, IMPORT_FILE_RESET, IMPORT_FILE_SUCCESS, QUERY_OFFICES, QUERY_OFFICES_FAILED, QUERY_OFFICES_SUCCESS,
     REGISTER_OFFICE,
     REGISTER_OFFICE_FAILED,
     REGISTER_OFFICE_SUCCESS, RESET_OFFICE,
@@ -28,6 +28,12 @@ const initialState = {
         loading: false,
         meta: {},
         data: {}
+    },
+    importFile:{
+        loading: false,
+        refresh: false,
+        success: false,
+        error: ""
     },
     refresh: false
 }
@@ -177,6 +183,51 @@ const office = (state = initialState, action) => {
             state = {
                 ...state,
                 loading: false,
+            }
+            break
+        case IMPORT_FILE_RESET:
+            state = {
+                ...state,
+                importFile: {
+                    loading: false,
+                    refresh: false,
+                    success: false,
+                    error: ""
+                }
+            }
+            break
+        case IMPORT_FILE:
+            state = {
+                ...state,
+                importFile: {
+                    ...state.importFile,
+                    loading: true,
+                    success: false,
+                    error: null
+                }
+            }
+            break
+        case IMPORT_FILE_SUCCESS:
+            state = {
+                ...state,
+                importFile: {
+                    ...state.importFile,
+                    loading: false,
+                    success: true,
+                    refresh: !state.refresh,
+                    error: null
+                }
+            }
+            break
+        case IMPORT_FILE_FAILED:
+            state = {
+                ...state,
+                importFile: {
+                    ...state.importFile,
+                    loading: false,
+                    success: false,
+                    error: action.payload
+                }
             }
             break
         default:

@@ -8,7 +8,7 @@ import {
     UPDATE_OFFICE,
     QUERY_OFFICES,
     DELETE_OFFICE,
-    CONFIRM_OFFICE, ADD_ORDER_OFFICE
+    CONFIRM_OFFICE, ADD_ORDER_OFFICE, IMPORT_FILE
 } from "./actionTypes"
 
 import {
@@ -20,14 +20,14 @@ import {
     registerOfficeFailed,
     updateOfficeSuccess,
     updateOfficeFail, queryOfficesSuccess, queryOfficesFailed,
-    deleteOfficeFailed, deleteOfficeSuccess, confirmOfficeSuccess
+    deleteOfficeFailed, deleteOfficeSuccess, confirmOfficeSuccess, importFileSuccess, importFileFailed
 } from "./actions"
 
 import {
     registerOfficeApi,
     updateOfficeApi,
     fetchOfficeApi,
-    fetchOfficesApi, deleteOfficeApi, confirmOfficeApi, addOrderOfficeApi
+    fetchOfficesApi, deleteOfficeApi, confirmOfficeApi, addOrderOfficeApi, importFileApi
 } from "../../helpers/backend_helper"
 
 import Conditionals from "../../common/conditionals";
@@ -45,11 +45,13 @@ const ACTION_NAME_UPDATE    =    UPDATE_OFFICE;
 const ACTION_NAME_DELETE    =    DELETE_OFFICE;
 const ACTION_NAME_CONFIRM   =    CONFIRM_OFFICE;
 const ACTION_NAME_ADD_CHILD =    ADD_ORDER_OFFICE;
+const IMPORT_FILE_POST      =    IMPORT_FILE;
 
 const LIST_API_REQUEST      =   fetchOfficesApi;
 const GET_API_REQUEST       =   fetchOfficeApi;
 const POST_API_REQUEST      =   registerOfficeApi;
 const PUT_API_REQUEST       =   updateOfficeApi;
+const IMPORT_FILE_API_REQUEST   =   importFileApi;
 
 //actions
 const QUERY_SUCCESS_ACTION  =   queryOfficesSuccess;
@@ -62,6 +64,8 @@ const CREATE_SUCCESS_ACTION =   registerOfficeSuccess;
 const CREATE_FAILED_ACTION  =   registerOfficeFailed;
 const UPDATE_SUCCESS_ACTION =   updateOfficeSuccess;
 const UPDATE_FAILED_ACTION  =   updateOfficeFail;
+const IMPORT_FILE_SUCCESS_ACTION =   importFileSuccess;
+const IMPORT_FILE_FAILED_ACTION  =   importFileFailed;
 
 
 const LIST_URL = "/offices";
@@ -159,6 +163,17 @@ function* officeOrderAdd({ payload: { id, data, conditional, history } }) {
     }
 }
 
+function* importFile({ payload: { data } }) {
+    try {console.log('importFile')
+        const response = yield call(IMPORT_FILE_API_REQUEST, data)
+        showResponseMessage(response, "Archivo importado!")
+        yield put(IMPORT_FILE_SUCCESS_ACTION(response))
+    } catch (error) {
+        console.log("error", error);
+        yield put(IMPORT_FILE_FAILED_ACTION(error.message))
+    }
+}
+
 export function* watchOffice() {
     yield takeEvery(ACTION_NAME_CREATE, register);
     yield takeEvery(ACTION_NAME_UPDATE, update);
@@ -168,6 +183,7 @@ export function* watchOffice() {
     yield takeEvery(ACTION_NAME_CONFIRM, officeConfirm);
     yield takeEvery(ACTION_NAME_QUERY, queryData);
     yield takeEvery(ACTION_NAME_ADD_CHILD, officeOrderAdd);
+    yield takeEvery(IMPORT_FILE_POST, importFile);
 }
 
 function* officeSaga() {

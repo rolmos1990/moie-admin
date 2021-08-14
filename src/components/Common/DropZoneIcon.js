@@ -19,9 +19,11 @@ const DropZoneIcon = props => {
 
     const handleView = () => {
         if(props.mode === 'icon'){
+            let iconClass = "display-5 text-muted uil uil-cloud-upload"
+            if(props.iconClass) iconClass = props.iconClass;
             return (
                 <div className="needsclick">
-                    <i className="display-5 text-muted uil uil-cloud-upload" title={'Subir imagen'}> </i>
+                    <i className={iconClass}> </i>
                 </div>
             );
         }

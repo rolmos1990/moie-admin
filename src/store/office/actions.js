@@ -20,7 +20,7 @@ import {
     DELETE_OFFICE_SUCCESS,
     CONFIRM_OFFICE,
     CONFIRM_OFFICE_SUCCESS,
-    CONFIRM_OFFICE_FAILED, ADD_ORDER_OFFICE, ADD_ORDER_OFFICE_SUCCESS, ADD_ORDER_OFFICE_FAILED
+    CONFIRM_OFFICE_FAILED, ADD_ORDER_OFFICE, ADD_ORDER_OFFICE_SUCCESS, ADD_ORDER_OFFICE_FAILED, IMPORT_FILE, IMPORT_FILE_SUCCESS, IMPORT_FILE_FAILED, IMPORT_FILE_RESET
 } from "./actionTypes";
 import Conditionals from "../../common/conditionals";
 
@@ -185,3 +185,18 @@ export const addOrderOfficeFailed = data => {
         payload: data,
     }
 }
+console.log('importFile')
+export const importFileReset = () => ({
+    type: IMPORT_FILE_RESET
+})
+export const importFile = (data) => ({
+    type: IMPORT_FILE,
+    payload: {data}
+})
+export const importFileFailed = error => ({
+    type: IMPORT_FILE_FAILED,
+    payload: error,
+})
+export const importFileSuccess = () => ({
+    type: IMPORT_FILE_SUCCESS
+})

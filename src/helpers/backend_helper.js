@@ -102,6 +102,7 @@ const updateOfficeApi = (id, data) => put(`${url.OFFICES}/${id}`, data);
 const deleteOfficeApi = (id) => del(`${url.OFFICES}/${id}`);
 const confirmOfficeApi = (id) => post(`${url.OFFICES}/${id}/confirm`);
 const addOrderOfficeApi = (id, data, params) => post(`${url.OFFICES}/${id}/addOrder`, data, {params: params});
+const importFileApi = data => post(`${url.OFFICES}/importFile`, data);
 
 //bills
 const fetchBillsApi = params => get(url.BILLS, {}, params);
@@ -232,6 +233,7 @@ export {
     deleteOfficeApi,
     confirmOfficeApi,
     addOrderOfficeApi,
+    importFileApi,
 
     fetchBillsApi,
     fetchBillApi,
