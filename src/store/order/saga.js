@@ -1,7 +1,7 @@
 import {all, call, fork, put, takeEvery, select} from "redux-saga/effects"
 
 //Account Redux states
-import {GET_ORDERS, GET_ORDER, REGISTER_ORDER, UPDATE_ORDER, GET_DELIVERY_METHODS, GET_DELIVERY_QUOTE, NEXT_STATUS_ORDER, RESUME_ORDER, PRINT_ORDER, PRINT_BATCH_REQUEST} from "./actionTypes"
+import {GET_ORDERS, GET_ORDER, REGISTER_ORDER, UPDATE_ORDER, GET_DELIVERY_METHODS, GET_DELIVERY_QUOTE, NEXT_STATUS_ORDER, RESUME_ORDER, PRINT_ORDER, PRINT_BATCH_REQUEST, GET_ORDERS_OFFICE} from "./actionTypes"
 
 import {
     getOrdersSuccess,
@@ -20,7 +20,7 @@ import {
     customOrderFailed,
     printBatchRequestFailed,
     printBatchRequestSuccess,
-    printBatchRequest, refreshOrders
+    printBatchRequest, refreshOrders, getOrdersByOfficeSuccess, getOrdersByOfficeFailed
 } from "./actions"
 
 import {
@@ -38,6 +38,7 @@ import {showResponseMessage} from "../../helpers/service";
  */
 
 const ACTION_NAME_LIST = GET_ORDERS;
+const ACTION_NAME_LIST_OFFICE = GET_ORDERS_OFFICE;
 const ACTION_NAME_GET = GET_ORDER;
 const ACTION_NAME_CREATE = REGISTER_ORDER;
 const ACTION_NAME_UPDATE = UPDATE_ORDER;
@@ -65,6 +66,8 @@ const UPDATE_FAILED_ACTION = updateOrderFail;
 
 const PRINT_BATCH_REQUEST_SUCCESS_ACTION = printBatchRequestSuccess;
 const PRINT_BATCH_REQUEST_FAILED_ACTION = printBatchRequestFailed;
+const LIST_OFFICE_SUCCESS_ACTION = getOrdersByOfficeSuccess;
+const LIST_OFFICE_FAILED_ACTION = getOrdersByOfficeFailed;
 
 function* get({id}) {
     try {
@@ -84,6 +87,17 @@ function* fetch({conditional, limit, offset}) {
         yield put(LIST_SUCCESS_ACTION(response.data, response.meta));
     } catch (error) {
         yield put(LIST_FAILED_ACTION(error))
+    }
+}
+function* fetchByOffice({conditional, limit, offset}) {
+    try {
+        const cond = Conditionals.getConditionalFormat(conditional);
+        const query = Conditionals.buildHttpGetQuery(cond, limit, offset);
+
+        const response = yield call(LIST_API_REQUEST, query)
+        yield put(LIST_OFFICE_SUCCESS_ACTION(response.data, response.meta));
+    } catch (error) {
+        yield put(LIST_OFFICE_FAILED_ACTION(error))
     }
 }
 
@@ -174,6 +188,7 @@ export function* watchOrder() {
     yield takeEvery(ACTION_NAME_CREATE, register);
     yield takeEvery(ACTION_NAME_UPDATE, update);
     yield takeEvery(ACTION_NAME_LIST, fetch);
+    yield takeEvery(ACTION_NAME_LIST_OFFICE, fetchByOffice);
     yield takeEvery(ACTION_NAME_GET, get)
     yield takeEvery(GET_DELIVERY_METHODS, fetchDeliveryMethods)
     yield takeEvery(GET_DELIVERY_QUOTE, fetchDeliveryQuote)

@@ -25,7 +25,7 @@ import {
 import ButtonSubmit from "../../components/Common/ButtonSubmit";
 import {DATE_MODES} from "../../components/Fields/InputDate";
 import {getEmptyOptions} from "../../common/converters";
-import {getDeliveryMethods, getOrders} from "../../store/order/actions";
+import {getDeliveryMethods, getOrdersByOffice} from "../../store/order/actions";
 import {getFieldOptionByGroups} from "../../store/fieldOptions/actions";
 import {StatusField} from "../../components/StatusField";
 import {ConfirmationModalAction} from "../../components/Modal/ConfirmationModal";
@@ -38,6 +38,7 @@ const OfficeEdit = (props) => {
     const {getOffice, office, deliveryMethods, orders} = props;
     const [officeData, setOfficeData] = useState({_status: STATUS.ACTIVE});
     const isEdit = props.match.params.id;
+    const [orderListConditions, setOrderListConditions] = useState([]);
     const [deliveryMethodList, setDeliveryMethodList] = useState([]);
     const [deliveryTypes, setDeliveryTypes] = useState(null);
     const [deliveryMethod, setDeliveryMethod] = useState(null);
@@ -94,7 +95,12 @@ const OfficeEdit = (props) => {
             type: values.deliveryType.value,
             batchDate: values.batchDate[0] ? formatDate(values.batchDate[0], DATE_FORMAT.ONLY_DATE) : null
         };
-
+        if(values.batchDate && values.batchDate.length === 1){
+            data.batchDate= values.batchDate[0] ? formatDate(values.batchDate[0], DATE_FORMAT.ONLY_DATE) : null
+        }
+        if(values.batchDate && values.batchDate.length > 1){
+            data.batchDate= values.batchDate ? formatDate(values.batchDate, DATE_FORMAT.ONLY_DATE) : null
+        }
         delete data._status;
         delete data.deliveryType;
 
@@ -139,22 +145,27 @@ const OfficeEdit = (props) => {
         props.addOrderOffice(officeData.id, {id: 123}, conditionals, props.history);
     };
 
+    const addOrders = () => {
+        const conditions = new Conditionals.Condition;
+        conditions.add("deliveryMethod", office.deliveryMethod.id, Conditionals.OPERATORS.EQUAL);
+        conditions.add("deliveryType", office.type, Conditionals.OPERATORS.EQUAL);
+        console.log('conditions', conditions);
+        setOrderListConditions(conditions.condition);
+        setOpenCustomerModal(true);
+    };
+
     const onConfirmDelete = (id, history) => props.deleteOffice(id, history);
     const onConfirmOffice = (id, history) => props.confirmOffice(id, history);
     const onGetDeliveryMethods = (conditional = null, limit = 50, page) => props.getDeliveryMethods(conditional, limit, page);
     const onGetFieldOptions = (conditional = null, limit = 500, page) => props.getFieldOptionByGroups([GROUPS.ORDERS_ORIGIN], limit, page);
-    const onGetOrders = (conditions) => props.getOrders(conditions.all(), 200, 0);
+    const onGetOrders = (conditions) => props.getOrdersByOffice(conditions.all(), 200, 0);
     const handleDownloadTemplate = (id) => fileOfficeTemplate('test.xls', id);
 
 
     return (
         <React.Fragment>
             <CustomModal title={"Agregar pedidos"} size="lg" showFooter={false} isOpen={openCustomerModal} onClose={onCloseModal}>
-                <OrderList customActions={onAcceptModal}/>
-                {/*<OrderCustomer showAsModal={true}
-                               onCloseModal={onCloseModal}
-                               onAcceptModal={onAcceptModal}
-                />*/}
+                <OrderList customActions={onAcceptModal} showAsModal={true} conditionals={orderListConditions}/>
             </CustomModal>
             <div className="page-content">
                 <Container fluid>
@@ -192,7 +203,7 @@ const OfficeEdit = (props) => {
                                                     </button>
                                                 </Tooltip>
                                                 <Tooltip placement="bottom" title="Agregar pedidos" aria-label="add">
-                                                    <button type="button" color="primary" className="btn-sm btn btn-outline-info waves-effect waves-light" onClick={() => setOpenCustomerModal(true)}>
+                                                    <button type="button" color="primary" className="btn-sm btn btn-outline-info waves-effect waves-light" onClick={() => addOrders()}>
                                                         <i className={"mdi mdi-plus"}> </i>
                                                     </button>
                                                 </Tooltip>
@@ -214,7 +225,7 @@ const OfficeEdit = (props) => {
                                 handleValidSubmit(e, v)
                             }}>
                         <Row>
-                            <Col xl="4">
+                            <Col xl="4" className="mb-2">
                                 <Card>
                                     <CardBody>
                                         <Row>
@@ -335,13 +346,13 @@ const OfficeEdit = (props) => {
 }
 
 const mapStateToProps = state => {
-    const {deliveryMethods, orders} = state.Order
+    const {deliveryMethods, ordersByOffice} = state.Order
     const {error, office, loading} = state.Office
-    return {error, office, loading, deliveryMethods: deliveryMethods.data, orders}
+    return {error, office, loading, deliveryMethods: deliveryMethods.data, orders: ordersByOffice}
 }
 
 export default withRouter(
-    connect(mapStateToProps, {apiError, registerOffice, deleteOffice, confirmOffice, updateOffice, getOffice, getDeliveryMethods, getFieldOptionByGroups, addOrderOffice, getOrders})(OfficeEdit)
+    connect(mapStateToProps, {apiError, registerOffice, deleteOffice, confirmOffice, updateOffice, getOffice, getDeliveryMethods, getFieldOptionByGroups, addOrderOffice, getOrdersByOffice})(OfficeEdit)
 )
 
 OfficeEdit.propTypes = {

@@ -38,7 +38,7 @@ const OrderList = props => {
     }, [refresh])
 
     useEffect(() => {
-        onGetOrders();
+        onGetOrders(getConditionals());
         if(customActions){
             setFilterable(false);
         }
@@ -46,13 +46,14 @@ const OrderList = props => {
 
     useEffect(() => {
         setStatesList(orders)
+        console.log('orders', orders)
     }, [orders])
 
     // eslint-disable-next-line no-unused-vars
     const handleTableChange = (type, {page, searchText}) => {
         let p = page - 1;
         setCurrentPage(p);
-        onGetOrders(conditional, DEFAULT_PAGE_LIMIT, p * DEFAULT_PAGE_LIMIT);
+        onGetOrders(getConditionals(), DEFAULT_PAGE_LIMIT, p * DEFAULT_PAGE_LIMIT);
     }
 
     const onFilterAction = (condition) => {

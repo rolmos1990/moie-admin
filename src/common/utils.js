@@ -64,7 +64,7 @@ export const formatDate =(date, type = DATE_FORMAT.FULL_DATE) =>{
             case DATE_FORMAT.FULL_DATE:
                 return moment(date, moment.ISO_8601).format('DD-MM-YYYY HH:mm:ss');
             case DATE_FORMAT.ONLY_DATE:
-                return moment(date, moment.ISO_8601).format('DD-MM-YYYY');
+                return moment(date, moment.ISO_8601).format('YYYY-MM-DD');
             case DATE_FORMAT.ONLY_TIME:
                 return moment(date, moment.ISO_8601).format('HH:mm:ss');
             default:

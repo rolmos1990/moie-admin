@@ -29,7 +29,7 @@ import {
     RESET_BATCH_REQUEST,
     PRINT_BATCH_REQUEST_SUCCESS,
     PRINT_BATCH_REQUEST_FAILED,
-    PRINT_BATCH_REQUEST, REFRESH_ORDER,
+    PRINT_BATCH_REQUEST, REFRESH_ORDER, GET_ORDERS_OFFICE, GET_ORDERS_OFFICE_FAILED, GET_ORDERS_OFFICE_SUCCESS,
 } from "./actionTypes";
 
 export const getOrders = (conditional, limit, offset) => ({
@@ -47,6 +47,23 @@ export const getOrdersSuccess = (data, meta) => ({
 
 export const getOrdersFailed = error => ({
     type: GET_ORDERS_FAILED,
+    payload: error,
+})
+
+export const getOrdersByOffice = (conditional, limit, offset) => ({
+    type: GET_ORDERS_OFFICE,
+    conditional: conditional,
+    limit: limit,
+    offset: offset
+})
+
+export const getOrdersByOfficeSuccess = (data, meta) => ({
+    type: GET_ORDERS_OFFICE_SUCCESS,
+    meta: meta,
+    payload: data,
+})
+export const getOrdersByOfficeFailed = error => ({
+    type: GET_ORDERS_OFFICE_FAILED,
     payload: error,
 })
 
