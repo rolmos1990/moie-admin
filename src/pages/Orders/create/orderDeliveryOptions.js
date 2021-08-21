@@ -3,23 +3,15 @@ import {Col, Label, Row} from "reactstrap"
 import {withRouter} from "react-router-dom"
 import {connect} from "react-redux";
 import PropTypes from "prop-types";
-import {FieldNumber, FieldSelect, FieldText} from "../../../components/Fields";
+import {FieldNumber, FieldSelect} from "../../../components/Fields";
 import {getProduct} from "../../../store/product/actions";
 import {AvForm} from "availity-reactstrap-validation";
 import {getFieldOptionByGroups} from "../../../store/fieldOptions/actions";
-import {
-    DELIVERY_METHODS_LIST,
-    DELIVERY_METHODS_PAYMENT_TYPES,
-    DELIVERY_TYPES,
-    GROUPS,
-    PAYMENT_TYPES,
-    PAYMENT_TYPES_LIST
-} from "../../../common/constants";
+import {DELIVERY_METHODS, DELIVERY_METHODS_PAYMENT_TYPES, DELIVERY_TYPES, GROUPS, PAYMENT_TYPES, PAYMENT_TYPES_LIST} from "../../../common/constants";
 import {getDeliveryMethods, getDeliveryQuote, updateCard} from "../../../store/order/actions";
 import {arrayToOptions, getEmptyOptions} from "../../../common/converters";
 import {Button} from "@material-ui/core";
-import {getAllDeliveryLocalities, getDeliveryLocalities} from "../../../store/deliveryLocality/actions";
-import deliveryLocalities from "../../../store/deliveryLocality/reducer";
+import {getAllDeliveryLocalities} from "../../../store/deliveryLocality/actions";
 
 const OrderDeliveryOptions = (props) => {
     const {
@@ -50,7 +42,7 @@ const OrderDeliveryOptions = (props) => {
         setDeliveryTypes([getEmptyOptions(), ...DELIVERY_TYPES.map(dt => ({label: dt.label, value: dt.id}))]);
         setPaymentTypes([getEmptyOptions(), ...PAYMENT_TYPES_LIST]);
         onGetFieldOptions();
-        onGetDeliveryMethods();
+        if(!deliveryMethods || deliveryMethods.length === 0) onGetDeliveryMethods();
         onGetDeliveryLocalities();
         if (car.reset) {
             setDeliveryMethod(null);
@@ -202,7 +194,7 @@ const OrderDeliveryOptions = (props) => {
                             id={"deliveryMethod"}
                             name={"deliveryMethod"}
                             options={deliveryMethodList}
-                            defaultValue={DELIVERY_METHODS_LIST[deliveryMethod]}
+                            defaultValue={DELIVERY_METHODS[deliveryMethod]}
                             onChange={item => setDeliveryMethod(item.value)}
                             required
                         />

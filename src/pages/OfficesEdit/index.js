@@ -147,8 +147,9 @@ const OfficeEdit = (props) => {
 
     const addOrders = () => {
         const conditions = new Conditionals.Condition;
-        conditions.add("deliveryMethod", office.deliveryMethod.id, Conditionals.OPERATORS.EQUAL);
-        conditions.add("deliveryType", office.type, Conditionals.OPERATORS.EQUAL);
+        conditions.add("deliveryMethod.id", office.deliveryMethod.id, Conditionals.OPERATORS.EQUAL);
+        conditions.add("orderDelivery.deliveryType", office.type, Conditionals.OPERATORS.EQUAL);
+        conditions.add('office', '',  Conditionals.OPERATORS.NULL);
         console.log('conditions', conditions);
         setOrderListConditions(conditions.condition);
         setOpenCustomerModal(true);

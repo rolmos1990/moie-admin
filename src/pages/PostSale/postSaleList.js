@@ -73,7 +73,7 @@ const PostSaleList = props => {
         if(!condition){
             condition = [];
         }
-        // cond.push({field:'orderDelivery.tracking', value:'', operator: Conditionals.OPERATORS.NOT_NULL});
+        cond.push({field:'orderDelivery.tracking', value:'', operator: Conditionals.OPERATORS.NOT_NULL});
         return [...cond, ...condition];
     }
 
