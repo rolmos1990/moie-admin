@@ -9,7 +9,7 @@ import PropTypes from "prop-types";
 import {addOrderOffice, confirmOffice, deleteOffice, getOffice, printOfficeReport, registerOffice, updateOffice} from "../../store/office/actions";
 import {FieldDate, FieldSelect, FieldText} from "../../components/Fields";
 import Breadcrumb from "../../components/Common/Breadcrumb";
-import {DATE_FORMAT, formatDate} from "../../common/utils";
+import {DATE_FORMAT, formatDate, printPartOfPage} from "../../common/utils";
 import {DELIVERY_METHODS, DELIVERY_TYPES, GROUPS, OFFICE_STATUS, STATUS} from "../../common/constants";
 import ButtonSubmit from "../../components/Common/ButtonSubmit";
 import {DATE_MODES} from "../../components/Fields/InputDate";
@@ -24,7 +24,7 @@ import Conditionals from "../../common/conditionals";
 import {fileOfficeTemplate} from "../../helpers/backend_helper";
 
 const OfficeEdit = (props) => {
-    const {getOffice, office, deliveryMethods, orders} = props;
+    const {getOffice, office, deliveryMethods, orders, printReportData} = props;
     const [officeData, setOfficeData] = useState({_status: STATUS.ACTIVE});
     const isEdit = props.match.params.id;
     const [orderListConditions, setOrderListConditions] = useState([]);
@@ -53,6 +53,21 @@ const OfficeEdit = (props) => {
             setOrdersList(orders);
         }
     }, [orders]);
+
+    useEffect(() => {
+        if (printReportData && printReportData.data && printReportData.data.batch) {
+            let html = null;
+            printReportData.data.batch.body.forEach((body) => {
+                if (html) {
+                    html += '<br/>';
+                } else {
+                    html = '';
+                }
+                html += body.html;
+            })
+            printPartOfPage(html);
+        }
+    }, [printReportData.data]);
 
     useEffect(() => {
         if (office.id && isEdit) {
@@ -176,7 +191,7 @@ const OfficeEdit = (props) => {
 
                                         <Tooltip placement="bottom" title="Imprimir reporte" aria-label="add">
                                             <button type="button" color="primary" className="btn-sm btn btn-outline-info waves-effect waves-light" onClick={() => printReport(officeData.id)}>
-                                                <i className={"mdi mdi-printer"}> </i>
+                                                <i className={"mdi mdi-printer"}> </i> {printReportData.loading ? 'Generando...' : ''}
                                             </button>
                                         </Tooltip>
                                         {!!(officeData?.type === 3 && DELIVERY_METHODS.INTERRAPIDISIMO === officeData?.deliveryMethod?.code) &&  (
@@ -338,8 +353,8 @@ const OfficeEdit = (props) => {
 
 const mapStateToProps = state => {
     const {deliveryMethods, ordersByOffice} = state.Order
-    const {error, office, loading} = state.Office
-    return {error, office, loading, deliveryMethods: deliveryMethods.data, orders: ordersByOffice}
+    const {error, office, loading, printReport} = state.Office
+    return {error, office, loading, deliveryMethods: deliveryMethods.data, orders: ordersByOffice, printReportData: printReport}
 }
 
 export default withRouter(
