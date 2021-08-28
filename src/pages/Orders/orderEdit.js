@@ -29,7 +29,7 @@ import {isMobile} from "react-device-detect";
 
 const OrderEdit = (props) => {
 
-    const {orderId, onGetOrder, onUpdateCar, onUpdateOrder, onCloseOverlay, onNextStatusOrder, onResumeOrder, onPrintOrder, print, resume, order, car, products, showOrderOverlay = false} = props;
+    const {orderId, onGetOrder, onUpdateCar, onUpdateOrder, onCloseOverlay, onNextStatusOrder, onResumeOrder, onPrintOrder, print, resume, order, car, refresh, showOrderOverlay = false} = props;
     const [orderData, setOrderData] = useState({});
     const [orderResume, setOrderResume] = useState('');
     const [showAsTable, setShowAsTable] = useState(false);
@@ -48,7 +48,7 @@ const OrderEdit = (props) => {
         if (orderId) {
             onGetOrder(orderId);
         }
-    }, [orderId]);
+    }, [orderId, refresh]);
 
     useEffect(() => {
         if (order && order.id) {
@@ -69,7 +69,7 @@ const OrderEdit = (props) => {
                     paymentType: order.paymentMode,
                     pieces: order.piecesForChanges || 0,
                     tracking: orderDelivery.tracking || '',
-                    deliveryLocality: orderDelivery.deliveryLocality || null
+                    deliveryLocality: orderDelivery.deliveryLocality.id || null
                 },
                 products: [],
                 isEdit: true
@@ -404,7 +404,7 @@ const OrderEdit = (props) => {
                                     )}
                                     <Col md={12}>
                                         <label>Dirección del envio: </label>
-                                        <span className="p-1">{getDeliveryAddress(orderData.orderDelivery)}</span>
+                                        <span className="p-1">{orderData.orderDelivery?.deliveryLocality?.name}</span>
                                     </Col>
                                 </Row>
                             </Card>
@@ -732,10 +732,10 @@ const OrderEdit = (props) => {
 
 const mapStateToProps = state => {
     const {products} = state.Product
-    const {error, car, order, loading, custom} = state.Order;
+    const {error, car, order, loading, custom, refresh} = state.Order;
     const print = custom.data && custom.data.print ? custom.data.print : null;
     const resume = custom.data && custom.data.resume ? custom.data.resume : null;
-    return {error, car, order, products, print, resume, loading}
+    return {error, car, order, products, print, resume, loading, refresh}
 }
 
 const mapDispatchToProps = dispatch => ({

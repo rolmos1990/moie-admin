@@ -10,6 +10,7 @@ import {
     getDeliveryMethodsSuccess,
     getDeliveryQuoteFailed,
     getDeliveryQuoteSuccess,
+    getOrder,
     getOrderFailed,
     getOrdersByOfficeFailed,
     getOrdersByOfficeSuccess,
@@ -128,7 +129,7 @@ function* nextStatus({payload: {data, history}}) {
         if(response.status === 200) yield put(refreshOrders());
         showResponseMessage(response, "Operación exitosa!");
         yield put(UPDATE_SUCCESS_ACTION(response.order))
-        //yield put(getOrder(response.order))
+
     } catch (error) {
         yield put(UPDATE_FAILED_ACTION(error))
     }
@@ -157,6 +158,7 @@ function* update({payload: {id, data, history}}) {
         const response = yield call(PUT_API_REQUEST, id, data)
         showResponseMessage(response, "Operación exitosa!");
         yield put(UPDATE_SUCCESS_ACTION(response.order))
+        yield put(getOrder(id))
     } catch (error) {
         yield put(UPDATE_FAILED_ACTION(error))
     }

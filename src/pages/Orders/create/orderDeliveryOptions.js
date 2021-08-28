@@ -7,7 +7,7 @@ import {FieldNumber, FieldSelect} from "../../../components/Fields";
 import {getProduct} from "../../../store/product/actions";
 import {AvForm} from "availity-reactstrap-validation";
 import {getFieldOptionByGroups} from "../../../store/fieldOptions/actions";
-import {DELIVERY_METHODS, DELIVERY_METHODS_PAYMENT_TYPES, DELIVERY_TYPES, GROUPS, PAYMENT_TYPES, PAYMENT_TYPES_LIST} from "../../../common/constants";
+import {DELIVERY_METHODS_PAYMENT_TYPES, DELIVERY_TYPES, GROUPS, PAYMENT_TYPES, PAYMENT_TYPES_LIST} from "../../../common/constants";
 import {getDeliveryMethods, getDeliveryQuote, updateCard} from "../../../store/order/actions";
 import {arrayToOptions, getEmptyOptions} from "../../../common/converters";
 import {Button} from "@material-ui/core";
@@ -107,7 +107,7 @@ const OrderDeliveryOptions = (props) => {
     useEffect(() => {
         if (car.isEdit && car.deliveryOptions && car.deliveryOptions.origin && initComponent) {
             setInitComponent(false);
-
+            console.log('paso', car.deliveryOptions)
             setDeliveryMethod(car.deliveryOptions.method);
             setOriginOrder(car.deliveryOptions.origin);
             setDeliveryType(car.deliveryOptions.type);
@@ -194,7 +194,7 @@ const OrderDeliveryOptions = (props) => {
                             id={"deliveryMethod"}
                             name={"deliveryMethod"}
                             options={deliveryMethodList}
-                            defaultValue={DELIVERY_METHODS[deliveryMethod]}
+                            defaultValue={deliveryMethod}
                             onChange={item => setDeliveryMethod(item.value)}
                             required
                         />
@@ -209,7 +209,7 @@ const OrderDeliveryOptions = (props) => {
                             required/>
                     </Col>
                     {(deliveryMethod && !showPaymentType) && (
-                        <Col md={6} className="p-1">
+                        <Col md={12} className="p-1">
                             <Label htmlFor="weight">Dirección de envío</Label>
                             <FieldSelect
                                 id={"deliveryLocality"}
