@@ -10,24 +10,51 @@ import NoDataIndication from "../../components/Common/NoDataIndication";
 import {StatusField} from "../../components/StatusField";
 import {COMMENT_ENTITIES, GROUPS, ORDER_STATUS} from "../../common/constants";
 import Observations from "../../components/Common/Observations";
-import {getOrder} from "../../store/order/actions";
+import {getOrder, updateOrder} from "../../store/order/actions";
 
 const PostSaleDetail = (props) => {
 
-    const {onGetOrder, order} = props;
+    const {onGetOrder, refresh, order} = props;
 
     useEffect(() => {
         if (props.match.params.id) {
             onGetOrder(props.match.params.id);
         }
-    }, [onGetOrder]);
+    }, [onGetOrder, refresh]);
 
+    const updateDeliveryStatus = () => {
+        props.onUpdateOrder(order.id, {enablePostSale: !order.enablePostSale})
+    }
 
     return order.id ? (
         <React.Fragment>
             <div className="page-content">
                 <Container fluid className="pb-3">
                     <Breadcrumb hasBack path="/postSales" title={order.name} item={`Post Venta #${order.id}`}/>
+
+                    <Row className="mb-2">
+                        <Col md={12}>
+                            <div className={"mb-3 float-md-start"}>
+                                <small className="badge rounded-pill bg-soft-info font-size-14 mr-5 p-2">Operador: {order?.user?.name}</small>
+                            </div>
+                            <div className={"mb-3 float-md-end"}>
+                                <div className="button-items">
+
+                                    <Tooltip placement="bottom" title={order.enablePostSale ? 'Desactivar' : 'Activar'} aria-label="add">
+                                        <button type="button" color="primary" className="btn-sm btn btn-outline-info waves-effect waves-light" onClick={() => updateDeliveryStatus(order)}>
+                                            <i className={`mdi mdi-${order.enablePostSale ? 'delete text-danger' : 'check text-success'}`}> </i>
+                                        </button>
+                                    </Tooltip>
+                                    <Tooltip placement="bottom" title="Refrescar" aria-label="add">
+                                        <button type="button" color="primary" className="btn-sm btn btn-outline-info waves-effect waves-light" onClick={() => onGetOrder(order.id)}>
+                                            <i className={"mdi mdi-refresh"}> </i>
+                                        </button>
+                                    </Tooltip>
+
+                                </div>
+                            </div>
+                        </Col>
+                    </Row>
 
                     <Card id={'details'} className="mb-3 p-3">
                         <Row>
@@ -135,12 +162,13 @@ const PostSaleDetail = (props) => {
 }
 
 const mapStateToProps = state => {
-    const {error, order, loading} = state.Order;
-    return {error, order, loading}
+    const {error, order, refresh, loading} = state.Order;
+    return {error, order, refresh, loading}
 }
 
 const mapDispatchToProps = dispatch => ({
     onGetOrder: (id) => dispatch(getOrder(id)),
+    onUpdateOrder: (id, payload) => dispatch(updateOrder(id, payload)),
 })
 
 export default withRouter(
