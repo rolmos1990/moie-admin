@@ -149,7 +149,7 @@ const OrderList = props => {
                                                     <div className="mb-3 float-md-end">
                                                         <Tooltip placement="bottom" title="Aceptar" aria-label="add">
                                                             <Button onClick={() => onPressAction() } color="success">
-                                                                Aceptar &nbsp; <i className={"mdi mdi-check"}> </i>
+                                                                <i className={"mdi mdi-check"}> </i> &nbsp; Aceptar
                                                             </Button>
                                                         </Tooltip>
                                                     </div>

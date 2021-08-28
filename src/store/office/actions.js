@@ -20,9 +20,20 @@ import {
     DELETE_OFFICE_SUCCESS,
     CONFIRM_OFFICE,
     CONFIRM_OFFICE_SUCCESS,
-    CONFIRM_OFFICE_FAILED, ADD_ORDER_OFFICE, ADD_ORDER_OFFICE_SUCCESS, ADD_ORDER_OFFICE_FAILED, IMPORT_FILE, IMPORT_FILE_SUCCESS, IMPORT_FILE_FAILED, IMPORT_FILE_RESET
+    CONFIRM_OFFICE_FAILED,
+    ADD_ORDER_OFFICE,
+    ADD_ORDER_OFFICE_SUCCESS,
+    ADD_ORDER_OFFICE_FAILED,
+    IMPORT_FILE,
+    IMPORT_FILE_SUCCESS,
+    IMPORT_FILE_FAILED,
+    IMPORT_FILE_RESET,
+    PRINT_OFFICE_REPORT,
+    PRINT_OFFICE_REPORT_SUCCESS,
+    PRINT_OFFICE_REPORT_FAILED
 } from "./actionTypes";
 import Conditionals from "../../common/conditionals";
+import {getComments} from "../comment/actions";
 
 export const resetOffice = () => ({
     type: RESET_OFFICE,
@@ -199,4 +210,17 @@ export const importFileFailed = error => ({
 })
 export const importFileSuccess = () => ({
     type: IMPORT_FILE_SUCCESS
+})
+
+export const printOfficeReport = (id) => ({
+    type: PRINT_OFFICE_REPORT,
+    payload: { id}
+})
+export const printOfficeReportSuccess = (data) => ({
+    type: PRINT_OFFICE_REPORT_SUCCESS,
+    payload: data
+})
+export const printOfficeReportFailed = error => ({
+    type: PRINT_OFFICE_REPORT_FAILED,
+    payload: error,
 })

@@ -103,6 +103,7 @@ const deleteOfficeApi = (id) => del(`${url.OFFICES}/${id}`);
 const confirmOfficeApi = (id) => post(`${url.OFFICES}/${id}/confirm`);
 const addOrderOfficeApi = (id, data, params) => post(`${url.OFFICES}/${id}/addOrder`, data, {params: params});
 const importFileApi = data => post(`${url.OFFICES}/importFile`, data);
+const printOfficeReportApi = id => get(`${url.OFFICES}/batch/printRequest/${id}`, {});
 
 //bills
 const fetchBillsApi = params => get(url.BILLS, {}, params);
@@ -234,6 +235,7 @@ export {
     confirmOfficeApi,
     addOrderOfficeApi,
     importFileApi,
+    printOfficeReportApi,
 
     fetchBillsApi,
     fetchBillApi,

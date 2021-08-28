@@ -117,6 +117,7 @@ const order = (state = initialState, action) => {
         case GET_ORDERS_OFFICE:
             return {
                 ...state,
+                ordersByOffice: [],
                 loading: true,
             }
         case GET_ORDERS_OFFICE_FAILED:

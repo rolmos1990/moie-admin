@@ -37,6 +37,7 @@ import Reports from "../pages/Reports";
 import PageNotFount from "../pages/commons/404";
 import Offices from "../pages/Offices";
 import OfficesEdit from "../pages/OfficesEdit";
+import PostSaleDetail from "../pages/PostSaleEdit/PostSaleDetail";
 
 const userRoutes = [
   { path: "/dashboard", component: Dashboard },
@@ -62,6 +63,7 @@ const userRoutes = [
   { path: "/municipality/:id", component: MunicipalityEdit },
   { path: "/configs", component: Configs },
   { path: "/postSales", component: PostSale},
+  { path: "/postSales/detail/:id", component: PostSaleDetail},
   { path: "/orders", component: Orders },
   { path: "/order/:id", component: OrderDetail },
   { path: "/orders/create", component: CreateOrder },

@@ -19,7 +19,7 @@ const postSaleColumns = () => {
             sort: true,
             formatter: (cellContent, item) => {
                 return (
-                    <Link to={`/order/${item.id}`} className="text-body">
+                    <Link to={`/postSales/detail/${item.id}`} className="text-body">
                         <b className="text-info">{item.id}</b>
                     </Link>
                 );
@@ -29,18 +29,28 @@ const postSaleColumns = () => {
             filterCondition: Conditionals.OPERATORS.EQUAL,
         },
         {
-            text: "Fecha de envío",
-            dataField: "orderDelivery.deliveryDate",
+            text: "Fecha del pedido",
+            dataField: "createdAt",
             sort: true,
             filter: true,
             filterType: "dateRange",
-            formatter: (cellContent, item) => {
-                if(item.orderDelivery.deliveryDate){
-                    console.log(item.orderDelivery.deliveryDate)
-                 return <div>{formatDate(item.orderDelivery.deliveryDate)}</div>;
-                }
-                return '';
-            },
+            formatter: (cellContent, item) => (
+                <div>{formatDate(item.createdAt)}</div>
+            ),
+        },
+        {
+            text: "Estado del Pedido",
+            dataField: "status",
+            sort: true,
+            filter: true,
+            filterType: "select",
+            filterOptions: statusOptions,
+            filterDefaultOption: statusOptions[0],
+            formatter: (cellContent, item) => (
+                <StatusField color={ORDER_STATUS[item.status].color}>
+                    {ORDER_STATUS[item.status].name}
+                </StatusField>
+            ),
         },
         {
             text: "Cliente",
@@ -61,21 +71,7 @@ const postSaleColumns = () => {
             ),
         },
         {
-            text: "Estado del Pedido",
-            dataField: "status",
-            sort: true,
-            filter: true,
-            filterType: "select",
-            filterOptions: statusOptions,
-            filterDefaultOption: statusOptions[0],
-            formatter: (cellContent, item) => (
-                <StatusField color={ORDER_STATUS[item.status].color}>
-                    {ORDER_STATUS[item.status].name}
-                </StatusField>
-            ),
-        },
-        {
-            text: "Metodo de envio",
+            text: "Metodo de envío",
             dataField: "deliveryMethod",
             sort: true,
             filter: true,
@@ -96,27 +92,37 @@ const postSaleColumns = () => {
             filter: true,
             filterType: "text",
             formatter: (cellContent, item) => (
-                <>
-                    <div>{item.orderDelivery.tracking}</div>
-                </>
+                <div className="badge p-2 bg-soft-info">{item.orderDelivery.tracking}</div>
             ),
         },
         {
-            text: "Estado del envio",
+            text: "Estado del envío",
             dataField: "orderDelivery.deliveryStatus",
             sort: true,
             filter: true,
-            filterType: "text"
+            filterType: "text",
+            formatter: (cellContent, item) => {
+                if (item.orderDelivery.deliveryStatus) {
+                    return <small className="text-muted">{item.orderDelivery.deliveryStatus}</small>;
+                }
+                return '';
+            },
         },
         {
-            text: "Fecha",
+            text: "Fecha de envío",
+            // dataField: "orderDelivery.deliveryDate",//TODO cambiar cuando se agregue
             dataField: "createdAt",
             sort: true,
             filter: true,
             filterType: "dateRange",
-            formatter: (cellContent, item) => (
-                <div>{formatDate(item.createdAt)}</div>
-            ),
+            formatter: (cellContent, item) => {
+                return <div>{formatDate(item.createdAt)}</div>
+                /*if(item.orderDelivery.deliveryDate){
+                    console.log(item.orderDelivery.deliveryDate)
+                 return <div>{formatDate(item.orderDelivery.deliveryDate)}</div>;
+                }
+                return '';*/
+            },
         },
     ];
 }

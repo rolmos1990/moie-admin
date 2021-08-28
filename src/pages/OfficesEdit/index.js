@@ -1,27 +1,16 @@
-import React, {useState, useEffect} from "react"
-import {CardBody, Col, Container, Label, Row, Spinner} from "reactstrap"
+import React, {useEffect, useState} from "react"
+import {CardBody, Col, Container, Label, Row} from "reactstrap"
 import {AvForm} from "availity-reactstrap-validation"
 import {Card, Tooltip} from "@material-ui/core";
-import {withRouter, Link} from "react-router-dom"
+import {Link, withRouter} from "react-router-dom"
 import {connect} from "react-redux";
 import {apiError} from "../../store/auth/login/actions";
 import PropTypes from "prop-types";
-import {
-    addOrderOffice,
-    confirmOffice,
-    deleteOffice,
-    getOffice,
-    registerOffice,
-    updateOffice
-} from "../../store/office/actions";
-import {FieldDate, FieldSelect, FieldSwitch, FieldText} from "../../components/Fields";
+import {addOrderOffice, confirmOffice, deleteOffice, getOffice, printOfficeReport, registerOffice, updateOffice} from "../../store/office/actions";
+import {FieldDate, FieldSelect, FieldText} from "../../components/Fields";
 import Breadcrumb from "../../components/Common/Breadcrumb";
 import {DATE_FORMAT, formatDate} from "../../common/utils";
-import {
-    DELIVERY_TYPES,
-    GROUPS, OFFICE_STATUS,
-    STATUS
-} from "../../common/constants";
+import {DELIVERY_METHODS, DELIVERY_TYPES, GROUPS, OFFICE_STATUS, STATUS} from "../../common/constants";
 import ButtonSubmit from "../../components/Common/ButtonSubmit";
 import {DATE_MODES} from "../../components/Fields/InputDate";
 import {getEmptyOptions} from "../../common/converters";
@@ -43,7 +32,7 @@ const OfficeEdit = (props) => {
     const [deliveryTypes, setDeliveryTypes] = useState(null);
     const [deliveryMethod, setDeliveryMethod] = useState(null);
     const [deliveryType, setDeliveryType] = useState(null);
-    const [openCustomerModal, setOpenCustomerModal] = useState(false);
+    const [openOrdersModal, setOpenOrdersModal] = useState(false);
     const [ordersList, setOrdersList] = useState([]);
 
 
@@ -60,7 +49,7 @@ const OfficeEdit = (props) => {
     }, [getOffice]);
 
     useEffect(() => {
-        if (orders && orders.length > 0 && isEdit) {
+        if (orders && isEdit) {
             setOrdersList(orders);
         }
     }, [orders]);
@@ -137,22 +126,24 @@ const OfficeEdit = (props) => {
     };
     const onCloseModal = () => {
         getOrdersByConditional();
-        setOpenCustomerModal(false);
+        setOpenOrdersModal(false);
     };
 
     const onAcceptModal = (conditionals) => {
         getOrdersByConditional();
         props.addOrderOffice(officeData.id, {id: 123}, conditionals, props.history);
+        setOpenOrdersModal(false);
     };
 
     const addOrders = () => {
         const conditions = new Conditionals.Condition;
+        conditions.add("status", 3, Conditionals.OPERATORS.EQUAL);//IMPRESA
         conditions.add("deliveryMethod.id", office.deliveryMethod.id, Conditionals.OPERATORS.EQUAL);
         conditions.add("orderDelivery.deliveryType", office.type, Conditionals.OPERATORS.EQUAL);
         conditions.add('office', '',  Conditionals.OPERATORS.NULL);
         console.log('conditions', conditions);
         setOrderListConditions(conditions.condition);
-        setOpenCustomerModal(true);
+        setOpenOrdersModal(true);
     };
 
     const onConfirmDelete = (id, history) => props.deleteOffice(id, history);
@@ -161,11 +152,11 @@ const OfficeEdit = (props) => {
     const onGetFieldOptions = (conditional = null, limit = 500, page) => props.getFieldOptionByGroups([GROUPS.ORDERS_ORIGIN], limit, page);
     const onGetOrders = (conditions) => props.getOrdersByOffice(conditions.all(), 200, 0);
     const handleDownloadTemplate = (id) => fileOfficeTemplate('test.xls', id);
-
+    const printReport = (id) => props.printOfficeReport(id);
 
     return (
         <React.Fragment>
-            <CustomModal title={"Agregar pedidos"} size="lg" showFooter={false} isOpen={openCustomerModal} onClose={onCloseModal}>
+            <CustomModal title={"Agregar pedidos"} size="lg" showFooter={false} isOpen={openOrdersModal} onClose={onCloseModal}>
                 <OrderList customActions={onAcceptModal} showAsModal={true} conditionals={orderListConditions}/>
             </CustomModal>
             <div className="page-content">
@@ -184,20 +175,19 @@ const OfficeEdit = (props) => {
                                     <div className="button-items">
 
                                         <Tooltip placement="bottom" title="Imprimir reporte" aria-label="add">
-                                            <button type="button" color="primary" className="btn-sm btn btn-outline-info waves-effect waves-light" onClick={() => {
-                                            }}>
+                                            <button type="button" color="primary" className="btn-sm btn btn-outline-info waves-effect waves-light" onClick={() => printReport(officeData.id)}>
                                                 <i className={"mdi mdi-printer"}> </i>
                                             </button>
                                         </Tooltip>
+                                        {!!(officeData?.type === 3 && DELIVERY_METHODS.INTERRAPIDISIMO === officeData?.deliveryMethod?.code) &&  (
+                                            <Tooltip placement="bottom" title="Descargar Plantilla Excel" aria-label="add">
+                                                <button type="button" color="primary" className="btn-sm btn btn-outline-info waves-effect waves-light" onClick={() => handleDownloadTemplate(officeData.id)}>
+                                                    <i className={"mdi mdi-file-excel"}> </i>
+                                                </button>
+                                            </Tooltip>
+                                        )}
                                         {officeData.status === 1 && (
                                             <>
-                                                <Tooltip placement="bottom" title="Descargar Plantilla Excel" aria-label="add">
-                                                    <button type="button" color="primary" className="btn-sm btn btn-outline-info waves-effect waves-light" onClick={() => handleDownloadTemplate(officeData.id)}>
-                                                        <i className={"mdi mdi-file-excel"}> </i>
-                                                    </button>
-                                                </Tooltip>
-                                                &nbsp;&nbsp;
-
                                                 <Tooltip placement="bottom" title="Eliminar despacho" aria-label="add">
                                                     <button type="button" color="primary" className="btn-sm btn btn-outline-danger waves-effect waves-light" onClick={() => onDelete(officeData.id)}>
                                                         <i className={"mdi mdi-delete"}> </i>
@@ -353,7 +343,8 @@ const mapStateToProps = state => {
 }
 
 export default withRouter(
-    connect(mapStateToProps, {apiError, registerOffice, deleteOffice, confirmOffice, updateOffice, getOffice, getDeliveryMethods, getFieldOptionByGroups, addOrderOffice, getOrdersByOffice})(OfficeEdit)
+    connect(mapStateToProps, {apiError, registerOffice, deleteOffice, confirmOffice, updateOffice, getOffice,
+        getDeliveryMethods, getFieldOptionByGroups, addOrderOffice, getOrdersByOffice, printOfficeReport})(OfficeEdit)
 )
 
 OfficeEdit.propTypes = {

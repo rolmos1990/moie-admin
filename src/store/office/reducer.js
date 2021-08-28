@@ -1,14 +1,31 @@
 import {
-    CONFIRM_OFFICE, CONFIRM_OFFICE_FAILED, CONFIRM_OFFICE_SUCCESS,
-    DELETE_OFFICE, DELETE_OFFICE_FAILED, DELETE_OFFICE_SUCCESS,
+    CONFIRM_OFFICE,
+    CONFIRM_OFFICE_FAILED,
+    CONFIRM_OFFICE_SUCCESS,
+    DELETE_OFFICE,
+    DELETE_OFFICE_FAILED,
+    DELETE_OFFICE_SUCCESS,
     GET_OFFICE,
     GET_OFFICE_FAILED,
     GET_OFFICE_SUCCESS,
-    GET_OFFICES, GET_OFFICES_FAILED, GET_OFFICES_SUCCESS, IMPORT_FILE, IMPORT_FILE_FAILED, IMPORT_FILE_RESET, IMPORT_FILE_SUCCESS, QUERY_OFFICES, QUERY_OFFICES_FAILED, QUERY_OFFICES_SUCCESS,
+    GET_OFFICES,
+    GET_OFFICES_FAILED,
+    GET_OFFICES_SUCCESS,
+    IMPORT_FILE,
+    IMPORT_FILE_FAILED,
+    IMPORT_FILE_RESET,
+    IMPORT_FILE_SUCCESS,
+    PRINT_OFFICE_REPORT, PRINT_OFFICE_REPORT_FAILED,
+    PRINT_OFFICE_REPORT_SUCCESS,
+    QUERY_OFFICES,
+    QUERY_OFFICES_FAILED,
+    QUERY_OFFICES_SUCCESS,
     REGISTER_OFFICE,
     REGISTER_OFFICE_FAILED,
-    REGISTER_OFFICE_SUCCESS, RESET_OFFICE,
-    UPDATE_OFFICE, UPDATE_OFFICE_FAILED,
+    REGISTER_OFFICE_SUCCESS,
+    RESET_OFFICE,
+    UPDATE_OFFICE,
+    UPDATE_OFFICE_FAILED,
     UPDATE_OFFICE_SUCCESS
 } from "./actionTypes";
 import {
@@ -33,6 +50,13 @@ const initialState = {
         loading: false,
         refresh: false,
         success: false,
+        error: ""
+    },
+    printReport:{
+        loading: false,
+        refresh: false,
+        success: false,
+        data: null,
         error: ""
     },
     refresh: false
@@ -224,6 +248,41 @@ const office = (state = initialState, action) => {
                 ...state,
                 importFile: {
                     ...state.importFile,
+                    loading: false,
+                    success: false,
+                    error: action.payload
+                }
+            }
+            break
+        case PRINT_OFFICE_REPORT:
+            state = {
+                ...state,
+                printReport: {
+                    ...state.printReport,
+                    loading: true,
+                    success: false,
+                    error: null
+                }
+            }
+            break
+        case PRINT_OFFICE_REPORT_SUCCESS:
+            state = {
+                ...state,
+                printReport: {
+                    ...state.printReport,
+                    loading: false,
+                    success: true,
+                    data: action.payload,
+                    refresh: !state.refresh,
+                    error: null
+                }
+            }
+            break
+        case PRINT_OFFICE_REPORT_FAILED:
+            state = {
+                ...state,
+                printReport: {
+                    ...state.printReport,
                     loading: false,
                     success: false,
                     error: action.payload
