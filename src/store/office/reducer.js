@@ -15,7 +15,9 @@ import {
     IMPORT_FILE_FAILED,
     IMPORT_FILE_RESET,
     IMPORT_FILE_SUCCESS,
-    PRINT_OFFICE_REPORT, PRINT_OFFICE_REPORT_FAILED,
+    PRINT_OFFICE_REPORT,
+    PRINT_OFFICE_REPORT_FAILED,
+    PRINT_OFFICE_REPORT_RESET,
     PRINT_OFFICE_REPORT_SUCCESS,
     QUERY_OFFICES,
     QUERY_OFFICES_FAILED,
@@ -28,12 +30,6 @@ import {
     UPDATE_OFFICE_FAILED,
     UPDATE_OFFICE_SUCCESS
 } from "./actionTypes";
-import {
-    DELETE_CUSTOMER,
-    DELETE_CUSTOMER_FAILED,
-    DELETE_CUSTOMER_SUCCESS,
-    RESET_CUSTOMERS
-} from "../customer/actionTypes";
 
 const initialState = {
     error: "",
@@ -286,6 +282,17 @@ const office = (state = initialState, action) => {
                     loading: false,
                     success: false,
                     error: action.payload
+                }
+            }
+            break
+        case PRINT_OFFICE_REPORT_RESET:
+            state = {
+                ...state,
+                printReport: {
+                    ...state.printReport,
+                    loading: false,
+                    success: false,
+                    data: null
                 }
             }
             break

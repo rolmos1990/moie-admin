@@ -6,7 +6,7 @@ import {Link, withRouter} from "react-router-dom"
 import {connect} from "react-redux";
 import {apiError} from "../../store/auth/login/actions";
 import PropTypes from "prop-types";
-import {addOrderOffice, confirmOffice, deleteOffice, getOffice, printOfficeReport, registerOffice, updateOffice} from "../../store/office/actions";
+import {addOrderOffice, confirmOffice, deleteOffice, getOffice, printOfficeReport, registerOffice, resetPrintOfficeReport, updateOffice} from "../../store/office/actions";
 import {FieldDate, FieldSelect, FieldText} from "../../components/Fields";
 import Breadcrumb from "../../components/Common/Breadcrumb";
 import {DATE_FORMAT, formatDate, printPartOfPage} from "../../common/utils";
@@ -34,6 +34,7 @@ const OfficeEdit = (props) => {
     const [deliveryType, setDeliveryType] = useState(null);
     const [openOrdersModal, setOpenOrdersModal] = useState(false);
     const [ordersList, setOrdersList] = useState([]);
+    const [reportBody, setReportBody] = useState(null);
 
 
     //carga inicial
@@ -49,15 +50,9 @@ const OfficeEdit = (props) => {
     }, [getOffice]);
 
     useEffect(() => {
-        if (orders && isEdit) {
-            setOrdersList(orders);
-        }
-    }, [orders]);
-
-    useEffect(() => {
-        if (printReportData && printReportData.data && printReportData.data.batch) {
+        if (reportBody && reportBody.length > 0) {
             let html = null;
-            printReportData.data.batch.body.forEach((body) => {
+            reportBody.forEach((body) => {
                 if (html) {
                     html += '<br/>';
                 } else {
@@ -66,6 +61,19 @@ const OfficeEdit = (props) => {
                 html += body.html;
             })
             printPartOfPage(html);
+        }
+    }, [reportBody]);
+
+    useEffect(() => {
+        if (orders && isEdit) {
+            setOrdersList(orders);
+        }
+    }, [orders]);
+
+    useEffect(() => {
+        if (!reportBody && printReportData && printReportData.data && printReportData.data.batch) {
+            setReportBody(printReportData.data.batch.body);
+            props.resetPrintOfficeReport();
         }
     }, [printReportData.data]);
 
@@ -167,7 +175,10 @@ const OfficeEdit = (props) => {
     const onGetFieldOptions = (conditional = null, limit = 500, page) => props.getFieldOptionByGroups([GROUPS.ORDERS_ORIGIN], limit, page);
     const onGetOrders = (conditions) => props.getOrdersByOffice(conditions.all(), 200, 0);
     const handleDownloadTemplate = (id) => fileOfficeTemplate('test.xls', id);
-    const printReport = (id) => props.printOfficeReport(id);
+    const printReport = (id) => {
+        setReportBody(null);
+        props.printOfficeReport(id);
+    }
 
     return (
         <React.Fragment>
@@ -358,8 +369,10 @@ const mapStateToProps = state => {
 }
 
 export default withRouter(
-    connect(mapStateToProps, {apiError, registerOffice, deleteOffice, confirmOffice, updateOffice, getOffice,
-        getDeliveryMethods, getFieldOptionByGroups, addOrderOffice, getOrdersByOffice, printOfficeReport})(OfficeEdit)
+    connect(mapStateToProps, {
+        apiError, registerOffice, deleteOffice, confirmOffice, updateOffice, getOffice,
+        getDeliveryMethods, getFieldOptionByGroups, addOrderOffice, getOrdersByOffice, printOfficeReport, resetPrintOfficeReport
+    })(OfficeEdit)
 )
 
 OfficeEdit.propTypes = {
