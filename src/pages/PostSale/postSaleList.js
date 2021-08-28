@@ -5,8 +5,6 @@ import {Card, CardBody, Col, Row} from "reactstrap"
 import paginationFactory, {PaginationListStandalone, PaginationProvider,} from "react-bootstrap-table2-paginator"
 import ToolkitProvider from "react-bootstrap-table2-toolkit"
 import BootstrapTable from "react-bootstrap-table-next"
-
-import {Link} from "react-router-dom"
 import {DEFAULT_PAGE_LIMIT} from "../../common/pagination";
 import {TableFilter} from "../../components/TableFilter";
 import {normalizeColumnsList} from "../../common/converters";
@@ -15,10 +13,7 @@ import postSaleColumns from "./postSaleColumn";
 import {Button, Tooltip} from "@material-ui/core";
 import {doPrintBatchRequest, getOrders} from "../../store/order/actions";
 import Conditionals from "../../common/conditionals";
-import Images from "../../components/Common/Image";
-import DropZoneIcon from "../../components/Common/DropZoneIcon";
 import {importFile} from "../../store/office/actions";
-import CustomerForm from "../CustomerEdit/CustomerForm";
 import CustomModal from "../../components/Modal/CommosModal";
 import PostSaleImportFileForm from "./PostSaleImportFileForm";
 
@@ -38,11 +33,11 @@ const PostSaleList = props => {
     }
 
     useEffect(() => {
-        if (null !== refresh) onGetOrders(getConditionals(), DEFAULT_PAGE_LIMIT, currentPage * DEFAULT_PAGE_LIMIT);
+        if (null !== refresh) onGetOrders(conditional, DEFAULT_PAGE_LIMIT, currentPage * DEFAULT_PAGE_LIMIT);
     }, [refresh])
 
     useEffect(() => {
-        onGetOrders(getConditionals());
+        onGetOrders(conditional);
         if (customActions) {
             setFilterable(false);
         }
@@ -55,26 +50,17 @@ const PostSaleList = props => {
     const handleTableChange = (type, {page, searchText}) => {
         let p = page - 1;
         setCurrentPage(p);
-        onGetOrders(getConditionals(), DEFAULT_PAGE_LIMIT, p * DEFAULT_PAGE_LIMIT);
+        onGetOrders(conditional, DEFAULT_PAGE_LIMIT, p * DEFAULT_PAGE_LIMIT);
     }
 
     const onFilterAction = (condition) => {
         setConditional(condition);
-        onGetOrders(getConditionals(condition), DEFAULT_PAGE_LIMIT, 0);
+        onGetOrders(condition, DEFAULT_PAGE_LIMIT, 0);
     }
 
     const handleImportFile = (reload) => {
         setOpenImportFileModal(false);
-        if(reload) onGetOrders(getConditionals(), DEFAULT_PAGE_LIMIT, currentPage * DEFAULT_PAGE_LIMIT);
-    }
-
-    const getConditionals = (condition) => {
-        const cond = conditional || [];
-        if(!condition){
-            condition = [];
-        }
-        cond.push({field:'orderDelivery.tracking', value:'', operator: Conditionals.OPERATORS.NOT_NULL});
-        return [...cond, ...condition];
+        if(reload) onGetOrders(conditional, DEFAULT_PAGE_LIMIT, currentPage * DEFAULT_PAGE_LIMIT);
     }
 
     const columns = postSaleColumns();
@@ -176,7 +162,11 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => ({
     onImportFile: (data) => dispatch(importFile(data)),
-    onGetOrders: (conditional = null, limit = DEFAULT_PAGE_LIMIT, page) => dispatch(getOrders(conditional, limit, page)),
+    onGetOrders: (conditional = null, limit = DEFAULT_PAGE_LIMIT, page) => {
+        if(!conditional) conditional = [];
+        conditional.push({field:'orderDelivery.tracking', value:'', operator: Conditionals.OPERATORS.NOT_NULL});
+        dispatch(getOrders(conditional, limit, page))
+    },
     onPrintBatchRequest: (conditional) => dispatch(doPrintBatchRequest(conditional)),
 })
 

@@ -1,18 +1,15 @@
 import React from "react"
 import {Link} from "react-router-dom"
 import {StatusField} from "../../components/StatusField";
-import {getEmptyOptions} from "../../common/converters";
+import {buildOptions} from "../../common/converters";
 import {DELIVERY_METHODS_LIST, ORDER_STATUS, ORDER_STATUS_LIST} from "../../common/constants";
 import Conditionals from "../../common/conditionals";
 import {formatDate} from "../../common/utils";
 import {Tooltip} from "@material-ui/core";
 import {CUSTOMER} from "../../helpers/url_helper";
 
-const statusOptions = ORDER_STATUS_LIST;
-statusOptions.unshift(getEmptyOptions);
-
-const deliveryMethodsOptions = DELIVERY_METHODS_LIST;
-deliveryMethodsOptions.unshift(getEmptyOptions);
+const statusOptions = buildOptions(ORDER_STATUS_LIST);
+const deliveryMethodsOptions = buildOptions(DELIVERY_METHODS_LIST);
 
 const orderColumns = (onSelectedOrder, showAsModal) => {
     let columns = [

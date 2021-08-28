@@ -13,10 +13,12 @@ import DropZoneIcon from "../../components/Common/DropZoneIcon";
 import {getEmptyOptions} from "../../common/converters";
 import {importFile, importFileReset} from "../../store/office/actions";
 import {DATE_FORMAT, formatDate} from "../../common/utils";
+import {DELIVERY_METHODS} from "../../common/constants";
 
 const PostSaleImportFileForm = ({onCloseModal, deliveryMethods, loading, error, success, getDeliveryMethods, importFileReset, importFile}) => {
 
     const [deliveryMethodList, setDeliveryMethodList] = useState([]);
+    const [deliveryMethod, setDeliveryMethod] = useState({});
     const [file, setFile] = useState(null);
 
     //carga inicial
@@ -28,7 +30,10 @@ const PostSaleImportFileForm = ({onCloseModal, deliveryMethods, loading, error, 
 
     useEffect(() => {
         if (deliveryMethods && deliveryMethods.length > 0) {
-            setDeliveryMethodList([getEmptyOptions(), ...deliveryMethods.map(op => ({label: op.name, value: op.code}))]);
+            setDeliveryMethod(deliveryMethods.find(op => op.name === DELIVERY_METHODS.INTERRAPIDISIMO).code);
+            setDeliveryMethodList([getEmptyOptions(),
+                ...deliveryMethods.filter(op => op.name === DELIVERY_METHODS.INTERRAPIDISIMO).map(op => ({label: op.name, value: op.code}))]
+            );
         }
     }, [deliveryMethods]);
 
@@ -73,6 +78,7 @@ const PostSaleImportFileForm = ({onCloseModal, deliveryMethods, loading, error, 
                                         id={"deliveryMethod"}
                                         name={"deliveryMethod"}
                                         options={deliveryMethodList}
+                                        defaultValue={deliveryMethod}
                                         required
                                     />
                                 </div>

@@ -33,3 +33,15 @@ export const getEmptyOptions = () => {
 export const normalizeColumnsList = (columns) => {
     return columns.filter(r => !r.hidden).map(r =>({text: r.text, dataField: r.dataField, sort: r.sort, formatter: r.formatter}));
 }
+
+export const buildOptions =(options)=>{
+    let opts = [...options];
+    opts.unshift(getEmptyOptions());
+    opts = opts.reduce((acc,item)=>{
+        if(!acc.some(i => i.value === item.value)){
+            acc.push(item);
+        }
+        return acc;
+    },[])
+    return opts;
+}

@@ -30,7 +30,7 @@ const CustomModal = (props) => {
 };
 
 CustomModal.propTypes = {
-    children: PropTypes.element.isRequired,
+    // children: PropTypes.element.isRequired,
     title: PropTypes.string,
     isOpen: PropTypes.bool,
     scrollable: PropTypes.bool,

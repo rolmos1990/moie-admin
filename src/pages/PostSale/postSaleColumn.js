@@ -1,20 +1,17 @@
 import React from "react"
 import {Link} from "react-router-dom"
 import {StatusField} from "../../components/StatusField";
-import {getEmptyOptions} from "../../common/converters";
+import {buildOptions} from "../../common/converters";
 import {DELIVERY_METHODS_LIST, ORDER_STATUS, ORDER_STATUS_LIST} from "../../common/constants";
 import Conditionals from "../../common/conditionals";
 import {formatDate} from "../../common/utils";
 import {Tooltip} from "@material-ui/core";
 import {CUSTOMER} from "../../helpers/url_helper";
 
-const statusOptions = ORDER_STATUS_LIST;
-statusOptions.unshift(getEmptyOptions);
-
-const deliveryMethodsOptions = DELIVERY_METHODS_LIST;
-deliveryMethodsOptions.unshift(getEmptyOptions);
-
 const postSaleColumns = () => {
+    const statusOptions = buildOptions(ORDER_STATUS_LIST);
+    const deliveryMethodsOptions = buildOptions(DELIVERY_METHODS_LIST);
+
     return [
         {
             text: "Pedido #",
@@ -94,7 +91,7 @@ const postSaleColumns = () => {
         },
         {
             text: "Guía",
-            dataField: "tracking",
+            dataField: "orderDelivery.tracking",
             sort: true,
             filter: true,
             filterType: "text",
@@ -105,18 +102,11 @@ const postSaleColumns = () => {
             ),
         },
         {
-            text: "Estado",
-            dataField: "status",
+            text: "Estado del envio",
+            dataField: "orderDelivery.deliveryStatus",
             sort: true,
             filter: true,
-            filterType: "select",
-            filterOptions: statusOptions,
-            filterDefaultOption: statusOptions[0],
-            formatter: (cellContent, item) => (
-                <StatusField color={ORDER_STATUS[item.status].color}>
-                    {ORDER_STATUS[item.status].name}
-                </StatusField>
-            ),
+            filterType: "text"
         },
         {
             text: "Fecha",

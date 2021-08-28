@@ -1,22 +1,13 @@
 import React from "react"
 import {Link} from "react-router-dom"
-import {STATUS_COLORS, StatusField} from "../../../components/StatusField";
-import {ConverterStatus, getEmptyOptions} from "../../../common/converters";
-import {
-    DELIVERY_METHODS_LIST,
-    DELIVERY_TYPES, DELIVERY_TYPES_LIST,
-    OFFICE_STATUS,
-    OFFICE_STATUS_LIST,
-    STATUS
-} from "../../../common/constants";
+import {StatusField} from "../../../components/StatusField";
+import {buildOptions} from "../../../common/converters";
+import {DELIVERY_METHODS_LIST, DELIVERY_TYPES_LIST, OFFICE_STATUS, OFFICE_STATUS_LIST} from "../../../common/constants";
 import Conditionals from "../../../common/conditionals";
-import {DATE_FORMAT, formatDate, STATUS_OPTIONS} from "../../../common/utils";
+import {DATE_FORMAT, formatDate} from "../../../common/utils";
 
-const statusOptions = OFFICE_STATUS_LIST;
-statusOptions.unshift(getEmptyOptions);
-
-const deliveryMethodsOptions = DELIVERY_METHODS_LIST;
-deliveryMethodsOptions.unshift(getEmptyOptions);
+const statusOptions = buildOptions(OFFICE_STATUS_LIST);
+const deliveryMethodsOptions = buildOptions(DELIVERY_METHODS_LIST);
 
 const municipalityColumns = (onDelete = false) => [
     {

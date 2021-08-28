@@ -57,5 +57,5 @@ export default withRouter(
 )
 
 CatalogPrintBatchRequest.propTypes = {
-    conditionals: PropTypes.array.isRequired,
+    conditionals: PropTypes.array,
 }

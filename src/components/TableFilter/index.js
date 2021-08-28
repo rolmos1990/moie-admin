@@ -18,6 +18,7 @@ export const TableFilter = (props) => {
     }
 
     const handleValidSubmit = (event, values) => {
+        console.log('values', fields)
         if (props.onSubmit) {
 
             let data = {...values};
@@ -36,59 +37,86 @@ export const TableFilter = (props) => {
                 .filter(dataField => data[dataField] && data[dataField] !== "")
                 .forEach(dataField => {
 
+                    // const isObject = data[dataField];
                     //Se borra el "_" del inicio porque algunos campos se renderizan mal, ejemplo el status
                     const fieldName = dataField.substr(1);
 
-                    const field = fields.filter(field => field.filter).filter(field => field.dataField === fieldName);
+                    let field = fields.filter(field => field.filter).filter(field => field.dataField === fieldName);
 
-                    if (field && field.length) {
-                        const filter = field[0];
-                        const value = data[dataField];
+                    if (!field || field.length === 0) {
+                        //para buscar dentro de nodos
+                        field = fields.filter(field => field.filter)
+                            .filter(field => field.dataField.includes('.'))
+                            .filter(field => field.dataField.startsWith(fieldName));
+                    }
 
-                        let operator;
-                        if (filter.filterType === "text") {
-                            operator = filter.filterCondition ? filter.filterCondition : Conditionals.OPERATORS.LIKE;
-                            conditions.add(fieldName, value, operator);
-                        }
-                        if (filter.filterType === "select" && isValidOption(filter.filterOptions, value.value)) {//for status
-                            if(value.value === true || value.value === false){
-                                operator = resolveOperator(filter, value.value ? Conditionals.OPERATORS.TRUE : Conditionals.OPERATORS.FALSE);
-                                conditions.add(fieldName, null, operator);
-                            }else{
-                                operator = resolveOperator(filter, Conditionals.OPERATORS.EQUAL);
-                                conditions.add(fieldName, value.value, operator);
-                            }
-                        }
-                        if (filter.filterType === "asyncSelect" && value.value) {
-                            operator = resolveOperator(filter, Conditionals.OPERATORS.EQUAL);
-                            conditions.add(fieldName, value.value, operator);
-                        }
+                    if (field && field.length > 0) {
+                        if (field.length === 1) {
+                            addConditionals(conditions, data, field, dataField, fieldName);
+                        }else{
+                            //agregar los los valores de los distintos nodos
+                            field.forEach(f => {
+                                const attr = f.dataField.split('.')[1];
+                                const d = {};
+                                d[f.dataField] = data[dataField][attr];
 
-                        if (filter.filterType === "number" && isValidObject(value) && value.length > 0) {
-
-                            if (value.length > 1 && value[0] && value[1]) {
-                                conditions.add(fieldName, value[0], Conditionals.OPERATORS.BETWEEN,[value[1]]);
-
-                            } else if (value.length > 0 && value[0]) {
-                                conditions.add(fieldName, value[1], Conditionals.OPERATORS.GREATER_THAN_OR_EQUAL);
-
-                            } else if (value.length > 1 && value[1]) {
-                                conditions.add(fieldName, value[1], Conditionals.OPERATORS.LESS_THAN);
-                            }
-
-                        }
-                        if (filter.filterType === "dateRange" && value && value.length > 0) {
-                            if(moment(value[0]).isSame(moment(value[1]))){
-                                conditions.add(fieldName,formatDateToServer(value[0]),Conditionals.OPERATORS.LESS_THAN_OR_EQUAL);
-                            }
-                            else {
-                                conditions.add(fieldName,formatDateToServer(value[0]), Conditionals.OPERATORS.BETWEEN,[formatDateToServer(value[1])]);
-                            }
+                                if(d[f.dataField] && d[f.dataField] !== ""){
+                                    addConditionals(conditions, d, [f], f.dataField, f.dataField);
+                                }
+                            })
                         }
                     }
                 });
 
             props.onSubmit(conditions.all());
+        }
+    }
+
+    const addConditionals = (conditions, data, field, dataField, fieldName) => {
+        if (field && field.length) {
+            const filter = field[0];
+            const value = data[dataField];
+
+            let operator;
+            if (filter.filterType === "text") {
+                operator = filter.filterCondition ? filter.filterCondition : Conditionals.OPERATORS.LIKE;
+                conditions.add(fieldName, value, operator);
+            }
+            if (filter.filterType === "select" && isValidOption(filter.filterOptions, value.value)) {//for status
+                if(value.value === true || value.value === false){
+                    operator = resolveOperator(filter, value.value ? Conditionals.OPERATORS.TRUE : Conditionals.OPERATORS.FALSE);
+                    conditions.add(fieldName, null, operator);
+                }else{
+                    operator = resolveOperator(filter, Conditionals.OPERATORS.EQUAL);
+                    conditions.add(fieldName, value.value, operator);
+                }
+            }
+            if (filter.filterType === "asyncSelect" && value.value) {
+                operator = resolveOperator(filter, Conditionals.OPERATORS.EQUAL);
+                conditions.add(fieldName, value.value, operator);
+            }
+
+            if (filter.filterType === "number" && isValidObject(value) && value.length > 0) {
+
+                if (value.length > 1 && value[0] && value[1]) {
+                    conditions.add(fieldName, value[0], Conditionals.OPERATORS.BETWEEN,[value[1]]);
+
+                } else if (value.length > 0 && value[0]) {
+                    conditions.add(fieldName, value[1], Conditionals.OPERATORS.GREATER_THAN_OR_EQUAL);
+
+                } else if (value.length > 1 && value[1]) {
+                    conditions.add(fieldName, value[1], Conditionals.OPERATORS.LESS_THAN);
+                }
+
+            }
+            if (filter.filterType === "dateRange" && value && value.length > 0) {
+                if(moment(value[0]).isSame(moment(value[1]))){
+                    conditions.add(fieldName,formatDateToServer(value[0]),Conditionals.OPERATORS.LESS_THAN_OR_EQUAL);
+                }
+                else {
+                    conditions.add(fieldName,formatDateToServer(value[0]), Conditionals.OPERATORS.BETWEEN,[formatDateToServer(value[1])]);
+                }
+            }
         }
     }
 
