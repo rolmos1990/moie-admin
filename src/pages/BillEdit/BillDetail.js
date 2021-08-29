@@ -92,6 +92,16 @@ const BillDetail = (props) => {
                                         <span className="p-1">{formatDate(bill.createdAt)}</span>
                                     </Col>
                                 </Row>
+                                <Row>
+                                    <Col md={6}>
+                                        <label>Cliente:</label>
+                                        <span className="p-1">{bill.order.customer.name}</span>
+                                    </Col>
+                                    <Col md={6}>
+                                        <label>Correo: </label>
+                                        <span className="p-1">{bill.order.customer.email}</span>
+                                    </Col>
+                                </Row>
                             </Col>
                         </Row>
                     </Card>
