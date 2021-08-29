@@ -74,7 +74,7 @@ const municipalityColumns = (onDelete = false) => [
     },
     {
         text: "Nota de Crédito",
-        dataField: "note",
+        dataField: "creditNote.id",
         sort: true,
         filter: true,
         filterType: "text",
