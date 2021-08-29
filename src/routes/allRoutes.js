@@ -1,5 +1,5 @@
 import React from "react"
-import { Redirect } from "react-router-dom"
+import {Redirect} from "react-router-dom"
 // Dashboard
 import Dashboard from "../pages/Dashboard/index"
 import Customer from "../pages/Customer/index"
@@ -38,6 +38,7 @@ import PageNotFount from "../pages/commons/404";
 import Offices from "../pages/Offices";
 import OfficesEdit from "../pages/OfficesEdit";
 import PostSaleDetail from "../pages/PostSaleEdit/PostSaleDetail";
+import BillDetail from "../pages/BillEdit/BillDetail";
 
 const userRoutes = [
   { path: "/dashboard", component: Dashboard },
@@ -61,24 +62,25 @@ const userRoutes = [
   { path: "/municipalities", component: Municipalities },
   { path: "/municipality", component: MunicipalityEdit },
   { path: "/municipality/:id", component: MunicipalityEdit },
-  { path: "/configs", component: Configs },
-  { path: "/postSales", component: PostSale},
-  { path: "/postSales/detail/:id", component: PostSaleDetail},
-  { path: "/orders", component: Orders },
-  { path: "/order/:id", component: OrderDetail },
-  { path: "/orders/create", component: CreateOrder },
-  { path: "/templates", component: Templates },
-  { path: "/template/:id", component: TemplateEdit },
-  { path: "/template", component: TemplateEdit },
-  { path: "/bills", component: Bills },
-  { path: "/offices", component: Offices },
-  { path: "/office/:id", component: OfficesEdit },
-  { path: "/office", component: OfficesEdit },
-  { path: "/reports", component: Reports },
-  { path: "/404", component: PageNotFount },
+  {path: "/configs", component: Configs},
+  {path: "/postSales", component: PostSale},
+  {path: "/postSales/detail/:id", component: PostSaleDetail},
+  {path: "/orders", component: Orders},
+  {path: "/order/:id", component: OrderDetail},
+  {path: "/orders/create", component: CreateOrder},
+  {path: "/templates", component: Templates},
+  {path: "/template/:id", component: TemplateEdit},
+  {path: "/template", component: TemplateEdit},
+  {path: "/bills", component: Bills},
+  {path: "/bill/detail/:id", component: BillDetail},
+  {path: "/offices", component: Offices},
+  {path: "/office/:id", component: OfficesEdit},
+  {path: "/office", component: OfficesEdit},
+  {path: "/reports", component: Reports},
+  {path: "/404", component: PageNotFount},
 
   // //profile
-  { path: "/profile", component: UserProfile },
+  {path: "/profile", component: UserProfile},
 
   // this route should be at the end of all other routes
   { path: "/", exact: true, component: () => <Redirect to="/dashboard" /> },

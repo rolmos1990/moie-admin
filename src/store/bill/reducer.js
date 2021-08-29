@@ -1,22 +1,31 @@
 import {
-    CONFIRM_BILL, CONFIRM_BILL_FAILED, CONFIRM_BILL_SUCCESS,
-    DELETE_BILL, DELETE_BILL_FAILED, DELETE_BILL_SUCCESS,
+    BILL_LIST_REFRESH,
+    CONFIRM_BILL,
+    CONFIRM_BILL_FAILED,
+    CONFIRM_BILL_SUCCESS,
+    DELETE_BILL,
+    DELETE_BILL_FAILED,
+    DELETE_BILL_SUCCESS,
+    GENERATE_CREDIT_NOTE,
+    GENERATE_CREDIT_NOTE_FAILED,
+    GENERATE_CREDIT_NOTE_SUCCESS,
     GET_BILL,
     GET_BILL_FAILED,
     GET_BILL_SUCCESS,
-    GET_BILLS, GET_BILLS_FAILED, GET_BILLS_SUCCESS, QUERY_BILLS, QUERY_BILLS_FAILED, QUERY_BILLS_SUCCESS,
+    GET_BILLS,
+    GET_BILLS_FAILED,
+    GET_BILLS_SUCCESS,
+    QUERY_BILLS,
+    QUERY_BILLS_FAILED,
+    QUERY_BILLS_SUCCESS,
     REGISTER_BILL,
     REGISTER_BILL_FAILED,
-    REGISTER_BILL_SUCCESS, RESET_BILL,
-    UPDATE_BILL, UPDATE_BILL_FAILED,
+    REGISTER_BILL_SUCCESS,
+    RESET_BILL,
+    UPDATE_BILL,
+    UPDATE_BILL_FAILED,
     UPDATE_BILL_SUCCESS
 } from "./actionTypes";
-import {
-    DELETE_CUSTOMER,
-    DELETE_CUSTOMER_FAILED,
-    DELETE_CUSTOMER_SUCCESS,
-    RESET_CUSTOMERS
-} from "../customer/actionTypes";
 
 const initialState = {
     error: "",
@@ -27,6 +36,10 @@ const initialState = {
     custom: {
         loading: false,
         meta: {},
+        data: {}
+    },
+    creditNote: {
+        loading: false,
         data: {}
     },
     refresh: false
@@ -131,7 +144,7 @@ const bill = (state = initialState, action) => {
         case UPDATE_BILL_SUCCESS:
             state = {
                 ...state,
-                refresh: true,
+                refresh: !state.refresh,
                 loading: false,
             }
             break
@@ -177,6 +190,40 @@ const bill = (state = initialState, action) => {
             state = {
                 ...state,
                 loading: false,
+            }
+            break
+        case GENERATE_CREDIT_NOTE:
+            state = {
+                ...state,
+                creditNote: {
+                    ...state.creditNote,
+                    loading: true,
+                },
+            }
+            break
+        case GENERATE_CREDIT_NOTE_SUCCESS:
+            state = {
+                ...state,
+                refresh: !state.refresh,
+                creditNote: {
+                    ...state.creditNote,
+                    loading: false,
+                },
+            }
+            break
+        case GENERATE_CREDIT_NOTE_FAILED:
+            state = {
+                ...state,
+                creditNote: {
+                    ...state.creditNote,
+                    loading: false,
+                },
+            }
+            break
+        case BILL_LIST_REFRESH:
+            state = {
+                ...state,
+                refresh: !state.refresh,
             }
             break
         default:

@@ -1,0 +1,121 @@
+import React, {useEffect} from "react"
+import {Col, Container, Row} from "reactstrap"
+import {Card, Tooltip} from "@material-ui/core";
+import {withRouter} from "react-router-dom"
+import {connect} from "react-redux";
+import PropTypes from "prop-types";
+import Breadcrumb from "../../components/Common/Breadcrumb";
+import {formatDate} from "../../common/utils";
+import NoDataIndication from "../../components/Common/NoDataIndication";
+import {createCreditNote, getBill} from "../../store/bill/actions";
+import {ConfirmationModalAction} from "../../components/Modal/ConfirmationModal";
+
+const BillDetail = (props) => {
+
+    const {onGetBill, refresh, bill} = props;
+
+    useEffect(() => {
+        if (props.match.params.id) {
+            onGetBill(props.match.params.id);
+        }
+    }, [onGetBill, refresh]);
+
+    const createCreditNote = () => {
+        ConfirmationModalAction({
+            title: `¿Está seguro de generar una nota de crédito para la factura # ${bill.id}?`,
+            description: 'Esta acción no puede revertirse.',
+            id: '_creditNoteModal',
+            onConfirm: () => props.onCreateCreditNote(bill.id)
+        });
+    }
+
+    return bill.id ? (
+        <React.Fragment>
+            <div className="page-content">
+                <Container fluid className="pb-3">
+                    <Breadcrumb hasBack path="/bills" title={`Factura #${bill.id}`} item={`Factura #${bill.id}`}/>
+
+                    <Row className="mb-2">
+                        <Col md={12}>
+                            <div className={"mb-3 float-md-start"}>
+
+                            </div>
+                            <div className={"mb-3 float-md-end"}>
+                                <div className="button-items">
+
+                                    {bill.status === 'PENDING' && (
+                                        <Tooltip placement="bottom" title="Generar nota de crédito" aria-label="add">
+                                            <button type="button" color="primary" className="btn-sm btn btn-outline-info waves-effect waves-light" onClick={() => createCreditNote()}>
+                                                <i className={`uil-bill text-danger`}> </i>
+                                            </button>
+                                        </Tooltip>
+                                    )}
+                                </div>
+                            </div>
+                        </Col>
+                    </Row>
+
+                    <Card id={'details'} className="mb-3 p-3">
+                        <Row>
+                            <Col md={12}>
+                                <h4 className="card-title text-info">Información básica</h4>
+                                <hr/>
+                            </Col>
+                            <Col md={12}>
+                                <Row>
+                                    <Col md={6}>
+                                        <label>ID: </label>
+                                        <span className="p-1">{bill.id}</span>
+                                    </Col>
+                                    {/* <Col md={6}>
+                                        <label>Tipo: </label>
+                                        <span className="p-1">{bill.type}</span>
+                                    </Col>*/}
+                                </Row>
+                                <Row>
+                                    <Col md={6}>
+                                        <label>Número legal: </label>
+                                        <span className="p-1">{bill.legalNumber}</span>
+                                    </Col>
+                                    <Col md={6}>
+                                        <label>Pedido: </label>
+                                        <span className="p-1">{bill.order.id}</span>
+                                    </Col>
+                                </Row>
+                                <Row>
+                                    <Col md={6}>
+                                        <label>Estatus:</label>
+                                        <span className="p-1">{bill.status}</span>
+                                    </Col>
+                                    <Col md={6}>
+                                        <label>Fecha: </label>
+                                        <span className="p-1">{formatDate(bill.createdAt)}</span>
+                                    </Col>
+                                </Row>
+                            </Col>
+                        </Row>
+                    </Card>
+                </Container>
+            </div>
+        </React.Fragment>
+    ) : <NoDataIndication/>;
+}
+
+const mapStateToProps = state => {
+    const {bill, loading, refresh, creditNote} = state.Bill
+    return {bill, refresh, loading, loadingCreditNote: creditNote.loading}
+}
+
+const mapDispatchToProps = dispatch => ({
+    onGetBill: (id) => dispatch(getBill(id)),
+    onCreateCreditNote: (id) => dispatch(createCreditNote(id)),
+})
+
+export default withRouter(
+    connect(mapStateToProps, mapDispatchToProps)(BillDetail)
+)
+
+BillDetail.propTypes = {
+    error: PropTypes.any,
+    history: PropTypes.object
+}

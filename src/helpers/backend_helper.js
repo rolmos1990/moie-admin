@@ -1,7 +1,6 @@
 // Login Method
-import {del, get, post, put, file} from "./api_helper";
+import {del, file, get, post, put} from "./api_helper";
 import * as url from "./url_helper";
-import {COMMENT, CUSTOMER, DELIVERY_METHODS, GET_USERS, USER} from "./url_helper";
 
 const postLogin = data => post(url.POST_LOGIN, data);
 
@@ -113,6 +112,7 @@ const updateBillApi = (id, data) => put(`${url.BILLS}/${id}`, data);
 const deleteBillApi = (id) => del(`${url.BILLS}/${id}`);
 const confirmBillApi = (id) => post(`${url.BILLS}/${id}/confirm`);
 const addOrderBillApi = (id, data, params) => post(`${url.BILLS}/${id}/addOrder`, data, {params: params});
+const createCreditNoteApi = (id) => post(`${url.BILLS}/creditNote/${id}`, {}, {});
 
 //templates
 const fetchTemplatesApi = data => get(url.TEMPLATES, {}, data);
@@ -244,6 +244,7 @@ export {
     deleteBillApi,
     confirmBillApi,
     addOrderBillApi,
+    createCreditNoteApi,
 
     fileOfficeTemplate
 }

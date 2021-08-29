@@ -1,35 +1,34 @@
 import React, {useEffect, useState} from "react"
 import PropTypes from "prop-types"
 import {connect} from "react-redux"
-import {Card, CardBody, Col, Row, Spinner} from "reactstrap"
-import paginationFactory, {
-    PaginationListStandalone,
-    PaginationProvider,
-} from "react-bootstrap-table2-paginator"
-import ToolkitProvider, {Search} from "react-bootstrap-table2-toolkit"
+import {Card, CardBody, Col, Row} from "reactstrap"
+import paginationFactory, {PaginationListStandalone, PaginationProvider,} from "react-bootstrap-table2-paginator"
+import ToolkitProvider from "react-bootstrap-table2-toolkit"
 import BootstrapTable from "react-bootstrap-table-next"
-
-import {Link} from "react-router-dom"
 import {Button, Tooltip} from "@material-ui/core";
 import {DEFAULT_PAGE_LIMIT} from "../../../common/pagination";
-import {ConfirmationModal, ConfirmationModalAction} from "../../../components/Modal/ConfirmationModal";
-import {getBills} from "../../../store/bill/actions";
+import {ConfirmationModalAction} from "../../../components/Modal/ConfirmationModal";
+import {getBills, registerBill} from "../../../store/bill/actions";
 import {TableFilter} from "../../../components/TableFilter";
 import billColumns from "./billColumns";
-import {normalizeColumnsList, statesToOptions} from "../../../common/converters";
+import {normalizeColumnsList} from "../../../common/converters";
+import Conditionals from "../../../common/conditionals";
+import NoDataIndication from "../../../components/Common/NoDataIndication";
+import CustomModal from "../../../components/Modal/CommosModal";
+import OrderList from "../../Orders/orderList";
 
 const BillList = props => {
     const {states, bills, meta, getStates, onGetBills, loading, refresh} = props; //onDeleteBill,
     const [billList, setBillList] = useState([])
     const [filter, setFilter] = useState(false);
     const [conditional, setConditional] = useState(null);
+    const [openOrdersModal, setOpenOrdersModal] = useState(false);
+    const [orderListConditions, setOrderListConditions] = useState([]);
 
     const pageOptions = {
         sizePerPage: DEFAULT_PAGE_LIMIT,
         custom: true,
     }
-    const {SearchBar} = Search
-
     useEffect(() => {
         onGetBills();
     }, [refresh])
@@ -66,96 +65,110 @@ const BillList = props => {
     };
     const columns = billColumns(onDelete);
 
-    var selectRowProp = {
-        mode: "checkbox",
-        clickToSelect: true,
+    const addOrders = () => {
+        const conditions = new Conditionals.Condition;
+        // conditions.add("status", 4, Conditionals.OPERATORS.EQUAL);//Enviada
+        conditions.add('office', '', Conditionals.OPERATORS.NOT_NULL);
+        console.log('conditions', conditions);
+        setOrderListConditions(conditions.condition);
+        setOpenOrdersModal(true);
     };
 
-    const NoDataIndication = () => (
-        <div className="spinner">
-            <div className="rect1"/>
-            <div className="rect2"/>
-            <div className="rect3"/>
-            <div className="rect4"/>
-            <div className="rect5"/>
-        </div>
-    );
+    const onCloseModal = () => {
+        setOpenOrdersModal(false);
+    };
+    const onAcceptModal = (conditionals) => {
+        console.log('conditionals', conditionals)
+        if (conditionals && conditionals.length > 0) {
+            const value = conditionals[0].value;
+            const ids = value.split ? value.split('::') : [value];
+            props.onCreateBill({ids: ids});
+        }
+        setOpenOrdersModal(false);
+    };
 
     return (
-        <Row>
-            <TableFilter
-                onPressDisabled={() => setFilter(false)}
-                isActive={filter}
-                fields={columns}
-                onSubmit={onFilterAction.bind(this)}/>
+        <>
+            <CustomModal title={"Agregar pedidos"} size="lg" showFooter={false} isOpen={openOrdersModal} onClose={onCloseModal}>
+                <OrderList customActions={onAcceptModal} showAsModal={true} conditionals={orderListConditions}/>
+            </CustomModal>
+            <Row>
 
-            <Col lg={filter ? "8" : "12"}>
-                <Card>
-                    <CardBody>
-                        <PaginationProvider pagination={paginationFactory(pageOptions)}>
-                            {({paginationProps, paginationTableProps}) => (
-                                <ToolkitProvider
-                                    keyField="id"
-                                    data={billList || []}
-                                    columns={normalizeColumnsList(columns)}
-                                    bootstrap4
-                                    search
-                                >
-                                    {toolkitProps => (
-                                        <React.Fragment>
-                                            <Row className="row mb-2">
-                                                <Col md={6}>
-                                                    <div className="form-inline mb-3">
-                                                        <div className="search-box ms-2">
-                                                            <h4 className="text-info"><i className="uil-bill me-2"></i> Facturas</h4>
+                <TableFilter
+                    onPressDisabled={() => setFilter(false)}
+                    isActive={filter}
+                    fields={columns}
+                    onSubmit={onFilterAction.bind(this)}/>
+
+                <Col lg={filter ? "8" : "12"}>
+                    <Card>
+                        <CardBody>
+                            <PaginationProvider pagination={paginationFactory(pageOptions)}>
+                                {({paginationProps, paginationTableProps}) => (
+                                    <ToolkitProvider
+                                        keyField="id"
+                                        data={billList || []}
+                                        columns={normalizeColumnsList(columns)}
+                                        bootstrap4
+                                        search
+                                    >
+                                        {toolkitProps => (
+                                            <React.Fragment>
+                                                <Row className="row mb-2">
+                                                    <Col md={6}>
+                                                        <div className="form-inline mb-3">
+                                                            <div className="search-box ms-2">
+                                                                <h4 className="text-info"><i className="uil-bill me-2"></i> Facturas</h4>
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                </Col>
-                                                <Col md={6}>
-                                                    <div className="mb-3 float-md-end">
-                                                        {columns.some(s => s.filter) && (
-                                                            <Tooltip placement="bottom" title="Filtros Avanzados" aria-label="add">
-                                                                <Button onClick={() => setFilter(!filter)}>
-                                                                    <i className={"mdi mdi-filter"}> </i>
-                                                                </Button>
-                                                            </Tooltip>
-                                                        )}
-                                                        <Link to={"/bill"} className="btn btn-primary waves-effect waves-light text-light">
-                                                            <i className="mdi mdi-plus"> </i> Generar Factura
-                                                        </Link>
-                                                    </div>
-                                                </Col>
-                                            </Row>
-                                            <Row>
-                                                <Col xl="12">
-                                                    <div className="table-responsive mb-4">
-                                                        <BootstrapTable
-                                                            remote
-                                                            responsive
-                                                            loading={true}
-                                                            bordered={false}
-                                                            striped={true}
-                                                            classes={"table table-centered table-nowrap mb-0"}
-                                                            noDataIndication={() => <NoDataIndication/>}
-                                                            {...toolkitProps.baseProps}
-                                                            onTableChange={handleTableChange}
-                                                            {...paginationTableProps}
-                                                        />
-                                                    </div>
-                                                </Col>
-                                            </Row>
-                                            <div className="float-sm-start">
-                                                <PaginationListStandalone {...paginationProps} />
-                                            </div>
-                                        </React.Fragment>
-                                    )}
-                                </ToolkitProvider>
-                            )}
-                        </PaginationProvider>
-                    </CardBody>
-                </Card>
-            </Col>
-        </Row>
+                                                    </Col>
+                                                    <Col md={6}>
+                                                        <div className="mb-3 float-md-end">
+                                                            {columns.some(s => s.filter) && (
+                                                                <Tooltip placement="bottom" title="Filtros Avanzados" aria-label="add">
+                                                                    <Button onClick={() => setFilter(!filter)}>
+                                                                        <i className={"mdi mdi-filter"}> </i>
+                                                                    </Button>
+                                                                </Tooltip>
+                                                            )}
+                                                            <Button color="primary" className="btn-sm btn-rounded waves-effect waves-light" onClick={addOrders}>
+                                                                <i className="mdi mdi-plus"> </i> Generar Factura
+                                                            </Button>
+                                                        </div>
+                                                    </Col>
+                                                </Row>
+                                                <Row>
+                                                    <Col xl="12">
+                                                        <div className="table-responsive mb-4">
+                                                            <BootstrapTable
+                                                                remote
+                                                                responsive
+                                                                loading={true}
+                                                                bordered={false}
+                                                                striped={true}
+                                                                classes={"table table-centered table-nowrap mb-0"}
+                                                                noDataIndication={() => <NoDataIndication/>}
+                                                                {...toolkitProps.baseProps}
+                                                                onTableChange={handleTableChange}
+                                                                {...paginationTableProps}
+                                                            />
+                                                        </div>
+                                                    </Col>
+                                                </Row>
+                                                <div className="float-sm-start">
+                                                    <PaginationListStandalone {...paginationProps} />
+                                                </div>
+                                            </React.Fragment>
+                                        )}
+                                    </ToolkitProvider>
+                                )}
+                            </PaginationProvider>
+                        </CardBody>
+                    </Card>
+                </Col>
+            </Row>
+        </>
+
     )
 }
 
@@ -171,9 +184,8 @@ const mapStateToProps = state => {
 }
 
 const mapDispatchToProps = dispatch => ({
-    //getStates,
     onGetBills: (conditional = null, limit = DEFAULT_PAGE_LIMIT, page) => dispatch(getBills(conditional, limit, page)),
-    //onDeleteBill: (id) => dispatch(deleteBill(id))
+    onCreateBill: (ids) => dispatch(registerBill(ids)),
 })
 
 export default connect(

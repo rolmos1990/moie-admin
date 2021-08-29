@@ -2,13 +2,29 @@ import React from "react"
 import {Link} from "react-router-dom"
 import {StatusField} from "../../../components/StatusField";
 import {buildOptions} from "../../../common/converters";
-import {DELIVERY_METHODS_LIST, DELIVERY_TYPES_LIST, OFFICE_STATUS, OFFICE_STATUS_LIST} from "../../../common/constants";
+import {DELIVERY_METHODS_LIST, OFFICE_STATUS_LIST, ORDER_STATUS} from "../../../common/constants";
 import Conditionals from "../../../common/conditionals";
 import {DATE_FORMAT, formatDate} from "../../../common/utils";
+import {CUSTOMER} from "../../../helpers/url_helper";
+import {Tooltip} from "@material-ui/core";
 
 const statusOptions = buildOptions(OFFICE_STATUS_LIST);
 const deliveryMethodsOptions = buildOptions(DELIVERY_METHODS_LIST);
 
+
+/**
+ *
+ * createdAt: "2021-08-29T04:20:38.018Z"
+ id: 1
+ legalNumber: 1
+ order: {id: 5, createdAt: "2021-08-28T22:10:10.565Z", status: 1}
+ createdAt: "2021-08-28T22:10:10.565Z"
+ id: 5
+ status: 1
+ status: "PENDING"
+
+
+ */
 const municipalityColumns = (onDelete = false) => [
     {
         text: "#",
@@ -16,8 +32,8 @@ const municipalityColumns = (onDelete = false) => [
         sort: true,
         formatter: (cellContent, item) => (
             <>
-                <Link to="#" className="text-body">
-                    {item.id}
+                <Link to={`/bill/detail/${item.id}`} className="text-body">
+                    <b className="text-info">{item.id}</b>
                 </Link>
             </>
         ),
@@ -26,8 +42,51 @@ const municipalityColumns = (onDelete = false) => [
         filterCondition: Conditionals.OPERATORS.LIKE,
     },
     {
-        text: "Pedido",
-        dataField: "order",
+        text: "Fecha",
+        dataField: "createdAt",
+        sort: true,
+        filter: true,
+        filterType: "dateRange",
+        formatter: (cellContent, item) => (
+            <div>{formatDate(item.createdAt, DATE_FORMAT.ONLY_DATE)}</div>
+        ),
+    },
+    {
+        text: "Num. Legal",
+        dataField: "legalNumber",
+        sort: true,
+        filter: true,
+        filterType: "text"
+    },
+    {
+        text: "Estado",
+        dataField: "status",
+        sort: true,
+        filter: true,
+        filterType: "text"
+    },
+    {
+        text: "Impuesto",
+        dataField: "tax",
+        sort: true,
+        filter: true,
+        filterType: "number"
+    },
+    {
+        text: "Nota de Crédito",
+        dataField: "note",
+        sort: true,
+        filter: true,
+        filterType: "text",
+        formatter: (cellContent, item) => (
+            <>
+                {item?.creditNote?.id}
+            </>
+        ),
+    },
+    {
+        text: "# Pedido",
+        dataField: "order.id",
         sort: true,
         filter: true,
         filterType: "text",
@@ -37,92 +96,32 @@ const municipalityColumns = (onDelete = false) => [
         text: "Cliente",
         dataField: "customer",
         sort: true,
-        filter: true,
-        filterType: "dateRange",
+        filter: false,
+        filterType: "asyncSelect",
+        urlStr: CUSTOMER,
         formatter: (cellContent, item) => (
-            <div>{formatDate(item.batchDate, DATE_FORMAT.ONLY_DATE)}</div>
-        ),
-    },
-    {
-        text: "Fecha",
-        dataField: "createdAt",
-        sort: true,
-        filter: true,
-        filterType: "text",
-        formatter: (item) => (
             <>
-                <div>{DELIVERY_TYPES_LIST[item - 1].label }</div>
+                {item.order.customer.name}
+                {item.order.customer.isMayorist === true && (
+                    <Tooltip placement="bottom" title="Cliente mayorista" aria-label="add">
+                        <i className={"mdi mdi-crown font-size-18 mr-1 text-warning"}> </i>
+                    </Tooltip>
+                )}
             </>
         ),
     },
     {
-        text: "Tipo",
-        dataField: "type",
-        sort: true,
-        filter: true,
-        filterType: "select",
-        filterOptions: deliveryMethodsOptions,
-        filterCondition: Conditionals.OPERATORS.EQUAL,
-        formatter: (cellContent, item) => (
-            <>
-                <div>{item.deliveryMethod.name}</div>
-            </>
-        ),
-    },
-    {
-        text: "Num. Legal",
-        dataField: "numLegal",
-        sort: true,
-        filter: true,
-        filterType: "text"
-    },
-    {
-        text: "Estado",
-        dataField: "status",
-        sort: true,
-        filter: true,
-        filterType: "text"
-    },
-    {
-        text: "Nota de Credito",
-        dataField: "note",
-        sort: true,
-        filter: true,
-        filterType: "text"
-    },
-    {
-        text: "Estado",
-        dataField: "status",
+        text: "Estado del pedido",
+        dataField: "order.status",
         sort: true,
         filter: true,
         filterType: "select",
         filterOptions: statusOptions,
         filterDefaultOption: statusOptions[0],
         formatter: (cellContent, item) => (
-            <StatusField color={OFFICE_STATUS[item.status].color}>
-                {OFFICE_STATUS[item.status].name}
+            <StatusField color={ORDER_STATUS[item.order.status].color}>
+                {ORDER_STATUS[item.order.status].name}
             </StatusField>
-        ),
-    },
-    {
-        dataField: "menu",
-        isDummyField: true,
-        text: "Acción",
-        formatter: (cellContent, item) => (
-            <ul className="list-inline font-size-20 contact-links mb-0">
-                <li className="list-inline-item">
-                    <Link to={`/bill/${item.id}`} className="px-2 text-primary">
-                        <i className="uil uil-pen font-size-18"> </i>
-                    </Link>
-                </li>
-                {onDelete && (
-                    <li className="list-inline-item">
-                        <button size="small" className="btn btn-sm text-danger" onClick={() => onDelete(item.id)}>
-                            <i className="uil uil-trash-alt font-size-18"> </i>
-                        </button>
-                    </li>
-                )}
-            </ul>
         ),
     },
 ]

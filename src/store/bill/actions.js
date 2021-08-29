@@ -1,26 +1,33 @@
 import {
-    GET_BILLS,
-    GET_BILLS_SUCCESS,
-    GET_BILLS_FAILED,
-    GET_BILL,
-    GET_BILL_SUCCESS,
-    GET_BILL_FAILED,
-    REGISTER_BILL_FAILED,
-    REGISTER_BILL_SUCCESS,
-    REGISTER_BILL,
-    UPDATE_BILL_FAILED,
-    UPDATE_BILL_SUCCESS,
-    UPDATE_BILL,
-    RESET_BILL,
-    QUERY_BILLS,
-    QUERY_BILLS_FAILED,
-    QUERY_BILLS_SUCCESS,
+    ADD_ORDER_BILL,
+    ADD_ORDER_BILL_FAILED,
+    ADD_ORDER_BILL_SUCCESS,
+    BILL_LIST_REFRESH,
+    CONFIRM_BILL,
+    CONFIRM_BILL_FAILED,
+    CONFIRM_BILL_SUCCESS,
     DELETE_BILL,
     DELETE_BILL_FAILED,
     DELETE_BILL_SUCCESS,
-    CONFIRM_BILL,
-    CONFIRM_BILL_SUCCESS,
-    CONFIRM_BILL_FAILED, ADD_ORDER_BILL, ADD_ORDER_BILL_SUCCESS, ADD_ORDER_BILL_FAILED
+    GENERATE_CREDIT_NOTE,
+    GENERATE_CREDIT_NOTE_FAILED,
+    GENERATE_CREDIT_NOTE_SUCCESS,
+    GET_BILL,
+    GET_BILL_FAILED,
+    GET_BILL_SUCCESS,
+    GET_BILLS,
+    GET_BILLS_FAILED,
+    GET_BILLS_SUCCESS,
+    QUERY_BILLS,
+    QUERY_BILLS_FAILED,
+    QUERY_BILLS_SUCCESS,
+    REGISTER_BILL,
+    REGISTER_BILL_FAILED,
+    REGISTER_BILL_SUCCESS,
+    RESET_BILL,
+    UPDATE_BILL,
+    UPDATE_BILL_FAILED,
+    UPDATE_BILL_SUCCESS
 } from "./actionTypes";
 import Conditionals from "../../common/conditionals";
 
@@ -35,11 +42,9 @@ export const getBills = (conditional, limit, offset) => ({
     offset: offset
 })
 
-
-
 export const getBillsByIds = (ids, offset) => {
     const conditions = new Conditionals.Condition;
-    if(ids.length > 0) conditions.add("id", ids.join("::"), Conditionals.OPERATORS.IN);
+    if (ids.length > 0) conditions.add("id", ids.join("::"), Conditionals.OPERATORS.IN);
     return getBills(conditions.all(), ids.length, offset);
 }
 
@@ -69,10 +74,10 @@ export const getBillFailed = error => ({
     payload: error,
 })
 
-export const registerBill = (data, history) => {
+export const registerBill = (data) => {
     return {
         type: REGISTER_BILL,
-        payload: { data, history },
+        payload: {data},
     }
 }
 
@@ -94,7 +99,7 @@ export const registerBillFailed = data => {
 export const updateBill = (id, data, history) => {
     return {
         type: UPDATE_BILL,
-        payload: { id, data, history },
+        payload: {id, data, history},
     }
 }
 
@@ -115,7 +120,7 @@ export const updateBillFail = error => {
 
 export const deleteBill = (id, history) => ({
     type: DELETE_BILL,
-    payload: { id, history}
+    payload: {id, history}
 })
 
 export const deleteBillSuccess = () => ({
@@ -129,7 +134,7 @@ export const deleteBillFailed = error => ({
 
 export const confirmBill = (id, history) => ({
     type: CONFIRM_BILL,
-    payload: { id, history}
+    payload: {id, history}
 })
 
 export const confirmBillSuccess = () => ({
@@ -142,9 +147,8 @@ export const confirmBillFailed = error => ({
 })
 
 
-
 export const countBillByStatus = () => {
-    const params = {operation:'id::count', group:"status"};
+    const params = {operation: 'id::count', group: "status"};
     return queryBills(params, 'statusGroup');
 }
 
@@ -167,7 +171,7 @@ export const queryBillsSuccess = (data, meta, node) => ({
 export const addOrderBill = (id, data, conditional, history) => {
     return {
         type: ADD_ORDER_BILL,
-        payload: { id, data, conditional, history },
+        payload: {id, data, conditional, history},
     }
 }
 
@@ -183,5 +187,24 @@ export const addOrderBillFailed = data => {
     return {
         type: ADD_ORDER_BILL_FAILED,
         payload: data,
+    }
+}
+
+export const refreshList = () => {
+    return {type: BILL_LIST_REFRESH}
+}
+
+export const createCreditNote = id => ({
+    type: GENERATE_CREDIT_NOTE,
+    id
+})
+export const createCreditNoteSuccess = () => {
+    return {
+        type: GENERATE_CREDIT_NOTE_SUCCESS
+    }
+}
+export const createCreditNoteFailed = () => {
+    return {
+        type: GENERATE_CREDIT_NOTE_FAILED
     }
 }
