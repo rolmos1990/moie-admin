@@ -5,12 +5,13 @@
 .footer {
     bottom: 0;
     padding: 10px calc(#{$grid-gutter-width} / 2);
-    position: absolute;
+    position: fixed;
     right: 0;
     color: $footer-color;
     left: 250px;
     height: $footer-height;
     box-shadow: 0 0px 4px rgba(15, 34, 58, .12);
+    background: white;
 }
   
 @media (max-width: 992px) {

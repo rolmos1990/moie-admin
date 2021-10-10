@@ -20,21 +20,23 @@ const FooterUsers = ({data}) => {
             setLoading(false);
             if (resp && resp.data && resp.data.length > 0) {
                 let u = [];
-                resp.data.filter(o => o.user && o.user.id).forEach(o => u.push({name: o.user.name, sales: o.origen, amount: priceFormat(o.totalAmount), image: avatar3}))
-                u = u.sort((a, b) => a.sales === b.sales ? 0 : (a.sales > b.sales) ? -1 : 1);
+                resp.data.filter(o => o.user && o.user.id).forEach(o => u.push({name: o.user.name, sales: o.origen, amount: priceFormat(o.totalAmount), image: avatar3}));
 
                 //TO TEST
-/*                [1,2,3,4,5,6,7,8,9].forEach(item => {
+                [1, 2, 3, 4, 5, 6, 7, 8, 9].forEach(item => {
                     const user = {...u[0]};
                     user.image = "https://picsum.photos/200/300?random=" + item;
+                    user.sales = item;
                     u.push(user);
-                });*/
+                });
+
+                u = u.sort((a, b) => a.sales === b.sales ? 0 : (a.sales > b.sales) ? 1 : -1);
 
                 if (u.length > 6) {
                     u.splice(6);
                 }
                 setUsers(u);
-                setMainUser(u[0]);
+                if (u.length > 0) setMainUser(u[u.length - 1]);
             }
         });
     }
@@ -44,7 +46,7 @@ const FooterUsers = ({data}) => {
                 <div key={k} style={{display: 'flex', alignItems: 'center', margin: '0 5px'}}>
                     <img src={user.image} className="rounded-circle header-profile-user" alt="user-pic"/>
                     <div className="flex-1">
-                        <small className="mt-0 mb-1">{k === 0 && <i className={"mdi mdi-crown mr-1 text-warning"}> </i>}{user.name} </small>
+                        <small className="mt-0 mb-1">{k === (users.length - 1) && <i className={"mdi mdi-crown mr-1 text-warning"}> </i>}{user.name} </small>
                         <br/>
                         <small><small className="m-0">Pedidos: <b>{user.sales}</b></small></small>
                     </div>

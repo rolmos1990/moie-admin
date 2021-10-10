@@ -234,3 +234,16 @@ h1 small {
 .user-sales-dropdown-menu {
   display: none;
 }
+
+.top-users-sales {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  //font-size: smaller;
+}
+
+@media (max-width: 1250px) {
+  .top-users-sales {
+    display: none;
+  }
+}
