@@ -13,6 +13,7 @@ import {
     GET_DELIVERY_QUOTE_SUCCESS,
     GET_ORDER,
     GET_ORDER_FAILED,
+    GET_ORDER_RESTART,
     GET_ORDER_SUCCESS,
     GET_ORDERS,
     GET_ORDERS_FAILED,
@@ -141,6 +142,12 @@ const order = (state = initialState, action) => {
                 ...state,
                 ordersByOffice: action.payload,
                 meta: action.meta,
+                loading: false,
+            }
+        case GET_ORDER_RESTART:
+            return {
+                ...state,
+                order: null,
                 loading: false,
             }
         case GET_ORDER:

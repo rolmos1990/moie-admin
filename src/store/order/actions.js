@@ -2,6 +2,9 @@ import {
     CONCILIATION_FAILED,
     CONCILIATION_REQUEST,
     CONCILIATION_SUCCESS,
+    CONFIRM_CONCILIATION_FAILED,
+    CONFIRM_CONCILIATION_REQUEST,
+    CONFIRM_CONCILIATION_SUCCESS,
     CUSTOM_ORDER_FAILED,
     CUSTOM_ORDER_SUCCESS,
     DO_BATCH_REQUEST,
@@ -13,6 +16,7 @@ import {
     GET_DELIVERY_QUOTE_SUCCESS,
     GET_ORDER,
     GET_ORDER_FAILED,
+    GET_ORDER_RESTART,
     GET_ORDER_SUCCESS,
     GET_ORDERS,
     GET_ORDERS_FAILED,
@@ -75,6 +79,9 @@ export const getOrdersByOfficeFailed = error => ({
 export const getOrder = id => ({
     type: GET_ORDER,
     id
+})
+export const restartOrder = () => ({
+    type: GET_ORDER_RESTART
 })
 
 export const getOrderSuccess = data => ({
@@ -230,7 +237,7 @@ export const refreshOrders = () => {
     }
 }
 
-//RECONCILIATION
+//CONCILIATION
 export const doConciliation = (orders) => ({
     type: CONCILIATION_REQUEST,
     orders
@@ -240,5 +247,17 @@ export const doConciliationSuccess = () => ({
 })
 export const doConciliationFailed = (error) => ({
     type: CONCILIATION_FAILED,
+    error
+})
+//CONFIRM CONCILIATION
+export const confirmConciliation = (orders) => ({
+    type: CONFIRM_CONCILIATION_REQUEST,
+    orders
+})
+export const confirmConciliationSuccess = () => ({
+    type: CONFIRM_CONCILIATION_SUCCESS
+})
+export const confirmConciliationFailed = (error) => ({
+    type: CONFIRM_CONCILIATION_FAILED,
     error
 })

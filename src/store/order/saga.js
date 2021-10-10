@@ -3,6 +3,7 @@ import {all, call, fork, put, takeEvery} from "redux-saga/effects"
 //Account Redux states
 import {
     CONCILIATION_REQUEST,
+    CONFIRM_CONCILIATION_REQUEST,
     GET_DELIVERY_METHODS,
     GET_DELIVERY_QUOTE,
     GET_ORDER,
@@ -17,6 +18,8 @@ import {
 } from "./actionTypes"
 
 import {
+    confirmConciliationFailed,
+    confirmConciliationSuccess,
     customOrderFailed,
     customOrderSuccess,
     doConciliationFailed,
@@ -44,6 +47,7 @@ import {
 import {
     batchPrintRequestApi,
     conciliationRequestApi,
+    confirmConciliationRequestApi,
     fetchDeliveryMethodsApi,
     fetchDeliveryQuoteApi,
     fetchOrderApi,
@@ -76,7 +80,8 @@ const GET_API_REQUEST = fetchOrderApi;
 const POST_API_REQUEST = registerOrderApi;
 const PUT_API_REQUEST = updateOrderApi;
 const BATCH_REQUEST_API_REQUEST = batchPrintRequestApi;
-const RECONCILIATION_REQUEST_API_REQUEST = conciliationRequestApi;
+const CONCILIATION_REQUEST_API_REQUEST = conciliationRequestApi;
+const CONFIRM_CONCILIATION_REQUEST_API_REQUEST = confirmConciliationRequestApi;
 
 //actions
 const CUSTOM_SUCCESS_ACTION = customOrderSuccess;
@@ -96,6 +101,8 @@ const LIST_OFFICE_SUCCESS_ACTION = getOrdersByOfficeSuccess;
 const LIST_OFFICE_FAILED_ACTION = getOrdersByOfficeFailed;
 const CONCILIATION_REQUEST_SUCCESS_ACTION = doConciliationSuccess;
 const CONCILIATION_REQUEST_FAILED_ACTION = doConciliationFailed;
+const CONFIRM_CONCILIATION_REQUEST_SUCCESS_ACTION = confirmConciliationSuccess;
+const CONFIRM_CONCILIATION_REQUEST_FAILED_ACTION = confirmConciliationFailed;
 
 function* get({id}) {
     try {
@@ -216,12 +223,23 @@ function* batchRequest({conditionals}) {
 
 function* conciliation({orders}) {
     try {
-        const response = yield call(RECONCILIATION_REQUEST_API_REQUEST, orders)
+        const response = yield call(CONCILIATION_REQUEST_API_REQUEST, orders)
         showResponseMessage(response, "Operación exitosa!", response.error);
         yield put(CONCILIATION_REQUEST_SUCCESS_ACTION())
     } catch (error) {
         showResponseMessage({status: 500}, "Ocurrió un error!", error.message);
         yield put(CONCILIATION_REQUEST_FAILED_ACTION(error.message))
+    }
+}
+
+function* confirmConciliation({orders}) {
+    try {
+        const response = yield call(CONFIRM_CONCILIATION_REQUEST_API_REQUEST, orders)
+        showResponseMessage(response, "Operación exitosa!", response.error);
+        yield put(CONFIRM_CONCILIATION_REQUEST_SUCCESS_ACTION())
+    } catch (error) {
+        showResponseMessage({status: 500}, "Ocurrió un error!", error.message);
+        yield put(CONFIRM_CONCILIATION_REQUEST_FAILED_ACTION(error.message))
     }
 }
 
@@ -238,6 +256,7 @@ export function* watchOrder() {
     yield takeEvery(PRINT_ORDER, printOrder)
     yield takeEvery(PRINT_BATCH_REQUEST, batchRequest)
     yield takeEvery(CONCILIATION_REQUEST, conciliation)
+    yield takeEvery(CONFIRM_CONCILIATION_REQUEST, confirmConciliation)
 }
 
 function* orderSaga() {

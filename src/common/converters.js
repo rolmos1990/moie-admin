@@ -22,10 +22,24 @@ export const arrayToOptions = (array) => {
     }));
 }
 export const arrayToOptionsByFieldName = (array, fieldName) => {
-    return array.filter(item => item[fieldName] && item[fieldName] !== '').map(item => ({
-        label: item[fieldName],
+    return array.filter(item => getValue(item, fieldName) && getValue(item, fieldName) !== '').map(item => ({
+        label: getValue(item, fieldName),
         value: item.id
     }));
+}
+export const getValue = (node, fieldName) => {
+    if (fieldName.includes('.')) {
+        const sp = fieldName.split('.');
+        let value = node;
+        sp.foreach(field => {
+            if (null !== value[field] && value[field] !== undefined) {
+                value = value[field];
+            }
+        })
+        return value;
+    } else {
+        return node[fieldName];
+    }
 }
 export const getEmptyOptions = () => {
     return {label: '-', value: null};

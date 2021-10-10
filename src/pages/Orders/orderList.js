@@ -16,9 +16,11 @@ import {Button, Tooltip} from "@material-ui/core";
 import {doConciliation, doPrintBatchRequest, getOrders} from "../../store/order/actions";
 import OrderEdit from "./orderEdit";
 import Conditionals from "../../common/conditionals";
+import CustomModal from "../../components/Modal/CommosModal";
+import OrderConciliationForm from "./orderConciliationsForm";
 
 const OrderList = props => {
-    const {orders, meta, onGetOrders, refresh, customActions, conditionals, showAsModal, reconciliation} = props;
+    const {orders, meta, onGetOrders, refresh, customActions, conditionals, showAsModal, conciliation} = props;
     const [statesList, setStatesList] = useState([])
     const [filter, setFilter] = useState(false);
     const [conditional, setConditional] = useState(null);
@@ -27,6 +29,7 @@ const OrderList = props => {
     const [currentPage, setCurrentPage] = useState(null);
     const [filterable, setFilterable] = useState(true);
     const [conciliationView, setConciliationView] = useState(null);
+    const [openConfirmConciliationModal, setOpenConfirmConciliationModal] = useState(false);
 
     const pageOptions = {
         sizePerPage: DEFAULT_PAGE_LIMIT,
@@ -45,11 +48,10 @@ const OrderList = props => {
     }, [conciliationView])
 
     useEffect(() => {
-        if (conciliationView && !reconciliation.loading && reconciliation.success) {
+        if (conciliationView && !conciliation.loading && conciliation.success) {
             setConciliationView(false);
-
         }
-    }, [reconciliation])
+    }, [conciliation])
 
     useEffect(() => {
         onGetOrders(getConditionals());
@@ -160,6 +162,10 @@ const OrderList = props => {
 
     return (
         <Row>
+            <CustomModal title={"Confirmar Conciliados"} size="lg" showFooter={false} isOpen={openConfirmConciliationModal} onClose={() => setOpenConfirmConciliationModal(false)}>
+                <OrderConciliationForm onCloseModal={() => setOpenConfirmConciliationModal(false)}/>
+            </CustomModal>
+
             <TableFilter
                 onPressDisabled={() => setFilter(false)}
                 isActive={filter && filterable}
@@ -217,7 +223,12 @@ const OrderList = props => {
                                                                     </Tooltip>
                                                                     <Tooltip placement="bottom" title="Conciliar" aria-label="add">
                                                                         <Button color="primary" onClick={() => showConciliationView()}>
-                                                                            <i className="mdi mdi-list-status"> </i> Conciliar
+                                                                            <i className="mdi mdi-list-status"> </i>
+                                                                        </Button>
+                                                                    </Tooltip>
+                                                                    <Tooltip placement="bottom" title="Confirmar Conciliados" aria-label="add">
+                                                                        <Button color="primary" onClick={() => setOpenConfirmConciliationModal(true)}>
+                                                                            <i className="mdi mdi-check"> </i>
                                                                         </Button>
                                                                     </Tooltip>
                                                                     <Link to={"/orders/create"} className="btn btn-primary waves-effect waves-light text-light">
@@ -230,8 +241,8 @@ const OrderList = props => {
                                                                 <>
                                                                     <Tooltip placement="bottom" title="Aceptar" aria-label="add">
                                                                         <Button color="primary" onClick={() => sendToConciliation()} disabled={ordersSelected.length === 0}>
-                                                                            {!reconciliation.loading && <i className="mdi mdi-check"> </i>}
-                                                                            {reconciliation.loading && <i className="fa fa-spinner fa-spin"> </i>}
+                                                                            {!conciliation.loading && <i className="mdi mdi-check"> </i>}
+                                                                            {conciliation.loading && <i className="fa fa-spinner fa-spin"> </i>}
                                                                             Aceptar
                                                                         </Button>
                                                                     </Tooltip>
