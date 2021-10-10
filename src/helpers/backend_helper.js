@@ -91,7 +91,8 @@ const printOrderApi = id => get(`${url.ORDERS}/${id}/print`, {}, {});
 const resumeOrderApi = id => get(`${url.ORDERS}/${id}/boardResume`, {}, {});
 const updateOrderApi = (id, data) => put(`${url.ORDERS}/${id}`, data);
 const deleteOrderApi = (id) => del(`${url.ORDERS}/${id}`);
-const batchPrintRequestApi = (data) => get(`${url.ORDERS}/batch/printRequest`,{}, data);
+const batchPrintRequestApi = (data) => get(`${url.ORDERS}/batch/printRequest`, {}, data);
+const conciliationRequestApi = (data) => post(`${url.ORDERS}/conciliation`, data);
 
 //offices
 const fetchOfficesApi = params => get(url.OFFICES, {}, params);
@@ -166,6 +167,7 @@ export {
     registerCategoryApi,
     updateCategoryApi,
     catalogBatchPrintRequestApi,
+    conciliationRequestApi,
 
     fetchSizesApi,
     fetchSizeApi,

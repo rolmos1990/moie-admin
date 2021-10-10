@@ -1,11 +1,26 @@
 import {all, call, fork, put, takeEvery} from "redux-saga/effects"
 
 //Account Redux states
-import {GET_DELIVERY_METHODS, GET_DELIVERY_QUOTE, GET_ORDER, GET_ORDERS, GET_ORDERS_OFFICE, NEXT_STATUS_ORDER, PRINT_BATCH_REQUEST, PRINT_ORDER, REGISTER_ORDER, RESUME_ORDER, UPDATE_ORDER} from "./actionTypes"
+import {
+    CONCILIATION_REQUEST,
+    GET_DELIVERY_METHODS,
+    GET_DELIVERY_QUOTE,
+    GET_ORDER,
+    GET_ORDERS,
+    GET_ORDERS_OFFICE,
+    NEXT_STATUS_ORDER,
+    PRINT_BATCH_REQUEST,
+    PRINT_ORDER,
+    REGISTER_ORDER,
+    RESUME_ORDER,
+    UPDATE_ORDER
+} from "./actionTypes"
 
 import {
     customOrderFailed,
     customOrderSuccess,
+    doConciliationFailed,
+    doConciliationSuccess,
     getDeliveryMethodsFailed,
     getDeliveryMethodsSuccess,
     getDeliveryQuoteFailed,
@@ -28,6 +43,7 @@ import {
 
 import {
     batchPrintRequestApi,
+    conciliationRequestApi,
     fetchDeliveryMethodsApi,
     fetchDeliveryQuoteApi,
     fetchOrderApi,
@@ -60,6 +76,7 @@ const GET_API_REQUEST = fetchOrderApi;
 const POST_API_REQUEST = registerOrderApi;
 const PUT_API_REQUEST = updateOrderApi;
 const BATCH_REQUEST_API_REQUEST = batchPrintRequestApi;
+const RECONCILIATION_REQUEST_API_REQUEST = conciliationRequestApi;
 
 //actions
 const CUSTOM_SUCCESS_ACTION = customOrderSuccess;
@@ -77,6 +94,8 @@ const PRINT_BATCH_REQUEST_SUCCESS_ACTION = printBatchRequestSuccess;
 const PRINT_BATCH_REQUEST_FAILED_ACTION = printBatchRequestFailed;
 const LIST_OFFICE_SUCCESS_ACTION = getOrdersByOfficeSuccess;
 const LIST_OFFICE_FAILED_ACTION = getOrdersByOfficeFailed;
+const CONCILIATION_REQUEST_SUCCESS_ACTION = doConciliationSuccess;
+const CONCILIATION_REQUEST_FAILED_ACTION = doConciliationFailed;
 
 function* get({id}) {
     try {
@@ -195,6 +214,17 @@ function* batchRequest({conditionals}) {
     }
 }
 
+function* conciliation({orders}) {
+    try {
+        const response = yield call(RECONCILIATION_REQUEST_API_REQUEST, orders)
+        showResponseMessage(response, "Operación exitosa!", response.error);
+        yield put(CONCILIATION_REQUEST_SUCCESS_ACTION())
+    } catch (error) {
+        showResponseMessage({status: 500}, "Ocurrió un error!", error.message);
+        yield put(CONCILIATION_REQUEST_FAILED_ACTION(error.message))
+    }
+}
+
 export function* watchOrder() {
     yield takeEvery(ACTION_NAME_CREATE, register);
     yield takeEvery(ACTION_NAME_UPDATE, update);
@@ -207,6 +237,7 @@ export function* watchOrder() {
     yield takeEvery(RESUME_ORDER, resumeOrder)
     yield takeEvery(PRINT_ORDER, printOrder)
     yield takeEvery(PRINT_BATCH_REQUEST, batchRequest)
+    yield takeEvery(CONCILIATION_REQUEST, conciliation)
 }
 
 function* orderSaga() {

@@ -1,4 +1,7 @@
 import {
+    CONCILIATION_FAILED,
+    CONCILIATION_REQUEST,
+    CONCILIATION_SUCCESS,
     CUSTOM_ORDER_FAILED,
     CUSTOM_ORDER_SUCCESS,
     DO_BATCH_REQUEST,
@@ -73,6 +76,11 @@ const initialState = {
         conditionals: null,
         loading: false,
         doRequest: false
+    },
+    conciliation: {
+        error: null,
+        loading: false,
+        success: false
     }
 }
 
@@ -332,6 +340,36 @@ const order = (state = initialState, action) => {
             return {
                 ...state,
                 refresh: !state.refresh,
+            }
+        case CONCILIATION_REQUEST:
+            return {
+                ...state,
+                conciliation: {
+                    ...state.conciliation,
+                    error: null,
+                    loading: true,
+                    success: false
+                }
+            }
+        case CONCILIATION_SUCCESS:
+            return {
+                ...state,
+                conciliation: {
+                    ...state.conciliation,
+                    error: null,
+                    loading: false,
+                    success: true
+                }
+            }
+        case CONCILIATION_FAILED:
+            return {
+                ...state,
+                conciliation: {
+                    ...state.conciliation,
+                    error: action.error,
+                    loading: false,
+                    success: false
+                }
             }
         default:
             state = {...state}

@@ -1,4 +1,7 @@
 import {
+    CONCILIATION_FAILED,
+    CONCILIATION_REQUEST,
+    CONCILIATION_SUCCESS,
     CUSTOM_ORDER_FAILED,
     CUSTOM_ORDER_SUCCESS,
     DO_BATCH_REQUEST,
@@ -226,3 +229,16 @@ export const refreshOrders = () => {
         type: REFRESH_ORDER
     }
 }
+
+//RECONCILIATION
+export const doConciliation = (orders) => ({
+    type: CONCILIATION_REQUEST,
+    orders
+})
+export const doConciliationSuccess = () => ({
+    type: CONCILIATION_SUCCESS
+})
+export const doConciliationFailed = (error) => ({
+    type: CONCILIATION_FAILED,
+    error
+})
