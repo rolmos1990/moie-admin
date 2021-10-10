@@ -114,6 +114,7 @@ const deleteBillApi = (id) => del(`${url.BILLS}/${id}`);
 const confirmBillApi = (id) => post(`${url.BILLS}/${id}/confirm`);
 const addOrderBillApi = (id, data, params) => post(`${url.BILLS}/${id}/addOrder`, data, {params: params});
 const createCreditNoteApi = (id) => post(`${url.BILLS}/creditNote/${id}`, {}, {});
+const generateReportApi = (data) => post(`${url.BILLS}/generateReport`, data, {});
 
 //templates
 const fetchTemplatesApi = data => get(url.TEMPLATES, {}, data);
@@ -247,6 +248,7 @@ export {
     confirmBillApi,
     addOrderBillApi,
     createCreditNoteApi,
+    generateReportApi,
 
     fileOfficeTemplate
 }

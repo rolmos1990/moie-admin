@@ -12,6 +12,10 @@ import {
     GENERATE_CREDIT_NOTE,
     GENERATE_CREDIT_NOTE_FAILED,
     GENERATE_CREDIT_NOTE_SUCCESS,
+    GENERATE_REPORT_FAILED,
+    GENERATE_REPORT_REQUEST,
+    GENERATE_REPORT_RESTART,
+    GENERATE_REPORT_SUCCESS,
     GET_BILL,
     GET_BILL_FAILED,
     GET_BILL_SUCCESS,
@@ -206,5 +210,30 @@ export const createCreditNoteSuccess = () => {
 export const createCreditNoteFailed = () => {
     return {
         type: GENERATE_CREDIT_NOTE_FAILED
+    }
+}
+
+
+export const generateReportRestart = () => {
+    return {
+        type: GENERATE_REPORT_RESTART
+    }
+}
+export const generateReport = (data) => {
+    return {
+        type: GENERATE_REPORT_REQUEST,
+        data
+    }
+}
+export const generateReportSuccess = (data) => {
+    return {
+        type: GENERATE_REPORT_SUCCESS,
+        data
+    }
+}
+export const generateReportFailed = (error) => {
+    return {
+        type: GENERATE_REPORT_FAILED,
+        error
     }
 }

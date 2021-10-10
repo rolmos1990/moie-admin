@@ -9,6 +9,10 @@ import {
     GENERATE_CREDIT_NOTE,
     GENERATE_CREDIT_NOTE_FAILED,
     GENERATE_CREDIT_NOTE_SUCCESS,
+    GENERATE_REPORT_FAILED,
+    GENERATE_REPORT_REQUEST,
+    GENERATE_REPORT_RESTART,
+    GENERATE_REPORT_SUCCESS,
     GET_BILL,
     GET_BILL_FAILED,
     GET_BILL_SUCCESS,
@@ -41,6 +45,11 @@ const initialState = {
     creditNote: {
         loading: false,
         data: {}
+    },
+    report: {
+        loading: false,
+        error: null,
+        success: false,
     },
     refresh: false
 }
@@ -224,6 +233,50 @@ const bill = (state = initialState, action) => {
             state = {
                 ...state,
                 refresh: !state.refresh,
+            }
+            break
+        case GENERATE_REPORT_RESTART:
+            state = {
+                ...state,
+                report: {
+                    ...state.report,
+                    loading: false,
+                    error: null,
+                    success: false,
+                },
+            }
+            break
+        case GENERATE_REPORT_REQUEST:
+            state = {
+                ...state,
+                report: {
+                    ...state.report,
+                    loading: true,
+                    error: null,
+                    success: false,
+                },
+            }
+            break
+        case GENERATE_REPORT_SUCCESS:
+            state = {
+                ...state,
+                report: {
+                    ...state.report,
+                    loading: false,
+                    error: null,
+                    success: true,
+                },
+            }
+            break
+        case GENERATE_REPORT_FAILED:
+            state = {
+                ...state,
+                report: {
+                    ...state.report,
+                    loading: false,
+                    error: action.error,
+                    success: false,
+                },
             }
             break
         default:

@@ -290,16 +290,13 @@ OrderList.propTypes = {
 }
 
 const mapStateToProps = state => {
-    const {orders, loading, meta, refresh, reconciliation} = state.Order
+    const {orders, loading, meta, refresh, conciliation} = state.Order
     return {
         orders,
         loading,
         meta,
         refresh,
-        reconciliation,
-        reconciliationLoading: reconciliation.loading,
-        reconciliationError: reconciliation.error,
-        reconciliationSuccess: reconciliation.success
+        conciliation
     }
 }
 

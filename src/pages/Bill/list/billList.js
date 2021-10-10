@@ -16,6 +16,7 @@ import Conditionals from "../../../common/conditionals";
 import NoDataIndication from "../../../components/Common/NoDataIndication";
 import CustomModal from "../../../components/Modal/CommosModal";
 import OrderList from "../../Orders/orderList";
+import BillGenerateReportForm from "./BillsReportForm";
 
 const BillList = props => {
     const {states, bills, meta, getStates, onGetBills, loading, refresh} = props; //onDeleteBill,
@@ -24,6 +25,7 @@ const BillList = props => {
     const [conditional, setConditional] = useState(null);
     const [openOrdersModal, setOpenOrdersModal] = useState(false);
     const [orderListConditions, setOrderListConditions] = useState([]);
+    const [openReportModal, setOpenReportModal] = useState(false);
 
     const pageOptions = {
         sizePerPage: DEFAULT_PAGE_LIMIT,
@@ -92,6 +94,9 @@ const BillList = props => {
             <CustomModal title={"Agregar pedidos"} size="lg" showFooter={false} isOpen={openOrdersModal} onClose={onCloseModal}>
                 <OrderList customActions={onAcceptModal} showAsModal={true} conditionals={orderListConditions}/>
             </CustomModal>
+            <CustomModal title={"Generar Reporte"} showFooter={false} isOpen={openReportModal} onClose={() => setOpenReportModal(false)}>
+                <BillGenerateReportForm onCloseModal={(reload) => setOpenReportModal(false)}/>
+            </CustomModal>
             <Row>
 
                 <TableFilter
@@ -131,6 +136,11 @@ const BillList = props => {
                                                                     </Button>
                                                                 </Tooltip>
                                                             )}
+                                                            <Tooltip placement="bottom" title="Generar reporte" aria-label="add">
+                                                                <Button onClick={() => setOpenReportModal(true)}>
+                                                                    <i className="mdi mdi-file"> </i>
+                                                                </Button>
+                                                            </Tooltip>
                                                             <Button color="primary" className="btn-sm btn-rounded waves-effect waves-light" onClick={addOrders}>
                                                                 <i className="mdi mdi-plus"> </i> Generar Factura
                                                             </Button>
