@@ -94,6 +94,7 @@ const deleteOrderApi = (id) => del(`${url.ORDERS}/${id}`);
 const batchPrintRequestApi = (data) => get(`${url.ORDERS}/batch/printRequest`, {}, data);
 const conciliationRequestApi = (data) => post(`${url.ORDERS}/conciliation`, data);
 const confirmConciliationRequestApi = (data) => post(`${url.ORDERS}/ConfirmConciliation`, data);
+const postSaleGenerateReportApi = (data) => post(`${url.ORDERS}/generateReport`, data, {});
 
 //offices
 const fetchOfficesApi = params => get(url.OFFICES, {}, params);
@@ -171,6 +172,7 @@ export {
     catalogBatchPrintRequestApi,
     conciliationRequestApi,
     confirmConciliationRequestApi,
+    postSaleGenerateReportApi,
 
     fetchSizesApi,
     fetchSizeApi,

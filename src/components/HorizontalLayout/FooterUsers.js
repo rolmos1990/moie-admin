@@ -23,14 +23,14 @@ const FooterUsers = ({data}) => {
                 resp.data.filter(o => o.user && o.user.id).forEach(o => u.push({name: o.user.name, sales: o.origen, amount: priceFormat(o.totalAmount), image: avatar3}))
                 u = u.sort((a, b) => a.sales === b.sales ? 0 : (a.sales > b.sales) ? -1 : 1);
 
-
-                u.push(u[0])
-                u.push(u[0])
-                u.push(u[0])
-                u.push(u[0])
-                u.push(u[0])
-                u.push(u[0])
-                u.push(u[0])
+                //TO TEST
+                /*  u.push(u[0])
+                  u.push(u[0])
+                  u.push(u[0])
+                  u.push(u[0])
+                  u.push(u[0])
+                  u.push(u[0])
+                  u.push(u[0])*/
 
                 if (u.length > 6) {
                     u.splice(6);

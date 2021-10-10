@@ -1,19 +1,23 @@
 import {
-    GET_POST_SALES,
-    GET_POST_SALES_SUCCESS,
-    GET_POST_SALES_FAILED,
+    CUSTOM_POST_SALE_FAILED,
+    CUSTOM_POST_SALE_SUCCESS,
+    GENERATE_REPORT_FAILED,
+    GENERATE_REPORT_REQUEST,
+    GENERATE_REPORT_RESTART,
+    GENERATE_REPORT_SUCCESS,
     GET_POST_SALE,
-    GET_POST_SALE_SUCCESS,
     GET_POST_SALE_FAILED,
+    GET_POST_SALE_SUCCESS,
+    GET_POST_SALES,
+    GET_POST_SALES_FAILED,
+    GET_POST_SALES_SUCCESS,
+    NEXT_STATUS_POST_SALE,
+    REFRESH_POST_SALE,
     REGISTER_POST_SALE,
     REGISTER_POST_SALE_SUCCESS,
     UPDATE_POST_SALE,
-    UPDATE_POST_SALE_SUCCESS,
     UPDATE_POST_SALE_FAILED,
-    NEXT_STATUS_POST_SALE,
-    CUSTOM_POST_SALE_SUCCESS,
-    CUSTOM_POST_SALE_FAILED,
-    REFRESH_POST_SALE,
+    UPDATE_POST_SALE_SUCCESS,
 } from "./actionTypes";
 
 export const getOrders = (conditional, limit, offset) => ({
@@ -115,5 +119,29 @@ export const updateOrderFail = error => {
 export const refreshOrders = () => {
     return {
         type: REFRESH_POST_SALE
+    }
+}
+
+export const generateReportRestart = () => {
+    return {
+        type: GENERATE_REPORT_RESTART
+    }
+}
+export const generateReport = (data) => {
+    return {
+        type: GENERATE_REPORT_REQUEST,
+        data
+    }
+}
+export const generateReportSuccess = (data) => {
+    return {
+        type: GENERATE_REPORT_SUCCESS,
+        data
+    }
+}
+export const generateReportFailed = (error) => {
+    return {
+        type: GENERATE_REPORT_FAILED,
+        error
     }
 }

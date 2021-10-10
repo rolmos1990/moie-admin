@@ -1,17 +1,23 @@
 import {
-    RESUME_POST_SALE,
+    CUSTOM_POST_SALE_FAILED,
+    CUSTOM_POST_SALE_SUCCESS,
     GET_POST_SALE,
     GET_POST_SALE_FAILED,
     GET_POST_SALE_SUCCESS,
     GET_POST_SALES,
     GET_POST_SALES_FAILED,
     GET_POST_SALES_SUCCESS,
+    PRINT_POST_SALE,
+    REFRESH_POST_SALE,
     REGISTER_POST_SALE,
     REGISTER_POST_SALE_FAILED,
     REGISTER_POST_SALE_SUCCESS,
-    UPDATE_POST_SALE, UPDATE_POST_SALE_FAILED,
-    UPDATE_POST_SALE_SUCCESS, PRINT_POST_SALE, CUSTOM_POST_SALE_SUCCESS, CUSTOM_POST_SALE_FAILED, REFRESH_POST_SALE
+    RESUME_POST_SALE,
+    UPDATE_POST_SALE,
+    UPDATE_POST_SALE_FAILED,
+    UPDATE_POST_SALE_SUCCESS
 } from "./actionTypes";
+import {GENERATE_REPORT_FAILED, GENERATE_REPORT_REQUEST, GENERATE_REPORT_RESTART, GENERATE_REPORT_SUCCESS} from "../bill/actionTypes";
 
 const initialState = {
     error: "",
@@ -51,7 +57,12 @@ const initialState = {
         conditionals: null,
         loading: false,
         doRequest: false
-    }
+    },
+    report: {
+        loading: false,
+        error: null,
+        success: false,
+    },
 }
 
 const postSale = (state = initialState, action) => {
@@ -170,6 +181,50 @@ const postSale = (state = initialState, action) => {
                 ...state,
                 refresh: !state.refresh,
             }
+        case GENERATE_REPORT_RESTART:
+            state = {
+                ...state,
+                report: {
+                    ...state.report,
+                    loading: false,
+                    error: null,
+                    success: false,
+                },
+            }
+            break
+        case GENERATE_REPORT_REQUEST:
+            state = {
+                ...state,
+                report: {
+                    ...state.report,
+                    loading: true,
+                    error: null,
+                    success: false,
+                },
+            }
+            break
+        case GENERATE_REPORT_SUCCESS:
+            state = {
+                ...state,
+                report: {
+                    ...state.report,
+                    loading: false,
+                    error: null,
+                    success: true,
+                },
+            }
+            break
+        case GENERATE_REPORT_FAILED:
+            state = {
+                ...state,
+                report: {
+                    ...state.report,
+                    loading: false,
+                    error: action.error,
+                    success: false,
+                },
+            }
+            break
         default:
             state = {...state}
             break

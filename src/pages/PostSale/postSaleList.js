@@ -16,6 +16,7 @@ import Conditionals from "../../common/conditionals";
 import {importFile} from "../../store/office/actions";
 import CustomModal from "../../components/Modal/CommosModal";
 import PostSaleImportFileForm from "./PostSaleImportFileForm";
+import PostSaleReportForm from "./PostSaleReportForm";
 
 const PostSaleList = props => {
     const {orders, meta, onGetOrders, loading, refresh, customActions} = props;
@@ -25,6 +26,7 @@ const PostSaleList = props => {
     const [openImportFileModal, setOpenImportFileModal] = useState(false);
     const [currentPage, setCurrentPage] = useState(null);
     const [filterable, setFilterable] = useState(true);
+    const [openReportModal, setOpenReportModal] = useState(false);
 
     const pageOptions = {
         sizePerPage: DEFAULT_PAGE_LIMIT,
@@ -109,7 +111,11 @@ const PostSaleList = props => {
                                                                 <i className={"mdi mdi-file-excel"}> </i>
                                                             </Button>
                                                         </Tooltip>
-
+                                                        <Tooltip placement="bottom" title="Generar reporte" aria-label="add">
+                                                            <Button onClick={() => setOpenReportModal(true)}>
+                                                                <i className={"mdi mdi-file"}> </i>
+                                                            </Button>
+                                                        </Tooltip>
                                                     </div>
                                                 </Col>
                                             </Row>
@@ -142,8 +148,11 @@ const PostSaleList = props => {
                     </CardBody>
                 </Card>
             </Col>
-            <CustomModal title={"Importar"} showFooter={false} isOpen={openImportFileModal} onClose={()=> setOpenImportFileModal(false)}>
+            <CustomModal title={"Importar"} showFooter={false} isOpen={openImportFileModal} onClose={() => setOpenImportFileModal(false)}>
                 <PostSaleImportFileForm onCloseModal={(reload) => handleImportFile(reload)}/>
+            </CustomModal>
+            <CustomModal title={"Generar reporte"} showFooter={false} isOpen={openReportModal} onClose={() => setOpenReportModal(false)}>
+                <PostSaleReportForm onCloseModal={() => setOpenReportModal(false)}/>
             </CustomModal>
         </Row>
     )
