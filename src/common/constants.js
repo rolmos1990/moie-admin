@@ -61,12 +61,19 @@ export const ORDER_STATUS = {
 };
 
 export const OFFICE_STATUS = {
-    1: {name: 'Pendiente', color:'warning', colorCss: "#ffeb3b"},
-    2: {name: 'Finalizada', color:'success', colorCss: "#4caf50"},
-    3: {name: 'Cancelada', color:'danger', colorCss: "#2196f3"}
+    1: {name: 'Pendiente', color: 'warning', colorCss: "#ffeb3b"},
+    2: {name: 'Finalizada', color: 'success', colorCss: "#4caf50"},
+    3: {name: 'Cancelada', color: 'danger', colorCss: "#2196f3"}
 };
 
-export const ORDER_STATUS_LIST = Object.keys(ORDER_STATUS).map(s => ({label:ORDER_STATUS[s].name, value:s}))
-export const OFFICE_STATUS_LIST = Object.keys(OFFICE_STATUS).map(s => ({label:OFFICE_STATUS[s].name, value:s}))
+export const ORDER_STATUS_LIST = Object.keys(ORDER_STATUS).map(s => ({label: ORDER_STATUS[s].name, value: s}))
+export const OFFICE_STATUS_LIST = Object.keys(OFFICE_STATUS).map(s => ({label: OFFICE_STATUS[s].name, value: s}))
 
-export const DELIVERY_TYPES_LIST = Object.keys(DELIVERY_TYPES).map(s => ({label:DELIVERY_TYPES[s].label, value:s}))
+export const DELIVERY_TYPES_LIST = Object.keys(DELIVERY_TYPES).map(s => ({label: DELIVERY_TYPES[s].label, value: s}))
+
+
+export const REPORT_TYPES = {
+    BILLS: 'BILLS',
+    CONCILIATION: 'CONCILIATION',
+    POST_SALE: 'POST_SALE',
+};

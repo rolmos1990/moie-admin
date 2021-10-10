@@ -1,4 +1,4 @@
-import { all, fork } from "redux-saga/effects"
+import {all, fork} from "redux-saga/effects"
 
 //public
 import AccountSaga from "./auth/register/saga"
@@ -22,6 +22,7 @@ import OfficeSaga from "./office/saga"
 import BillSaga from "./bill/saga"
 import LayoutSaga from "./layout/saga"
 import PostSaleSaga from "./postSale/saga"
+import ReportSaga from "./reports/saga";
 
 export default function* rootSaga() {
   yield all([
@@ -45,6 +46,7 @@ export default function* rootSaga() {
     OfficeSaga(),
     BillSaga(),
     PostSaleSaga(),
+    ReportSaga(),
     ForgetSaga(),
     fork(LayoutSaga)
   ])

@@ -1,24 +1,29 @@
-import React, {useEffect} from "react"
+import React, {useEffect, useState} from "react"
 import {CardBody, Col, Label, Row} from "reactstrap"
 import {AvForm} from "availity-reactstrap-validation"
 import {Card} from "@material-ui/core";
 import {withRouter} from "react-router-dom"
 import {connect} from "react-redux";
 import PropTypes from "prop-types";
-import {generateReport, generateReportRestart} from "../../../store/bill/actions";
-import {FieldDate, FieldSelect} from "../../../components/Fields";
-import {DATE_MODES} from "../../../components/Fields/InputDate";
-import ButtonSubmit from "../../../components/Common/ButtonSubmit";
-import {formatDateToServer} from "../../../common/utils";
+import {FieldDate, FieldSelect} from "../../components/Fields";
+import {DATE_MODES} from "../../components/Fields/InputDate";
+import ButtonSubmit from "../../components/Common/ButtonSubmit";
+import {formatDateToServer} from "../../common/utils";
+import {DELIVERY_METHODS, REPORT_TYPES} from "../../common/constants";
+import {getEmptyOptions} from "../../common/converters";
+import {getDeliveryMethods} from "../../store/order/actions";
+import {generateReport, generateReportRestart} from "../../store/reports/actions";
 
-const types = [{label: 'Facturas electrónicas', value: 'FE'}, {label: 'Notas de crédito', value: 'NC'}];
+const ConciliationReportForm = ({onCloseModal, deliveryMethods, onGetDeliveryMethods, loading, error, success, onGenerateReport, onRestartReport}) => {
 
-const BillGenerateReportForm = ({onCloseModal, loading, error, success, onGenerateReport, onRestartReport}) => {
+    const [deliveryMethodList, setDeliveryMethodList] = useState([]);
+    const [deliveryMethod, setDeliveryMethod] = useState({});
 
     useEffect(() => {
         if (onRestartReport) {
             onRestartReport();
         }
+        if (onGetDeliveryMethods) onGetDeliveryMethods();
     }, [onRestartReport]);
 
     useEffect(() => {
@@ -27,9 +32,18 @@ const BillGenerateReportForm = ({onCloseModal, loading, error, success, onGenera
         }
     }, [success]);
 
+    useEffect(() => {
+        if (deliveryMethods && deliveryMethods.length > 0) {
+            setDeliveryMethod(deliveryMethods.find(op => op.name === DELIVERY_METHODS.INTERRAPIDISIMO).code);
+            setDeliveryMethodList([getEmptyOptions(),
+                ...deliveryMethods.filter(op => op.name === DELIVERY_METHODS.INTERRAPIDISIMO).map(op => ({label: op.name, value: op.code}))]
+            );
+        }
+    }, [deliveryMethods]);
+
     const handleValidSubmit = (e, values) => {
         const payload = {
-            type: values.type.value,
+            deliveryMethod: values.deliveryMethod.value,
             dateFrom: formatDateToServer(values.reportDate[0]),
             dateTo: formatDateToServer(values.reportDate[1])
         };
@@ -45,12 +59,12 @@ const BillGenerateReportForm = ({onCloseModal, loading, error, success, onGenera
                         <Row>
                             <Col md="12">
                                 <div className="mb-3">
-                                    <Label htmlFor="field_name">Tipo<span className="text-danger">*</span></Label>
+                                    <Label htmlFor="field_name">Metodo<span className="text-danger">*</span></Label>
                                     <FieldSelect
-                                        id={"type"}
-                                        name={"type"}
-                                        options={types}
-                                        defaultValue={types[0]}
+                                        id={"deliveryMethod"}
+                                        name={"deliveryMethod"}
+                                        options={deliveryMethodList}
+                                        defaultValue={deliveryMethod}
                                         required
                                     />
                                 </div>
@@ -85,20 +99,22 @@ const BillGenerateReportForm = ({onCloseModal, loading, error, success, onGenera
 }
 
 const mapStateToProps = state => {
-    const {report} = state.Bill;
-    return {loading: report.loading, error: report.error, success: report.success}
+    const {report} = state.PostSale;
+    const {deliveryMethods} = state.Order;
+    return {deliveryMethods: deliveryMethods.data, loading: report.loading, error: report.error, success: report.success}
 }
 
 const mapDispatchToProps = dispatch => ({
-    onGenerateReport: (data) => dispatch(generateReport(data)),
+    onGenerateReport: (data) => dispatch(generateReport(REPORT_TYPES.CONCILIATION, data)),
     onRestartReport: () => dispatch(generateReportRestart()),
+    onGetDeliveryMethods: (conditional = null, limit = 50, page) => dispatch(getDeliveryMethods(conditional, limit, page)),
 })
 
 export default withRouter(
-    connect(mapStateToProps, mapDispatchToProps)(BillGenerateReportForm)
+    connect(mapStateToProps, mapDispatchToProps)(ConciliationReportForm)
 )
 
-BillGenerateReportForm.propTypes = {
+ConciliationReportForm.propTypes = {
     error: PropTypes.any,
     onCloseModal: PropTypes.func
 }

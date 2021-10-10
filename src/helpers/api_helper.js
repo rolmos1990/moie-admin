@@ -39,7 +39,6 @@ export async function file(filename, url, config, params) {
   }catch(e){
     console.log("DEBUG -- error ", e.message);
   }
-
 }
 
 export async function get(url, config = {}, params = undefined) {

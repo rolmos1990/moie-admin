@@ -1,4 +1,4 @@
-import { combineReducers } from "redux"
+import {combineReducers} from "redux"
 
 // Front
 import Layout from "./layout/reducer"
@@ -26,6 +26,7 @@ import Comment from "./comment/reducer"
 import Office from "./office/reducer"
 import Bill from "./bill/reducer"
 import PostSale from "./postSale/reducer"
+import Report from "./reports/reducer"
 
 const rootReducer = combineReducers({
   // public
@@ -49,7 +50,8 @@ const rootReducer = combineReducers({
   Comment,
   Office,
   Bill,
-  PostSale
+  PostSale,
+  Report
 })
 
 export default rootReducer

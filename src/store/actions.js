@@ -20,6 +20,7 @@ export * from "./comment/actions"
 export * from "./office/actions"
 export * from "./bill/actions"
 export * from "./postSale/actions"
+export * from "./reports/actions"
 
 //System
 export * from "./location/actions"

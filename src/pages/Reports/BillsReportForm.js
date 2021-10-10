@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react"
+import React, {useEffect} from "react"
 import {CardBody, Col, Label, Row} from "reactstrap"
 import {AvForm} from "availity-reactstrap-validation"
 import {Card} from "@material-ui/core";
@@ -9,21 +9,17 @@ import {FieldDate, FieldSelect} from "../../components/Fields";
 import {DATE_MODES} from "../../components/Fields/InputDate";
 import ButtonSubmit from "../../components/Common/ButtonSubmit";
 import {formatDateToServer} from "../../common/utils";
-import {DELIVERY_METHODS, ORDER_STATUS_LIST} from "../../common/constants";
-import {getEmptyOptions} from "../../common/converters";
-import {getDeliveryMethods} from "../../store/order/actions";
-import {generateReport, generateReportRestart} from "../../store/postSale/actions";
+import {generateReport, generateReportRestart} from "../../store/reports/actions";
+import {REPORT_TYPES} from "../../common/constants";
 
-const PostSaleReportForm = ({onCloseModal, deliveryMethods, onGetDeliveryMethods, loading, error, success, onGenerateReport, onRestartReport}) => {
+const types = [{label: 'Facturas electrónicas', value: 'INVOICE'}, {label: 'Notas de crédito', value: 'CREDIT'}];
 
-    const [deliveryMethodList, setDeliveryMethodList] = useState([]);
-    const [deliveryMethod, setDeliveryMethod] = useState({});
+const BillsReportForm = ({onCloseModal, loading, error, success, onGenerateReport, onRestartReport}) => {
 
     useEffect(() => {
         if (onRestartReport) {
             onRestartReport();
         }
-        if (onGetDeliveryMethods) onGetDeliveryMethods();
     }, [onRestartReport]);
 
     useEffect(() => {
@@ -32,19 +28,9 @@ const PostSaleReportForm = ({onCloseModal, deliveryMethods, onGetDeliveryMethods
         }
     }, [success]);
 
-    useEffect(() => {
-        if (deliveryMethods && deliveryMethods.length > 0) {
-            setDeliveryMethod(deliveryMethods.find(op => op.name === DELIVERY_METHODS.INTERRAPIDISIMO).code);
-            setDeliveryMethodList([getEmptyOptions(),
-                ...deliveryMethods.filter(op => op.name === DELIVERY_METHODS.INTERRAPIDISIMO).map(op => ({label: op.name, value: op.code}))]
-            );
-        }
-    }, [deliveryMethods]);
-
     const handleValidSubmit = (e, values) => {
         const payload = {
-            status: values._status.value,
-            deliveryMethod: values.deliveryMethod.value,
+            type: values.type.value,
             dateFrom: formatDateToServer(values.reportDate[0]),
             dateTo: formatDateToServer(values.reportDate[1])
         };
@@ -58,26 +44,14 @@ const PostSaleReportForm = ({onCloseModal, deliveryMethods, onGetDeliveryMethods
                 <Card>
                     <CardBody>
                         <Row>
-                            <Col md="6">
+                            <Col md="12">
                                 <div className="mb-3">
-                                    <Label htmlFor="field_name">Metodo<span className="text-danger">*</span></Label>
+                                    <Label htmlFor="field_name">Tipo<span className="text-danger">*</span></Label>
                                     <FieldSelect
-                                        id={"deliveryMethod"}
-                                        name={"deliveryMethod"}
-                                        options={deliveryMethodList}
-                                        defaultValue={deliveryMethod}
-                                        required
-                                    />
-                                </div>
-                            </Col>
-                            <Col md="6">
-                                <div className="mb-3">
-                                    <Label htmlFor="field_name">Estatus<span className="text-danger">*</span></Label>
-                                    <FieldSelect
-                                        id={"_status"}
-                                        name={"_status"}
-                                        options={ORDER_STATUS_LIST}
-                                        defaultValue={ORDER_STATUS_LIST[0]}
+                                        id={"type"}
+                                        name={"type"}
+                                        options={types}
+                                        defaultValue={types[0]}
                                         required
                                     />
                                 </div>
@@ -112,22 +86,20 @@ const PostSaleReportForm = ({onCloseModal, deliveryMethods, onGetDeliveryMethods
 }
 
 const mapStateToProps = state => {
-    const {report} = state.PostSale;
-    const {deliveryMethods} = state.Order;
-    return {deliveryMethods: deliveryMethods.data, loading: report.loading, error: report.error, success: report.success}
+    const {report} = state.Bill;
+    return {loading: report.loading, error: report.error, success: report.success}
 }
 
 const mapDispatchToProps = dispatch => ({
-    onGenerateReport: (data) => dispatch(generateReport(data)),
+    onGenerateReport: (data) => dispatch(generateReport(REPORT_TYPES.BILLS, data)),
     onRestartReport: () => dispatch(generateReportRestart()),
-    onGetDeliveryMethods: (conditional = null, limit = 50, page) => dispatch(getDeliveryMethods(conditional, limit, page)),
 })
 
 export default withRouter(
-    connect(mapStateToProps, mapDispatchToProps)(PostSaleReportForm)
+    connect(mapStateToProps, mapDispatchToProps)(BillsReportForm)
 )
 
-PostSaleReportForm.propTypes = {
+BillsReportForm.propTypes = {
     error: PropTypes.any,
     onCloseModal: PropTypes.func
 }

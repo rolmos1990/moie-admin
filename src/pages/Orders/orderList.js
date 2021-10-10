@@ -18,6 +18,7 @@ import OrderEdit from "./orderEdit";
 import Conditionals from "../../common/conditionals";
 import CustomModal from "../../components/Modal/CommosModal";
 import OrderConciliationForm from "./orderConciliationsForm";
+import ConciliationReportForm from "../Reports/ConciliationReportForm";
 
 const OrderList = props => {
     const {orders, meta, onGetOrders, refresh, customActions, conditionals, showAsModal, conciliation} = props;
@@ -30,6 +31,7 @@ const OrderList = props => {
     const [filterable, setFilterable] = useState(true);
     const [conciliationView, setConciliationView] = useState(null);
     const [openConfirmConciliationModal, setOpenConfirmConciliationModal] = useState(false);
+    const [openReportConciliationModal, setOpenReportConciliationModal] = useState(false);
 
     const pageOptions = {
         sizePerPage: DEFAULT_PAGE_LIMIT,
@@ -165,6 +167,9 @@ const OrderList = props => {
             <CustomModal title={"Confirmar Conciliados"} size="lg" showFooter={false} isOpen={openConfirmConciliationModal} onClose={() => setOpenConfirmConciliationModal(false)}>
                 <OrderConciliationForm onCloseModal={() => setOpenConfirmConciliationModal(false)}/>
             </CustomModal>
+            <CustomModal title={"Generar reporte conciliados"} showFooter={false} isOpen={openReportConciliationModal} onClose={() => setOpenReportConciliationModal(false)}>
+                <ConciliationReportForm onCloseModal={() => setOpenReportConciliationModal(false)}/>
+            </CustomModal>
 
             <TableFilter
                 onPressDisabled={() => setFilter(false)}
@@ -229,6 +234,11 @@ const OrderList = props => {
                                                                     <Tooltip placement="bottom" title="Confirmar Conciliados" aria-label="add">
                                                                         <Button color="primary" onClick={() => setOpenConfirmConciliationModal(true)}>
                                                                             <i className="mdi mdi-check"> </i>
+                                                                        </Button>
+                                                                    </Tooltip>
+                                                                    <Tooltip placement="bottom" title="Generar reporte conciliados" aria-label="add">
+                                                                        <Button onClick={() => setOpenReportConciliationModal(true)}>
+                                                                            <i className={"mdi mdi-file"}> </i>
                                                                         </Button>
                                                                     </Tooltip>
                                                                     <Link to={"/orders/create"} className="btn btn-primary waves-effect waves-light text-light">

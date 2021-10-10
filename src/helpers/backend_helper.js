@@ -118,17 +118,21 @@ const addOrderBillApi = (id, data, params) => post(`${url.BILLS}/${id}/addOrder`
 const createCreditNoteApi = (id) => post(`${url.BILLS}/creditNote/${id}`, {}, {});
 const generateReportApi = (data) => post(`${url.BILLS}/generateReport`, data, {});
 
+//REPORTS
+const billReportApi = (data) => get(`${url.BILLS}/billReport`, {header: 'content-type: application/pdf'}, data);
+const postSaleReportApi = (data) => get(`${url.ORDERS}/postSaleReport`, {header: 'content-type: application/pdf'}, data);
+const conciliationReportApi = (data) => get(`${url.ORDERS}/conciliationReport`, {header: 'content-type: application/pdf'}, data);
+const fileOfficeTemplate = (filename, id) => file(filename, `${url.OFFICES}/${id}/getTemplate`, {header: 'content-type: application/vnd.ms-excel'});
+
 //templates
 const fetchTemplatesApi = data => get(url.TEMPLATES, {}, data);
-const fetchTemplateApi = (id) => get(`${url.TEMPLATES}/${id}`,{});
+const fetchTemplateApi = (id) => get(`${url.TEMPLATES}/${id}`, {});
 const registerTemplateApi = data => post(url.TEMPLATES, data);
 const updateTemplateApi = (id, data) => put(`${url.TEMPLATES}/${id}`, data);
 
-const fileOfficeTemplate = (filename, id) => file(filename, `${url.OFFICES}/${id}/getTemplate`, {header: 'content-type: application/vnd.ms-excel'});
 
-
-const fetchDeliveryMethodsApi = () => get(`${url.DELIVERY_METHODS}`,{});
-const fetchDeliveryQuoteApi = (data) => post(`${url.DELIVERY_METHODS}/quote`,data);
+const fetchDeliveryMethodsApi = () => get(`${url.DELIVERY_METHODS}`, {});
+const fetchDeliveryQuoteApi = (data) => post(`${url.DELIVERY_METHODS}/quote`, data);
 
 const fetchMunicipalitiesApi = data => get(url.MUNICIPALITIES, {}, data);
 const fetchMunicipalityApi = (id) => get(`${url.MUNICIPALITIES}/${id}`,{});
@@ -254,5 +258,9 @@ export {
     createCreditNoteApi,
     generateReportApi,
 
-    fileOfficeTemplate
+    fileOfficeTemplate,
+
+    billReportApi,
+    postSaleReportApi,
+    conciliationReportApi,
 }

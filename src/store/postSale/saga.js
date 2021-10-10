@@ -137,7 +137,7 @@ function* generateReport({data}) {
         showResponseMessage(response, "Reporte creado!", response.error);
         yield put(GENERATE_REPORT_SUCCESS_ACTION(response));
     } catch (error) {
-        yield put(GENERATE_REPORT_FAILED_ACTION(error.message || error.response.data.error))
+        yield put(GENERATE_REPORT_FAILED_ACTION(error.message || error.response.data.error));
         showResponseMessage({status: 500}, "", error.message || error.response.data.error);
     }
 }

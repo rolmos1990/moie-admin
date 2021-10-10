@@ -16,7 +16,7 @@ import Conditionals from "../../../common/conditionals";
 import NoDataIndication from "../../../components/Common/NoDataIndication";
 import CustomModal from "../../../components/Modal/CommosModal";
 import OrderList from "../../Orders/orderList";
-import BillGenerateReportForm from "./BillsReportForm";
+import BillGenerateReportForm from "../../Reports/BillsReportForm";
 
 const BillList = props => {
     const {states, bills, meta, getStates, onGetBills, loading, refresh} = props; //onDeleteBill,

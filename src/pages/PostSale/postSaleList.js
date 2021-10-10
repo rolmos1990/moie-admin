@@ -16,7 +16,7 @@ import Conditionals from "../../common/conditionals";
 import {importFile} from "../../store/office/actions";
 import CustomModal from "../../components/Modal/CommosModal";
 import PostSaleImportFileForm from "./PostSaleImportFileForm";
-import PostSaleReportForm from "./PostSaleReportForm";
+import PostSaleReportForm from "../Reports/PostSaleReportForm";
 
 const PostSaleList = props => {
     const {orders, meta, onGetOrders, loading, refresh, customActions} = props;
