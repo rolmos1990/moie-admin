@@ -24,13 +24,11 @@ const FooterUsers = ({data}) => {
                 u = u.sort((a, b) => a.sales === b.sales ? 0 : (a.sales > b.sales) ? -1 : 1);
 
                 //TO TEST
-                /*  u.push(u[0])
-                  u.push(u[0])
-                  u.push(u[0])
-                  u.push(u[0])
-                  u.push(u[0])
-                  u.push(u[0])
-                  u.push(u[0])*/
+/*                [1,2,3,4,5,6,7,8,9].forEach(item => {
+                    const user = {...u[0]};
+                    user.image = "https://picsum.photos/200/300?random=" + item;
+                    u.push(user);
+                });*/
 
                 if (u.length > 6) {
                     u.splice(6);
