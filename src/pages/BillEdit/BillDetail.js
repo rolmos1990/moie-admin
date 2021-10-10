@@ -42,7 +42,6 @@ const BillDetail = (props) => {
                             </div>
                             <div className={"mb-3 float-md-end"}>
                                 <div className="button-items">
-
                                     {bill.status === 'PENDING' && (
                                         <Tooltip placement="bottom" title="Generar nota de crédito" aria-label="add">
                                             <button type="button" color="primary" className="btn-sm btn btn-outline-info waves-effect waves-light" onClick={() => createCreditNote()}>

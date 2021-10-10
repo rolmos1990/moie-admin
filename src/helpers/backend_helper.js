@@ -115,7 +115,7 @@ const updateBillApi = (id, data) => put(`${url.BILLS}/${id}`, data);
 const deleteBillApi = (id) => del(`${url.BILLS}/${id}`);
 const confirmBillApi = (id) => post(`${url.BILLS}/${id}/confirm`);
 const addOrderBillApi = (id, data, params) => post(`${url.BILLS}/${id}/addOrder`, data, {params: params});
-const createCreditNoteApi = (id) => post(`${url.BILLS}/creditNote/${id}`, {}, {});
+const createCreditNoteApi = (id) => post(`${url.BILLS}/CreditMemo/${id}`, {}, {});
 const generateReportApi = (data) => post(`${url.BILLS}/generateReport`, data, {});
 
 //REPORTS

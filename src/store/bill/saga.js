@@ -173,8 +173,8 @@ function* createCreditNote({id}) {
         yield put(CREDIT_NOTE_SUCCESS_ACTION(response));
         yield put(refreshList())
     } catch (error) {
-        yield put(CREDIT_NOTE_FAILED_ACTION(error))
-        showResponseMessage({status: error.response.data.code}, "", error.response.data.error);
+        yield put(CREDIT_NOTE_FAILED_ACTION(error.message || error.response.data.error))
+        showResponseMessage({status: 500}, "", error.message || error.response.data.error);
     }
 }
 
