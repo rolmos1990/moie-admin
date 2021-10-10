@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react"
 import PropTypes from 'prop-types'
 import {Link} from "react-router-dom"
-import {Card, CardBody, Col, Dropdown, DropdownMenu, DropdownToggle, Row} from "reactstrap"
+import {Col, Dropdown, DropdownMenu, DropdownToggle, Row} from "reactstrap"
 import SimpleBar from "simplebar-react"
 
 //Import images
@@ -45,7 +45,7 @@ const UsersSalesDropdown = ({data}) => {
     return (
         <>
             {/* > 1832px */}
-            <div className="user-sales-list">
+            {/*<div className="user-sales-list">
                 <Card>
                     <CardBody className="p-2">
                         <Row className="align-items-center">
@@ -76,7 +76,7 @@ const UsersSalesDropdown = ({data}) => {
                         </div>
                     </CardBody>
                 </Card>
-            </div>
+            </div>*/}
 
             {/* < 1832px */}
             <div className="user-sales-dropdown-menu">
