@@ -28,6 +28,7 @@ import {addOrderBillApi, confirmBillApi, createCreditNoteApi, deleteBillApi, fet
 
 import Conditionals from "../../common/conditionals";
 import {showResponseMessage} from "../../helpers/service";
+import {BILL_MEMO_TYPES} from "../../common/constants";
 
 /**
  * *  Configuración de CRUD Saga (Realizar configuración para cada uno de las replicas)
@@ -168,7 +169,7 @@ function* billOrderAdd({ payload: { id, data, conditional, history } }) {
 function* createCreditNote({id}) {
     try {
         console.log('createCreditNote', id)
-        const response = yield call(CREDIT_NOTE_API_REQUEST, id);
+        const response = yield call(CREDIT_NOTE_API_REQUEST, id, {type: BILL_MEMO_TYPES.CREDIT});
         showResponseMessage(response, "Nota de credito creada!", response.error);
         yield put(CREDIT_NOTE_SUCCESS_ACTION(response));
         yield put(refreshList())

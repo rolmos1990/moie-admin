@@ -80,7 +80,7 @@ const municipalityColumns = (onDelete = false) => [
         filterType: "text",
         formatter: (cellContent, item) => (
             <>
-                {item?.creditNote?.id}
+                {item?.creditNote?.id ? "Si" : "No"}
             </>
         ),
     },

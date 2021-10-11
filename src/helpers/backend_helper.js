@@ -94,7 +94,7 @@ const deleteOrderApi = (id) => del(`${url.ORDERS}/${id}`);
 const batchPrintRequestApi = (data) => get(`${url.ORDERS}/batch/printRequest`, {}, data);
 const conciliationRequestApi = (data) => post(`${url.ORDERS}/conciliation`, data);
 const confirmConciliationRequestApi = (data) => post(`${url.ORDERS}/ConfirmConciliation`, data);
-const postSaleGenerateReportApi = (data) => post(`${url.ORDERS}/generateReport`, data, {});
+const postSaleGenerateReportApi = (data) => post(`${url.ORDERS}/generate/report`, data, {});
 
 //offices
 const fetchOfficesApi = params => get(url.OFFICES, {}, params);
@@ -115,12 +115,12 @@ const updateBillApi = (id, data) => put(`${url.BILLS}/${id}`, data);
 const deleteBillApi = (id) => del(`${url.BILLS}/${id}`);
 const confirmBillApi = (id) => post(`${url.BILLS}/${id}/confirm`);
 const addOrderBillApi = (id, data, params) => post(`${url.BILLS}/${id}/addOrder`, data, {params: params});
-const createCreditNoteApi = (id) => post(`${url.BILLS}/CreditMemo/${id}`, {}, {});
+const createCreditNoteApi = (id, data) => post(`${url.BILLS}/CreditMemo/${id}`, data, {});
 const generateReportApi = (data) => post(`${url.BILLS}/generateReport`, data, {});
 
 //REPORTS
 const billReportApi = (data) => get(`${url.BILLS}/billReport`, {header: 'content-type: application/pdf'}, data);
-const postSaleReportApi = (data) => get(`${url.ORDERS}/postSaleReport`, {header: 'content-type: application/pdf'}, data);
+const postSaleReportApi = (data) => get(`${url.ORDERS}/gen/postSaleReport`, {header: 'content-type: application/pdf'}, data);
 const conciliationReportApi = (data) => get(`${url.ORDERS}/conciliationReport`, {header: 'content-type: application/pdf'}, data);
 const fileOfficeTemplate = (filename, id) => file(filename, `${url.OFFICES}/${id}/getTemplate`, {header: 'content-type: application/vnd.ms-excel'});
 

@@ -9,6 +9,7 @@ import {formatDate} from "../../common/utils";
 import NoDataIndication from "../../components/Common/NoDataIndication";
 import {createCreditNote, getBill} from "../../store/bill/actions";
 import {ConfirmationModalAction} from "../../components/Modal/ConfirmationModal";
+import {BILL_STATUS} from "../../common/constants";
 
 const BillDetail = (props) => {
 
@@ -42,7 +43,7 @@ const BillDetail = (props) => {
                             </div>
                             <div className={"mb-3 float-md-end"}>
                                 <div className="button-items">
-                                    {bill.status === 'PENDING' && (
+                                    {bill.status === BILL_STATUS.SENT && (
                                         <Tooltip placement="bottom" title="Generar nota de crédito" aria-label="add">
                                             <button type="button" color="primary" className="btn-sm btn btn-outline-info waves-effect waves-light" onClick={() => createCreditNote()}>
                                                 <i className={`uil-bill text-danger`}> </i>
@@ -66,10 +67,6 @@ const BillDetail = (props) => {
                                         <label>ID: </label>
                                         <span className="p-1">{bill.id}</span>
                                     </Col>
-                                    {/* <Col md={6}>
-                                        <label>Tipo: </label>
-                                        <span className="p-1">{bill.type}</span>
-                                    </Col>*/}
                                 </Row>
                                 <Row>
                                     <Col md={6}>

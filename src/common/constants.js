@@ -77,3 +77,14 @@ export const REPORT_TYPES = {
     CONCILIATION: 'CONCILIATION',
     POST_SALE: 'POST_SALE',
 };
+
+export const BILL_STATUS = {
+    PENDING: 'PENDING',
+    SENT: 'Enviada'
+};
+
+export const BILL_MEMO_TYPES = {
+    INVOICE : 'InvoiceType',
+    CREDIT : 'CreditNoteType',
+    DEBIT : 'DebitNoteType'
+};
