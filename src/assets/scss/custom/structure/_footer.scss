@@ -3,15 +3,16 @@
 // 
 
 .footer {
-    bottom: 0;
-    padding: 10px calc(#{$grid-gutter-width} / 2);
-    position: fixed;
-    right: 0;
-    color: $footer-color;
-    left: 250px;
-    height: $footer-height;
-    box-shadow: 0 0px 4px rgba(15, 34, 58, .12);
-    background: white;
+  bottom: 0;
+  padding: 10px calc(#{$grid-gutter-width} / 2);
+  position: fixed;
+  right: 0;
+  color: $footer-color;
+  left: 250px;
+  height: $footer-height;
+  box-shadow: 0 0px 4px rgba(15, 34, 58, .12);
+  background: white;
+  z-index: 5;
 }
   
 @media (max-width: 992px) {

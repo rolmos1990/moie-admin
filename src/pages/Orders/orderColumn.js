@@ -4,21 +4,21 @@ import {StatusField} from "../../components/StatusField";
 import {buildOptions} from "../../common/converters";
 import {DELIVERY_METHODS_LIST, ORDER_STATUS, ORDER_STATUS_LIST} from "../../common/constants";
 import Conditionals from "../../common/conditionals";
-import {formatDate} from "../../common/utils";
+import {formatDate, priceFormat} from "../../common/utils";
 import {Tooltip} from "@material-ui/core";
 import {CUSTOMER} from "../../helpers/url_helper";
 
 const statusOptions = buildOptions(ORDER_STATUS_LIST);
 const deliveryMethodsOptions = buildOptions(DELIVERY_METHODS_LIST);
 
-const orderColumns = (onSelectedOrder, showAsModal) => {
+const orderColumns = (onSelectedOrder, showAsModal, conciliationView) => {
     let columns = [
         {
             text: "Pedido #",
             dataField: "id",
             sort: true,
             formatter: (cellContent, item) => {
-                if(onSelectedOrder){
+                if (onSelectedOrder) {
                     return (
                         <button className="btn btn-outline-default" onClick={() => onSelectedOrder(item.id)}>
                             <b className="text-info">{item.id}</b>
@@ -109,7 +109,7 @@ const orderColumns = (onSelectedOrder, showAsModal) => {
 
     ];
 
-    if(!showAsModal){
+    if (!showAsModal && !conciliationView) {
         columns.push({
             dataField: "menu",
             isDummyField: true,
@@ -123,6 +123,24 @@ const orderColumns = (onSelectedOrder, showAsModal) => {
                     </li>
                 </ul>
             ),
+        });
+    }
+
+    if (conciliationView) {
+        columns.push({
+            text: "Precio",
+            dataField: "totalAmount",
+            sort: true,
+            headerStyle: (colum, colIndex) => {
+                return {textAlign: 'center'};
+            },
+            formatter: (cellContent, item) => (
+                <div className="text-right">
+                    {priceFormat(item.totalAmount, "", true)}
+                </div>
+            ),
+            filter: true,
+            filterType: "number",
         });
     }
 

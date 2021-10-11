@@ -28,15 +28,16 @@ export const arrayToOptionsByFieldName = (array, fieldName) => {
     }));
 }
 export const getValue = (node, fieldName) => {
+    console.log(node, fieldName)
     if (fieldName.includes('.')) {
         const sp = fieldName.split('.');
         let value = node;
-        sp.foreach(field => {
+        sp.forEach(field => {
             if (null !== value[field] && value[field] !== undefined) {
                 value = value[field];
             }
         })
-        return value;
+        return typeof value === 'object' ? '' : value;
     } else {
         return node[fieldName];
     }

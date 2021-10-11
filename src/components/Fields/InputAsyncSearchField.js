@@ -4,13 +4,13 @@ import AsyncSelect from 'react-select/async';
 import {FormGroup, FormText} from "reactstrap";
 import './style.scss';
 import {getData} from "../../helpers/service";
-import {arrayToOptions, arrayToOptionsByFieldName, getEmptyOptions} from "../../common/converters";
+import {arrayToOptionsByFieldName, getEmptyOptions} from "../../common/converters";
 import {AvBaseInput} from "availity-reactstrap-validation";
 import messages from "./messages";
 import Conditionals from "../../common/conditionals";
 
 const InputAsyncSearchField = (props) => {
-    const {defaultValue, conditionalOptions} = props;
+    const {defaultValue, conditionalOptions, defaultConditions} = props;
     const [selected, setSelected] = useState(null);
 
     useEffect(() => {
@@ -32,6 +32,7 @@ const InputAsyncSearchField = (props) => {
                 }
             }}
             conditionalOptions={conditionalOptions}
+            defaultConditions={defaultConditions}
         />
     )
 }
@@ -43,7 +44,7 @@ InputAsyncSearchField.propTypes = {
 
 class AvAsyncSearchInput extends AvBaseInput {
     render() {
-        const {name, value, onChange, validate,hasWild, urlStr, conditionalOptions, placeholder, helpMessage} = this.props;
+        const {name, value, onChange, validate, hasWild, urlStr, conditionalOptions, defaultConditions, placeholder, helpMessage} = this.props;
         const validation = this.context.FormCtrl.getInputState(this.props.name);
         const feedback = validation.errorMessage ? (<div className="invalid-feedback" style={{display: "block"}}>{validation.errorMessage}</div>) : null;
         const help = helpMessage ? (<FormText>{helpMessage}</FormText>) : null;
@@ -66,8 +67,8 @@ class AvAsyncSearchInput extends AvBaseInput {
                                 cond.operator = Conditionals.OPERATORS.LIKE;
                                 textSearch = textSearch.replace('*', '')
                             }
-                            return getData(urlStr, textSearch, cond).then(response => {
-                                const fieldName = conditionalOptions && conditionalOptions.fieldName ? conditionalOptions.fieldName:'name';
+                            return getData(urlStr, textSearch, cond, defaultConditions).then(response => {
+                                const fieldName = conditionalOptions && conditionalOptions.fieldName ? conditionalOptions.fieldName : 'name';
                                 const options = arrayToOptionsByFieldName(response.data, fieldName);
                                 options.unshift(getEmptyOptions());
                                 return options

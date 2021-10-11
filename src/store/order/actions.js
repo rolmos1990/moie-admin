@@ -4,6 +4,7 @@ import {
     CONCILIATION_SUCCESS,
     CONFIRM_CONCILIATION_FAILED,
     CONFIRM_CONCILIATION_REQUEST,
+    CONFIRM_CONCILIATION_RESTART,
     CONFIRM_CONCILIATION_SUCCESS,
     CUSTOM_ORDER_FAILED,
     CUSTOM_ORDER_SUCCESS,
@@ -260,4 +261,7 @@ export const confirmConciliationSuccess = () => ({
 export const confirmConciliationFailed = (error) => ({
     type: CONFIRM_CONCILIATION_FAILED,
     error
+})
+export const confirmConciliationRestart = () => ({
+    type: CONFIRM_CONCILIATION_RESTART
 })

@@ -32,6 +32,7 @@ const OrderList = props => {
     const [conciliationView, setConciliationView] = useState(null);
     const [openConfirmConciliationModal, setOpenConfirmConciliationModal] = useState(false);
     const [openReportConciliationModal, setOpenReportConciliationModal] = useState(false);
+    const [columns, setColumns] = useState(orderColumns(setOrderSelected, showAsModal, false));
 
     const pageOptions = {
         sizePerPage: DEFAULT_PAGE_LIMIT,
@@ -47,6 +48,7 @@ const OrderList = props => {
         if (null !== conciliationView) {
             onFilterAction(conditional);
         }
+        setColumns(orderColumns(setOrderSelected, showAsModal, conciliationView));
     }, [conciliationView])
 
     useEffect(() => {
@@ -127,8 +129,6 @@ const OrderList = props => {
         return [...cond, ...extConditions];
     }
 
-    const columns = orderColumns(setOrderSelected, showAsModal);
-
     var selectRowProp = {
         mode: "checkbox",
         clickToSelect: true,
@@ -196,7 +196,8 @@ const OrderList = props => {
                                                     <div className="form-inline mb-3">
                                                         <div className="search-box ms-2">
                                                             <h4 className="text-info">
-                                                                <i className="uil-shopping-cart-alt me-2"></i> {conciliationView ? 'Conciliar ' : ''} Pedidos
+                                                                <i className="uil-shopping-cart-alt me-2"></i>
+                                                                {conciliationView ? `Conciliar pedidos (${ordersSelected.length})` : 'Pedidos'}
                                                             </h4>
                                                         </div>
                                                     </div>
@@ -226,7 +227,7 @@ const OrderList = props => {
                                                                             <i className="mdi mdi-printer"> </i>
                                                                         </Button>
                                                                     </Tooltip>
-                                                                    <Tooltip placement="bottom" title="Conciliar" aria-label="add">
+                                                                    <Tooltip placement="bottom" title="Conciliar pedidos" aria-label="add">
                                                                         <Button color="primary" onClick={() => showConciliationView()}>
                                                                             <i className="mdi mdi-list-status"> </i>
                                                                         </Button>

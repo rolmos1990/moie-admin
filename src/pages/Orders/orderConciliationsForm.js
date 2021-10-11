@@ -5,29 +5,46 @@ import {Card, Tooltip} from "@material-ui/core";
 import {withRouter} from "react-router-dom"
 import {connect} from "react-redux";
 import PropTypes from "prop-types";
-import {FieldAsyncSelect, FieldSelect} from "../../components/Fields";
+import {FieldAsyncSelect, FieldSelect, FieldText} from "../../components/Fields";
 import ButtonSubmit from "../../components/Common/ButtonSubmit";
 import {ORDERS} from "../../helpers/url_helper";
 import {getEmptyOptions} from "../../common/converters";
-import {confirmConciliation, getOrder, restartOrder} from "../../store/order/actions";
+import {confirmConciliation, confirmConciliationRestart, getOrder, restartOrder} from "../../store/order/actions";
 import Conditionals from "../../common/conditionals";
 import {priceFormat} from "../../common/utils";
+import {StatusField} from "../../components/StatusField";
+import {ORDER_STATUS} from "../../common/constants";
 
-const searchByOptions = [{label: "Pedido", value: "ID"}, {label: "Guia", value: "GUIA"}];
+const searchByOptions = [{label: "Pedido", value: "ID"}, {label: "Guia", value: "GUIA"}, {label: "Lote", value: "LOTE"}];
 const emptyOption = getEmptyOptions();
 
-const OrderConciliationForm = ({onGetOrder, onCloseModal, order, loading, success, error, onRestartOrder, onConfirmConciliate}) => {
+const OrderConciliationForm = ({
+                                   onConfirmConciliationRestart,
+                                   conciliationSuccess,
+                                   conciliationError,
+                                   conciliationLoading,
+                                   onGetOrder,
+                                   onCloseModal,
+                                   order,
+                                   loading,
+                                   success,
+                                   error,
+                                   onRestartOrder,
+                                   onConfirmConciliate
+                               }) => {
 
     const [orderId, setOrderId] = useState(null);
     const [orders, setOrders] = useState([]);
     const [searchBy, setSearchBy] = useState(searchByOptions[0].value);
     const [defaultOption, setDefaultOption] = useState(emptyOption);
+    const [lote, setLote] = useState(null);
 
     useEffect(() => {
         if (order) {
             const list = [...orders];
             if (!list.some(o => o.id === order.id)) {
                 list.push(order);
+                list.sort((a, b) => (a.id > b.id) ? 1 : -1);
                 setOrders(list);
             }
         } else {
@@ -42,12 +59,28 @@ const OrderConciliationForm = ({onGetOrder, onCloseModal, order, loading, succes
     }, [onRestartOrder]);
 
     useEffect(() => {
-        if (success && !error) {
+        if (conciliationSuccess && !conciliationError) {
             onCloseModal(true);
+            onConfirmConciliationRestart();
         }
-    }, [success]);
+    }, [conciliationSuccess]);
+
+    const addLote = () => {
+        console.log('addOrder', lote);
+        lote.split(' ')
+            .filter(l => l)
+            .filter(l => !orders.some(o => o.id == l))
+            .forEach(id => {
+                onGetOrder(id);
+            })
+        setLote("");
+    }
 
     const addOrder = () => {
+        if (searchBy === 'LOTE') {
+            addLote();
+            return;
+        }
         console.log('addOrder', orderId);
         onGetOrder(orderId);
         setDefaultOption(getEmptyOptions());
@@ -57,13 +90,13 @@ const OrderConciliationForm = ({onGetOrder, onCloseModal, order, loading, succes
     const removeOrder = (orderId) => {
         console.log('removeOrder', orderId);
         const list = [...orders];
-        const orderToRemove = list.find(o => o.id === order.id);
+        const orderToRemove = list.find(o => o.id === orderId);
         list.splice(list.indexOf(orderToRemove), 1);
         setOrders(list);
     }
 
     const doConciliation = (e) => {
-        onConfirmConciliate(orders.map(o => o.id));
+        onConfirmConciliate(orders.filter(o => o.status === 4).map(o => o.id));
     }
 
     return (
@@ -93,6 +126,7 @@ const OrderConciliationForm = ({onGetOrder, onCloseModal, order, loading, succes
                                         placeholder="Buscar por Pedido"
                                         defaultValue={defaultOption}
                                         conditionalOptions={{fieldName: 'id', operator: Conditionals.OPERATORS.EQUAL}}
+                                        defaultConditions={[{field: 'status', value: 4, operator: Conditionals.OPERATORS.EQUAL}]}
                                         onChange={(c) => {
                                             setOrderId(c.value);
                                         }}
@@ -114,11 +148,25 @@ const OrderConciliationForm = ({onGetOrder, onCloseModal, order, loading, succes
                                     />
                                 </Col>
                             )}
+                            {searchBy === "LOTE" && (
+                                <Col md={6}>
+                                    <Label htmlFor="orders">Pedidos</Label>
+                                    <FieldText
+                                        id='orders'
+                                        name={"orders"}
+                                        value={lote}
+                                        defaultValue={lote}
+                                        onChange={(e) => {
+                                            setLote(e.target.value);
+                                        }}
+                                    />
+                                </Col>
+                            )}
                             <Col md={2} style={{display: 'flex', 'alignItems': 'flex-end'}}>
-                                <Tooltip placement="bottom" title="Aceptar" aria-label="add">
+                                <Tooltip placement="bottom" title="Agregar" aria-label="add">
                                     <button type="button"
                                             className="btn btn-primary btn-block waves-effect waves-light mt-2 me-1 w-100"
-                                            disabled={!orderId || loading}
+                                            disabled={(!orderId && !lote) || loading}
                                             onClick={() => addOrder()}>
                                         {loading && <i className="fa fa-spinner fa-spin"> </i>}
                                         {!loading && <i className="mdi mdi-plus"> </i>}
@@ -132,6 +180,7 @@ const OrderConciliationForm = ({onGetOrder, onCloseModal, order, loading, succes
                                     <thead>
                                     <tr>
                                         <th>Pedido</th>
+                                        <th>Estado</th>
                                         <th>Guia</th>
                                         <th>Cliente</th>
                                         <th>Monto</th>
@@ -139,16 +188,21 @@ const OrderConciliationForm = ({onGetOrder, onCloseModal, order, loading, succes
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    {orders.map(o => (
+                                    {orders.filter(o => o.status === 4).map(o => (
                                         <tr>
                                             <td>{o.id}</td>
+                                            <td>
+                                                <StatusField color={ORDER_STATUS[o.status]?.color}>
+                                                    {ORDER_STATUS[o.status]?.name}
+                                                </StatusField>
+                                            </td>
                                             <td>{o.orderDelivery?.tracking}</td>
                                             <td>{o.customer?.name}</td>
                                             <td className="text-end">{priceFormat(o.totalAmount)}</td>
                                             <td className="text-center">
-                                                <button size="small" className="btn btn-sm text-danger" onClick={() => removeOrder(o.id)}>
+                                                <a title="button" className="btn btn-sm text-danger" onClick={() => removeOrder(o.id)}>
                                                     <i className="uil uil-trash-alt font-size-16"> </i>
-                                                </button>
+                                                </a>
                                             </td>
                                         </tr>
                                     ))}
@@ -156,12 +210,54 @@ const OrderConciliationForm = ({onGetOrder, onCloseModal, order, loading, succes
                                 </table>
                             </Col>
                             <Col>
-                                Total pedidos: {orders.length}
+                                Total pedidos: {orders.filter(o => o.status === 4).length}
                             </Col>
                         </Row>
+                        {orders.some(o => o.status !== 4) && (
+                            <Row className="mt-5">
+                                <Col md={12}>
+                                    <h5>Pedidos con estados no validos</h5>
+                                    <table className="table table-condensed table-bordered">
+                                        <thead>
+                                        <tr>
+                                            <th>Pedido</th>
+                                            <th>Estado</th>
+                                            <th>Guia</th>
+                                            <th>Cliente</th>
+                                            <th>Monto</th>
+                                            <th></th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {orders.filter(o => o.status !== 4).map(o => (
+                                            <tr>
+                                                <td>{o.id}</td>
+                                                <td>
+                                                    <StatusField color={ORDER_STATUS[o.status]?.color}>
+                                                        {ORDER_STATUS[o.status]?.name}
+                                                    </StatusField>
+                                                </td>
+                                                <td>{o.orderDelivery?.tracking}</td>
+                                                <td>{o.customer?.name}</td>
+                                                <td className="text-end">{priceFormat(o.totalAmount)}</td>
+                                                <td className="text-center">
+                                                    <a className="btn btn-sm text-danger" onClick={() => removeOrder(o.id)}>
+                                                        <i className="uil uil-trash-alt font-size-16"> </i>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        ))}
+                                        </tbody>
+                                    </table>
+                                </Col>
+                                <Col>
+                                    Total pedidos: {orders.filter(o => o.status !== 4).length}
+                                </Col>
+                            </Row>
+                        )}
                         <Row>
                             <Col md={12} className="text-right">
-                                <ButtonSubmit loading={loading} disabled={loading || orders.length === 0}/>
+                                <ButtonSubmit loading={conciliationLoading} disabled={conciliationLoading || orders.filter(o => o.status === 4).length === 0}/>
                             </Col>
                         </Row>
                     </CardBody>
@@ -172,11 +268,12 @@ const OrderConciliationForm = ({onGetOrder, onCloseModal, order, loading, succes
 }
 
 const mapStateToProps = state => {
-    const {order, loading} = state.Order;
-    return {order, loading}
+    const {order, loading, conciliation} = state.Order;
+    return {order, loading, conciliationSuccess: conciliation.success, conciliationError: conciliation.error, conciliationLoading: conciliation.loading}
 }
 
 const mapDispatchToProps = dispatch => ({
+    onConfirmConciliationRestart: () => dispatch(confirmConciliationRestart()),
     onConfirmConciliate: (orders) => dispatch(confirmConciliation(orders)),
     onRestartOrder: () => dispatch(restartOrder()),
     onGetOrder: (id) => dispatch(getOrder(id)),

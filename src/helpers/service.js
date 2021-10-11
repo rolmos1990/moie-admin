@@ -3,12 +3,13 @@ import Conditionals from "../common/conditionals";
 import {showMessage} from "../components/MessageToast/ShowToastMessages";
 import {DEFAULT_PAGE_LIMIT} from "../common/pagination";
 import * as url from "./url_helper";
-import {queryCustomers} from "../store/customer/actions";
-import {BATCH_REQUEST, CUSTOMER, CUSTOMERS, FIELD_OPTIONS, PRODUCT} from "./url_helper";
 import {formatDateToServer, getMoment} from "../common/utils";
 
-export const getData = (urlStr, name, conditionalOptions) => {
+export const getData = (urlStr, name, conditionalOptions, defaultConditions) => {
     const conditions = new Conditionals.Condition;
+    if (defaultConditions) {
+        defaultConditions.forEach(dc => conditions.add(dc.field, dc.value, dc.operator));
+    }
     if (name) {
         if (conditionalOptions) {
             conditions.add(conditionalOptions.fieldName, name, conditionalOptions.operator);
