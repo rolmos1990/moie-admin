@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from "react"
-import {CardBody, Col, Container, Label, Row, Spinner} from "reactstrap"
+import {Col, Label, Row} from "reactstrap"
 import {AvField, AvForm} from "availity-reactstrap-validation"
-import {Button, Card} from "@material-ui/core";
 import {withRouter} from "react-router-dom"
 import {connect} from "react-redux";
 import {apiError} from "../../store/auth/login/actions";
@@ -10,8 +9,6 @@ import {getCustomer, registerCustomer, updateCustomer} from "../../store/custome
 import {getMunicipalities, getStates} from "../../store/location/actions";
 import Conditionals from "../../common/conditionals";
 import {FieldEmail, FieldPhone, FieldSelect, FieldSwitch, FieldText} from "../../components/Fields";
-import Breadcrumb from "../../components/Common/Breadcrumb";
-import {STATUS} from "../../common/constants";
 import ButtonSubmit from "../../components/Common/ButtonSubmit";
 
 const CustomerForm = (props) => {
@@ -230,6 +227,16 @@ const CustomerForm = (props) => {
                                         required
                                         isSearchable
                                     />
+                                </div>
+                            </Col>
+                            <Col md="12">
+                                <div className="mb-3">
+                                    <Label htmlFor="validationCustom03">Dirección</Label>
+                                    <FieldText
+                                        id='address'
+                                        name={"address"}
+                                        value={customerData.address}
+                                        required/>
                                 </div>
                             </Col>
                         </Row>
