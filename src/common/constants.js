@@ -79,7 +79,7 @@ export const REPORT_TYPES = {
 };
 
 export const BILL_STATUS = {
-    PENDING: 'PENDING',
+    PENDING: 'Pendiente',
     SENT: 'Enviada'
 };
 

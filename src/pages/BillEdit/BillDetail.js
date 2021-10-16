@@ -30,7 +30,7 @@ const BillDetail = (props) => {
         });
     }
 
-    return bill.id ? (
+    return (bill && bill.id) ? (
         <React.Fragment>
             <div className="page-content">
                 <Container fluid className="pb-3">

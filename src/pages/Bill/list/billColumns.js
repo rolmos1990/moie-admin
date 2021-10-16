@@ -21,7 +21,7 @@ const statusOptions = buildOptions(ORDER_STATUS_LIST);
  createdAt: "2021-08-28T22:10:10.565Z"
  id: 5
  status: 1
- status: "PENDING"
+ status: "Pendiente"
 
 
  */
