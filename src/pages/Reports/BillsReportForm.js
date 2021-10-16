@@ -10,9 +10,9 @@ import {DATE_MODES} from "../../components/Fields/InputDate";
 import ButtonSubmit from "../../components/Common/ButtonSubmit";
 import {formatDateToServer} from "../../common/utils";
 import {generateReport, generateReportRestart} from "../../store/reports/actions";
-import {REPORT_TYPES} from "../../common/constants";
+import { BILL_MEMO_TYPES, REPORT_TYPES } from "../../common/constants";
 
-const types = [{label: 'Facturas electrónicas', value: 'INVOICE'}, {label: 'Notas de crédito', value: 'CREDIT'}];
+const types = [{label: 'Facturas electrónicas', value: BILL_MEMO_TYPES.INVOICE }, {label: 'Notas de crédito', value: BILL_MEMO_TYPES.CREDIT }];
 
 const BillsReportForm = ({onCloseModal, loading, error, success, onGenerateReport, onRestartReport}) => {
 
