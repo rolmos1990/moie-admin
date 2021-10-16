@@ -3,6 +3,7 @@ import React from "react";
 import moment from "moment";
 import {baseImagePath, baseImagePathNew} from "../helpers/api_helper";
 import {showMessage} from "../components/MessageToast/ShowToastMessages";
+import userImage from "../assets/images/users/user.png"
 
 export const BOOLEAN_STRING_OPTIONS = [
     {label: '-', value: null},
@@ -111,6 +112,11 @@ export const getImageByQuality = (imgData, quality) => {
         console.log(e);
     }
     return `${path}${result}`;
+}
+export const getImagePath = (photoPath) => {
+    if (!photoPath) return userImage;
+    const basePath = photoPath.includes('uploads') ? baseImagePathNew : baseImagePath;
+    return `${basePath}${photoPath}`;
 }
 
 export const getErrorMessage = (error) => {

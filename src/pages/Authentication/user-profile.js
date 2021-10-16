@@ -1,18 +1,6 @@
 import PropTypes from 'prop-types'
-import React, {useState, useEffect} from "react"
-import {
-    Container,
-    Row,
-    Col,
-    Card,
-    Alert,
-    CardBody,
-    Media,
-    Button,
-} from "reactstrap"
-
-// availity-reactstrap-validation
-import {AvForm, AvField} from "availity-reactstrap-validation"
+import React, {useEffect, useState} from "react"
+import {Container,} from "reactstrap"
 
 // Redux
 import {connect} from "react-redux"
@@ -20,14 +8,29 @@ import {withRouter} from "react-router-dom"
 
 //Import Breadcrumb
 import Breadcrumb from "../../components/Common/Breadcrumb"
-
-import avatar from "../../assets/images/users/avatar-1.jpg"
 // actions
-import {editProfile, resetProfileFlag} from "../../store/actions"
-import user4 from "../../assets/images/users/avatar-7.jpg";
+import {changeProfilePicture, resetChangeProfilePicture} from "../../store/actions"
+import {getImagePath} from "../../common/utils";
+import DropZoneIcon from "../../components/Common/DropZoneIcon";
+import Images from "../../components/Common/Image";
+import {Tooltip} from "@material-ui/core";
 
 const UserProfile = props => {
-    const {user} = props;
+    const {user, onChangeProfilePicture, loading, success} = props;
+
+    const [photo, setPhoto] = useState(getImagePath(user?.photo));
+    const [changePhoto, setChangePhoto] = useState(false);
+
+    useEffect(() => {
+        if (success) {
+            setChangePhoto(false);
+        }
+    }, [success])
+
+    const changeProfilePicture = () => {
+        console.log('changeProfilePicture', photo)
+        onChangeProfilePicture({photo: photo}, props.history)
+    }
 
     return (
         <React.Fragment>
@@ -35,14 +38,43 @@ const UserProfile = props => {
                 <Container fluid>
                     <Breadcrumb title="Mi perfil" item={`${user.name} ${user.lastname}`}/>
 
-
                     <div className="row mb-4">
                         <div className="col-md-offset-4 col-md-4">
                             <div className="card h-100">
                                 <div className="card-body">
                                     <div className="text-center">
                                         <div>
-                                            <img src={user4} alt="" className="avatar-lg rounded-circle img-thumbnail" />
+                                            <div>
+                                                <Images className="avatar-lg rounded-circle img-thumbnail"
+                                                        alt={'profile image'}
+                                                        src={photo}
+                                                />
+                                            </div>
+                                            <div className="p-2">
+                                                <div className=" btn btn-primary btn-sm">
+                                                    <DropZoneIcon
+                                                        maxFiles={1}
+                                                        mode="icon"
+                                                        iconClass="fa fa-pencil-alt"
+                                                        tooltip="Cambiar imagen"
+                                                        onDrop={(file) => {
+                                                            setPhoto(file.base64);
+                                                            setChangePhoto(true);
+                                                        }}
+                                                    />
+                                                </div>
+
+                                                {changePhoto && (
+                                                    <Tooltip placement="bottom" title="Guardar" aria-label="add">
+                                                        <button type={"button"} className="btn btn-primary btn-sm" style={{marginLeft: '5px'}} onClick={() => {
+                                                            changeProfilePicture()
+                                                        }}>
+                                                            <i className="fa fa-save"></i>
+                                                        </button>
+                                                    </Tooltip>
+                                                )}
+                                            </div>
+
                                         </div>
                                         <h5 className="mt-3 mb-1">{`${user.name} ${user.lastname}`}</h5>
                                         <p className="text-muted">{user.email}</p>
@@ -92,6 +124,8 @@ const UserProfile = props => {
 
                 </Container>
             </div>
+
+
         </React.Fragment>
     )
 }
@@ -102,12 +136,19 @@ UserProfile.propTypes = {
     success: PropTypes.any
 }
 
-const mapStatetoProps = state => {
-    const {error, success} = state.Profile
+const mapStateToProps = state => {
+
+    const {profileImage} = state.Profile
     const {user} = state.Login
-    return {user, error, success}
+    console.log('USER', user);
+    return {user, profileResponse: profileImage.data, error: profileImage.error, success: profileImage.success, loading: profileImage.loading}
 }
 
+const mapDispatchToProps = dispatch => ({
+    onChangeProfilePicture: (data) => dispatch(changeProfilePicture(data)),
+    onResetChangeProfilePicture: () => dispatch(resetChangeProfilePicture()),
+})
+
 export default withRouter(
-    connect(mapStatetoProps, {editProfile, resetProfileFlag})(UserProfile)
+    connect(mapStateToProps, mapDispatchToProps)(UserProfile)
 )

@@ -1,5 +1,6 @@
 import React from "react"
 import Dropzone from "react-dropzone";
+import {Tooltip} from "@material-ui/core";
 
 const DropZoneIcon = props => {
     const onChange = (files) => {
@@ -10,7 +11,7 @@ const DropZoneIcon = props => {
                 const base64EncodedStr = btoa(fileAsBinaryString);
 
                 if (props.onDrop) {
-                    props.onDrop({f:file, base64: `data:image/${file.name.split('.')[1]};base64,${base64EncodedStr}`});
+                    props.onDrop({f: file, base64: `data:image/${file.name.split('.')[1]};base64,${base64EncodedStr}`});
                 }
             };
             reader.readAsBinaryString(file);
@@ -18,17 +19,28 @@ const DropZoneIcon = props => {
     }
 
     const handleView = () => {
-        if(props.mode === 'icon'){
+        if (props.mode === 'icon') {
             let iconClass = "display-5 text-muted uil uil-cloud-upload"
-            if(props.iconClass) iconClass = props.iconClass;
+            let iconText = ""
+            if (props.iconClass) iconClass = props.iconClass;
+            if (props.iconText) iconText = props.iconText;
             return (
                 <div className="needsclick">
-                    <i className={iconClass}> </i>
+                    {!props.tooltip && (
+                        <>
+                            <i className={iconClass}> </i> {iconText}
+                        </>
+                    )}
+                    {props.tooltip && (
+                        <Tooltip placement="bottom" title={props.tooltip} aria-label="add">
+                            <i className={iconClass}> </i>
+                        </Tooltip>
+                    )}
                 </div>
             );
         }
         return (
-            <div style={{minHeight:'375px'}}>
+            <div style={{minHeight: '375px'}}>
                 {props.hasImage ? props.children : (
                     <div className="dz-message needsclick">
                         <div className="mb-3">

@@ -1,13 +1,13 @@
 import PropTypes from "prop-types"
-import React, { useState, useEffect } from "react"
-import { Row, Col, Collapse } from "reactstrap"
-import { Link, withRouter } from "react-router-dom"
+import React, {useEffect, useState} from "react"
+import {Collapse} from "reactstrap"
+import {Link, withRouter} from "react-router-dom"
 import classname from "classnames"
 
 //i18n
-import { withTranslation } from "react-i18next"
+import {withTranslation} from "react-i18next"
 
-import { connect } from "react-redux"
+import {connect} from "react-redux"
 
 const Navbar = props => {
   const [ui, setui] = useState(false)
@@ -160,6 +160,12 @@ const Navbar = props => {
                       <Link to="/postSales" className="dropdown-item">
                         <i className="uil-shopping-cart-alt me-2"></i>
                         {props.t("Post Venta")}
+                      </Link>
+                    </li>
+                    <li className="nav-item">
+                      <Link to="/payments" className="dropdown-item">
+                        <i className="uil-money me-2"></i>
+                        {props.t("Pagos")}
                       </Link>
                     </li>
                   </div>

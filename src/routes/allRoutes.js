@@ -77,13 +77,14 @@ const userRoutes = [
   {path: "/office/:id", component: OfficesEdit},
   {path: "/office", component: OfficesEdit},
   {path: "/reports", component: Reports},
+  {path: "/reports", component: Reports},
   {path: "/404", component: PageNotFount},
 
   // //profile
   {path: "/profile", component: UserProfile},
 
   // this route should be at the end of all other routes
-  { path: "/", exact: true, component: () => <Redirect to="/dashboard" /> },
+  {path: "/", exact: true, component: () => <Redirect to="/dashboard"/>},
 ]
 
 const authRoutes = [

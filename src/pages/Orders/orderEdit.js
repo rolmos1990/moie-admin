@@ -509,7 +509,7 @@ const OrderEdit = (props) => {
                                                                     </Col>
                                                                     <Col md={12}>
                                                                         <small><span className="font-weight-600">Desc.:</span> <span
-                                                                            className="text-danger">-{priceFormat(product.discount)} ({product.discountPercentage}%)</span></small>
+                                                                            className="text-danger">-{priceFormat(product.discount)}</span></small>
                                                                     </Col>
                                                                     <Col md={12}>
                                                                         <div className="font-weight-600 font-size-12"><b>Total: {priceFormat(product.total)}</b></div>

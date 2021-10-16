@@ -23,6 +23,7 @@ import BillSaga from "./bill/saga"
 import LayoutSaga from "./layout/saga"
 import PostSaleSaga from "./postSale/saga"
 import ReportSaga from "./reports/saga";
+import PaymentSaga from "./payments/saga";
 
 export default function* rootSaga() {
   yield all([
@@ -47,6 +48,7 @@ export default function* rootSaga() {
     BillSaga(),
     PostSaleSaga(),
     ReportSaga(),
+    PaymentSaga(),
     ForgetSaga(),
     fork(LayoutSaga)
   ])

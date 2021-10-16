@@ -35,6 +35,7 @@ const fetchUserApi = (id) => get(`${url.USER}/${id}`,{});
 const registerUserApi = data => post(url.USER, data);
 const updateUserApi = (id, data) => put(`${url.USER}/${id}`, data);
 const changePasswordApi = (data) => post(`${url.USER}/changePassword`, data);
+const changeProfilePictureApi = (data) => post(`${url.USER}/changeProfilePicture`, data);
 
 //Sizes template
 const fetchSizesApi = data => get(url.SIZE, {}, data);
@@ -130,12 +131,18 @@ const fetchTemplateApi = (id) => get(`${url.TEMPLATES}/${id}`, {});
 const registerTemplateApi = data => post(url.TEMPLATES, data);
 const updateTemplateApi = (id, data) => put(`${url.TEMPLATES}/${id}`, data);
 
+//payments
+const fetchPaymentsApi = data => get(url.PAYMENTS, {}, data);
+const fetchPaymentApi = (id) => get(`${url.PAYMENTS}/${id}`, {});
+const registerPaymentApi = data => post(url.PAYMENTS, data);
+const updatePaymentApi = (id, data) => put(`${url.PAYMENTS}/${id}`, data);
+
 
 const fetchDeliveryMethodsApi = () => get(`${url.DELIVERY_METHODS}`, {});
 const fetchDeliveryQuoteApi = (data) => post(`${url.DELIVERY_METHODS}/quote`, data);
 
 const fetchMunicipalitiesApi = data => get(url.MUNICIPALITIES, {}, data);
-const fetchMunicipalityApi = (id) => get(`${url.MUNICIPALITIES}/${id}`,{});
+const fetchMunicipalityApi = (id) => get(`${url.MUNICIPALITIES}/${id}`, {});
 const registerMunicipalityApi = data => post(url.MUNICIPALITIES, data);
 const updateMunicipalityApi = (id, data) => put(`${url.MUNICIPALITIES}/${id}`, data);
 const deleteMunicipalityApi = (id) => del(`${url.MUNICIPALITIES}/${id}`);
@@ -237,6 +244,7 @@ export {
     registerUserApi,
     updateUserApi,
     changePasswordApi,
+    changeProfilePictureApi,
 
     fetchOfficesApi,
     fetchOfficeApi,
@@ -263,4 +271,9 @@ export {
     billReportApi,
     postSaleReportApi,
     conciliationReportApi,
+
+    fetchPaymentsApi,
+    fetchPaymentApi,
+    registerPaymentApi,
+    updatePaymentApi
 }
