@@ -82,6 +82,10 @@ export const TableFilter = (props) => {
                 operator = filter.filterCondition ? filter.filterCondition : Conditionals.OPERATORS.LIKE;
                 conditions.add(fieldName, value, operator);
             }
+            if (filter.filterType === "voyed") {//for status
+                    operator = resolveOperator(filter, value.value ? Conditionals.OPERATORS.NOT_NULL : Conditionals.OPERATORS.NULL);
+                    conditions.add(fieldName, null, operator);
+            }
             if (filter.filterType === "select" && isValidOption(filter.filterOptions, value.value)) {//for status
                 if(value.value === true || value.value === false){
                     operator = resolveOperator(filter, value.value ? Conditionals.OPERATORS.TRUE : Conditionals.OPERATORS.FALSE);
@@ -183,6 +187,19 @@ export const TableFilter = (props) => {
                                         </Col>
                                 )}
                                 {field.filterType === 'select' && (
+                                    <Col md="12" >
+                                        <div className="mb-3">
+                                            <Label htmlFor={"_" + field.dataField}>{field.text}</Label>
+                                            <FieldSelect
+                                                name={"_" + field.dataField}
+                                                options={field.filterOptions}
+                                                defaultValue={field.filterDefaultOption}
+                                                placeholder={field.text}
+                                            />
+                                        </div>
+                                    </Col>
+                                )}
+                                {field.filterType === 'voyed' && (
                                     <Col md="12" >
                                         <div className="mb-3">
                                             <Label htmlFor={"_" + field.dataField}>{field.text}</Label>

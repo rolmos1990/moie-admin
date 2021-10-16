@@ -36,7 +36,7 @@ const BillList = props => {
     }, [refresh])
 
     useEffect(() => {
-        onGetBills()
+        onGetBills();
         //getStates();
     }, [onGetBills])
 

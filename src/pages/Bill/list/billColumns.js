@@ -2,15 +2,15 @@ import React from "react"
 import {Link} from "react-router-dom"
 import {StatusField} from "../../../components/StatusField";
 import {buildOptions} from "../../../common/converters";
-import {DELIVERY_METHODS_LIST, OFFICE_STATUS_LIST, ORDER_STATUS} from "../../../common/constants";
+import {
+    ORDER_STATUS, ORDER_STATUS_LIST,
+} from "../../../common/constants";
 import Conditionals from "../../../common/conditionals";
 import {DATE_FORMAT, formatDate} from "../../../common/utils";
 import {CUSTOMER} from "../../../helpers/url_helper";
 import {Tooltip} from "@material-ui/core";
 
-const statusOptions = buildOptions(OFFICE_STATUS_LIST);
-const deliveryMethodsOptions = buildOptions(DELIVERY_METHODS_LIST);
-
+const statusOptions = buildOptions(ORDER_STATUS_LIST);
 
 /**
  *
@@ -73,11 +73,16 @@ const municipalityColumns = (onDelete = false) => [
         filterType: "number"
     },
     {
+        /** TODO -- hacer que filtre por nota de Credito */
         text: "Nota de Crédito",
-        dataField: "creditNote.id",
+        dataField: "creditMemo",
         sort: true,
-        filter: true,
-        filterType: "text",
+        filter: false,
+        filterType: "voyed",
+        filterOptions: [
+            { label: "No", value: false },
+            { label: "Si", value: true }
+        ],
         formatter: (cellContent, item) => (
             <>
                 {item?.creditNote?.id ? "Si" : "No"}

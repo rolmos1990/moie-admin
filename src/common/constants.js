@@ -8,6 +8,7 @@ export const STATUS = {
     INACTIVE: false
 };
 
+export const STATUS_LIST = Object.keys(STATUS).map(s => ({label: [s], value: s}))
 
 //FIELD OPTIONS GROUPS
 export const GROUPS = {
@@ -70,7 +71,6 @@ export const ORDER_STATUS_LIST = Object.keys(ORDER_STATUS).map(s => ({label: ORD
 export const OFFICE_STATUS_LIST = Object.keys(OFFICE_STATUS).map(s => ({label: OFFICE_STATUS[s].name, value: s}))
 
 export const DELIVERY_TYPES_LIST = Object.keys(DELIVERY_TYPES).map(s => ({label: DELIVERY_TYPES[s].label, value: s}))
-
 
 export const REPORT_TYPES = {
     BILLS: 'BILLS',

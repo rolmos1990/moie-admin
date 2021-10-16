@@ -121,7 +121,7 @@ const generateReportApi = (data) => post(`${url.BILLS}/generateReport`, data, {}
 //REPORTS
 const billReportApi = (data) => get(`${url.BILLS}/gen/billReport`, {header: 'content-type: application/pdf'}, data);
 const postSaleReportApi = (data) => get(`${url.ORDERS}/gen/postSaleReport`, {header: 'content-type: application/pdf'}, data);
-const conciliationReportApi = (data) => get(`${url.ORDERS}/conciliationReport`, {header: 'content-type: application/pdf'}, data);
+const conciliationReportApi = (data) => get(`${url.ORDERS}/gen/conciliationReport`, {header: 'content-type: application/pdf'}, data);
 const fileOfficeTemplate = (filename, id) => file(filename, `${url.OFFICES}/${id}/getTemplate`, {header: 'content-type: application/vnd.ms-excel'});
 
 //templates

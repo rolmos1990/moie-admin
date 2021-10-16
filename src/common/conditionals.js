@@ -45,7 +45,7 @@ function buildCondition(field, value, operator = null, moreValues = []) {
     } else if (moreValues.length > 0) {
         condition = {field, value, operator, moreValues};
     } else {
-        if ([OPERATORS.TRUE, OPERATORS.FALSE].includes(operator)) {
+        if ([OPERATORS.NULL, OPERATORS.NOT_NULL].includes(operator) || [OPERATORS.TRUE, OPERATORS.FALSE].includes(operator)) {
             condition = {field, value: "", operator};
         } else {
             condition = {field, value, operator};
