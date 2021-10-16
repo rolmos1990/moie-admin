@@ -1,20 +1,15 @@
-import React, { useState, useEffect } from "react"
+import React, {useEffect, useState} from "react"
 import PropTypes from 'prop-types'
-import {
-  Dropdown,
-  DropdownToggle,
-  DropdownMenu,
-  DropdownItem,
-} from "reactstrap"
+import {Dropdown, DropdownMenu, DropdownToggle,} from "reactstrap"
 
 //i18n
-import { withTranslation } from "react-i18next"
+import {withTranslation} from "react-i18next"
 // Redux
-import { connect } from "react-redux"
-import { withRouter, Link } from "react-router-dom"
+import {connect} from "react-redux"
+import {Link, withRouter} from "react-router-dom"
 
 // users
-import userImage from "../../../assets/images/users/user.png"
+import {getImagePath} from "../../../common/utils";
 
 const ProfileMenu = props => {
   // Declare a new state variable, which we'll call "menu"
@@ -50,9 +45,9 @@ const ProfileMenu = props => {
           tag="button"
         >
           <img
-            className="rounded-circle header-profile-user"
-            src={userImage}
-            alt="Header Avatar"
+              className="rounded-circle header-profile-user"
+              src={getImagePath(props.user?.photo)}
+              alt="Header Avatar"
           />
           <span className="d-none d-xl-inline-block ms-1 fw-medium font-size-15">{username}</span>{" "}
           <i className="uil-angle-down d-none d-xl-inline-block font-size-15"></i>
@@ -79,8 +74,9 @@ ProfileMenu.propTypes = {
 }
 
 const mapStatetoProps = state => {
-  const { error, success } = state.Profile
-  return { error, success }
+  const {error, success} = state.Profile
+  const {user} = state.Login
+  return {error, success, user}
 }
 
 export default withRouter(

@@ -140,7 +140,6 @@ const mapStateToProps = state => {
 
     const {profileImage} = state.Profile
     const {user} = state.Login
-    console.log('USER', user);
     return {user, profileResponse: profileImage.data, error: profileImage.error, success: profileImage.success, loading: profileImage.loading}
 }
 
