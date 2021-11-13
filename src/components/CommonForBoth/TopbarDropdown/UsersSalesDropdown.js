@@ -5,13 +5,12 @@ import {Col, Dropdown, DropdownMenu, DropdownToggle, Row} from "reactstrap"
 import SimpleBar from "simplebar-react"
 
 //Import images
-import avatar3 from "../../../assets/images/users/avatar-3.jpg";
 import userImage from "../../../assets/images/users/user.png"
 
 //i18n
 import {connect} from "react-redux";
 import {countUsersOrders} from "../../../helpers/service";
-import {priceFormat} from "../../../common/utils";
+import {getImagePath, priceFormat} from "../../../common/utils";
 import {Tooltip} from "@material-ui/core";
 
 const UsersSalesDropdown = ({data}) => {
@@ -31,7 +30,7 @@ const UsersSalesDropdown = ({data}) => {
             setLoading(false);
             if (resp && resp.data && resp.data.length > 0) {
                 let u = [];
-                resp.data.filter(o => o.user && o.user.id).forEach(o => u.push({name: o.user.name, sales: o.origen, amount: priceFormat(o.totalAmount), image: avatar3}))
+                resp.data.filter(o => o.user && o.user.id).forEach(o => u.push({name: o.user.name, sales: o.origen, amount: priceFormat(o.totalAmount), image: getImagePath(o.user?.photo)}))
                 u = u.sort((a, b) => a.sales === b.sales ? 0 : (a.sales > b.sales) ? -1 : 1);
                 if(u.length > 6){
                     u.splice(6);

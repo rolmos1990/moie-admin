@@ -1,4 +1,4 @@
-import React, {useEffect, usePayment} from "react"
+import React, {useEffect, useState} from "react"
 import PropTypes from "prop-types"
 import {connect} from "react-redux"
 import {Card, CardBody, Col, Row} from "reactstrap"
@@ -10,7 +10,7 @@ import {Link} from "react-router-dom"
 import {Button, Tooltip} from "@material-ui/core";
 import {DEFAULT_PAGE_LIMIT} from "../../../common/pagination";
 import {ConfirmationModalAction} from "../../../components/Modal/ConfirmationModal";
-import {deletePayment, getPayments} from "../../../store/location/actions";
+import {getPayments} from "../../../store/payments/actions";
 import paymentsColumns from "./paymentsColumn";
 import {TableFilter} from "../../../components/TableFilter";
 import {normalizeColumnsList} from "../../../common/converters";
@@ -18,10 +18,9 @@ import NoDataIndication from "../../../components/Common/NoDataIndication";
 
 const PaymentsList = props => {
     const {payments, meta, onGetPayments, onDeletePayment, loading, refresh} = props;
-    const [paymentsList, setPaymentsList] = usePayment([])
-    const [filter, setFilter] = usePayment(false);
-    const [conditional, setConditional] = usePayment(null);
-
+    const [paymentsList, setPaymentsList] = useState([])
+    const [filter, setFilter] = useState(false);
+    const [conditional, setConditional] = useState(null);
 
     const pageOptions = {
         sizePerPage: DEFAULT_PAGE_LIMIT,
@@ -97,13 +96,7 @@ const PaymentsList = props => {
                                                 <Col md={6}>
                                                     <div className="form-inline mb-3">
                                                         <div className="search-box ms-2">
-                                                            <h4 className="text-info"><i className="uil-shopping-cart-alt me-2"></i> Estados</h4>
-                                                            {/*{!filter && (
-                                                                <div className="position-relative">
-                                                                    <SearchBar {...toolkitProps.searchProps}/>
-                                                                    <i className="mdi mdi-magnify search-icon"> </i>
-                                                                </div>
-                                                            )}*/}
+                                                            <h4 className="text-info"><i className="uil-shopping-cart-alt me-2"></i> Pagos</h4>
                                                         </div>
                                                     </div>
                                                 </Col>
@@ -117,7 +110,7 @@ const PaymentsList = props => {
                                                             </Tooltip>
                                                         )}
                                                         <Link to={"/payment"} className="btn btn-primary waves-effect waves-light text-light">
-                                                            <i className="mdi mdi-plus"></i> Nuevo Estado
+                                                            <i className="mdi mdi-plus"></i> Nuevo pago
                                                         </Link>
                                                     </div>
                                                 </Col>
@@ -164,13 +157,12 @@ PaymentsList.propTypes = {
 }
 
 const mapPaymentToProps = state => {
-    const {payments, loading, meta, refresh} = state.Location
+    const {payments, loading, meta, refresh} = state.Payments
     return {payments, loading, meta, refresh}
 }
 
 const mapDispatchToProps = dispatch => ({
     onGetPayments: (conditional = null, limit = DEFAULT_PAGE_LIMIT, page) => dispatch(getPayments(conditional, limit, page)),
-    onDeletePayments: (id) => dispatch(deletePayment(id))
 })
 
 export default connect(

@@ -8,7 +8,7 @@ const Payments = () => {
         <React.Fragment>
             <div className="page-content">
                 <Container fluid>
-                    <Breadcrumb path="/payments" title={null} item="Estados"/>
+                    <Breadcrumb path="/payments" title={null} item="Pagos"/>
                     <PaymentsList/>
                 </Container>
             </div>

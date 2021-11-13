@@ -164,7 +164,7 @@ const Navbar = props => {
                     </li>
                     <li className="nav-item">
                       <Link to="/payments" className="dropdown-item">
-                        <i className="uil-money me-2"></i>
+                        <i className="uil-money-bill me-2"></i>
                         {props.t("Pagos")}
                       </Link>
                     </li>
