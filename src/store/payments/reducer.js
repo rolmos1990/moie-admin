@@ -33,7 +33,7 @@ const payments = (state = initialState, action) => {
             return {
                 ...state,
                 error: action.payload,
-                loading: true,
+                loading: false,
             }
 
         case GET_PAYMENTS_SUCCESS:

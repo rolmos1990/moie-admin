@@ -3,7 +3,7 @@ import PropTypes from "prop-types"
 import {connect} from "react-redux"
 import {Card, CardBody, Col, Row} from "reactstrap"
 import paginationFactory, {PaginationListStandalone, PaginationProvider,} from "react-bootstrap-table2-paginator"
-import ToolkitProvider, {Search} from "react-bootstrap-table2-toolkit"
+import ToolkitProvider from "react-bootstrap-table2-toolkit"
 import BootstrapTable from "react-bootstrap-table-next"
 
 import {Link} from "react-router-dom"
@@ -15,10 +15,25 @@ import paymentsColumns from "./paymentsColumn";
 import {TableFilter} from "../../../components/TableFilter";
 import {normalizeColumnsList} from "../../../common/converters";
 import NoDataIndication from "../../../components/Common/NoDataIndication";
+import PaymentOverlay from "../paymentOverlay";
+
+const list = [{
+    id: 1,
+    name: "asdasdasd",
+    email: "yoel.gonzalez@warnermedia.com",
+    cellphone: "+57 434 333 4",
+    paymentForm: "Transferencia bancaria",
+    originBank: "Banco Colpatria",
+    targetBank: "BANCO1",
+    consignmentAmount: "43434334",
+    consignmentNumber: "sdfsfdffsd",
+    date: "2021-11-13"
+}]
 
 const PaymentsList = props => {
     const {payments, meta, onGetPayments, onDeletePayment, loading, refresh} = props;
     const [paymentsList, setPaymentsList] = useState([])
+    const [paymentSelected, setPaymentSelected] = useState(null);
     const [filter, setFilter] = useState(false);
     const [conditional, setConditional] = useState(null);
 
@@ -27,7 +42,6 @@ const PaymentsList = props => {
         totalSize: meta?.totalRegisters,
         custom: true,
     }
-    const {SearchBar} = Search
 
     useEffect(() => {
         onGetPayments();
@@ -38,7 +52,8 @@ const PaymentsList = props => {
     }, [onGetPayments])
 
     useEffect(() => {
-        setPaymentsList(payments)
+        // setPaymentsList(payments)
+        setPaymentsList(list)
     }, [payments])
 
     // eslint-disable-next-line no-unused-vars
@@ -63,7 +78,7 @@ const PaymentsList = props => {
         });
     };
 
-    const columns = paymentsColumns(onDelete);
+    const columns = paymentsColumns(setPaymentSelected);
 
     var selectRowProp = {
         mode: "checkbox",
@@ -71,82 +86,85 @@ const PaymentsList = props => {
     };
 
     return (
-        <Row>
-            <TableFilter
-                onPressDisabled={() => setFilter(false)}
-                isActive={filter}
-                fields={columns}
-                onSubmit={onFilterAction.bind(this)}/>
+        <>
+            <Row>
+                <TableFilter
+                    onPressDisabled={() => setFilter(false)}
+                    isActive={filter}
+                    fields={columns}
+                    onSubmit={onFilterAction.bind(this)}/>
 
-            <Col lg={filter ? "8" : "12"}>
-                <Card>
-                    <CardBody>
-                        <PaginationProvider pagination={paginationFactory(pageOptions)}>
-                            {({paginationProps, paginationTableProps}) => (
-                                <ToolkitProvider
-                                    keyField="id"
-                                    data={paymentsList || []}
-                                    columns={normalizeColumnsList(columns)}
-                                    bootstrap4
-                                    search
-                                >
-                                    {toolkitProps => (
-                                        <React.Fragment>
-                                            <Row className="row mb-2">
-                                                <Col md={6}>
-                                                    <div className="form-inline mb-3">
-                                                        <div className="search-box ms-2">
-                                                            <h4 className="text-info"><i className="uil-shopping-cart-alt me-2"></i> Pagos</h4>
+                <Col lg={filter ? "8" : "12"}>
+                    <Card>
+                        <CardBody>
+                            <PaginationProvider pagination={paginationFactory(pageOptions)}>
+                                {({paginationProps, paginationTableProps}) => (
+                                    <ToolkitProvider
+                                        keyField="id"
+                                        data={paymentsList || []}
+                                        columns={normalizeColumnsList(columns)}
+                                        bootstrap4
+                                        search
+                                    >
+                                        {toolkitProps => (
+                                            <React.Fragment>
+                                                <Row className="row mb-2">
+                                                    <Col md={6}>
+                                                        <div className="form-inline mb-3">
+                                                            <div className="search-box ms-2">
+                                                                <h4 className="text-info"><i className="uil-shopping-cart-alt me-2"></i> Pagos</h4>
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                </Col>
-                                                <Col md={6}>
-                                                    <div className="mb-3 float-md-end">
-                                                        {columns.some(s => s.filter) && (
-                                                            <Tooltip placement="bottom" title="Filtros Avanzados" aria-label="add">
-                                                                <Button onClick={() => setFilter(!filter)}>
-                                                                    <i className={"mdi mdi-filter"}></i>
-                                                                </Button>
-                                                            </Tooltip>
-                                                        )}
-                                                        <Link to={"/payment"} className="btn btn-primary waves-effect waves-light text-light">
-                                                            <i className="mdi mdi-plus"></i> Nuevo pago
-                                                        </Link>
-                                                    </div>
-                                                </Col>
-                                            </Row>
-                                            <Row>
-                                                <Col xl="12">
-                                                    <div className="table-responsive mb-4">
-                                                        <BootstrapTable
-                                                            remote
-                                                            responsive
-                                                            loading={true}
-                                                            bordered={false}
-                                                            striped={true}
-                                                            classes={
-                                                                "table table-centered table-nowrap mb-0"
-                                                            }
-                                                            noDataIndication={() => <NoDataIndication/>}
-                                                            {...toolkitProps.baseProps}
-                                                            onTableChange={handleTableChange}
-                                                            {...paginationTableProps}
-                                                        />
-                                                    </div>
-                                                </Col>
-                                            </Row>
-                                            <div className="float-sm-start">
-                                                <PaginationListStandalone {...paginationProps} />
-                                            </div>
-                                        </React.Fragment>
-                                    )}
-                                </ToolkitProvider>
-                            )}
-                        </PaginationProvider>
-                    </CardBody>
-                </Card>
-            </Col>
-        </Row>
+                                                    </Col>
+                                                    <Col md={6}>
+                                                        <div className="mb-3 float-md-end">
+                                                            {columns.some(s => s.filter) && (
+                                                                <Tooltip placement="bottom" title="Filtros Avanzados" aria-label="add">
+                                                                    <Button onClick={() => setFilter(!filter)}>
+                                                                        <i className={"mdi mdi-filter"}></i>
+                                                                    </Button>
+                                                                </Tooltip>
+                                                            )}
+                                                            <Link to={"/payment"} className="btn btn-primary waves-effect waves-light text-light">
+                                                                <i className="mdi mdi-plus"></i> Nuevo pago
+                                                            </Link>
+                                                        </div>
+                                                    </Col>
+                                                </Row>
+                                                <Row>
+                                                    <Col xl="12">
+                                                        <div className="table-responsive mb-4">
+                                                            <BootstrapTable
+                                                                remote
+                                                                responsive
+                                                                loading={true}
+                                                                bordered={false}
+                                                                striped={true}
+                                                                classes={
+                                                                    "table table-centered table-nowrap mb-0"
+                                                                }
+                                                                noDataIndication={() => <NoDataIndication/>}
+                                                                {...toolkitProps.baseProps}
+                                                                onTableChange={handleTableChange}
+                                                                {...paginationTableProps}
+                                                            />
+                                                        </div>
+                                                    </Col>
+                                                </Row>
+                                                <div className="float-sm-start">
+                                                    <PaginationListStandalone {...paginationProps} />
+                                                </div>
+                                            </React.Fragment>
+                                        )}
+                                    </ToolkitProvider>
+                                )}
+                            </PaginationProvider>
+                        </CardBody>
+                    </Card>
+                </Col>
+            </Row>
+            {paymentSelected && (<PaymentOverlay payment={paymentSelected} showOverlay={true} onCloseOverlay={() => setPaymentSelected(null)}/>)}
+        </>
     )
 }
 

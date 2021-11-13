@@ -21,6 +21,7 @@ export const GROUPS = {
     CUSTOMER_OBSERVATIONS: 'CUSTOMER_OBSERVATIONS',
     ORDER_OBSERVATIONS: 'ORDER_OBSERVATIONS',
     TEMPLATE_MENTIONS: 'TEMPLATE_MENTIONS',
+    BANKS: 'BANKS',
 };
 //FIELD OPTIONS NAMES
 export const NAMES = {
@@ -84,7 +85,18 @@ export const BILL_STATUS = {
 };
 
 export const BILL_MEMO_TYPES = {
-    INVOICE : 'InvoiceType',
-    CREDIT : 'CreditNoteType',
-    DEBIT : 'DebitNoteType'
+    INVOICE: 'InvoiceType',
+    CREDIT: 'CreditNoteType',
+    DEBIT: 'DebitNoteType'
 };
+
+export const PAYMENT_FORMS = {
+    DEPOSIT: 'Depósito',
+    BANK_TRANSFER: 'Transferencia bancaria',
+};
+export const PAYMENT_FORMS_LIST = Object.keys(PAYMENT_FORMS).map(s => ({label: PAYMENT_FORMS[s], value: PAYMENT_FORMS[s]}))
+
+export const BANKS = {
+    BANCO1: 'BANCO1',
+};
+export const BANKS_LIST = Object.keys(BANKS).map(s => ({label: BANKS[s], value: BANKS[s]}))

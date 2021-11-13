@@ -40,6 +40,7 @@ import OfficesEdit from "../pages/OfficesEdit";
 import PostSaleDetail from "../pages/PostSaleEdit/PostSaleDetail";
 import BillDetail from "../pages/BillEdit/BillDetail";
 import Payments from "../pages/Payments";
+import PaymentEdit from "../pages/PaymentsEdit";
 
 const userRoutes = [
   { path: "/dashboard", component: Dashboard },
@@ -79,6 +80,8 @@ const userRoutes = [
   {path: "/office", component: OfficesEdit},
   {path: "/reports", component: Reports},
   {path: "/payments", component: Payments},
+  {path: "/payment/:id", component: PaymentEdit},
+  {path: "/payment", component: PaymentEdit},
   {path: "/404", component: PageNotFount},
 
   // //profile
