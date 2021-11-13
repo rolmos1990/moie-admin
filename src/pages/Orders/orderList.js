@@ -227,11 +227,11 @@ const OrderList = props => {
                                                                             <i className="mdi mdi-printer"> </i>
                                                                         </Button>
                                                                     </Tooltip>
-                                                                    <Tooltip placement="bottom" title="Conciliar pedidos" aria-label="add">
+                                                                  {/*  <Tooltip placement="bottom" title="Conciliar pedidos" aria-label="add">
                                                                         <Button color="primary" onClick={() => showConciliationView()}>
                                                                             <i className="mdi mdi-list-status"> </i>
                                                                         </Button>
-                                                                    </Tooltip>
+                                                                    </Tooltip>*/}
                                                                     <Tooltip placement="bottom" title="Confirmar Conciliados" aria-label="add">
                                                                         <Button color="primary" onClick={() => setOpenConfirmConciliationModal(true)}>
                                                                             <i className="mdi mdi-check"> </i>
