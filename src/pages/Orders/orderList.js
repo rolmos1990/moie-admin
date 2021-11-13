@@ -105,7 +105,7 @@ const OrderList = props => {
             } else {
                 conditionals.push({field: 'status', value: statusToConciliate, operator: Conditionals.OPERATORS.EQUAL});
             }
-        } else if (statusFiltered.value === statusToConciliate) {
+        } else if (statusFiltered && statusFiltered.value === statusToConciliate) {
             conditionals.splice(conditionals.indexOf(statusFiltered), 1);
         }
     }

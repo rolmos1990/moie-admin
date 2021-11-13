@@ -35,6 +35,7 @@ const PaymentOverlay = (props) => {
             if (!orders || orders.length === 0) {
                 const conditions = new Conditionals.Condition;
                 conditions.add("payment", null, Conditionals.OPERATORS.NULL);
+                // conditions.add("orderDelivery.deliveryType", 3, Conditionals.OPERATORS.NOT_EQUAL);//TODO error: "No entity column \"orderDelivery.deliveryType\" was found."
                 onGetOrders(conditions);
             } else if (orders.length === 1) {
                 setOrderRelated(orders[0])
