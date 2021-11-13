@@ -43,7 +43,7 @@ const BillDetail = (props) => {
                             </div>
                             <div className={"mb-3 float-md-end"}>
                                 <div className="button-items">
-                                    {bill.status === BILL_STATUS.SENT && (
+                                    {!!(bill.status === BILL_STATUS.SENT && !bill.creditNote) && (
                                         <Tooltip placement="bottom" title="Generar nota de crédito" aria-label="add">
                                             <button type="button" color="primary" className="btn-sm btn btn-outline-info waves-effect waves-light" onClick={() => createCreditNote()}>
                                                 <i className={`uil-bill text-danger`}> </i>
