@@ -6,7 +6,7 @@ import {DELIVERY_METHODS_LIST, ORDER_STATUS, ORDER_STATUS_LIST} from "../../comm
 import Conditionals from "../../common/conditionals";
 import {formatDate, priceFormat} from "../../common/utils";
 import {Tooltip} from "@material-ui/core";
-import {CUSTOMER} from "../../helpers/url_helper";
+import {CUSTOMER, USER} from "../../helpers/url_helper";
 
 const statusOptions = buildOptions(ORDER_STATUS_LIST);
 const deliveryMethodsOptions = buildOptions(DELIVERY_METHODS_LIST);
@@ -43,13 +43,17 @@ const orderColumns = (onSelectedOrder, showAsModal, conciliationView) => {
             filterType: "asyncSelect",
             urlStr: CUSTOMER,
             formatter: (cellContent, item) => (
-                !showAsModal ? (<Link to={`/customer/detail/${item.customer.id}`} className="text-body">
+                !showAsModal ? (
+                    <Link to={`/customer/detail/${item.customer.id}`} className="text-body">
                         {item.customer.name}
                         {item.customer.isMayorist === true && (
                             <Tooltip placement="bottom" title="Cliente mayorista" aria-label="add">
                                 <i className={"mdi mdi-crown font-size-18 mr-1 text-warning"}> </i>
                             </Tooltip>
                         )}
+                        <div>
+                            <small className="bg-grey badge badge-soft-secondary"><i className="fa fa-user"></i> Ramon Olmos</small>
+                        </div>
                     </Link>)
                     :(<>
                         {item.customer.name}
@@ -106,7 +110,18 @@ const orderColumns = (onSelectedOrder, showAsModal, conciliationView) => {
                 </StatusField>
             ),
         },
-
+        {
+            text: "Operador",
+            dataField: "user",
+            hidden: true,
+            sort: false,
+            filterType: "asyncSelect",
+            filter: true,
+            urlStr: USER,
+            formatter: (cellContent, item) => (
+                <div>{item.user.name}</div>
+            ),
+        }
     ];
 
     if (!showAsModal && !conciliationView) {

@@ -28,6 +28,7 @@ import Bill from "./bill/reducer"
 import PostSale from "./postSale/reducer"
 import Report from "./reports/reducer"
 import Payments from "./payments/reducer"
+import BillConfig from "./billConfig/reducer"
 
 const rootReducer = combineReducers({
   // public
@@ -53,7 +54,8 @@ const rootReducer = combineReducers({
   Bill,
   PostSale,
   Report,
-  Payments
+  Payments,
+  BillConfig
 })
 
 export default rootReducer

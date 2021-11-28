@@ -50,7 +50,7 @@ const PaymentEdit = (props) => {
 
     const handleValidSubmit = (event, values) => {
         const data = {...values, status: values._status};
-        if (values.paymentForm) data.paymentForm = values.paymentForm.value;
+        if (values.type) data.type = values.type.value;
         if (values.targetBank) data.targetBank = values.targetBank.value;
         if (values.originBank) data.originBank = values.originBank.value;
         delete data._status;
@@ -126,10 +126,10 @@ const PaymentEdit = (props) => {
                                                 <div className="mb-3">
                                                     <Label htmlFor="state">Forma de pago <span className="text-danger">*</span></Label>
                                                     <FieldSelect
-                                                        id="paymentForm"
-                                                        name={"paymentForm"}
+                                                        id="type"
+                                                        name={"type"}
                                                         placeholder={"Indique una forma de pago"}
-                                                        defaultValue={paymentData.paymentForm}
+                                                        defaultValue={paymentData.type}
                                                         options={PAYMENT_FORMS_LIST}
                                                         onChange={item => setPaymentFormSelected(item.value)}
                                                         required

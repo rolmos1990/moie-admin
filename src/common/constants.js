@@ -53,6 +53,7 @@ export const PAYMENT_TYPES = {
 
 export const PAYMENT_TYPES_LIST = Object.keys(PAYMENT_TYPES).map(k => ({label: PAYMENT_TYPES[k], value: PAYMENT_TYPES[k]}));
 
+
 export const ORDER_STATUS = {
     1: {name: 'Pendiente', color:'danger', colorCss: "#f44336"},
     2: {name: 'Confirmada', color:'success', colorCss: "#4caf50"},

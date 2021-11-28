@@ -277,6 +277,11 @@ const Navbar = props => {
                       </Link>
                     </li>
                     <li className="nav-item">
+                      <Link to="/billConfigs" className="dropdown-item">
+                        {props.t("Conf. Resoluciones")}
+                      </Link>
+                    </li>
+                    <li className="nav-item">
                       <Link to="/configs" className="dropdown-item">
                           {props.t("Configuraciones")}
                       </Link>

@@ -41,6 +41,8 @@ import PostSaleDetail from "../pages/PostSaleEdit/PostSaleDetail";
 import BillDetail from "../pages/BillEdit/BillDetail";
 import Payments from "../pages/Payments";
 import PaymentEdit from "../pages/PaymentsEdit";
+import BillConfigs from "../pages/BillConfig";
+import BillConfigEdit from '../pages/BillConfigEdit';
 
 const userRoutes = [
   { path: "/dashboard", component: Dashboard },
@@ -82,6 +84,8 @@ const userRoutes = [
   {path: "/payments", component: Payments},
   {path: "/payment/:id", component: PaymentEdit},
   {path: "/payment", component: PaymentEdit},
+  {path: "/billConfigs", component: BillConfigs},
+  {path: "/billConfig/:id", component: BillConfigEdit},
   {path: "/404", component: PageNotFount},
 
   // //profile

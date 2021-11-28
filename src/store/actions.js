@@ -22,6 +22,7 @@ export * from "./bill/actions"
 export * from "./postSale/actions"
 export * from "./reports/actions"
 export * from "./payments/actions"
+export * from "./billConfig/actions"
 
 //System
 export * from "./location/actions"

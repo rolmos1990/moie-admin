@@ -119,6 +119,13 @@ const addOrderBillApi = (id, data, params) => post(`${url.BILLS}/${id}/addOrder`
 const createCreditNoteApi = (id, data) => post(`${url.BILLS}/CreditMemo/${id}`, data, {});
 const generateReportApi = (data) => post(`${url.BILLS}/generateReport`, data, {});
 
+//bills Config
+const fetchBillConfigsApi = params => get(url.BILL_CONFIGS, {}, params);
+const fetchBillConfigApi = data => get((data && data.id) ? `${url.BILL_CONFIGS}/${data.id}` : url.BILL_CONFIGS, data);
+const registerBillConfigApi = data => post(url.BILL_CONFIGS, data);
+const updateBillConfigApi = (id, data) => put(`${url.BILL_CONFIGS}/${id}`, data);
+const deleteBillConfigApi = (id) => del(`${url.BILL_CONFIGS}/${id}`);
+
 //REPORTS
 const billReportApi = (data) => get(`${url.BILLS}/gen/billReport`, {header: 'content-type: application/pdf'}, data);
 const postSaleReportApi = (data) => get(`${url.ORDERS}/gen/postSaleReport`, {header: 'content-type: application/pdf'}, data);
@@ -275,5 +282,11 @@ export {
     fetchPaymentsApi,
     fetchPaymentApi,
     registerPaymentApi,
-    updatePaymentApi
+    updatePaymentApi,
+
+    fetchBillConfigsApi,
+    fetchBillConfigApi,
+    registerBillConfigApi,
+    updateBillConfigApi,
+    deleteBillConfigApi
 }
