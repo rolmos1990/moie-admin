@@ -110,15 +110,15 @@ const PaymentEdit = (props) => {
                                                 <div className="mb-3">
                                                     <Label htmlFor="field_name">Teléfono <span className="text-danger">*</span></Label>
                                                     <FieldPhone
-                                                        id="cellphone"
-                                                        name="cellphone"
-                                                        value={paymentData.cellphone}
+                                                        id="phone"
+                                                        name="phone"
+                                                        value={paymentData.phone}
                                                         placeholder=""
                                                         type="text"
                                                         errorMessage="Ingrese un número valido (Ejemplo: 00000000)"
                                                         className="form-control"
                                                         validate={{required: {value: true}}}
-                                                        onChange={(value) => setPaymentData({...paymentData, cellphone: value})}
+                                                        onChange={(value) => setPaymentData({...paymentData, phone: value})}
                                                     />
                                                 </div>
                                             </Col>
