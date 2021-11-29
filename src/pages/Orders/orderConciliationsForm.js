@@ -14,8 +14,9 @@ import Conditionals from "../../common/conditionals";
 import {priceFormat} from "../../common/utils";
 import {StatusField} from "../../components/StatusField";
 import {ORDER_STATUS} from "../../common/constants";
+import {fetchOrdersApi} from "../../helpers/backend_helper";
 
-const searchByOptions = [{label: "Pedido", value: "ID"}, {label: "Guia", value: "GUIA"}, {label: "Lote", value: "LOTE"}];
+const searchByOptions = [{label: "Pedido", value: "ID"}, {label: "Guia", value: "GUIA"}, {label: "Lote Guia", value: "LOTE_GUIA"}, {label: "Lote pedido", value: "LOTE_PEDIDO"}];
 const emptyOption = getEmptyOptions();
 
 const OrderConciliationForm = ({
@@ -66,7 +67,6 @@ const OrderConciliationForm = ({
     }, [conciliationSuccess]);
 
     const addLote = () => {
-        console.log('addOrder', lote);
         lote.split(' ')
             .filter(l => l)
             .filter(l => !orders.some(o => o.id == l))
@@ -75,9 +75,73 @@ const OrderConciliationForm = ({
             })
         setLote("");
     }
+    const addLoteGuia = () => {
+
+        const trackingList = lote.split(' ')
+            .filter(tracking => tracking)
+            .filter(tracking => !orders.some(o => o.orderDelivery && o.orderDelivery.tracking === tracking))
+            .map(tracking => tracking);
+
+        const list = [...orders];
+
+        trackingList.forEach((tracking, index) => {
+            const conditions = new Conditionals.Condition;
+            conditions.add("orderDelivery.tracking", tracking, Conditionals.OPERATORS.EQUAL);
+            const cond = Conditionals.getConditionalFormat(conditions.all());
+            const query = Conditionals.buildHttpGetQuery(cond, 1, 0);
+
+            fetchOrdersApi(query).then(resp => {
+                if (resp && resp.data && resp.data.length === 1) {
+                    let _order = resp.data[0];
+                    if (!list.some(o => o.id === _order.id)) {
+                        list.push(_order);
+                        list.sort((a, b) => (a.id > b.id) ? 1 : -1);
+                    }
+                }
+
+                if ((index + 1) === trackingList.length) {
+                    setOrders(list);
+                }
+            })
+        })
+        setLote("");
+    }
+
+    /*const addLoteGuia = () => {
+        console.log('addOrder', lote);
+
+        const trackingList = lote.split(' ')
+            .filter(tracking=> tracking)
+            .filter(tracking => !orders.some(o => o.orderDelivery && o.orderDelivery.tracking === tracking))
+            .map(tracking=> tracking);
+
+        const conditions = new Conditionals.Condition;
+        conditions.add("orderDelivery.tracking", trackingList, Conditionals.OPERATORS.IN);
+        const cond = Conditionals.getConditionalFormat(conditions.all());
+        const query = Conditionals.buildHttpGetQuery(cond, 1, 0);
+
+        fetchOrdersApi(query).then(o => {
+            console.log('YG OOO ', o)
+            if(o && o.data && o.data.length > 0){
+                const list = [...orders];
+                o.data.forEach((_order) => {
+                    if (!list.some(o => o.id === _order.id)) {
+                        list.push(_order);
+                        list.sort((a, b) => (a.id > b.id) ? 1 : -1);
+                    }
+                })
+                setOrders(list);
+            }
+        })
+        setLote("");
+    }*/
 
     const addOrder = () => {
-        if (searchBy === 'LOTE') {
+        if (searchBy === 'LOTE_GUIA') {
+            addLoteGuia();
+            return;
+        }
+        if (searchBy === 'LOTE_PEDIDO') {
             addLote();
             return;
         }
@@ -121,7 +185,7 @@ const OrderConciliationForm = ({
                                 <Col md={6}>
                                     <Label htmlFor="product">Pedido # </Label>
                                     <FieldAsyncSelect
-                                        name={"product"}
+                                        name={"order"}
                                         urlStr={ORDERS}
                                         placeholder="Buscar por Pedido"
                                         defaultValue={defaultOption}
@@ -137,7 +201,7 @@ const OrderConciliationForm = ({
                                 <Col md={6}>
                                     <Label htmlFor="customer">Guia</Label>
                                     <FieldAsyncSelect
-                                        name={"customer"}
+                                        name={"tracking"}
                                         urlStr={ORDERS}
                                         placeholder="Buscar por Guia"
                                         defaultValue={defaultOption}
@@ -148,12 +212,26 @@ const OrderConciliationForm = ({
                                     />
                                 </Col>
                             )}
-                            {searchBy === "LOTE" && (
+                            {searchBy === "LOTE_GUIA" && (
                                 <Col md={6}>
-                                    <Label htmlFor="orders">Pedidos</Label>
+                                    <Label htmlFor="orders">Lote - Guias</Label>
                                     <FieldText
-                                        id='orders'
-                                        name={"orders"}
+                                        id='loteTracking'
+                                        name={"loteTracking"}
+                                        value={lote}
+                                        defaultValue={lote}
+                                        onChange={(e) => {
+                                            setLote(e.target.value);
+                                        }}
+                                    />
+                                </Col>
+                            )}
+                            {searchBy === "LOTE_PEDIDO" && (
+                                <Col md={6}>
+                                    <Label htmlFor="orders">Lote - Pedidos</Label>
+                                    <FieldText
+                                        id='loteOrder'
+                                        name={"loteOrder"}
                                         value={lote}
                                         defaultValue={lote}
                                         onChange={(e) => {
@@ -210,7 +288,8 @@ const OrderConciliationForm = ({
                                 </table>
                             </Col>
                             <Col>
-                                Total pedidos: {orders.filter(o => o.status === 4).length}
+                                <div><b>Cant pedidos:</b> {orders.filter(o => o.status === 4).length}</div>
+                                <div><b>Total:</b> {priceFormat(orders.filter(o => o.status === 4).reduce((acc, item) => acc + item.totalAmount, 0))}</div>
                             </Col>
                         </Row>
                         {orders.some(o => o.status !== 4) && (
@@ -251,7 +330,8 @@ const OrderConciliationForm = ({
                                     </table>
                                 </Col>
                                 <Col>
-                                    Total pedidos: {orders.filter(o => o.status !== 4).length}
+                                    <div><b>Cant pedidos:</b> {orders.filter(o => o.status !== 4).length}</div>
+                                    <div><b>Total:</b> {priceFormat(orders.filter(o => o.status !== 4).reduce((acc, item) => acc + item.totalAmount, 0))}</div>
                                 </Col>
                             </Row>
                         )}
