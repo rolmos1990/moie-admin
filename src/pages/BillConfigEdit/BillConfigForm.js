@@ -30,12 +30,15 @@ const BillConfigForm = (props) => {
     }, [billConfig]);
 
     const handleValidSubmit = (event, values) => {
+        console.log("VALUES", values);
         const data = filteredValues(values);
+
         if (!billConfig.id) {
             props.registerBillConfig(data, props.history)
         } else {
             props.updateBillConfig(billConfig.id, data, props.history)
         }
+
         if(showAsModal && onAcceptModal){
             onAcceptModal(billConfig.id);
         }
@@ -44,7 +47,7 @@ const BillConfigForm = (props) => {
     const filteredValues = (values) => {
         const data = {...values};
 
-        data.status = values._status;
+        data.status = values._status === "true" ? true : false;
         delete data._status;
         return data;
     }
@@ -63,8 +66,8 @@ const BillConfigForm = (props) => {
                                         </Col>
                                         <Col>
                                             <FieldSwitch
-                                                value={billConfigData.status}
-                                                defaultValue={billConfigData.status}
+                                                id={"_status"}
+                                                defaultValue={billConfigData._status}
                                                 name={"_status"}
                                             />
                                         </Col>
@@ -103,6 +106,8 @@ const BillConfigForm = (props) => {
                                         id='startNumber'
                                         name={"startNumber"}
                                         value={billConfigData.startNumber}
+                                        minLength={1}
+                                        maxLength={255}
                                         required/>
                                 </div>
                             </Col>
@@ -113,6 +118,8 @@ const BillConfigForm = (props) => {
                                         id='finalNumber'
                                         name={"finalNumber"}
                                         value={billConfigData.finalNumber}
+                                        minLength={1}
+                                        maxLength={255}
                                         required/>
                                 </div>
                             </Col>
@@ -122,6 +129,7 @@ const BillConfigForm = (props) => {
                                     <FieldDate
                                         name={"resolutionDate"}
                                         mode={DATE_MODES.SINGLE}
+                                        defaultValue={billConfigData.createdAt}
                                     />
                                 </div>
                             </Col>

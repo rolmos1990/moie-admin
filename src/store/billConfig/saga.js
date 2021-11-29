@@ -85,13 +85,14 @@ function* queryData({params ={}, node='bills'}) {
     }
 }
 
-function* register({payload: {data}}) {
+function* register({payload: {data, history}}) {
     try {
         console.log('factura', data)
         const response = yield call(POST_API_REQUEST, data);
-        showResponseMessage(response, "Factura creada!", response.error);
-        yield put(CREATE_SUCCESS_ACTION(response));
-        yield put(refreshList())
+        showResponseMessage(response, "Resolución creada!", response.error);
+        //yield put(CREATE_SUCCESS_ACTION(response));
+        //yield put(refreshList());
+        history.push(LIST_URL);
     } catch (error) {
         yield put(CREATE_FAILED_ACTION(error))
         showResponseMessage({status: error.response.data.code}, "", error.response.data.error);
@@ -101,7 +102,7 @@ function* register({payload: {data}}) {
 function* update({ payload: { id, data, history } }) {
     try {
         const response = yield call(PUT_API_REQUEST, id, data)
-        showResponseMessage(response, "Despacho actualizado!")
+        showResponseMessage(response, "Conf. de Resolución han sido actualizada!")
         yield put(UPDATE_SUCCESS_ACTION(response))
         //history.push(LIST_URL)
     } catch (error) {
@@ -113,7 +114,7 @@ function* billDelete({ payload: { id, history } }) {
     try {
         yield call(deleteBillConfigApi, id)
         yield put(deleteBillConfigSuccess(id))
-        showResponseMessage({status:200}, "Despacho borrado!");
+        showResponseMessage({status:200}, "Resolución borrada!");
         history.push("/bills")
 
     } catch (error) {

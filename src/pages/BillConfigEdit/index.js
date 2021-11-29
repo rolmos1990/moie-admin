@@ -24,7 +24,7 @@ const BillConfigEdit = (props) => {
         <React.Fragment>
             <div className="page-content">
                 <Container fluid>
-                    <Breadcrumb hasBack path="/billConfigs" title={billConfig.name} item={"Resolucion"}/>
+                    <Breadcrumb hasBack path="/billConfigs" title={billConfig.name} item={"Resolución"}/>
                     <Card>
                         <CardBody>
                             <BillConfigForm billConfig={billConfig}/>

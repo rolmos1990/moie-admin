@@ -65,10 +65,10 @@ export const getBillConfigFailed = error => ({
     payload: error,
 })
 
-export const registerBillConfig = (data) => {
+export const registerBillConfig = (data, history) => {
     return {
         type: REGISTER_BILL_CONFIG,
-        payload: {data},
+        payload: {data, history},
     }
 }
 

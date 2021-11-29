@@ -86,6 +86,8 @@ const userRoutes = [
   {path: "/payment", component: PaymentEdit},
   {path: "/billConfigs", component: BillConfigs},
   {path: "/billConfig/:id", component: BillConfigEdit},
+  {path: "/billConfig", component: BillConfigEdit },
+
   {path: "/404", component: PageNotFount},
 
   // //profile

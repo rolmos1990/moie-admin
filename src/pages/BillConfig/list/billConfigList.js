@@ -12,17 +12,14 @@ import {getBillConfigs, registerBillConfig} from "../../../store/billConfig/acti
 import {TableFilter} from "../../../components/TableFilter";
 import billConfigColumns from "./billConfigColumns";
 import {normalizeColumnsList} from "../../../common/converters";
-import Conditionals from "../../../common/conditionals";
 import NoDataIndication from "../../../components/Common/NoDataIndication";
+import {Link} from "react-router-dom";
 
 const BillConfigList = props => {
-    const {states, billConfigs, meta, getStates, onGetBillConfigs, loading, refresh} = props; //onDeleteBillConfig,
+    const {billConfigs, onGetBillConfigs, refresh} = props; //onDeleteBillConfig,
     const [billConfigList, setBillConfigList] = useState([])
     const [filter, setFilter] = useState(false);
     const [conditional, setConditional] = useState(null);
-    const [openOrdersModal, setOpenOrdersModal] = useState(false);
-    const [orderListConditions, setOrderListConditions] = useState([]);
-    const [openReportModal, setOpenReportModal] = useState(false);
 
     const pageOptions = {
         sizePerPage: DEFAULT_PAGE_LIMIT,
@@ -63,28 +60,6 @@ const BillConfigList = props => {
         });
     };
     const columns = billConfigColumns(onDelete);
-
-    const addOrders = () => {
-        const conditions = new Conditionals.Condition;
-        // conditions.add("status", 4, Conditionals.OPERATORS.EQUAL);//Enviada
-        conditions.add('office', '', Conditionals.OPERATORS.NOT_NULL);
-        console.log('conditions', conditions);
-        setOrderListConditions(conditions.condition);
-        setOpenOrdersModal(true);
-    };
-
-    const onCloseModal = () => {
-        setOpenOrdersModal(false);
-    };
-    const onAcceptModal = (conditionals) => {
-        console.log('conditionals', conditionals)
-        if (conditionals && conditionals.length > 0) {
-            const value = conditionals[0].value;
-            const ids = value.split ? value.split('::') : [value];
-            props.onCreateBillConfig({ids: ids});
-        }
-        setOpenOrdersModal(false);
-    };
 
     return (
         <>
@@ -127,14 +102,9 @@ const BillConfigList = props => {
                                                                     </Button>
                                                                 </Tooltip>
                                                             )}
-                                                            <Tooltip placement="bottom" title="Generar reporte" aria-label="add">
-                                                                <Button onClick={() => setOpenReportModal(true)}>
-                                                                    <i className="mdi mdi-file"> </i>
-                                                                </Button>
-                                                            </Tooltip>
-                                                            <Button color="primary" className="btn-sm btn-rounded waves-effect waves-light" onClick={addOrders}>
-                                                                <i className="mdi mdi-plus"> </i> Generar Factura
-                                                            </Button>
+                                                            <Link to={"/billConfig"} className="btn btn-primary waves-effect waves-light text-light">
+                                                                <i className="mdi mdi-plus"></i> Nueva resolución
+                                                            </Link>
                                                         </div>
                                                     </Col>
                                                 </Row>
