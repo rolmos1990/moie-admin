@@ -5,7 +5,7 @@ import PropTypes from "prop-types";
 import {Button as ButtonMaterial} from "@material-ui/core";
 import Conditionals from "../../common/conditionals";
 import {FieldAsyncSelect, FieldDate, FieldNumber, FieldSelect, FieldText} from "../Fields";
-import {formatDateToServer, isValidObject, isValidOption, isValidString} from "../../common/utils";
+import {formatDateToServer, isValidObject, isValidOption} from "../../common/utils";
 import moment from "moment";
 import {DATE_MODES} from "../Fields/InputDate";
 
@@ -221,6 +221,7 @@ export const TableFilter = (props) => {
                                                 urlStr={field.urlStr}
                                                 placeholder={field.text}
                                                 defaultValue={field.filterDefaultOption}
+                                                conditionalOptions={field.conditionalOptions}
                                             />
                                         </div>
                                     </Col>
