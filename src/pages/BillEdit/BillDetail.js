@@ -30,6 +30,17 @@ const BillDetail = (props) => {
         });
     }
 
+    const formatLog = (_log) => {
+        if (_log) {
+            const replaceRegex = /Paso+/g;
+            _log = _log.replace(replaceRegex, "<br /><br />Paso");
+            return _log;
+        } else {
+            return "No hay registros al momento";
+
+        }
+    }
+
     return (bill && bill.id) ? (
         <React.Fragment>
             <div className="page-content">
@@ -98,6 +109,16 @@ const BillDetail = (props) => {
                                         <span className="p-1">{bill.order.customer.email}</span>
                                     </Col>
                                 </Row>
+                            </Col>
+                        </Row>
+                    </Card>
+
+                    <Card id={'log'} className="mb-3 p-3">
+                        <Row>
+                            <Col md={12}>
+                                <h4 className="card-title text-info">Bitacora Dian</h4>
+                                <hr/>
+                                <div dangerouslySetInnerHTML={{ __html: formatLog(bill.dianLog) }} />
                             </Col>
                         </Row>
                     </Card>
