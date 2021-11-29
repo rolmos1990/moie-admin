@@ -1,4 +1,7 @@
 import {
+    APPLY_PAYMENT,
+    APPLY_PAYMENT_FAILED,
+    APPLY_PAYMENT_SUCCESS,
     GET_PAYMENT,
     GET_PAYMENT_FAILED,
     GET_PAYMENT_SUCCESS,
@@ -74,18 +77,34 @@ export const updatePayment = (id, data, history) => {
         payload: {id, data, history},
     }
 }
-
 export const updatePaymentSuccess = data => {
     return {
         type: UPDATE_PAYMENT_SUCCESS,
         payload: data,
     }
 }
-
-
 export const updatePaymentFail = error => {
     return {
         type: UPDATE_PAYMENT_FAILED,
+        payload: error,
+    }
+}
+
+export const applyPayment = (paymentId, data) => {
+    return {
+        type: APPLY_PAYMENT,
+        payload: {paymentId, data},
+    }
+}
+export const applyPaymentSuccess = data => {
+    return {
+        type: APPLY_PAYMENT_SUCCESS,
+        payload: data,
+    }
+}
+export const applyPaymentFail = error => {
+    return {
+        type: APPLY_PAYMENT_FAILED,
         payload: error,
     }
 }

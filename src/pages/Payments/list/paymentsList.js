@@ -52,8 +52,8 @@ const PaymentsList = props => {
     }, [onGetPayments])
 
     useEffect(() => {
-        // setPaymentsList(payments)
-        setPaymentsList(list)
+        setPaymentsList(payments)
+        // setPaymentsList(list)
     }, [payments])
 
     // eslint-disable-next-line no-unused-vars

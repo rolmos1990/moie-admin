@@ -1,4 +1,7 @@
 import {
+    APPLY_PAYMENT,
+    APPLY_PAYMENT_FAILED,
+    APPLY_PAYMENT_SUCCESS,
     GET_PAYMENT,
     GET_PAYMENT_FAILED,
     GET_PAYMENT_SUCCESS,
@@ -90,6 +93,23 @@ const payments = (state = initialState, action) => {
             }
             break
         case UPDATE_PAYMENT_FAILED:
+            state = {
+                ...state,
+                loading: false,
+            }
+        case APPLY_PAYMENT:
+            state = {
+                ...state,
+                loading: true,
+            }
+            break
+        case APPLY_PAYMENT_SUCCESS:
+            state = {
+                ...state,
+                loading: false,
+            }
+            break
+        case APPLY_PAYMENT_FAILED:
             state = {
                 ...state,
                 loading: false,

@@ -3,7 +3,7 @@ import {all, call, fork, put, takeEvery} from "redux-saga/effects"
 import {GENERATE_REPORT} from "./actionTypes"
 import {b64toBlob} from "../../common/utils";
 import {generateReportFailed, generateReportSuccess} from "./actions";
-import {billReportApi, conciliationReportApi, postSaleReportApi} from "../../helpers/backend_helper";
+import {billReportApi, conciliationReportApi, officeReportApi, postSaleReportApi} from "../../helpers/backend_helper";
 import {REPORT_TYPES} from "../../common/constants";
 import {showResponseMessage} from "../../helpers/service";
 
@@ -11,6 +11,7 @@ const apiMap = {}
 apiMap[REPORT_TYPES.BILLS] = billReportApi;
 apiMap[REPORT_TYPES.CONCILIATION] = conciliationReportApi;
 apiMap[REPORT_TYPES.POST_SALE] = postSaleReportApi;
+apiMap[REPORT_TYPES.OFFICE] = officeReportApi;
 
 
 function* generateReport({reportType, data}) {

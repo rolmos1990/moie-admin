@@ -78,6 +78,7 @@ export const REPORT_TYPES = {
     BILLS: 'BILLS',
     CONCILIATION: 'CONCILIATION',
     POST_SALE: 'POST_SALE',
+    OFFICE: 'OFFICE',
 };
 
 export const BILL_STATUS = {
@@ -101,3 +102,9 @@ export const BANKS = {
     BANCO1: 'BANCO1',
 };
 export const BANKS_LIST = Object.keys(BANKS).map(s => ({label: BANKS[s], value: BANKS[s]}))
+
+export const OFFICE_REPORT_TYPES = {
+    PREVIO_PAGO: 'Previo pago',
+    MENSAJERO: 'Mensajero',
+};
+export const OFFICE_REPORT_TYPE_LIST = Object.keys(OFFICE_REPORT_TYPES).map(s => ({label: OFFICE_REPORT_TYPES[s], value: OFFICE_REPORT_TYPES[s]}))

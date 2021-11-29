@@ -5,17 +5,18 @@ import {withRouter} from "react-router-dom"
 import {connect} from "react-redux";
 import PropTypes from "prop-types";
 import NoDataIndication from "../../components/Common/NoDataIndication";
-import {getOrders, updateOrder} from "../../store/order/actions";
+import {getOrders} from "../../store/order/actions";
 import Conditionals from "../../common/conditionals";
 import {formatDate, priceFormat} from "../../common/utils";
 import {ConfirmationModalAction} from "../../components/Modal/ConfirmationModal";
 import {StatusField} from "../../components/StatusField";
 import {ORDER_STATUS} from "../../common/constants";
+import {applyPayment} from "../../store/payments/actions";
 
 const PaymentOverlay = (props) => {
 
-    const {payment, onUpdateOrder, onCloseOverlay, onGetOrders, orders} = props;
-    const [gettingOrder, setGettingOrder] = useState(null)
+    const {payment, onRelateOrder, onCloseOverlay, onGetOrders, orders} = props;
+    const [findOrderBy, setFindOrderBy] = useState(null)
     const [orderRelated, setOrderRelated] = useState(null)
 
     useEffect(() => {
@@ -24,23 +25,25 @@ const PaymentOverlay = (props) => {
             const conditions = new Conditionals.Condition;
             conditions.add("payment", payment.id, Conditionals.OPERATORS.EQUAL);
             onGetOrders(conditions);
-            setGettingOrder(true);
+            setFindOrderBy("PAYMENT");
         }
     }, [payment]);
 
     useEffect(() => {
-        console.log('YG orders', orders)
-        if (null !== gettingOrder) {
+        console.log('YG orders', orders);
+        if (findOrderBy === "PAYMENT") {
+            if (orders.length === 1 && orders[0].payment && orders[0].payment.id === payment.id) {
+                setOrderRelated(orders[0]);
 
-            if (!orders || orders.length === 0) {
+            } else {
                 const conditions = new Conditionals.Condition;
                 conditions.add("payment", null, Conditionals.OPERATORS.NULL);
-                // conditions.add("orderDelivery.deliveryType", 3, Conditionals.OPERATORS.NOT_EQUAL);//TODO error: "No entity column \"orderDelivery.deliveryType\" was found."
+                conditions.add("orderDelivery.chargeOnDelivery", 0, Conditionals.OPERATORS.EQUAL);
                 onGetOrders(conditions);
-            } else if (orders.length === 1) {
-                setOrderRelated(orders[0])
+                setFindOrderBy("NO_PAYMENT");
             }
         }
+
     }, [orders]);
 
     const selectOrder = (order) => {
@@ -49,7 +52,8 @@ const PaymentOverlay = (props) => {
             description: `Usted está asociando el pago# ${payment.id} con el pedido# ${order.id}, ¿Desea continuar?`,
             id: '_clienteModal',
             onConfirm: () => {
-                onUpdateOrder(order.id, {payment: payment.id});
+                console.log('YG onRelateOrder', order);
+                onRelateOrder(payment.id, {orderId: order.id});
                 setOrderRelated(order);
             }
         });
@@ -225,7 +229,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => ({
     onGetOrders: (conditions) => dispatch(getOrders(conditions.all(), 500, 0)),
-    onUpdateOrder: (id, payload) => dispatch(updateOrder(id, payload))
+    onRelateOrder: (paymentId, payload) => dispatch(applyPayment(paymentId, payload))
 })
 
 export default withRouter(

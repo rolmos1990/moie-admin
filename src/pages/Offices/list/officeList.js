@@ -1,28 +1,28 @@
 import React, {useEffect, useState} from "react"
 import PropTypes from "prop-types"
 import {connect} from "react-redux"
-import {Card, CardBody, Col, Row, Spinner} from "reactstrap"
-import paginationFactory, {
-    PaginationListStandalone,
-    PaginationProvider,
-} from "react-bootstrap-table2-paginator"
+import {Card, CardBody, Col, Row} from "reactstrap"
+import paginationFactory, {PaginationListStandalone, PaginationProvider,} from "react-bootstrap-table2-paginator"
 import ToolkitProvider, {Search} from "react-bootstrap-table2-toolkit"
 import BootstrapTable from "react-bootstrap-table-next"
 
 import {Link} from "react-router-dom"
 import {Button, Tooltip} from "@material-ui/core";
 import {DEFAULT_PAGE_LIMIT} from "../../../common/pagination";
-import {ConfirmationModal, ConfirmationModalAction} from "../../../components/Modal/ConfirmationModal";
+import {ConfirmationModalAction} from "../../../components/Modal/ConfirmationModal";
 import {getOffices} from "../../../store/office/actions";
 import {TableFilter} from "../../../components/TableFilter";
 import officeColumns from "./officeColumns";
-import {normalizeColumnsList, statesToOptions} from "../../../common/converters";
+import {normalizeColumnsList} from "../../../common/converters";
+import CustomModal from "../../../components/Modal/CommosModal";
+import OfficeReportForm from "../../Reports/OfficeReportForm";
 
 const OfficeList = props => {
     const {states, offices, meta, getStates, onGetOffices, loading, refresh} = props; //onDeleteOffice,
     const [officeList, setOfficeList] = useState([])
     const [filter, setFilter] = useState(false);
     const [conditional, setConditional] = useState(null);
+    const [openReportModal, setOpenReportModal] = useState(null);
 
     const pageOptions = {
         sizePerPage: DEFAULT_PAGE_LIMIT,
@@ -120,6 +120,13 @@ const OfficeList = props => {
                                                                 </Button>
                                                             </Tooltip>
                                                         )}
+
+                                                        <Tooltip placement="bottom" title="Generar reporte" aria-label="add">
+                                                            <Button onClick={() => setOpenReportModal(true)}>
+                                                                <i className={"mdi mdi-file"}> </i>
+                                                            </Button>
+                                                        </Tooltip>
+
                                                         <Link to={"/office"} className="btn btn-primary waves-effect waves-light text-light">
                                                             <i className="mdi mdi-plus"> </i> Generar Despacho
                                                         </Link>
@@ -155,6 +162,11 @@ const OfficeList = props => {
                     </CardBody>
                 </Card>
             </Col>
+
+
+            <CustomModal title={"Generar reporte"} showFooter={false} isOpen={openReportModal} onClose={() => setOpenReportModal(false)}>
+                <OfficeReportForm onCloseModal={() => setOpenReportModal(false)}/>
+            </CustomModal>
         </Row>
     )
 }

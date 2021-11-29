@@ -1,6 +1,6 @@
 import React from "react"
 import Conditionals from "../../../common/conditionals";
-import {priceFormat} from "../../../common/utils";
+import {formatDate, priceFormat} from "../../../common/utils";
 
 const paymentsColumns = (onSelected) => [
     {
@@ -28,14 +28,19 @@ const paymentsColumns = (onSelected) => [
     },
     {
         text: "Fecha",
-        dataField: "date",
+        dataField: "createdAt",
         sort: true,
         filter: true,
-        filterType: "text",
+        filterType: "dateRange",
+        formatter: (cellContent, item) => (
+            <div>
+                {formatDate(item.createdAt)}
+            </div>
+        ),
     },
     {
         text: "Forma de pago",
-        dataField: "paymentForm",
+        dataField: "type",
         sort: true,
         filter: true,
         filterType: "text",

@@ -1,11 +1,22 @@
 import {all, call, fork, put, takeEvery} from "redux-saga/effects"
 
 //Account Redux states
-import {GET_PAYMENT, GET_PAYMENTS, REGISTER_PAYMENT, UPDATE_PAYMENT} from "./actionTypes"
+import {APPLY_PAYMENT, GET_PAYMENT, GET_PAYMENTS, REGISTER_PAYMENT, UPDATE_PAYMENT} from "./actionTypes"
 
-import {getPaymentFailed, getPaymentsFailed, getPaymentsSuccess, getPaymentSuccess, registerPaymentFailed, registerPaymentSuccess, updatePaymentFail, updatePaymentSuccess} from "./actions"
+import {
+    applyPaymentFail,
+    applyPaymentSuccess,
+    getPaymentFailed,
+    getPaymentsFailed,
+    getPaymentsSuccess,
+    getPaymentSuccess,
+    registerPaymentFailed,
+    registerPaymentSuccess,
+    updatePaymentFail,
+    updatePaymentSuccess
+} from "./actions"
 
-import {fetchPaymentApi, fetchPaymentsApi, registerPaymentApi, updatePaymentApi} from "../../helpers/backend_helper"
+import {applyPaymentPaymentApi, fetchPaymentApi, fetchPaymentsApi, registerPaymentApi, updatePaymentApi} from "../../helpers/backend_helper"
 
 import Conditionals from "../../common/conditionals";
 import {showResponseMessage} from "../../helpers/service";
@@ -18,11 +29,13 @@ const ACTION_NAME_LIST = GET_PAYMENTS;
 const ACTION_NAME_GET = GET_PAYMENT;
 const ACTION_NAME_CREATE = REGISTER_PAYMENT;
 const ACTION_NAME_UPDATE = UPDATE_PAYMENT;
+const ACTION_NAME_APPLY_PAYMENT = APPLY_PAYMENT;
 
 const LIST_API_REQUEST = fetchPaymentsApi;
 const GET_API_REQUEST = fetchPaymentApi;
 const POST_API_REQUEST = registerPaymentApi;
 const PUT_API_REQUEST = updatePaymentApi;
+const POST_API_REQUEST_APPLY_PAYMENT = applyPaymentPaymentApi;
 
 //actions
 const LIST_SUCCESS_ACTION = getPaymentsSuccess;
@@ -33,6 +46,10 @@ const CREATE_SUCCESS_ACTION = registerPaymentSuccess;
 const CREATE_FAILED_ACTION = registerPaymentFailed;
 const UPDATE_SUCCESS_ACTION = updatePaymentSuccess;
 const UPDATE_FAILED_ACTION = updatePaymentFail;
+
+
+const APPLY_PAYMENT_FAILED_ACTION = applyPaymentSuccess;
+const APPLY_PAYMENT_SUCCESS_ACTION = applyPaymentFail;
 
 
 const LIST_URL = "/payments";
@@ -72,6 +89,18 @@ function* register({payload: {data, history}}) {
     }
 }
 
+function* applyPayment({payload: {paymentId, data, history}}) {
+    try {
+        const response = yield call(POST_API_REQUEST_APPLY_PAYMENT, paymentId, data)
+        showResponseMessage(response, "Operación exitosa!");
+        yield put(APPLY_PAYMENT_SUCCESS_ACTION(response))
+        history.push(LIST_URL)
+
+    } catch (error) {
+        yield put(APPLY_PAYMENT_FAILED_ACTION(error))
+    }
+}
+
 function* update({payload: {id, data, history}}) {
     try {
         const response = yield call(PUT_API_REQUEST, id, data)
@@ -89,6 +118,7 @@ export function* watchPayment() {
     yield takeEvery(ACTION_NAME_UPDATE, update);
     yield takeEvery(ACTION_NAME_LIST, fetch);
     yield takeEvery(ACTION_NAME_GET, get)
+    yield takeEvery(ACTION_NAME_APPLY_PAYMENT, applyPayment)
 }
 
 function* paymentSaga() {

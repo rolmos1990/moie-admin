@@ -7,7 +7,7 @@ import {STATUS} from "../../../common/constants";
 import Conditionals from "../../../common/conditionals";
 import {getImageByQuality, priceFormat, STATUS_OPTIONS, YES_NO_OPTIONS} from "../../../common/utils";
 import {CATEGORY, SIZE} from "../../../helpers/url_helper";
-import { Tooltip} from "@material-ui/core";
+import {Tooltip} from "@material-ui/core";
 import Images from "../../../components/Common/Image";
 
 const badgeStyles = {minWidth: '30px', margin: '2px'}
@@ -90,7 +90,7 @@ const productColumns = (onDelete = false) => [
         sort: true,
         formatter: (cellContent, item) => (
             <div className="field-br" style={{width: '230px'}}>
-                {!item.category ? '': (
+                {!item.category ? '' : (
                     <Link to={`/category/${item.category.id}`} className="text-body">
                         {item.category.name}
                     </Link>
@@ -100,6 +100,7 @@ const productColumns = (onDelete = false) => [
         filter: true,
         filterType: "asyncSelect",
         urlStr: CATEGORY,
+        conditionalOptions: {fieldName: 'name', operator: Conditionals.OPERATORS.LIKE},
     },
     {
         text: "Existencia",

@@ -130,6 +130,7 @@ const deleteBillConfigApi = (id) => del(`${url.BILL_CONFIGS}/${id}`);
 const billReportApi = (data) => get(`${url.BILLS}/gen/billReport`, {header: 'content-type: application/pdf'}, data);
 const postSaleReportApi = (data) => get(`${url.ORDERS}/gen/postSaleReport`, {header: 'content-type: application/pdf'}, data);
 const conciliationReportApi = (data) => get(`${url.ORDERS}/gen/conciliationReport`, {header: 'content-type: application/pdf'}, data);
+const officeReportApi = (data) => get(`${url.OFFICES}/gen/officeReport`, {header: 'content-type: application/vnd.ms-excel'}, data);
 const fileOfficeTemplate = (filename, id) => file(filename, `${url.OFFICES}/${id}/getTemplate`, {header: 'content-type: application/vnd.ms-excel'});
 
 //templates
@@ -143,6 +144,7 @@ const fetchPaymentsApi = data => get(url.PAYMENTS, {}, data);
 const fetchPaymentApi = (id) => get(`${url.PAYMENTS}/${id}`, {});
 const registerPaymentApi = data => post(url.PAYMENTS, data);
 const updatePaymentApi = (id, data) => put(`${url.PAYMENTS}/${id}`, data);
+const applyPaymentPaymentApi = (paymentId, data) => post(`${url.PAYMENTS}/applyPayment/${paymentId}`, data);
 
 
 const fetchDeliveryMethodsApi = () => get(`${url.DELIVERY_METHODS}`, {});
@@ -278,10 +280,12 @@ export {
     billReportApi,
     postSaleReportApi,
     conciliationReportApi,
+    officeReportApi,
 
     fetchPaymentsApi,
     fetchPaymentApi,
     registerPaymentApi,
+    applyPaymentPaymentApi,
     updatePaymentApi,
 
     fetchBillConfigsApi,
