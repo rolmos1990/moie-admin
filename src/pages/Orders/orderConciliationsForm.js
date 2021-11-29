@@ -289,7 +289,7 @@ const OrderConciliationForm = ({
                             </Col>
                             <Col>
                                 <div><b>Cant pedidos:</b> {orders.filter(o => o.status === 4).length}</div>
-                                <div><b>Total:</b> {priceFormat(orders.filter(o => o.status === 4).reduce((acc, item) => acc + item.totalAmount, 0))}</div>
+                                <div><b>Total:</b> {priceFormat(orders.filter(o => o.status === 4).reduce((acc, item) => parseFloat(acc) + parseFloat(item.totalAmount), 0))}</div>
                             </Col>
                         </Row>
                         {orders.some(o => o.status !== 4) && (
@@ -331,7 +331,7 @@ const OrderConciliationForm = ({
                                 </Col>
                                 <Col>
                                     <div><b>Cant pedidos:</b> {orders.filter(o => o.status !== 4).length}</div>
-                                    <div><b>Total:</b> {priceFormat(orders.filter(o => o.status !== 4).reduce((acc, item) => acc + item.totalAmount, 0))}</div>
+                                    <div><b>Total:</b> {priceFormat(orders.filter(o => o.status !== 4).reduce((acc, item) => parseFloat(acc) + parseFloat(item.totalAmount), 0))}</div>
                                 </Col>
                             </Row>
                         )}
