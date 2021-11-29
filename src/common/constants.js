@@ -104,7 +104,7 @@ export const BANKS = {
 export const BANKS_LIST = Object.keys(BANKS).map(s => ({label: BANKS[s], value: BANKS[s]}))
 
 export const OFFICE_REPORT_TYPES = {
-    PREVIO_PAGO: 'Previo pago',
-    MENSAJERO: 'Mensajero',
+    PREVIO_PAGO: 'PREVIO_PAGO',
+    MENSAJERO: 'MENSAJERO',
 };
 export const OFFICE_REPORT_TYPE_LIST = Object.keys(OFFICE_REPORT_TYPES).map(s => ({label: OFFICE_REPORT_TYPES[s], value: OFFICE_REPORT_TYPES[s]}))

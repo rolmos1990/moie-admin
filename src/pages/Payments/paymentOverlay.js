@@ -111,7 +111,7 @@ const PaymentOverlay = (props) => {
                             </Col>
                             <Col md={6}>
                                 <label>Fecha: </label>
-                                <span className="p-1">{formatDate(payment.date)}</span>
+                                <span className="p-1">{formatDate(payment.createdAt)}</span>
                             </Col>
                             <Col md={6}>
                                 <label>Número de comprobante: </label>
