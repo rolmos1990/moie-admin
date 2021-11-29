@@ -42,16 +42,17 @@ const orderColumns = (onSelectedOrder, showAsModal, conciliationView) => {
             filter: true,
             filterType: "asyncSelect",
             urlStr: CUSTOMER,
+            conditionalOptions: {fieldName: 'name', operator: Conditionals.OPERATORS.LIKE},
             formatter: (cellContent, item) => (
                 !showAsModal ? (
-                    <Link to={`/customer/detail/${item.customer.id}`} className="text-body">
-                        {item.customer.name}
-                        {item.customer.isMayorist === true && (
-                            <Tooltip placement="bottom" title="Cliente mayorista" aria-label="add">
-                                <i className={"mdi mdi-crown font-size-18 mr-1 text-warning"}> </i>
-                            </Tooltip>
-                        )}
-                        <div>
+                        <Link to={`/customer/detail/${item.customer.id}`} className="text-body">
+                            {item.customer.name}
+                            {item.customer.isMayorist === true && (
+                                <Tooltip placement="bottom" title="Cliente mayorista" aria-label="add">
+                                    <i className={"mdi mdi-crown font-size-18 mr-1 text-warning"}> </i>
+                                </Tooltip>
+                            )}
+                            <div>
                             <small className="bg-grey badge badge-soft-secondary"><i className="fa fa-user"></i> Ramon Olmos</small>
                         </div>
                     </Link>)
