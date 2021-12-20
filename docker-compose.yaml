@@ -1,0 +1,10 @@
+version: '3.3'
+services:
+  moie-lucy-api:
+    ports:
+      - '8081:80'
+    restart: always
+    logging:
+      options:
+        max-size: 1g
+    image: 'rolmos/moie-admin:latest'
