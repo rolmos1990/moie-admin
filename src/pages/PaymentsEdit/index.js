@@ -138,6 +138,38 @@ const PaymentEdit = (props) => {
                                                 </div>
                                             </Col>
                                             {(PAYMENT_FORMS.BANK_TRANSFER === paymentFormSelected) && (
+                                            <>
+                                            <Col md="6">
+                                                <div className="mb-3">
+                                                    <Label htmlFor="state">Banco origen <span className="text-danger">*</span></Label>
+                                                    <FieldSelect
+                                                        id="originBank"
+                                                        name={"originBank"}
+                                                        placeholder={"Seleccione un banco"}
+                                                        defaultValue={paymentData.originBank}
+                                                        options={banks}
+                                                        required
+                                                        isSearchable
+                                                    />
+                                                </div>
+                                            </Col>
+                                            <Col md="6">
+                                                <div className="mb-3">
+                                                    <Label htmlFor="state">Banco destino <span className="text-danger">*</span></Label>
+                                                    <FieldSelect
+                                                        id="targetBank"
+                                                        name={"targetBank"}
+                                                        placeholder={"Seleccione un banco"}
+                                                        defaultValue={paymentData.targetBank}
+                                                        options={BANKS_LIST}
+                                                        required
+                                                        isSearchable
+                                                    />
+                                                </div>
+                                            </Col>
+                                            </>
+                                            )}
+                                            {(PAYMENT_FORMS.DEPOSIT === paymentFormSelected) && (
                                                 <Col md="6">
                                                     <div className="mb-3">
                                                         <Label htmlFor="state">Banco origen <span className="text-danger">*</span></Label>
@@ -153,20 +185,6 @@ const PaymentEdit = (props) => {
                                                     </div>
                                                 </Col>
                                             )}
-                                            <Col md="6">
-                                                <div className="mb-3">
-                                                    <Label htmlFor="state">Banco destino <span className="text-danger">*</span></Label>
-                                                    <FieldSelect
-                                                        id="targetBank"
-                                                        name={"targetBank"}
-                                                        placeholder={"Seleccione un banco"}
-                                                        defaultValue={paymentData.targetBank}
-                                                        options={BANKS_LIST}
-                                                        required
-                                                        isSearchable
-                                                    />
-                                                </div>
-                                            </Col>
                                             <Col md="6">
                                                 <div className="mb-3">
                                                     <Label htmlFor="field_name">Número de consignación o transferencia <span className="text-danger">*</span></Label>
