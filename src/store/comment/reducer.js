@@ -39,9 +39,12 @@ const comments = (state = initialState, action) => {
         case GET_COMMENTS_SUCCESS:
             return {
                 ...state,
-                comments: action.payload,
+                comments: {
+                    ...state.comments,
+                    [action.entity] : action.payload
+                },
                 meta: action.meta,
-                loading: false,
+                loading: false
             }
         case GET_COMMENT:
             return {

@@ -63,11 +63,14 @@ function* get({ id }) {
 }
 function* fetch({conditional, limit, offset}) {
     try {
+        const field = conditional.filter(item => item.field === "entity")[0];
         const cond = Conditionals.getConditionalFormat(conditional);
         const query = Conditionals.buildHttpGetQuery(cond, limit, offset);
 
-        const response = yield call(LIST_API_REQUEST, query)
-        yield put(LIST_SUCCESS_ACTION(response.data, response.meta));
+        const response = yield call(LIST_API_REQUEST, query);
+        if(field.value){
+            yield put(LIST_SUCCESS_ACTION(response.data, response.meta, field.value));
+        }
     } catch (error) {
         yield put(LIST_FAILED_ACTION(error))
     }

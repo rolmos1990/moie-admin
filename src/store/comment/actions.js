@@ -29,10 +29,11 @@ export const getComments = (conditional, limit, offset) => ({
     limit: limit,
     offset: offset
 })
-export const getCommentsSuccess = (data, meta) => ({
+export const getCommentsSuccess = (data, meta, entity) => ({
     type: GET_COMMENTS_SUCCESS,
     meta: meta,
     payload: data,
+    entity: entity
 })
 export const getCommentsFailed = error => ({
     type: GET_COMMENTS_FAILED,

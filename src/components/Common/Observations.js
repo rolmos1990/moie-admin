@@ -25,12 +25,12 @@ const Observations = (props) => {
     }, [entityId]);
 
     useEffect(() => {
-        if (observations && observations.length > 0) {
-            if(observations.some(o => o.entity === entity)) setObservationList(observations.filter(o => o.entity === entity));
+        if (observations[entity] && observations[entity].length > 0) {
+            if(observations[entity].some(o => o.entity === entity)) setObservationList(observations[entity].filter(o => o.entity === entity));
         }else{
             setObservationList([]);
         }
-    }, [observations]);
+    }, [observations[entity]]);
 
     const onDelete = (id) => {
         ConfirmationModalAction({
