@@ -2,6 +2,7 @@ import {all, call, fork, put, takeEvery} from "redux-saga/effects"
 
 //Account Redux states
 import {
+    CANCELED_STATUS_ORDER,
     CONCILIATION_REQUEST,
     CONFIRM_CONCILIATION_REQUEST,
     GET_DELIVERY_METHODS,
@@ -45,7 +46,7 @@ import {
 } from "./actions"
 
 import {
-    batchPrintRequestApi,
+    batchPrintRequestApi, canceledStatusOrderApi,
     conciliationRequestApi,
     confirmConciliationRequestApi,
     fetchDeliveryMethodsApi,
@@ -76,6 +77,7 @@ const PRINT_ORDER_API = printOrderApi;
 const RESUME_ORDER_API = resumeOrderApi;
 const LIST_API_REQUEST = fetchOrdersApi;
 const NEXT_STATUS_API_REQUEST = nextStatusOrderApi;
+const CANCELED_STATUS_API_REQUEST = canceledStatusOrderApi;
 const GET_API_REQUEST = fetchOrderApi;
 const POST_API_REQUEST = registerOrderApi;
 const PUT_API_REQUEST = updateOrderApi;
@@ -156,6 +158,18 @@ function* register({payload: {data, history}}) {
 function* nextStatus({payload: {data, history}}) {
     try {
         const response = yield call(NEXT_STATUS_API_REQUEST, data)
+        if(response.status === 200) yield put(refreshOrders());
+        showResponseMessage(response, "Operación exitosa!");
+        yield put(UPDATE_SUCCESS_ACTION(response.order))
+
+    } catch (error) {
+        yield put(UPDATE_FAILED_ACTION(error))
+    }
+}
+
+function* canceledStatus({payload: {data, history}}) {
+    try {
+        const response = yield call(CANCELED_STATUS_API_REQUEST, data)
         if(response.status === 200) yield put(refreshOrders());
         showResponseMessage(response, "Operación exitosa!");
         yield put(UPDATE_SUCCESS_ACTION(response.order))
@@ -265,6 +279,7 @@ export function* watchOrder() {
     yield takeEvery(GET_DELIVERY_METHODS, fetchDeliveryMethods)
     yield takeEvery(GET_DELIVERY_QUOTE, fetchDeliveryQuote)
     yield takeEvery(NEXT_STATUS_ORDER, nextStatus)
+    yield takeEvery(CANCELED_STATUS_ORDER, canceledStatus)
     yield takeEvery(RESUME_ORDER, resumeOrder)
     yield takeEvery(PRINT_ORDER, printOrder)
     yield takeEvery(PRINT_BATCH_REQUEST, batchRequest)

@@ -15,6 +15,7 @@ import {
 import NoDataIndication from "../../components/Common/NoDataIndication";
 
 import {
+    canceledStatusOrder,
     getOrder,
     historicOrder,
     nextStatusOrder,
@@ -44,7 +45,7 @@ import {isMobile} from "react-device-detect";
 
 const OrderEdit = (props) => {
 
-    const {orderId, onGetOrder, onUpdateCar, onUpdateOrder, onCloseOverlay, onNextStatusOrder, onResumeOrder, onPrintOrder, print, resume, order, car, refresh, showOrderOverlay = false, onGetHistoric, historic} = props;
+    const {orderId, onGetOrder, onUpdateCar, onUpdateOrder, onCloseOverlay, onNextStatusOrder, onCanceledStatusOrder, onResumeOrder, onPrintOrder, print, resume, order, car, refresh, showOrderOverlay = false, onGetHistoric, historic} = props;
     const [orderData, setOrderData] = useState({});
     const [orderResume, setOrderResume] = useState('');
     const [showAsTable, setShowAsTable] = useState(false);
@@ -272,7 +273,7 @@ const OrderEdit = (props) => {
                         <div className="button-items">
                             {(order && (order.status === 1 || order.status === 2)) && (
                                 <Tooltip placement="bottom" title="Anular" aria-label="add">
-                                    <button type="button" color="primary" className="btn-sm btn btn-outline-danger waves-effect waves-light">
+                                    <button type="button" color="primary" className="btn-sm btn btn-outline-danger waves-effect waves-light" onClick={() => onCanceledStatusOrder(order.id)}>
                                         <i className={"mdi mdi-delete"}> </i>
                                     </button>
                                 </Tooltip>
@@ -776,6 +777,7 @@ const mapDispatchToProps = dispatch => ({
     onUpdateCar: (data) => dispatch(updateCard(data)),
     onGetProducts: (ids = []) => dispatch(getProductsByIds(ids)),
     onNextStatusOrder: (id = []) => dispatch(nextStatusOrder({order: id})),
+    onCanceledStatusOrder: (id = []) => dispatch(canceledStatusOrder({order: id})),
     onResumeOrder: (id = []) => dispatch(resumeOrder(id)),
     onPrintOrder: (id = []) => dispatch(printOrder(id)),
     onGetHistoric: (id) => dispatch(historicOrder(id)),

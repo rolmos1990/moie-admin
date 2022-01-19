@@ -88,6 +88,7 @@ const fetchOrdersApi = data => get(url.ORDERS, {}, data);
 const fetchOrderApi = (id) => get(`${url.ORDERS}/${id}`,{});
 const registerOrderApi = data => post(url.ORDERS, data);
 const nextStatusOrderApi = data => post(`${url.ORDERS}/nextStatus`, data);
+const canceledStatusOrderApi = data => post(`${url.ORDERS}/canceledStatus`, data);
 const printOrderApi = id => get(`${url.ORDERS}/${id}/print`, {}, {});
 const orderHistoric = (id) => get(`${url.ORDERS}/${id}/historic`, {});
 const resumeOrderApi = id => get(`${url.ORDERS}/${id}/boardResume`, {}, {});
@@ -208,6 +209,7 @@ export {
 
     getProductsPendingApi,
     nextStatusOrderApi,
+    canceledStatusOrderApi,
 
     fetchProductImagesApi,
     fetchProductImageApi,

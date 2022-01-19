@@ -1,4 +1,5 @@
 import {
+    CANCELED_STATUS_ORDER,
     CONCILIATION_FAILED,
     CONCILIATION_REQUEST,
     CONCILIATION_SUCCESS,
@@ -98,6 +99,12 @@ export const getOrderFailed = error => ({
 export const nextStatusOrder = (data, history) => {
     return {
         type: NEXT_STATUS_ORDER,
+        payload: { data, history },
+    }
+}
+export const canceledStatusOrder = (data, history) => {
+    return {
+        type: CANCELED_STATUS_ORDER,
         payload: { data, history },
     }
 }
