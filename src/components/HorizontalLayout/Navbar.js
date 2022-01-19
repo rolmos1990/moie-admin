@@ -137,7 +137,7 @@ const Navbar = props => {
                       to="#"
                       onClick={e => {
                         e.preventDefault()
-                        setextra(!extra)
+                        //setextra(!extra)
                       }}
                   >
                     <i className="uil-cog me-2"></i>
@@ -187,7 +187,7 @@ const Navbar = props => {
                       to="#"
                       onClick={e => {
                         e.preventDefault()
-                        setextra(!extra)
+                        //setextra(!extra)
                       }}
                   >
                     <i className="uil-cog me-2"></i>

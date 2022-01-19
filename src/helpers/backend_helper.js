@@ -89,6 +89,7 @@ const fetchOrderApi = (id) => get(`${url.ORDERS}/${id}`,{});
 const registerOrderApi = data => post(url.ORDERS, data);
 const nextStatusOrderApi = data => post(`${url.ORDERS}/nextStatus`, data);
 const printOrderApi = id => get(`${url.ORDERS}/${id}/print`, {}, {});
+const orderHistoric = (id) => get(`${url.ORDERS}/${id}/historic`, {});
 const resumeOrderApi = id => get(`${url.ORDERS}/${id}/boardResume`, {}, {});
 const updateOrderApi = (id, data) => put(`${url.ORDERS}/${id}`, data);
 const deleteOrderApi = (id) => del(`${url.ORDERS}/${id}`);
@@ -240,6 +241,7 @@ export {
     fetchDeliveryQuoteApi,
 
     printOrderApi,
+    orderHistoric,
     resumeOrderApi,
 
     fetchCommentsApi,

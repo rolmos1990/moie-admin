@@ -39,7 +39,10 @@ import {
     UPDATE_CAR,
     UPDATE_ORDER,
     UPDATE_ORDER_FAILED,
-    UPDATE_ORDER_SUCCESS
+    UPDATE_ORDER_SUCCESS,
+    GET_HISTORIC_ORDER,
+    GET_HISTORIC_ORDER_FAILED,
+    GET_HISTORIC_ORDER_SUCCESS
 } from "./actionTypes";
 
 const initialState = {
@@ -49,6 +52,7 @@ const initialState = {
     orders: [],
     ordersByOffice: [],
     order: {},
+    historic: [],
     refresh: null,
     deliveryMethods: {
         data: [],
@@ -421,6 +425,21 @@ const order = (state = initialState, action) => {
                     loading: false,
                     success: false
                 }
+            }
+        case GET_HISTORIC_ORDER:
+            return {
+                ...state,
+                historic: []
+            }
+        case GET_HISTORIC_ORDER_SUCCESS:
+            return {
+                ...state,
+                historic: action.payload
+            }
+        case GET_HISTORIC_ORDER_FAILED:
+            return {
+                ...state,
+                historic: []
             }
         default:
             state = {...state}

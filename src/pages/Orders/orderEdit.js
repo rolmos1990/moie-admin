@@ -4,10 +4,25 @@ import {Button, Card, Tooltip} from "@material-ui/core";
 import {withRouter} from "react-router-dom"
 import {connect} from "react-redux";
 import PropTypes from "prop-types";
-import {copyToClipboard, getImageByQuality, priceFormat, printPartOfPage, threeDots} from "../../common/utils";
+import {
+    copyToClipboard,
+    formatDate,
+    getImageByQuality,
+    priceFormat,
+    printPartOfPage,
+    threeDots
+} from "../../common/utils";
 import NoDataIndication from "../../components/Common/NoDataIndication";
 
-import {getOrder, nextStatusOrder, printOrder, resumeOrder, updateCard, updateOrder} from "../../store/order/actions";
+import {
+    getOrder,
+    historicOrder,
+    nextStatusOrder,
+    printOrder,
+    resumeOrder,
+    updateCard,
+    updateOrder
+} from "../../store/order/actions";
 import CustomModal from "../../components/Modal/CommosModal";
 import OrderDeliveryOptions from "./create/orderDeliveryOptions";
 import {COMMENT_ENTITIES, DELIVERY_METHODS_PAYMENT_TYPES, DELIVERY_TYPES, GROUPS, ORDER_STATUS, PAYMENT_TYPES} from "../../common/constants";
@@ -29,13 +44,13 @@ import {isMobile} from "react-device-detect";
 
 const OrderEdit = (props) => {
 
-    const {orderId, onGetOrder, onUpdateCar, onUpdateOrder, onCloseOverlay, onNextStatusOrder, onResumeOrder, onPrintOrder, print, resume, order, car, refresh, showOrderOverlay = false} = props;
+    const {orderId, onGetOrder, onUpdateCar, onUpdateOrder, onCloseOverlay, onNextStatusOrder, onResumeOrder, onPrintOrder, print, resume, order, car, refresh, showOrderOverlay = false, onGetHistoric, historic} = props;
     const [orderData, setOrderData] = useState({});
     const [orderResume, setOrderResume] = useState('');
     const [showAsTable, setShowAsTable] = useState(false);
     const [orderPrint, setOrderPrint] = useState('');
     const [downloadingPhoto, setDownloadingPhoto] = useState(false);
-    const [activeTab, setActiveTab] = useState(1);
+    const [activeTab, setActiveTab] = useState(2);
 
     const [openPrintConfirmModal, setOpenPrintConfirmModal] = useState(false);
     const [openCustomerModal, setOpenCustomerModal] = useState(false);
@@ -47,6 +62,7 @@ const OrderEdit = (props) => {
     useEffect(() => {
         if (orderId) {
             onGetOrder(orderId);
+            onGetHistoric(orderId);
         }
     }, [orderId, refresh]);
 
@@ -643,17 +659,33 @@ const OrderEdit = (props) => {
                                     <table className="table table-sm table-striped table-bordered table-centered table-nowrap">
                                         <thead>
                                         <tr>
-                                            <th className="text-center">Estado</th>
-                                            <th className="text-center">Usuario</th>
                                             <th className="text-center">Fecha</th>
+                                            <th className="text-center">Usuario</th>
+                                            <th className="text-center">Estado</th>
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        <tr>
-                                            <td colSpan={3}>
-                                                No se encontraron datos.
-                                            </td>
-                                        </tr>
+                                        {(historic) ?
+                                            historic.map(item => <tr>
+                                                <td>
+                                                    {formatDate(item.createdAt)}
+                                                </td>
+                                                <td>
+                                                    {item.user.name}
+                                                </td>
+                                                <td>
+                                                    <StatusField color={ORDER_STATUS[item.status].color} className={"font-size-14 mr-5"}>
+                                                        {ORDER_STATUS[item.status].name}
+                                                    </StatusField>
+                                                </td>
+                                            </tr>)
+                                        : (
+                                            <tr>
+                                                <td colSpan={3}>
+                                                    No se encontraron datos.
+                                                </td>
+                                            </tr>
+                                        )}
                                         </tbody>
                                     </table>
                                 </p>
@@ -732,10 +764,10 @@ const OrderEdit = (props) => {
 
 const mapStateToProps = state => {
     const {products} = state.Product
-    const {error, car, order, loading, custom, refresh} = state.Order;
+    const {error, car, order, loading, custom, refresh, historic} = state.Order;
     const print = custom.data && custom.data.print ? custom.data.print : null;
     const resume = custom.data && custom.data.resume ? custom.data.resume : null;
-    return {error, car, order, products, print, resume, loading, refresh}
+    return {error, car, order, products, print, resume, loading, refresh, historic}
 }
 
 const mapDispatchToProps = dispatch => ({
@@ -746,6 +778,7 @@ const mapDispatchToProps = dispatch => ({
     onNextStatusOrder: (id = []) => dispatch(nextStatusOrder({order: id})),
     onResumeOrder: (id = []) => dispatch(resumeOrder(id)),
     onPrintOrder: (id = []) => dispatch(printOrder(id)),
+    onGetHistoric: (id) => dispatch(historicOrder(id)),
 })
 
 export default withRouter(

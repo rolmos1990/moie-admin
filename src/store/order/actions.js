@@ -14,7 +14,7 @@ import {
     GET_DELIVERY_METHODS_SUCCESS,
     GET_DELIVERY_QUOTE,
     GET_DELIVERY_QUOTE_FAILED,
-    GET_DELIVERY_QUOTE_SUCCESS,
+    GET_DELIVERY_QUOTE_SUCCESS, GET_HISTORIC_ORDER, GET_HISTORIC_ORDER_FAILED, GET_HISTORIC_ORDER_SUCCESS,
     GET_ORDER,
     GET_ORDER_FAILED,
     GET_ORDER_RESTART,
@@ -105,6 +105,23 @@ export const resumeOrder = (id, history) => {
     return {
         type: RESUME_ORDER,
         payload: { id, history },
+    }
+}
+export const historicOrder = (id) => {
+    return {
+        type: GET_HISTORIC_ORDER,
+        payload: { id },
+    }
+}
+export const historicOrderFailed = () => {
+    return {
+        type: GET_HISTORIC_ORDER_FAILED
+    }
+}
+export const historicOrderSuccess = (data) => {
+    return {
+        type: GET_HISTORIC_ORDER_SUCCESS,
+        payload: data ,
     }
 }
 export const printOrder = (id, history) => {

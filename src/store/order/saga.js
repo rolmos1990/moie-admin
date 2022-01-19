@@ -5,7 +5,7 @@ import {
     CONCILIATION_REQUEST,
     CONFIRM_CONCILIATION_REQUEST,
     GET_DELIVERY_METHODS,
-    GET_DELIVERY_QUOTE,
+    GET_DELIVERY_QUOTE, GET_HISTORIC_ORDER,
     GET_ORDER,
     GET_ORDERS,
     GET_ORDERS_OFFICE,
@@ -34,7 +34,7 @@ import {
     getOrdersByOfficeSuccess,
     getOrdersFailed,
     getOrdersSuccess,
-    getOrderSuccess,
+    getOrderSuccess, historicOrder, historicOrderFailed, historicOrderSuccess,
     printBatchRequestFailed,
     printBatchRequestSuccess,
     refreshOrders,
@@ -52,7 +52,7 @@ import {
     fetchDeliveryQuoteApi,
     fetchOrderApi,
     fetchOrdersApi,
-    nextStatusOrderApi,
+    nextStatusOrderApi, orderHistoric,
     printOrderApi,
     registerOrderApi,
     resumeOrderApi,
@@ -82,6 +82,7 @@ const PUT_API_REQUEST = updateOrderApi;
 const BATCH_REQUEST_API_REQUEST = batchPrintRequestApi;
 const CONCILIATION_REQUEST_API_REQUEST = conciliationRequestApi;
 const CONFIRM_CONCILIATION_REQUEST_API_REQUEST = confirmConciliationRequestApi;
+const ORDER_HISTORIC_API_REQUEST = orderHistoric;
 
 //actions
 const CUSTOM_SUCCESS_ACTION = customOrderSuccess;
@@ -103,6 +104,9 @@ const CONCILIATION_REQUEST_SUCCESS_ACTION = doConciliationSuccess;
 const CONCILIATION_REQUEST_FAILED_ACTION = doConciliationFailed;
 const CONFIRM_CONCILIATION_REQUEST_SUCCESS_ACTION = confirmConciliationSuccess;
 const CONFIRM_CONCILIATION_REQUEST_FAILED_ACTION = confirmConciliationFailed;
+
+const ORDER_HISTORIC_SUCCESS_ACTION = historicOrderSuccess;
+const ORDER_HISTORIC_FAILED_ACTION = historicOrderFailed;
 
 function* get({id}) {
     try {
@@ -232,6 +236,15 @@ function* conciliation({orders}) {
     }
 }
 
+function* fetchHistoric({payload}) {
+    try {
+        const response = yield call(ORDER_HISTORIC_API_REQUEST, payload.id);
+        yield put(historicOrderSuccess(response.orderHistoric));
+    } catch (error) {
+        yield put(historicOrderFailed(error))
+    }
+}
+
 function* confirmConciliation({orders}) {
     try {
         const response = yield call(CONFIRM_CONCILIATION_REQUEST_API_REQUEST, orders)
@@ -257,6 +270,7 @@ export function* watchOrder() {
     yield takeEvery(PRINT_BATCH_REQUEST, batchRequest)
     yield takeEvery(CONCILIATION_REQUEST, conciliation)
     yield takeEvery(CONFIRM_CONCILIATION_REQUEST, confirmConciliation)
+    yield takeEvery(GET_HISTORIC_ORDER, fetchHistoric);
 }
 
 function* orderSaga() {
