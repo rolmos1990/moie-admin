@@ -6,7 +6,7 @@ import {Link, withRouter} from "react-router-dom"
 import {connect} from "react-redux";
 import {apiError} from "../../store/auth/login/actions";
 import PropTypes from "prop-types";
-import {addOrderOffice, confirmOffice, deleteOffice, getOffice, printOfficeReport, registerOffice, resetPrintOfficeReport, updateOffice} from "../../store/office/actions";
+import {addOrderOffice, deleteOrderOffice, confirmOffice, deleteOffice, getOffice, printOfficeReport, registerOffice, resetPrintOfficeReport, updateOffice} from "../../store/office/actions";
 import {FieldDate, FieldSelect, FieldText} from "../../components/Fields";
 import Breadcrumb from "../../components/Common/Breadcrumb";
 import {DATE_FORMAT, formatDate, printPartOfPage} from "../../common/utils";
@@ -24,7 +24,7 @@ import Conditionals from "../../common/conditionals";
 import {fileOfficeTemplate} from "../../helpers/backend_helper";
 
 const OfficeEdit = (props) => {
-    const {getOffice, office, deliveryMethods, orders, printReportData} = props;
+    const {getOffice, office, deliveryMethods, orders, printReportData, refresh} = props;
     const [officeData, setOfficeData] = useState({_status: STATUS.ACTIVE});
     const isEdit = props.match.params.id;
     const [orderListConditions, setOrderListConditions] = useState([]);
@@ -168,6 +168,10 @@ const OfficeEdit = (props) => {
         setOrderListConditions(conditions.condition);
         setOpenOrdersModal(true);
     };
+
+    const deleteOrders = (id) => {
+        props.deleteOrderOffice(office.id , {order: id});
+    }
 
     const onConfirmDelete = (id, history) => props.deleteOffice(id, history);
     const onConfirmOffice = (id, history) => props.confirmOffice(id, history);
@@ -343,6 +347,11 @@ const OfficeEdit = (props) => {
                                                             </Tooltip>
                                                             <br/>
                                                             <small><span className="font-weight-600">Cliente: </span> <small>{order.customer.name}</small></small>
+                                                            {onDelete && (
+                                                                <button size="small" className="btn btn-sm text-danger" onClick={() => deleteOrders(order.id)}>
+                                                                    <i className="uil uil-trash-alt font-size-18"> </i>
+                                                                </button>
+                                                            )}
                                                         </div>
                                                     </div>
                                                 </Col>
@@ -364,14 +373,14 @@ const OfficeEdit = (props) => {
 
 const mapStateToProps = state => {
     const {deliveryMethods, ordersByOffice} = state.Order
-    const {error, office, loading, printReport} = state.Office
-    return {error, office, loading, deliveryMethods: deliveryMethods.data, orders: ordersByOffice, printReportData: printReport}
+    const {error, office, loading, printReport, refresh} = state.Office
+    return {error, office, loading, deliveryMethods: deliveryMethods.data, orders: ordersByOffice, printReportData: printReport, refresh}
 }
 
 export default withRouter(
     connect(mapStateToProps, {
         apiError, registerOffice, deleteOffice, confirmOffice, updateOffice, getOffice,
-        getDeliveryMethods, getFieldOptionByGroups, addOrderOffice, getOrdersByOffice, printOfficeReport, resetPrintOfficeReport
+        getDeliveryMethods, getFieldOptionByGroups, addOrderOffice, deleteOrderOffice, getOrdersByOffice, printOfficeReport, resetPrintOfficeReport
     })(OfficeEdit)
 )
 

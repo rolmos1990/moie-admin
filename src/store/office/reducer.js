@@ -1,4 +1,7 @@
 import {
+    ADD_ORDER_OFFICE,
+    ADD_ORDER_OFFICE_FAILED,
+    ADD_ORDER_OFFICE_SUCCESS,
     CONFIRM_OFFICE,
     CONFIRM_OFFICE_FAILED,
     CONFIRM_OFFICE_SUCCESS,
@@ -60,6 +63,24 @@ const initialState = {
 
 const office = (state = initialState, action) => {
     switch (action.type) {
+        case ADD_ORDER_OFFICE:
+            return {
+                ...state,
+                refresh: state.refresh,
+                loading: true,
+            }
+        case ADD_ORDER_OFFICE_SUCCESS:
+            return {
+                ...state,
+                refresh: !state.refresh,
+                loading: false,
+            }
+        case ADD_ORDER_OFFICE_FAILED:
+            return {
+                ...state,
+                refresh: state.refresh,
+                loading: false,
+            }
         case RESET_OFFICE:
             return {
                 ...initialState

@@ -8,7 +8,7 @@ import {
     UPDATE_OFFICE,
     QUERY_OFFICES,
     DELETE_OFFICE,
-    CONFIRM_OFFICE, ADD_ORDER_OFFICE, IMPORT_FILE, PRINT_OFFICE_REPORT
+    CONFIRM_OFFICE, ADD_ORDER_OFFICE, IMPORT_FILE, PRINT_OFFICE_REPORT, DELETE_ORDER_OFFICE
 } from "./actionTypes"
 
 import {
@@ -19,15 +19,31 @@ import {
     getOfficeFailed,
     registerOfficeFailed,
     updateOfficeSuccess,
-    updateOfficeFail, queryOfficesSuccess, queryOfficesFailed,
-    deleteOfficeFailed, deleteOfficeSuccess, confirmOfficeSuccess, importFileSuccess, importFileFailed, getOffice, printOfficeReportSuccess, printOfficeReportFailed
+    updateOfficeFail,
+    queryOfficesSuccess,
+    queryOfficesFailed,
+    deleteOfficeFailed,
+    deleteOfficeSuccess,
+    confirmOfficeSuccess,
+    importFileSuccess,
+    importFileFailed,
+    getOffice,
+    printOfficeReportSuccess,
+    printOfficeReportFailed,
+    addOrderOfficeSuccess, addOrderOfficeFailed
 } from "./actions"
 
 import {
     registerOfficeApi,
     updateOfficeApi,
     fetchOfficeApi,
-    fetchOfficesApi, deleteOfficeApi, confirmOfficeApi, addOrderOfficeApi, importFileApi, printOfficeReportApi
+    fetchOfficesApi,
+    deleteOfficeApi,
+    confirmOfficeApi,
+    addOrderOfficeApi,
+    importFileApi,
+    printOfficeReportApi,
+    deleteOrderOfficeApi
 } from "../../helpers/backend_helper"
 
 import Conditionals from "../../common/conditionals";
@@ -45,6 +61,7 @@ const ACTION_NAME_UPDATE = UPDATE_OFFICE;
 const ACTION_NAME_DELETE = DELETE_OFFICE;
 const ACTION_NAME_CONFIRM = CONFIRM_OFFICE;
 const ACTION_NAME_ADD_CHILD = ADD_ORDER_OFFICE;
+const ACTION_NAME_DELETE_CHILD = DELETE_ORDER_OFFICE;
 const IMPORT_FILE_POST = IMPORT_FILE;
 const PRINT_OFFICE_REPORT_POST = PRINT_OFFICE_REPORT;
 
@@ -154,8 +171,23 @@ function* officeOrderAdd({payload: {id, data, conditional, history}}) {
         const cond = Conditionals.getConditionalFormat(conditional);
         const query = Conditionals.buildHttpGetQuery(cond, 0, 200);
         yield call(addOrderOfficeApi, id, data, query)
-        yield put(deleteOfficeSuccess(id))
+        yield put(addOrderOfficeSuccess(id))
         showResponseMessage({status: 200}, "Despacho creado!");
+        //history.push("/office/" + id)
+
+    } catch (error) {
+        console.log("error", error);
+        yield put(addOrderOfficeFailed(error))
+    }
+}
+
+function* officeOrderDelete({payload: {id, data, conditional, history}}) {
+    try {
+        const cond = Conditionals.getConditionalFormat(conditional);
+        const query = Conditionals.buildHttpGetQuery(cond, 0, 200);
+        yield call(deleteOrderOfficeApi, id, data, query)
+        yield put(deleteOfficeSuccess(id))
+        showResponseMessage({status: 200}, "Orden retirada de despacho!");
         history.push("/office/" + id)
 
     } catch (error) {
@@ -202,6 +234,7 @@ export function* watchOffice() {
     yield takeEvery(ACTION_NAME_CONFIRM, officeConfirm);
     yield takeEvery(ACTION_NAME_QUERY, queryData);
     yield takeEvery(ACTION_NAME_ADD_CHILD, officeOrderAdd);
+    yield takeEvery(ACTION_NAME_DELETE_CHILD, officeOrderDelete);
     yield takeEvery(IMPORT_FILE_POST, importFile);
     yield takeEvery(PRINT_OFFICE_REPORT_POST, printOfficeReport);
 }

@@ -7,7 +7,7 @@ import {
     CONFIRM_OFFICE_SUCCESS,
     DELETE_OFFICE,
     DELETE_OFFICE_FAILED,
-    DELETE_OFFICE_SUCCESS,
+    DELETE_OFFICE_SUCCESS, DELETE_ORDER_OFFICE, DELETE_ORDER_OFFICE_FAILED, DELETE_ORDER_OFFICE_SUCCESS,
     GET_OFFICE,
     GET_OFFICE_FAILED,
     GET_OFFICE_SUCCESS,
@@ -196,6 +196,27 @@ export const addOrderOfficeFailed = data => {
         payload: data,
     }
 }
+
+export const deleteOrderOffice = (id, data, conditional, history) => {
+    return {
+        type: DELETE_ORDER_OFFICE,
+        payload: { id, data, conditional, history },
+    }
+}
+
+export const deleteOrderOfficeSuccess = data => {
+    return {
+        type: DELETE_ORDER_OFFICE_SUCCESS
+    }
+}
+
+
+export const deleteOrderOfficeFailed = data => {
+    return {
+        type: DELETE_ORDER_OFFICE_FAILED
+    }
+}
+
 console.log('importFile')
 export const importFileReset = () => ({
     type: IMPORT_FILE_RESET
