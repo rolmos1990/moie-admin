@@ -12,15 +12,14 @@ import BootstrapTable from "react-bootstrap-table-next"
 import {Link} from "react-router-dom"
 import {Button, Tooltip} from "@material-ui/core";
 import {DEFAULT_PAGE_LIMIT} from "../../../common/pagination";
-import {ConfirmationModal, ConfirmationModalAction} from "../../../components/Modal/ConfirmationModal";
+import {ConfirmationModalAction} from "../../../components/Modal/ConfirmationModal";
 import {TableFilter} from "../../../components/TableFilter";
 import {normalizeColumnsList} from "../../../common/converters";
-import {getTemplates} from "../../../store/template/actions";
+import {getTemplates, resetTemplate} from "../../../store/template/actions";
 import templateColumns from "./templateColumn";
-import Template from "../../../store/template/reducer";
 
 const TemplateList = props => {
-    const {templates, meta, onGetTemplates, onDeleteState, loading, refresh} = props;
+    const {templates, meta, onGetTemplates, onResetTemplate, onDeleteState, loading, refresh} = props;
     const [templatesList, setTemplatesList] = useState([])
     const [filter, setFilter] = useState(false);
     const [conditional, setConditional] = useState(null);
@@ -37,6 +36,7 @@ const TemplateList = props => {
     }, [refresh])
 
     useEffect(() => {
+        onResetTemplate();
         onGetTemplates()
     }, [onGetTemplates])
 
@@ -180,6 +180,9 @@ const mapStateToProps = state => {
 }
 
 const mapDispatchToProps = dispatch => ({
+    onResetTemplate: () => {
+        dispatch(resetTemplate());
+    },
     onGetTemplates: (conditional = null, limit = DEFAULT_PAGE_LIMIT, page) => dispatch(getTemplates(conditional, limit, page)),
 })
 

@@ -13,15 +13,16 @@ import {normalizeColumnsList} from "../../common/converters";
 import NoDataIndication from "../../components/Common/NoDataIndication";
 import orderColumns from "./orderColumn";
 import {Button, Tooltip} from "@material-ui/core";
-import {doConciliation, doPrintBatchRequest, getOrders} from "../../store/order/actions";
+import {doConciliation, doPrintBatchRequest, getOrders, resetOrder} from "../../store/order/actions";
 import OrderEdit from "./orderEdit";
 import Conditionals from "../../common/conditionals";
 import CustomModal from "../../components/Modal/CommosModal";
 import OrderConciliationForm from "./orderConciliationsForm";
 import ConciliationReportForm from "../Reports/ConciliationReportForm";
+import {resetCustomer} from "../../store/customer/actions";
 
 const OrderList = props => {
-    const {orders, meta, onGetOrders, refresh, customActions, conditionals, showAsModal, conciliation} = props;
+    const {orders, meta, onGetOrders, onResetOrders, refresh, customActions, conditionals, showAsModal, conciliation} = props;
     const [statesList, setStatesList] = useState([])
     const [filter, setFilter] = useState(false);
     const [conditional, setConditional] = useState(null);
@@ -58,6 +59,7 @@ const OrderList = props => {
     }, [conciliation])
 
     useEffect(() => {
+        onResetOrders();
         onGetOrders(getConditionals());
         if (customActions) {
             setFilterable(false);
@@ -323,6 +325,9 @@ const mapStateToProps = state => {
 }
 
 const mapDispatchToProps = dispatch => ({
+    onResetOrders: () => {
+        dispatch(resetOrder());
+    },
     onGetOrders: (conditional = null, limit = DEFAULT_PAGE_LIMIT, page) => dispatch(getOrders(conditional, limit, page)),
     onPrintBatchRequest: (conditional) => dispatch(doPrintBatchRequest(conditional)),
     onConciliation: (ordersSelected) => dispatch(doConciliation(ordersSelected)),

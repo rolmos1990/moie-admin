@@ -42,7 +42,7 @@ import {
     UPDATE_ORDER_SUCCESS,
     GET_HISTORIC_ORDER,
     GET_HISTORIC_ORDER_FAILED,
-    GET_HISTORIC_ORDER_SUCCESS
+    GET_HISTORIC_ORDER_SUCCESS, RESET_ORDER
 } from "./actionTypes";
 
 const initialState = {
@@ -95,6 +95,10 @@ const initialState = {
 
 const order = (state = initialState, action) => {
     switch (action.type) {
+        case RESET_ORDER:
+            return {
+                ...initialState
+            }
         case RESET_CAR:
             return {
                 ...state,

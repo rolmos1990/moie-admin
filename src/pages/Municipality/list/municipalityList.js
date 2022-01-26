@@ -13,13 +13,14 @@ import {Link} from "react-router-dom"
 import {Button, Tooltip} from "@material-ui/core";
 import {DEFAULT_PAGE_LIMIT} from "../../../common/pagination";
 import {ConfirmationModal, ConfirmationModalAction} from "../../../components/Modal/ConfirmationModal";
-import {deleteMunicipality, getMunicipalities, getStates} from "../../../store/location/actions";
+import {deleteMunicipality, getMunicipalities, getStates, resetLocation} from "../../../store/location/actions";
 import {TableFilter} from "../../../components/TableFilter";
 import municipalityColumns from "./municipalityColumns";
 import {normalizeColumnsList, statesToOptions} from "../../../common/converters";
+import {resetOffice} from "../../../store/office/actions";
 
 const MunicipalityList = props => {
-    const {states, municipalities, meta, getStates, onGetMunicipalities, onDeleteMunicipality, loading, refresh} = props;
+    const {states, municipalities, meta, getStates, onGetMunicipalities, onResetLocation, onDeleteMunicipality, loading, refresh} = props;
     const [municipalityList, setMunicipalityList] = useState([])
     const [filter, setFilter] = useState(false);
     const [conditional, setConditional] = useState(null);
@@ -36,6 +37,7 @@ const MunicipalityList = props => {
     }, [refresh])
 
     useEffect(() => {
+        onResetLocation();
         onGetMunicipalities()
         getStates();
     }, [onGetMunicipalities])
@@ -192,6 +194,9 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => ({
     getStates,
+    onResetLocation: () => {
+        dispatch(resetLocation());
+    },
     onGetMunicipalities: (conditional = null, limit = DEFAULT_PAGE_LIMIT, page) => dispatch(getMunicipalities(conditional, limit, page)),
     onDeleteMunicipality: (id) => dispatch(deleteMunicipality(id))
 })

@@ -3,7 +3,7 @@ import {Link} from "react-router-dom";
 import PropTypes from "prop-types";
 import {DEFAULT_PAGE_LIMIT} from "../../../common/pagination";
 import {connect} from "react-redux";
-import {getProducts} from "../../../store/product/actions";
+import {getProducts, resetProduct} from "../../../store/product/actions";
 import React, {useEffect, useState} from "react";
 import {TableFilter} from "../../../components/TableFilter";
 import paginationFactory, {PaginationListStandalone, PaginationProvider} from "react-bootstrap-table2-paginator";
@@ -141,7 +141,7 @@ const reportss = [
 
 const ProductList = props => {
 
-    const {refresh, onGetProducts, countProductsByStatus, products, meta} = props;
+    const {refresh, onGetProducts, onResetProducts, countProductsByStatus, products, meta} = props;
     const [productList, setProductList] = useState([]);
     const [filter, setFilter] = useState(false);
     const [conditional, setConditional] = useState(null);
@@ -157,6 +157,7 @@ const ProductList = props => {
     }, [refresh])
 
     useEffect(() => {
+        onResetProducts();
         onGetProducts();
     }, [onGetProducts])
 
@@ -281,6 +282,9 @@ const mapStateToProps = state => {
 }
 
 const mapDispatchToProps = dispatch => ({
+    onResetProducts: () => {
+        dispatch(resetProduct());
+    },
     onGetProducts: (conditional = null, limit = DEFAULT_PAGE_LIMIT, page) => dispatch(getProducts(conditional, limit, page)),
     countProductsByStatus,
 })

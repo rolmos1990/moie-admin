@@ -21,9 +21,10 @@ import StatsRegisteredCard from "../../../components/Common/StatsRegisteredCard"
 import CountUp from "react-countup";
 import {getCatalogBatchRequest} from "../../../helpers/service";
 import {formatDate} from "../../../common/utils";
+import {resetProduct} from "../../../store/product/actions";
 
 const CategoryList = props => {
-    const {categories, onGetCategories, onDeleteState, getCatalogBatchRequest, onCatalogPrintBatchRequest, refresh} = props;
+    const {categories, onGetCategories, onResetCategories, onDeleteState, getCatalogBatchRequest, onCatalogPrintBatchRequest, refresh} = props;
     const [categoriesList, setCategoriesList] = useState([])
     const [filter, setFilter] = useState(false);
     const [conditional, setConditional] = useState(null);
@@ -43,6 +44,7 @@ const CategoryList = props => {
     }, [refresh])
 
     useEffect(() => {
+        onResetCategories();
         onGetCategories();
         onGetCatalogBatchRequest();
     }, [onGetCategories])
@@ -252,6 +254,9 @@ const mapStateToProps = state => {
 }
 
 const mapDispatchToProps = dispatch => ({
+    onResetCategories: () => {
+        dispatch(resetProduct());
+    },
     onGetCategories: (conditional = null, limit = DEFAULT_PAGE_LIMIT, page) => dispatch(getCategories(conditional, limit, page)),
     onCatalogPrintBatchRequest: (conditional, catalog ) => dispatch(doCatalogPrintBatchRequest(conditional, catalog)),
     getCatalogBatchRequest,

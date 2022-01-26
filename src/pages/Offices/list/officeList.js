@@ -10,15 +10,16 @@ import {Link} from "react-router-dom"
 import {Button, Tooltip} from "@material-ui/core";
 import {DEFAULT_PAGE_LIMIT} from "../../../common/pagination";
 import {ConfirmationModalAction} from "../../../components/Modal/ConfirmationModal";
-import {getOffices} from "../../../store/office/actions";
+import {getOffices, resetOffice} from "../../../store/office/actions";
 import {TableFilter} from "../../../components/TableFilter";
 import officeColumns from "./officeColumns";
 import {normalizeColumnsList} from "../../../common/converters";
 import CustomModal from "../../../components/Modal/CommosModal";
 import OfficeReportForm from "../../Reports/OfficeReportForm";
+import {resetOrder} from "../../../store/order/actions";
 
 const OfficeList = props => {
-    const {states, offices, meta, getStates, onGetOffices, loading, refresh} = props; //onDeleteOffice,
+    const {states, offices, meta, getStates, onGetOffices, onResetOffices, loading, refresh} = props; //onDeleteOffice,
     const [officeList, setOfficeList] = useState([])
     const [filter, setFilter] = useState(false);
     const [conditional, setConditional] = useState(null);
@@ -35,6 +36,7 @@ const OfficeList = props => {
     }, [refresh])
 
     useEffect(() => {
+        onResetOffices();
         onGetOffices()
         //getStates();
     }, [onGetOffices])
@@ -185,6 +187,9 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => ({
     //getStates,
     onGetOffices: (conditional = null, limit = DEFAULT_PAGE_LIMIT, page) => dispatch(getOffices(conditional, limit, page)),
+    onResetOffices: () => {
+        dispatch(resetOffice());
+    },
     //onDeleteOffice: (id) => dispatch(deleteOffice(id))
 })
 

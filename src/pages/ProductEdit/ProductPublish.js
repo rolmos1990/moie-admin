@@ -31,7 +31,7 @@ const ProductPublish = props => {
     const fillValues = () => {
         if (selectValues.length === 0) {
             const valueList = [];
-            for (let i = 5; i <= 100;) {
+            for (let i = 0; i <= 100;) {
                 valueList.push({label: i, value: i});
                 i += 5;
             }

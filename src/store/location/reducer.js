@@ -22,7 +22,7 @@ import {
     REGISTER_MUNICIPALITY_SUCCESS,
     REGISTER_STATE,
     REGISTER_STATE_FAILED,
-    REGISTER_STATE_SUCCESS,
+    REGISTER_STATE_SUCCESS, RESET_LOCATION,
     UPDATE_MUNICIPALITY,
     UPDATE_MUNICIPALITY_FAILED,
     UPDATE_MUNICIPALITY_SUCCESS,
@@ -30,6 +30,7 @@ import {
     UPDATE_STATE_FAILED,
     UPDATE_STATE_SUCCESS
 } from "./actionTypes";
+import {RESET_ORDER} from "../order/actionTypes";
 
 const initialState = {
     error: "",
@@ -43,6 +44,10 @@ const initialState = {
 
 const location = (state = initialState, action) => {
     switch (action.type) {
+        case RESET_LOCATION:
+            return {
+                ...initialState
+            }
         case GET_STATES:
             return {
                 ...state,

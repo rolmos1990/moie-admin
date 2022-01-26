@@ -53,7 +53,7 @@ const orderColumns = (onSelectedOrder, showAsModal, conciliationView) => {
                                 </Tooltip>
                             )}
                             <div>
-                            <small className="bg-grey badge badge-soft-secondary"><i className="fa fa-user"></i> Ramon Olmos</small>
+                            <small className="bg-grey badge badge-soft-secondary"><i className="fa fa-user"></i> { item.user.name }</small>
                         </div>
                     </Link>)
                     :(<>

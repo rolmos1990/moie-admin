@@ -29,9 +29,12 @@ import {
     GET_MUNICIPALITIES_FAILED,
     GET_MUNICIPALITY,
     GET_MUNICIPALITY_SUCCESS,
-    GET_MUNICIPALITY_FAILED,
+    GET_MUNICIPALITY_FAILED, RESET_LOCATION,
 } from "./actionTypes";
 
+export const resetLocation = () => ({
+    type: RESET_LOCATION,
+})
 
 export const getState = id => ({
     type: GET_STATE,

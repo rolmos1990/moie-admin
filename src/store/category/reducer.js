@@ -14,9 +14,8 @@ import {
     CATALOG_PRINT_BATCH_REQUEST_SUCCESS,
     CATALOG_PRINT_BATCH_REQUEST_FAILED,
     CATALOG_RESET_BATCH_REQUEST,
-    CATALOG_DO_BATCH_REQUEST, REFRESH_CATEGORIES,
+    CATALOG_DO_BATCH_REQUEST, REFRESH_CATEGORIES, RESET_CATEGORY,
 } from "./actionTypes";
-
 
 const initialState = {
     error: "",
@@ -37,6 +36,10 @@ const initialState = {
 
 const category = (state = initialState, action) => {
     switch (action.type) {
+        case RESET_CATEGORY:
+            return {
+                ...initialState
+            }
         case GET_CATEGORIES:
             return {
                 ...state,

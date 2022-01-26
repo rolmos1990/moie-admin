@@ -1,4 +1,5 @@
 import {
+    RESET_CATEGORY,
     GET_CATEGORIES,
     GET_CATEGORIES_SUCCESS,
     GET_CATEGORIES_FAILED,
@@ -17,6 +18,10 @@ import {
     CATALOG_RESET_BATCH_REQUEST,
     CATALOG_DO_BATCH_REQUEST, REFRESH_CATEGORIES,
 } from "./actionTypes";
+
+export const resetCategory = () => ({
+    type: RESET_CATEGORY,
+})
 
 export const getCategories = (conditional, limit, offset) => ({
     type: GET_CATEGORIES,

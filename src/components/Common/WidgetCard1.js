@@ -31,6 +31,7 @@ const options1 = {
         },
     },
     tooltip: {
+        enabled: false,
         fixed: {
             enabled: !1
         },

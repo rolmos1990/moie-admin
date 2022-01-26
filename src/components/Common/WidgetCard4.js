@@ -7,7 +7,7 @@ import PropTypes from "prop-types";
 import WidgetCard from "./WidgetCard";
 
 const series4 = [{
-    data: [25, 66, 200]
+    data: [0.1, 0.5, 0.2, 0.3, 0.2]
 }]
 
 const options4 = {
@@ -33,6 +33,7 @@ const options4 = {
         },
     },
     tooltip: {
+        enabled: false,
         fixed: {
             enabled: !1
         },
@@ -75,7 +76,7 @@ const WidgetCard4 = props => {
             color: "success",
             desc: "registrados hoy",
             series: series4,
-            options: options4,
+            options: options4
         };
         setDataCard(data);
     }, [reportData])

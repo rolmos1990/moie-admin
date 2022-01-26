@@ -1,4 +1,5 @@
 import {
+    RESET_ORDER,
     CANCELED_STATUS_ORDER,
     CONCILIATION_FAILED,
     CONCILIATION_REQUEST,
@@ -42,6 +43,10 @@ import {
     UPDATE_ORDER_FAILED,
     UPDATE_ORDER_SUCCESS,
 } from "./actionTypes";
+
+export const resetOrder = () => ({
+    type: RESET_ORDER,
+})
 
 export const getOrders = (conditional, limit, offset) => ({
     type: GET_ORDERS,

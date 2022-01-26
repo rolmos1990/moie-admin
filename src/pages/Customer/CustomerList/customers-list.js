@@ -8,7 +8,7 @@ import BootstrapTable from "react-bootstrap-table-next"
 
 import customerColumn from "./customerColumn"
 import {Link} from "react-router-dom"
-import {deleteCustomer, getCustomers} from "../../../store/customer/actions";
+import {deleteCustomer, getCustomers, resetCustomer} from "../../../store/customer/actions";
 import {Button, Tooltip} from "@material-ui/core";
 import {DEFAULT_PAGE_LIMIT} from "../../../common/pagination";
 import {ConfirmationModalAction} from "../../../components/Modal/ConfirmationModal";
@@ -20,9 +20,10 @@ import StatsStatusCard from "../../../components/Common/StatsStatusCard";
 import StatsRegisteredCard from "../../../components/Common/StatsRegisteredCard";
 import CountUp from "react-countup";
 import ReactApexChart from "react-apexcharts";
+import {resetProduct} from "../../../store/product/actions";
 
 const CustomersList = props => {
-    const {customers, meta, onGetCustomers, onDeleteCustomer,  refresh, countCustomersByStatus, statsCustomerRegistered, statsCustomerRegisteredToday} = props;
+    const {customers, meta, onGetCustomers, onResetCustomers, onDeleteCustomer,  refresh, countCustomersByStatus, statsCustomerRegistered, statsCustomerRegisteredToday} = props;
     const [customerList, setCustomerList] = useState([])
     const [filter, setFilter] = useState(false);
     const [conditional, setConditional] = useState(null);
@@ -43,7 +44,8 @@ const CustomersList = props => {
     }, [refresh])
 
     useEffect(() => {
-        onGetCustomers()
+        onResetCustomers();
+        onGetCustomers();
     }, [onGetCustomers])
 
     useEffect(() => {
@@ -200,6 +202,9 @@ const mapStateToProps = state => {
 }
 
 const mapDispatchToProps = dispatch => ({
+    onResetCustomers: () => {
+        dispatch(resetCustomer());
+    },
     countCustomersByStatus,
     countMayoristas,
     statsCustomerRegistered,

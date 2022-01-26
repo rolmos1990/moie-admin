@@ -7,7 +7,7 @@ import {
     GET_TEMPLATES_SUCCESS,
     REGISTER_TEMPLATE,
     REGISTER_TEMPLATE_FAILED,
-    REGISTER_TEMPLATE_SUCCESS,
+    REGISTER_TEMPLATE_SUCCESS, RESET_TEMPLATE,
     UPDATE_TEMPLATE, UPDATE_TEMPLATE_FAILED,
     UPDATE_TEMPLATE_SUCCESS
 } from "./actionTypes";
@@ -23,6 +23,10 @@ const initialState = {
 
 const template = (state = initialState, action) => {
     switch (action.type) {
+        case RESET_TEMPLATE:
+            return {
+                ...initialState
+            }
         case GET_TEMPLATES:
             return {
                 ...state,

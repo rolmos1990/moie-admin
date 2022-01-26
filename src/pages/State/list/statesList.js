@@ -10,14 +10,14 @@ import {Link} from "react-router-dom"
 import {Button, Tooltip} from "@material-ui/core";
 import {DEFAULT_PAGE_LIMIT} from "../../../common/pagination";
 import {ConfirmationModalAction} from "../../../components/Modal/ConfirmationModal";
-import {deleteState, getStates} from "../../../store/location/actions";
+import {deleteState, getStates, resetLocation} from "../../../store/location/actions";
 import statesColumns from "./statesColumn";
 import {TableFilter} from "../../../components/TableFilter";
 import {normalizeColumnsList} from "../../../common/converters";
 import NoDataIndication from "../../../components/Common/NoDataIndication";
 
 const StatesList = props => {
-    const {states, meta, onGetStates, onDeleteState, loading, refresh} = props;
+    const {states, meta, onGetStates, onDeleteState, onResetLocation, loading, refresh} = props;
     const [statesList, setStatesList] = useState([])
     const [filter, setFilter] = useState(false);
     const [conditional, setConditional] = useState(null);
@@ -35,6 +35,7 @@ const StatesList = props => {
     }, [refresh])
 
     useEffect(() => {
+        onResetLocation();
         onGetStates()
     }, [onGetStates])
 
@@ -169,6 +170,9 @@ const mapStateToProps = state => {
 }
 
 const mapDispatchToProps = dispatch => ({
+    onResetLocation: () => {
+        dispatch(resetLocation());
+    },
     onGetStates: (conditional = null, limit = DEFAULT_PAGE_LIMIT, page) => dispatch(getStates(conditional, limit, page)),
     onDeleteStates: (id) => dispatch(deleteState(id))
 })

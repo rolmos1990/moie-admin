@@ -10,8 +10,12 @@ import {
     REGISTER_TEMPLATE_FAILED,
     UPDATE_TEMPLATE,
     UPDATE_TEMPLATE_SUCCESS,
-    UPDATE_TEMPLATE_FAILED, DELETE_TEMPLATE
+    UPDATE_TEMPLATE_FAILED, RESET_TEMPLATE
 } from "./actionTypes";
+
+export const resetTemplate = () => ({
+    type: RESET_TEMPLATE,
+})
 
 export const getTemplates = (conditional, limit, offset) => ({
     type: GET_TEMPLATES,

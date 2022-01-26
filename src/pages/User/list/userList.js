@@ -11,13 +11,14 @@ import {Button, Tooltip} from "@material-ui/core";
 import {DEFAULT_PAGE_LIMIT} from "../../../common/pagination";
 import {TableFilter} from "../../../components/TableFilter";
 import {normalizeColumnsList} from "../../../common/converters";
-import {getUsers, setUserToChangePassword} from "../../../store/user/actions";
+import {getUsers, resetUser, setUserToChangePassword} from "../../../store/user/actions";
 import userColumns from "./userColumn";
 import NoDataIndication from "../../../components/Common/NoDataIndication";
 import ForgetPassword from "./forgetPassword";
+import {resetOrder} from "../../../store/order/actions";
 
 const UserList = props => {
-    const {users, meta, onGetUsers, onSelectUser, loading, refresh} = props;
+    const {users, meta, onGetUsers,onResetUsers, onSelectUser, loading, refresh} = props;
     const [usersList, setCategoriesList] = useState([])
     const [filter, setFilter] = useState(false);
     const [conditional, setConditional] = useState(null);
@@ -38,6 +39,7 @@ const UserList = props => {
     }, [refresh])
 
     useEffect(() => {
+        onResetUsers();
         onGetUsers()
     }, [onGetUsers])
 
@@ -149,6 +151,9 @@ const mapStateToProps = state => {
 }
 
 const mapDispatchToProps = dispatch => ({
+    onResetUsers: () => {
+        dispatch(resetUser());
+    },
     onGetUsers: (conditional = null, limit = DEFAULT_PAGE_LIMIT, page) => dispatch(getUsers(conditional, limit, page)),
     onSelectUser: (user) => dispatch(setUserToChangePassword(user)),
     // onDeleteStates: (id) => dispatch(deleteState(id))

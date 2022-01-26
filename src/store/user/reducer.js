@@ -8,7 +8,7 @@ import {
     GET_USERS_SUCCESS,
     REGISTER_USER,
     REGISTER_USER_FAILED,
-    REGISTER_USER_SUCCESS, RESET_CHANGE_PASSWORD,
+    REGISTER_USER_SUCCESS, RESET_CHANGE_PASSWORD, RESET_USER,
     UPDATE_USER, UPDATE_USER_FAILED,
     UPDATE_USER_SUCCESS, USER_CHANGE_PASSWORD
 } from "./actionTypes";
@@ -30,6 +30,10 @@ const initialState = {
 
 const user = (state = initialState, action) => {
     switch (action.type) {
+        case RESET_USER:
+            return {
+                ...initialState
+            }
         case GET_USERS:
             return {
                 ...state,

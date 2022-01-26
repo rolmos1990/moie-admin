@@ -8,7 +8,7 @@ import BootstrapTable from "react-bootstrap-table-next"
 import {Button, Tooltip} from "@material-ui/core";
 import {DEFAULT_PAGE_LIMIT} from "../../../common/pagination";
 import {ConfirmationModalAction} from "../../../components/Modal/ConfirmationModal";
-import {getBillConfigs, registerBillConfig} from "../../../store/billConfig/actions";
+import {getBillConfigs, registerBillConfig, resetBillConfig} from "../../../store/billConfig/actions";
 import {TableFilter} from "../../../components/TableFilter";
 import billConfigColumns from "./billConfigColumns";
 import {normalizeColumnsList} from "../../../common/converters";
@@ -16,7 +16,7 @@ import NoDataIndication from "../../../components/Common/NoDataIndication";
 import {Link} from "react-router-dom";
 
 const BillConfigList = props => {
-    const {billConfigs, onGetBillConfigs, refresh} = props; //onDeleteBillConfig,
+    const {billConfigs, onGetBillConfigs, onResetBillConfig, refresh} = props; //onDeleteBillConfig,
     const [billConfigList, setBillConfigList] = useState([])
     const [filter, setFilter] = useState(false);
     const [conditional, setConditional] = useState(null);
@@ -30,6 +30,7 @@ const BillConfigList = props => {
     }, [refresh])
 
     useEffect(() => {
+        onResetBillConfig();
         onGetBillConfigs();
         //getStates();
     }, [onGetBillConfigs])
@@ -155,6 +156,9 @@ const mapStateToProps = state => {
 }
 
 const mapDispatchToProps = dispatch => ({
+    onResetBillConfig: () => {
+        dispatch(resetBillConfig());
+    },
     onGetBillConfigs: (conditional = null, limit = DEFAULT_PAGE_LIMIT, page) => dispatch(getBillConfigs(conditional, limit, page)),
     onCreateBillConfig: (ids) => dispatch(registerBillConfig(ids)),
 })
