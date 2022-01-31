@@ -107,6 +107,7 @@ const payments = (state = initialState, action) => {
             state = {
                 ...state,
                 loading: false,
+                refresh: !state.refresh
             }
             break
         case APPLY_PAYMENT_FAILED:

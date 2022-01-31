@@ -20,7 +20,7 @@ function getConditionalFormat(options) {
 }
 
 /* Construye un formato valido para las peticiones GET (URL) */
-function buildHttpGetQuery(cond = null, limit = null, offset = null) {
+function buildHttpGetQuery(cond = null, limit = null, offset = null, order = false) {
     const data = {};
     if (cond) {
         data.conditional = cond;
@@ -30,6 +30,10 @@ function buildHttpGetQuery(cond = null, limit = null, offset = null) {
     }
     if (offset || offset === 0) {
         data.offset = offset;
+    }
+    if (order) {
+        data.order = order.field;
+        data.orderType = order.type;
     }
 
     return urlSearchParams(data);

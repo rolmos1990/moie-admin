@@ -26,7 +26,15 @@ import {
 } from "../../store/order/actions";
 import CustomModal from "../../components/Modal/CommosModal";
 import OrderDeliveryOptions from "./create/orderDeliveryOptions";
-import {COMMENT_ENTITIES, DELIVERY_METHODS_PAYMENT_TYPES, DELIVERY_TYPES, GROUPS, ORDER_STATUS, PAYMENT_TYPES} from "../../common/constants";
+import {
+    COMMENT_ENTITIES,
+    DELIVERY_METHODS_PAYMENT_TYPES,
+    DELIVERY_TYPES,
+    EVENT_STATUS,
+    GROUPS,
+    ORDER_STATUS, ORDERS_ENUM,
+    PAYMENT_TYPES
+} from "../../common/constants";
 import {map} from "lodash";
 import Images from "../../components/Common/Image";
 import OrderCustomer from "./create/orderCustomer";
@@ -233,6 +241,57 @@ const OrderEdit = (props) => {
             })
     }
 
+    //Permite cancelar la orden
+    const canCancel = () => {
+        const isPrevPayment = order.orderDelivery && ([1,2].includes(order.orderDelivery.deliveryType));
+        const canCancelPreviewPayment = [ORDERS_ENUM.PENDING].includes(parseInt(order.status)) && isPrevPayment;
+        const canCancelChargeOnDelivery = [ORDERS_ENUM.PENDING,ORDERS_ENUM.CONFIRMED,ORDERS_ENUM.PRINTED,ORDERS_ENUM.SENT].includes(parseInt(order.status)) && !isPrevPayment;
+        if(order && (canCancelPreviewPayment || canCancelChargeOnDelivery)){
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    //Permite confirmar la orden
+    const canConfirm = () => {
+        if(order && order.status === ORDERS_ENUM.PENDING && order.orderDelivery && order.orderDelivery.deliveryType !== 1){
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    const canEdit = () => {
+        const isPrevPayment = order.orderDelivery && ([1,2].includes(order.orderDelivery.deliveryType));
+        const canEditPreviewPayment = [ORDERS_ENUM.PENDING, ORDERS_ENUM.CONCILIED, ORDERS_ENUM.PRINTED].includes(parseInt(order.status)) && isPrevPayment;
+        const canEditChargeOnDelivery = [ORDERS_ENUM.PENDING, ORDERS_ENUM.CONFIRMED, ORDERS_ENUM.PRINTED].includes(parseInt(order.status)) && !isPrevPayment;
+        if(order && (canEditPreviewPayment || canEditChargeOnDelivery)){
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    //Permite imprimir la orden
+    const canPrint = () => {
+        if(order && order.status < ORDERS_ENUM.CONCILIED){
+            return true;
+        } else if(order && order.status === ORDERS_ENUM.CONCILIED && order.orderDelivery && order.orderDelivery.deliveryType === 1){
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    const isNextPrint = () => {
+        if(order.status === ORDERS_ENUM.CONFIRMED || (order && order.status === ORDERS_ENUM.CONCILIED && order.orderDelivery && order.orderDelivery.deliveryType === 1)){
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     const onConfirmPrintOrder = () => {
         setOpenPrintConfirmModal(false);
         onNextStatusOrder(order.id);
@@ -271,14 +330,14 @@ const OrderEdit = (props) => {
                     </div>
                     <div className={"mb-3 float-md-end"}>
                         <div className="button-items">
-                            {(order && (order.status === 1 || order.status === 2)) && (
+                            {canCancel() && (
                                 <Tooltip placement="bottom" title="Anular" aria-label="add">
                                     <button type="button" color="primary" className="btn-sm btn btn-outline-danger waves-effect waves-light" onClick={() => onCanceledStatusOrder(order.id)}>
                                         <i className={"mdi mdi-delete"}> </i>
                                     </button>
                                 </Tooltip>
                             )}
-                            {(order && order.status === 1) && (
+                            {canConfirm() && (
                                 <Tooltip placement="bottom" title="Confirmar" aria-label="add">
                                     <button type="button" color="primary" className="btn-sm btn btn-outline-success waves-effect waves-light" onClick={() => onNextStatusOrder(order.id)}>
                                         <i className={"mdi mdi-check"}> </i>
@@ -292,7 +351,7 @@ const OrderEdit = (props) => {
                                     </button>
                                 </Tooltip>
                             )}
-                            {(order && order.status < 5) && (
+                            {canPrint() && (
                                 <Tooltip placement="bottom" title="Imprimir" aria-label="add">
                                     <button type="button" color="primary" className="btn-sm btn btn-outline-info waves-effect waves-light" onClick={() => printOrder()}>
                                         <i className={"mdi mdi-printer"}> </i>
@@ -420,9 +479,21 @@ const OrderEdit = (props) => {
                                         </>
                                     )}
                                     <Col md={12}>
-                                        <label>Dirección del envio: </label>
+                                        <label>Localidad: </label>
                                         <span className="p-1">{orderData.orderDelivery?.deliveryLocality?.name}</span>
                                     </Col>
+                                    {orderData.orderDelivery.tracking && (
+                                        <Col md={12}>
+                                            <label>Número de guía: </label>
+                                            <span className="p-1">{orderData.orderDelivery?.tracking}</span>
+                                        </Col>
+                                    )}
+                                    {orderData.orderDelivery.tracking && (
+                                        <Col md={12}>
+                                            <label>Estado de Envio: </label>
+                                            <span className="p-1">{orderData.orderDelivery?.deliveryStatus}</span>
+                                        </Col>
+                                    )}
                                 </Row>
                             </Card>
                         </Col>
@@ -462,6 +533,7 @@ const OrderEdit = (props) => {
                                                     </Tooltip>
                                                 </>
                                             )}
+                                            {canEdit() &&
                                             <Tooltip placement="bottom" title="Editar products" aria-label="add">
                                                 <button type="button"
                                                         size="small"
@@ -472,6 +544,7 @@ const OrderEdit = (props) => {
                                                     <i className="uil uil-pen font-size-18"> </i>
                                                 </button>
                                             </Tooltip>
+                                            }
                                         </Col>
                                     </Row>
                                     {!showAsTable && (
@@ -592,9 +665,16 @@ const OrderEdit = (props) => {
                             <Col md={12}>
                                 <Card id={'summary-detail'} className="p-3">
                                     <Row>
-                                        <Col md={12}>
+                                        <Row>
+                                            <Col md={10}>
                                             <h4 className="card-title text-info"><i className="uil uil-bill"> </i> Totales</h4>
-                                        </Col>
+                                            </Col>
+                                            <Col md={2}>
+                                                <div className="card-title text-right"><span><Tooltip placement="bottom" title="Peso" aria-label="add">
+                                                    <i className="fa fa-weight text-info"></i>
+                                                </Tooltip></span> : {priceFormat(orderData.totalWeight)}g</div>
+                                            </Col>
+                                        </Row>
                                         <Col md={12}>
                                             <div className="table-responsive">
                                                 <table className="table table-sm mb-0">
@@ -609,7 +689,7 @@ const OrderEdit = (props) => {
                                                     </tr>
                                                     <tr>
                                                         <td>Total con descuento:</td>
-                                                        <td className="text-end">{priceFormat(orderData.totalDiscount + orderData.subTotalAmount)}</td>
+                                                        <td className="text-end">{priceFormat(parseFloat(orderData.subTotalAmount) - parseFloat(orderData.totalDiscount))}</td>
                                                     </tr>
                                                     <tr>
                                                         <td>Envio:</td>
@@ -675,8 +755,8 @@ const OrderEdit = (props) => {
                                                     {item.user.name}
                                                 </td>
                                                 <td>
-                                                    <StatusField color={ORDER_STATUS[item.status].color} className={"font-size-14 mr-5"}>
-                                                        {ORDER_STATUS[item.status].name}
+                                                    <StatusField color={EVENT_STATUS[item.status].color} className={"font-size-14 mr-5"}>
+                                                        {EVENT_STATUS[item.status].name}
                                                     </StatusField>
                                                 </td>
                                             </tr>)
@@ -708,7 +788,7 @@ const OrderEdit = (props) => {
                 </Col>
             </Row>
 
-            <CustomModal title={"Confirmar"} showFooter={false} isOpen={order.status === 2 && openPrintConfirmModal} onClose={() => setOpenPrintConfirmModal(false)}>
+            <CustomModal title={"Confirmar"} showFooter={false} isOpen={isNextPrint() && openPrintConfirmModal} onClose={() => setOpenPrintConfirmModal(false)}>
                 <Row>
                     <Col md={12}>
                         ¿Logró imprimir el pedido?

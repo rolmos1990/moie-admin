@@ -122,7 +122,7 @@ const order = (state = initialState, action) => {
         case GET_ORDERS:
             return {
                 ...state,
-                loading: true,
+                loading: true
             }
         case GET_ORDERS_FAILED:
             return {
@@ -207,6 +207,7 @@ const order = (state = initialState, action) => {
             state = {
                 ...state,
                 loading: false,
+                refresh: !state.refresh
             }
             break
         case UPDATE_ORDER_FAILED:

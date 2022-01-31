@@ -51,8 +51,8 @@ const customerListColumns = (onDelete = false) => [
         sort: false,
         formatter: (cellContent, item) => (
             <>
-                <div>Cel.: {item.phone && item.phone.length > 3 ? item.phone : ''}</div>
-                <div>Res.: {item.cellphone && item.cellphone.length > 3 ? item.cellphone : ''}</div>
+                <div>Cel.: {item.cellphone && item.cellphone.length > 3 ? item.cellphone : ''}</div>
+                <div>Res.: {item.phone && item.phone.length > 3 ? item.phone : ''}</div>
             </>
         ),
     },
@@ -79,7 +79,7 @@ const customerListColumns = (onDelete = false) => [
         filterDefaultOption: STATUS_OPTIONS[0],
     },
     {
-        text: "Estado",
+        text: "ContraPago",
         dataField: "status",
         sort: true,
         filter: true,

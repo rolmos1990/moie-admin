@@ -163,7 +163,7 @@ const PaymentsList = props => {
                     </Card>
                 </Col>
             </Row>
-            {paymentSelected && (<PaymentOverlay payment={paymentSelected} showOverlay={true} onCloseOverlay={() => setPaymentSelected(null)}/>)}
+            {paymentSelected && (<PaymentOverlay paymentSelected={paymentSelected} showOverlay={true} onCloseOverlay={() => setPaymentSelected(null)}/>)}
         </>
     )
 }

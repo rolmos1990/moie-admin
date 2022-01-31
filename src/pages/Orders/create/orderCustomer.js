@@ -5,7 +5,7 @@ import {connect} from "react-redux";
 import PropTypes from "prop-types";
 import {FieldAsyncSelect, FieldSelect} from "../../../components/Fields";
 import {CUSTOMER} from "../../../helpers/url_helper";
-import {getCustomer} from "../../../store/customer/actions";
+import {getCustomer, updateCustomer} from "../../../store/customer/actions";
 import {arrayToOptionsByFieldName, getEmptyOptions} from "../../../common/converters";
 import {AvForm} from "availity-reactstrap-validation";
 import {Button, Tooltip} from "@material-ui/core";
@@ -21,7 +21,7 @@ import CategoriesPieChart from "../../CustomerEdit/CategoriesPieChart";
 const searchByOptions = [{label: "Documento", value: "doc"}, {label: "Nombre", value: "name"}, {label: "Correo", value: "email"}];
 
 const OrderCustomer = (props) => {
-    const {car, customer, onGetCustomer, hasCustomerOpenOrders, onUpdateCar, showAsModal} = props;
+    const {car, customer, onGetCustomer, hasCustomerOpenOrders, onUpdateCar, showAsModal, onUpdateCustomer} = props;
     const [initComponent, setInitComponent] = useState(true);
     const [searchBy, setSearchBy] = useState(searchByOptions[0].value);
     const [editCustomer, setEditCustomer] = useState(false);
@@ -43,7 +43,7 @@ const OrderCustomer = (props) => {
     useEffect(() => {
         if (customer.id) {
             setCustomerData(customer);
-            if(customer.status) onUpdateCar({...car, customer});
+            if(customer.id) onUpdateCar({...car, customer});
             if (car && !car.orderId) hasCustomerOpenOrders(customer.id).then(resp => setHasPendingOrders(resp && resp.data && resp.data.length > 0));
         } else {
             resetData();
@@ -55,6 +55,14 @@ const OrderCustomer = (props) => {
     }
     const toggleModal = () => {
         setOpenCustomerModal(!openCustomerModal);
+    }
+    const toggleActivateCustomer = () => {
+        onUpdateCustomer(customer.id, {status: !customer.status});
+        setTimeout(() => {
+            onGetCustomer(customer.id)
+        }, 500);
+        ;
+        //resetData();
     }
 
     const resetData = () => {
@@ -110,10 +118,17 @@ const OrderCustomer = (props) => {
                                 urlStr={CUSTOMER}
                                 placeholder="Buscar por documento"
                                 defaultValue={customerDocumentDefault}
+                                isClearable={true}
+                                hasWild={false}
                                 conditionalOptions={{fieldName: 'document', operator: Conditionals.OPERATORS.LIKE}}
-                                onChange={(c) => {
-                                    onGetCustomer(c.value);
-                                    setCustomerDefault(getEmptyOptions());
+                                onChange={(c, meta) => {
+                                    if(meta.action === "clear"){
+                                        resetData();
+                                    }
+                                    else {
+                                        onGetCustomer(c.value);
+                                        setCustomerDefault(getEmptyOptions());
+                                    }
                                 }}
                             />
                         </Col>
@@ -126,9 +141,17 @@ const OrderCustomer = (props) => {
                                 urlStr={CUSTOMER}
                                 placeholder="Buscar por nombre"
                                 defaultValue={customerDefault}
-                                onChange={(c) => {
-                                    onGetCustomer(c.value);
-                                    setCustomerDocumentDefault(getEmptyOptions());
+                                isClearable={true}
+                                hasWild={false}
+                                conditionalOptions={{fieldName: 'name', operator: Conditionals.OPERATORS.LIKE}}
+                                onChange={(c, meta) => {
+                                    if(meta.action === "clear"){
+                                        resetData();
+                                    }
+                                    else {
+                                        onGetCustomer(c.value);
+                                        setCustomerDocumentDefault(getEmptyOptions());
+                                    }
                                 }}
                             />
                         </Col>
@@ -141,10 +164,17 @@ const OrderCustomer = (props) => {
                                 urlStr={CUSTOMER}
                                 placeholder="Buscar por correo"
                                 defaultValue={customerEmailDefault}
+                                isClearable={true}
+                                hasWild={true}
                                 conditionalOptions={{fieldName: 'email', operator: Conditionals.OPERATORS.LIKE}}
-                                onChange={(c) => {
+                                onChange={(c, meta) => {
+                                    if(meta.action === "clear"){
+                                        resetData();
+                                    }
+                                    else {
                                     onGetCustomer(c.value);
                                     setCustomerEmailDefault(getEmptyOptions());
+                                    }
                                 }}
                             />
                         </Col>
@@ -160,7 +190,7 @@ const OrderCustomer = (props) => {
             </AvForm>
             {customerData.id && (
                 <Row className="mt-3">
-                    <Col md={11}>
+                    <Col md={10}>
                         <Row>
                             <Col md={6}>
                                 <label>Nombre: </label>
@@ -198,7 +228,17 @@ const OrderCustomer = (props) => {
                         </Row>
 
                     </Col>
-                    <Col md={1} className="text-right">
+                    <Col md={2} className="text-right">
+                        <Tooltip placement="bottom" title={`${customer.status ? 'Inactivar Contrapago' : 'Activar Contrapago'}`} aria-label="add">
+                            <button type="button"
+                                    size="small"
+                                    className={`btn btn-sm ${customer.status ? 'text-danger' : 'text-success'}`}
+                                    onClick={() => {
+                                        toggleActivateCustomer();
+                                    }}>
+                                <i className={`uil ${customer.status ? 'uil-multiply' : 'uil-check'} font-size-18`}> </i>
+                            </button>
+                        </Tooltip>
                         <Tooltip placement="bottom" title="Editar cliente" aria-label="add">
                             <button type="button"
                                     size="small"
@@ -234,7 +274,7 @@ const OrderCustomer = (props) => {
                     {!customer.status && (
                         <Col md={12} >
                             <div className="alert alert-danger m-0 font-size-14">
-                                <i className="uil uil-exclamation-triangle"> </i> <b>Este cliente no puede generar pedidos nuevos debido a que se encuentra inactivo.</b>
+                                <i className="uil uil-exclamation-triangle"> </i> <b>Este cliente no puede generar pedidos ContraPago.</b>
                             </div>
                         </Col>
                     )}
@@ -291,6 +331,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => ({
     hasCustomerOpenOrders,
     onGetCustomer: (id) => dispatch(getCustomer(id)),
+    onUpdateCustomer: (id, data) => dispatch(updateCustomer(id, data)),
     onUpdateCar: (data) => dispatch(updateCard(data)),
 })
 

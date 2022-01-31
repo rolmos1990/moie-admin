@@ -7,7 +7,7 @@ import {connect} from "react-redux";
 import {apiError} from "../../store/auth/login/actions";
 import PropTypes from "prop-types";
 import {getCategory, registerCategory, updateCategory} from "../../store/category/actions";
-import {FieldSwitch, FieldText} from "../../components/Fields";
+import {FieldSwitch, FieldText, FieldAlphaText} from "../../components/Fields";
 import Breadcrumb from "../../components/Common/Breadcrumb";
 import {STATUS} from "../../common/constants";
 import ButtonSubmit from "../../components/Common/ButtonSubmit";
@@ -72,7 +72,7 @@ const CategoryEdit = (props) => {
                                                         name={"name"}
                                                         value={categoryData.name}
                                                         minLength={3}
-                                                        maxLength={255}
+                                                        maxLength={150}
                                                         required
                                                     />
                                                 </div>
@@ -80,7 +80,7 @@ const CategoryEdit = (props) => {
                                             <Col md="4">
                                                 <div className="mb-3">
                                                     <Label htmlFor="field_prefix">Prefijo <span className="text-danger">*</span></Label>
-                                                    <FieldText
+                                                    <FieldAlphaText
                                                         id={"field_prefix"}
                                                         name={"prefix"}
                                                         value={categoryData.prefix}

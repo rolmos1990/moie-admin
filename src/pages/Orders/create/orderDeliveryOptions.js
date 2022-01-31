@@ -35,6 +35,7 @@ const OrderDeliveryOptions = (props) => {
     const [deliveryCost, setDeliveryCost] = useState(0);
     const [pieceToChange, setPieceToChange] = useState(0);
     const [showPaymentType, setShowPaymentType] = useState(false);
+    const [hasAddress, setHasAddress] = useState(false);
     const [productQty, setProductQty] = useState(0);
 
     //Carga inicial
@@ -54,6 +55,7 @@ const OrderDeliveryOptions = (props) => {
             setShowPaymentType(false);
             setProductQty(0);
             setTracking("");
+            setHasAddress(false);
         }
     }, [onGetFieldOptions, car.reset]);
 
@@ -144,10 +146,12 @@ const OrderDeliveryOptions = (props) => {
             deliveryLocality: deliveryLocality
         };
 
+        //Se agrega validacion si es mensajero, previo pago o previo pago cod no tiene direccion de envio
+        setHasAddress(!(deliveryMethod === "MENSAJERO" || [1,2].includes(deliveryType)));
+
         if(tracking && tracking !== ''){
             deliveryOps.tracking = tracking;
         }
-        //console.log(deliveryOps, paymentType)
         onUpdateCar({...car, deliveryOptions: deliveryOps});
     }
 
@@ -155,7 +159,7 @@ const OrderDeliveryOptions = (props) => {
         onAcceptModal(car);
     }
 
-    const showGuia = () => car.status && car.status > 1 && car.status < 6
+    const showGuia = () => car.deliveryOptions.tracking
 
     return (
         <React.Fragment>
@@ -208,9 +212,9 @@ const OrderDeliveryOptions = (props) => {
                             onChange={item => setDeliveryCost(item.target.value)}
                             required/>
                     </Col>
-                    {(deliveryMethod && !showPaymentType) && (
+                    {(deliveryMethod && !showPaymentType && hasAddress) && (
                         <Col md={12} className="p-1">
-                            <Label htmlFor="weight">Dirección de envío</Label>
+                            <Label htmlFor="weight">Localidad</Label>
                             <FieldSelect
                                 id={"deliveryLocality"}
                                 name={"deliveryLocality"}
@@ -218,6 +222,7 @@ const OrderDeliveryOptions = (props) => {
                                 defaultValue={deliveryLocality}
                                 onChange={item => setDeliveryLocality(item.value)}
                                 required
+                                isSearchable
                             />
                         </Col>
                     )}

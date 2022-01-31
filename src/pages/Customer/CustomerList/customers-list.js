@@ -8,7 +8,7 @@ import BootstrapTable from "react-bootstrap-table-next"
 
 import customerColumn from "./customerColumn"
 import {Link} from "react-router-dom"
-import {deleteCustomer, getCustomers, resetCustomer} from "../../../store/customer/actions";
+import {deleteCustomer, getCustomerRegistereds, getCustomers, resetCustomer} from "../../../store/customer/actions";
 import {Button, Tooltip} from "@material-ui/core";
 import {DEFAULT_PAGE_LIMIT} from "../../../common/pagination";
 import {ConfirmationModalAction} from "../../../components/Modal/ConfirmationModal";
@@ -23,7 +23,7 @@ import ReactApexChart from "react-apexcharts";
 import {resetProduct} from "../../../store/product/actions";
 
 const CustomersList = props => {
-    const {customers, meta, onGetCustomers, onResetCustomers, onDeleteCustomer,  refresh, countCustomersByStatus, statsCustomerRegistered, statsCustomerRegisteredToday} = props;
+    const {customers, meta, onGetCustomers, onResetCustomers, onDeleteCustomer, onGetCustomerRegistereds, refresh, countCustomersByStatus, registereds} = props;
     const [customerList, setCustomerList] = useState([])
     const [filter, setFilter] = useState(false);
     const [conditional, setConditional] = useState(null);
@@ -36,6 +36,7 @@ const CustomersList = props => {
 
     useEffect(() => {
         onGetCustomers();
+        onGetCustomerRegistereds();
         countMayoristas().then(data => {
             if(data[1]){
                 setCountMayorista(data[1])
@@ -45,6 +46,7 @@ const CustomersList = props => {
 
     useEffect(() => {
         onResetCustomers();
+        onGetCustomerRegistereds();
         onGetCustomers();
     }, [onGetCustomers])
 
@@ -83,7 +85,7 @@ const CustomersList = props => {
                     <StatsStatusCard title="Clientes" getData={countCustomersByStatus}/>
                 </Col>
                 <Col md={4}>
-                    <StatsRegisteredCard title="Clientes Registrados esta semana" getData={statsCustomerRegistered} getDataToday={statsCustomerRegisteredToday}/>
+                    <StatsRegisteredCard title="Clientes Registrados esta semana" getData={registereds.lastWeek} getDataToday={registereds.today}/>
                 </Col>
                 <Col md={4}>
                     <Card>
@@ -197,18 +199,19 @@ CustomersList.propTypes = {
 }
 
 const mapStateToProps = state => {
-    const {customers, loading, meta, refresh, custom} = state.Customer
-    return {customData: custom, customers, loading, meta, refresh}
+    const {customers, loading, meta, refresh, custom, registereds} = state.Customer
+    return {customData: custom, customers, loading, meta, refresh, registereds}
 }
 
 const mapDispatchToProps = dispatch => ({
     onResetCustomers: () => {
         dispatch(resetCustomer());
     },
+    onGetCustomerRegistereds: ()  => {
+        dispatch(getCustomerRegistereds());
+    },
     countCustomersByStatus,
     countMayoristas,
-    statsCustomerRegistered,
-    statsCustomerRegisteredToday,
     onGetCustomers: (conditional = null, limit = DEFAULT_PAGE_LIMIT, page) => dispatch(getCustomers(conditional, limit, page)),
     onDeleteCustomer: (id) => dispatch(deleteCustomer(id))
 })

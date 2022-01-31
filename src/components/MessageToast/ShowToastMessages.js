@@ -22,7 +22,7 @@ const ContainerToast = (props) => {
         <>
             <ToastContainer
                 position={toast.POSITION.TOP_RIGHT}
-                autoClose={5000}
+                autoClose={1200}
                 hideProgressBar={false}
                 newestOnTop={false}
                 closeOnClick

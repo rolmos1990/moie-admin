@@ -8,9 +8,9 @@ export const CUSTOMER_STATUS = {
 export const ConverterCustomerStatus = (status) => {
     switch(status) {
         case CUSTOMER_STATUS.ACTIVE:
-            return 'Activo';
+            return 'Si';
             break;
         default:
-            return 'Inactivo';
+            return 'No';
     }
 }

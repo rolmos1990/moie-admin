@@ -16,13 +16,13 @@ const OrderSummary = (props) => {
         const s = modelSummary();
         car.products.forEach(prod => {
             s.quantity += parseInt(prod.quantity);
-            s.weight += prod.origin.weight || 0;
-            s.totalDiscount += prod.discount;
-            s.totalWithoutDiscount += prod.origin.price * prod.quantity;
-            s.totalWithDiscount += prod.total;
+            s.weight += (parseFloat(prod.origin.weight) * prod.quantity) || 0;
+            s.totalDiscount += parseFloat(prod.discount);
+            s.totalWithoutDiscount += parseFloat(prod.origin.price) * parseInt(prod.quantity);
+            s.totalWithDiscount += parseFloat(prod.total);
         });
-        s.delivery = car.deliveryOptions?.cost || 0;
-        s.totalWithDelivery = s.totalWithDiscount + s.delivery;
+        s.delivery = parseFloat(car.deliveryOptions?.cost) || 0;
+        s.totalWithDelivery = parseFloat(s.totalWithDiscount) + s.delivery;
         setSummary(s);
     }, [car])
 

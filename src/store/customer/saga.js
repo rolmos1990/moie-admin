@@ -1,7 +1,15 @@
 import {all, call, fork, put, takeEvery} from "redux-saga/effects"
 
 //Account Redux states
-import {GET_CUSTOMERS, GET_CUSTOMER, REGISTER_CUSTOMER, UPDATE_CUSTOMER, DELETE_CUSTOMER, QUERY_CUSTOMERS} from "./actionTypes"
+import {
+    GET_CUSTOMERS,
+    GET_CUSTOMER,
+    REGISTER_CUSTOMER,
+    UPDATE_CUSTOMER,
+    DELETE_CUSTOMER,
+    QUERY_CUSTOMERS,
+    GET_CUSTOMER_REGISTEREDS
+} from "./actionTypes"
 import {
     getCustomersSuccess,
     registerCustomerSuccess,
@@ -9,7 +17,13 @@ import {
     getCustomerSuccess,
     getCustomerFail,
     registerCustomerFail,
-    updateCustomerSuccess, updateCustomerFail, deleteCustomerSuccess, deleteCustomerFailed, queryCustomersFailed, queryCustomersSuccess
+    updateCustomerSuccess,
+    updateCustomerFail,
+    deleteCustomerSuccess,
+    deleteCustomerFailed,
+    queryCustomersFailed,
+    queryCustomersSuccess,
+    getCustomerRegisteredsSuccess, getCustomerRegisteredsFailed
 } from "./actions"
 
 //Include Both Helper File with needed methods
@@ -18,7 +32,7 @@ import {
     updateCustomer,
     fetchCustomer,
     fetchCustomersApi,
-    deleteCustomerApi
+    deleteCustomerApi, fetchCustomerRegisteredsApi
 } from "../../helpers/backend_helper"
 import Conditionals from "../../common/conditionals";
 import {showResponseMessage} from "../../helpers/service";
@@ -51,6 +65,15 @@ function* queryData({params ={}, node='customers'}) {
         yield put(queryCustomersSuccess(response.data, response.meta, node));
     } catch (error) {
         yield put(queryCustomersFailed(error))
+    }
+}
+
+function* fetchCustomerRegistereds() {
+    try {
+        const response = yield call(fetchCustomerRegisteredsApi)
+        yield put(getCustomerRegisteredsSuccess(response));
+    } catch (error) {
+        yield put(getCustomerRegisteredsFailed(error))
     }
 }
 
@@ -99,6 +122,7 @@ export function* watchCustomer() {
     yield takeEvery(GET_CUSTOMER, fetchCustomerById);
     yield takeEvery(DELETE_CUSTOMER, customerDelete);
     yield takeEvery(QUERY_CUSTOMERS, queryData);
+    yield takeEvery(GET_CUSTOMER_REGISTEREDS, fetchCustomerRegistereds);
 }
 
 function* customerSaga() {

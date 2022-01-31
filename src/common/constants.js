@@ -32,6 +32,8 @@ export const COMMENT_ENTITIES = {
     ORDER: 'order',
 };
 
+export const CHARGE_ON_DELIVERY = 3;
+
 export const DELIVERY_TYPES = [
     {id: 1, name: "PREVIOUS_PAYMENT", label: "PREVIO PAGO"},
     {id: 2, name: "PAY_ONLY_DELIVERY", label: "PREVIO PAGO COD"},
@@ -53,20 +55,46 @@ export const PAYMENT_TYPES = {
 
 export const PAYMENT_TYPES_LIST = Object.keys(PAYMENT_TYPES).map(k => ({label: PAYMENT_TYPES[k], value: PAYMENT_TYPES[k]}));
 
+export const EVENT_STATUS = {
+    1: {name: 'Pendiente', color:'danger', colorCss: "#f44336"},
+    2: {name: 'Confirmado', color:'success', colorCss: "#4caf50"},
+    3: {name: 'Impreso', color:'warning', colorCss: "#ffeb3b"},
+    4: {name: 'Enviado', color:'warning', colorCss: "#ffeb3b"},
+    5: {name: 'Conciliado', color:'info', colorCss: "#2196f3"},
+    6: {name: 'Anulado', color:'info', colorCss: "#2196f3"},
+    7: {name: 'Finalizado', color:'success', colorCss: "#4caf50"},
+    8: {name: 'Actualizado', color:'danger', colorCss: "#f44336"},
+};
+
+
+export const PAYMENT_STATUS = {
+    0: {name: 'Pendiente', color:'danger', colorCss: "#f44336"},
+    1: {name: 'Conciliado', color:'success', colorCss: "#4caf50"}
+};
 
 export const ORDER_STATUS = {
     1: {name: 'Pendiente', color:'danger', colorCss: "#f44336"},
-    2: {name: 'Confirmada', color:'success', colorCss: "#4caf50"},
-    3: {name: 'Impresa', color:'warning', colorCss: "#ffeb3b"},
-    4: {name: 'Enviada', color:'warning', colorCss: "#ffeb3b"},
-    5: {name: 'Conciliada', color:'info', colorCss: "#2196f3"},
-    6: {name: 'Anulada', color:'info', colorCss: "#2196f3"},
+    2: {name: 'Confirmado', color:'success', colorCss: "#4caf50"},
+    3: {name: 'Impreso', color:'warning', colorCss: "#ffeb3b"},
+    4: {name: 'Enviado', color:'warning', colorCss: "#ffeb3b"},
+    5: {name: 'Conciliado', color:'info', colorCss: "#2196f3"},
+    6: {name: 'Anulado', color:'info', colorCss: "#2196f3"},
+};
+
+export const ORDERS_ENUM = {
+    PENDING: 1,
+    CONFIRMED: 2,
+    PRINTED: 3,
+    SENT: 4,
+    CONCILIED: 5,
+    ANULED: 6,
+    FINISHED: 7
 };
 
 export const OFFICE_STATUS = {
     1: {name: 'Pendiente', color: 'warning', colorCss: "#ffeb3b"},
-    2: {name: 'Finalizada', color: 'success', colorCss: "#4caf50"},
-    3: {name: 'Cancelada', color: 'danger', colorCss: "#2196f3"}
+    2: {name: 'Finalizado', color: 'success', colorCss: "#4caf50"},
+    3: {name: 'Cancelado', color: 'danger', colorCss: "#2196f3"}
 };
 
 export const ORDER_STATUS_LIST = Object.keys(ORDER_STATUS).map(s => ({label: ORDER_STATUS[s].name, value: s}))

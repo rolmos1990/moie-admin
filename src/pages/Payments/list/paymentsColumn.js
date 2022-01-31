@@ -1,6 +1,8 @@
 import React from "react"
 import Conditionals from "../../../common/conditionals";
 import {formatDate, priceFormat} from "../../../common/utils";
+import {StatusField} from "../../../components/StatusField";
+import {ORDER_STATUS, PAYMENT_STATUS} from "../../../common/constants";
 
 const paymentsColumns = (onSelected) => [
     {
@@ -25,6 +27,11 @@ const paymentsColumns = (onSelected) => [
         filter: true,
         filterType: "text",
         filterCondition: Conditionals.OPERATORS.LIKE,
+        formatter: (cellContent, item) => (
+            <>
+                {cellContent} &nbsp; {item.status > 0 && <span><i className={"mdi mdi-check font-size-18 mr-1 text-success"}> </i></span>}
+            </>
+        ),
     },
     {
         text: "Fecha",
@@ -69,6 +76,18 @@ const paymentsColumns = (onSelected) => [
             <div className="text-right">
                 {priceFormat(item.consignmentAmount, "", true)}
             </div>
+        ),
+    },
+    {
+        text: "Estado",
+        dataField: "status",
+        sort: true,
+        filter: true,
+        filterType: "text",
+        formatter: (cellContent, item) => (
+            <StatusField color={PAYMENT_STATUS[item.status].color}>
+                {PAYMENT_STATUS[item.status].name}
+            </StatusField>
         ),
     },
 ]

@@ -77,7 +77,7 @@ const orderColumns = (onSelectedOrder, showAsModal, conciliationView) => {
             ),
         },
         {
-            text: "Metodo de envio",
+            text: "Envio",
             dataField: "deliveryMethod",
             sort: true,
             filter: true,
@@ -88,6 +88,9 @@ const orderColumns = (onSelectedOrder, showAsModal, conciliationView) => {
                 <>
                     <div>{item.deliveryMethod.name}</div>
                     <small>{item.tracking}</small>
+                    {item.orderDelivery.deliveryType === 1 && <small className="badge badge-soft-primary bg-grey small-title">PP</small>}
+                    {item.orderDelivery.deliveryType === 2 && <small className="badge badge-soft-primary bg-grey small-title">PP</small>}
+                    {item.orderDelivery.deliveryType === 3 && <small className="badge badge-soft-primary bg-grey small-title">CC</small>}
                 </>
             ),
         },
@@ -96,6 +99,13 @@ const orderColumns = (onSelectedOrder, showAsModal, conciliationView) => {
             dataField: "quantity",
             sort: false,
             filter: false,
+        },
+        {
+            text: "Monto",
+            dataField: "totalAmount",
+            sort: false,
+            filter: false,
+            formatter: (cellContent, item) => priceFormat(cellContent),
         },
         {
             text: "Estado",

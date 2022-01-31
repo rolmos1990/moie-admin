@@ -1,6 +1,6 @@
 import InputSearchField from "./InputSearchField";
 import InputSwitchField from "./InputSwitchField";
-import {EmailField, NumberDecimalField, NumberField, TextField} from './InputTextField';
+import {EmailField, NumberDecimalField, NumberField, TextAlphaField, TextField} from './InputTextField';
 import InputDate from "./InputDate";
 import InputPhoneField from "./InputPhoneField";
 import InputAsyncSearchField from "./InputAsyncSearchField";
@@ -11,6 +11,7 @@ const FieldSelectBasic = InputSelectBasicField;
 const FieldSelect = InputSearchField;
 const FieldSwitch = InputSwitchField;
 const FieldText = TextField;
+const FieldAlphaText = TextAlphaField;
 const FieldNumber = NumberField;
 const FieldDecimalNumber = NumberDecimalField;
 const FieldEmail = EmailField;
@@ -27,5 +28,6 @@ export {
     FieldDecimalNumber,
     FieldEmail,
     FieldDate,
-    FieldPhone
+    FieldPhone,
+    FieldAlphaText
 };

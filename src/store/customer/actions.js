@@ -13,7 +13,10 @@ import {
     UPDATE_CUSTOMER_FAILED,
     DELETE_CUSTOMER,
     DELETE_CUSTOMER_SUCCESS,
-    DELETE_CUSTOMER_FAILED, RESET_CUSTOMERS, QUERY_CUSTOMERS, QUERY_CUSTOMERS_FAILED, QUERY_CUSTOMERS_SUCCESS
+    DELETE_CUSTOMER_FAILED, RESET_CUSTOMERS, QUERY_CUSTOMERS, QUERY_CUSTOMERS_FAILED, QUERY_CUSTOMERS_SUCCESS,
+    GET_CUSTOMER_REGISTEREDS,
+    GET_CUSTOMER_REGISTEREDS_SUCCESS,
+    GET_CUSTOMER_REGISTEREDS_FAILED,
 } from "./actionTypes"
 
 export const resetCustomer = () => ({
@@ -133,4 +136,16 @@ export const queryCustomersSuccess = (data, meta, node) => ({
     meta: meta,
     payload: data,
     node: node,
+})
+
+export const getCustomerRegistereds = () => ({
+    type: GET_CUSTOMER_REGISTEREDS
+})
+export const getCustomerRegisteredsFailed = error => ({
+    type: GET_CUSTOMER_REGISTEREDS_FAILED,
+    payload: error,
+})
+export const getCustomerRegisteredsSuccess = (data) => ({
+    type: GET_CUSTOMER_REGISTEREDS_SUCCESS,
+    payload: data,
 })

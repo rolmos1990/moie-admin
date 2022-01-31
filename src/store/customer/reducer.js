@@ -15,7 +15,7 @@ import {
     RESET_CUSTOMERS,
     QUERY_CUSTOMERS,
     QUERY_CUSTOMERS_FAILED,
-    QUERY_CUSTOMERS_SUCCESS, GET_CUSTOMER, GET_CUSTOMERS
+    QUERY_CUSTOMERS_SUCCESS, GET_CUSTOMER, GET_CUSTOMERS, GET_CUSTOMER_REGISTEREDS_SUCCESS
 
 } from "./actionTypes"
 
@@ -25,7 +25,8 @@ const initialState = {
     meta: {},
     customers: [],
     customer: {},
-    refresh: false
+    refresh: false,
+    registereds: {}
 }
 
 const customer = (state = initialState, action) => {
@@ -159,6 +160,12 @@ const customer = (state = initialState, action) => {
             state = {
                 ...state,
                 loading: false,
+            }
+            break
+        case GET_CUSTOMER_REGISTEREDS_SUCCESS:
+            state = {
+                ...state,
+                registereds: action.payload,
             }
             break
         default:

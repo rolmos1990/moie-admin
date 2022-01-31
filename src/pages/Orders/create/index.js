@@ -14,7 +14,12 @@ import {resetProduct} from "../../../store/product/actions";
 import {ConfirmationModalAction} from "../../../components/Modal/ConfirmationModal";
 import OrderSummary from "./orderSummary";
 import {registerOrder, resetCar} from "../../../store/order/actions";
-import {DELIVERY_METHODS_PAYMENT_TYPES, DELIVERY_TYPES, PAYMENT_TYPES} from "../../../common/constants";
+import {
+    CHARGE_ON_DELIVERY,
+    DELIVERY_METHODS_PAYMENT_TYPES,
+    DELIVERY_TYPES,
+    PAYMENT_TYPES
+} from "../../../common/constants";
 
 const CreateOrder = (props) => {
     const {onResetOrder, car, onRegisterOrder} = props;
@@ -33,7 +38,9 @@ const CreateOrder = (props) => {
             const isValidCustomer = !!car.customer.id;
             const isValidProducts = car.products.length > 0;
             const isValidDeliveryOptions = car.deliveryOptions && car.deliveryOptions.origin && car.deliveryOptions.type && car.deliveryOptions.method;
-            setIsValidOrder(isValidCustomer && isValidProducts && isValidDeliveryOptions);
+            //se agrega valicacion para no permitir clientes contrapagos que esten inactivos
+            const validCustomerType = car.customer && car.customer.status === true || (car.customer && car.customer.status === false && car.deliveryOptions  && car.deliveryOptions.type !== CHARGE_ON_DELIVERY);
+            setIsValidOrder(isValidCustomer && isValidProducts && isValidDeliveryOptions && validCustomerType);
         }
     }, [car]);
 

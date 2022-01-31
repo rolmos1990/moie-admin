@@ -10,56 +10,44 @@ import Conditionals from "../../common/conditionals";
 import {formatDate, priceFormat} from "../../common/utils";
 import {ConfirmationModalAction} from "../../components/Modal/ConfirmationModal";
 import {StatusField} from "../../components/StatusField";
-import {ORDER_STATUS} from "../../common/constants";
-import {applyPayment} from "../../store/payments/actions";
+import {ORDER_STATUS, PAYMENT_STATUS} from "../../common/constants";
+import {applyPayment, getPayment} from "../../store/payments/actions";
 
 const PaymentOverlay = (props) => {
 
-    const {payment, onRelateOrder, onCloseOverlay, onGetOrders, orders} = props;
-    const [findOrderBy, setFindOrderBy] = useState(null)
-    const [orderRelated, setOrderRelated] = useState(null)
+    const {paymentSelected, payment, onRelateOrder, onCloseOverlay, onGetOrders, orders, onGetPayment, refresh} = props;
+    const [findOrderBy, setFindOrderBy] = useState(null);
 
     useEffect(() => {
-        console.log('YG payment', payment)
-        if (payment) {
-            const conditions = new Conditionals.Condition;
-            conditions.add("payment", payment.id, Conditionals.OPERATORS.EQUAL);
-            onGetOrders(conditions);
-            setFindOrderBy("PAYMENT");
+        if (paymentSelected) {
+            onReload();
         }
-    }, [payment]);
+    }, [paymentSelected, refresh]);
 
-    useEffect(() => {
-        console.log('YG orders', orders);
-        if (findOrderBy === "PAYMENT") {
-            if (orders.length === 1 && orders[0].payment && orders[0].payment.id === payment.id) {
-                setOrderRelated(orders[0]);
+    const onReload = () => {
+        onGetPayment(paymentSelected.id);
 
-            } else {
-                const conditions = new Conditionals.Condition;
-                conditions.add("payment", null, Conditionals.OPERATORS.NULL);
-                conditions.add("orderDelivery.chargeOnDelivery", 0, Conditionals.OPERATORS.EQUAL);
-                onGetOrders(conditions);
-                setFindOrderBy("NO_PAYMENT");
-            }
-        }
-
-    }, [orders]);
+        const conditions = new Conditionals.Condition;
+        conditions.add("payment", null, Conditionals.OPERATORS.NULL);
+        conditions.add("orderDelivery.deliveryType", '1::2', Conditionals.OPERATORS.IN);
+        conditions.add('status', 1);
+        onGetOrders(conditions);
+        setFindOrderBy("NO_PAYMENT");
+    }
 
     const selectOrder = (order) => {
         ConfirmationModalAction({
             title: 'Confirmación',
-            description: `Usted está asociando el pago# ${payment.id} con el pedido# ${order.id}, ¿Desea continuar?`,
+            description: `Usted está asociando el pago# ${paymentSelected.id} con el pedido# ${order.id}, ¿Desea continuar?`,
             id: '_clienteModal',
             onConfirm: () => {
-                console.log('YG onRelateOrder', order);
-                onRelateOrder(payment.id, {orderId: order.id});
-                setOrderRelated(order);
+                onRelateOrder(paymentSelected.id, {orderId: order.id});
+                onReload();
             }
         });
     }
 
-    return payment.id ? (
+    return paymentSelected && payment && payment.id ? (
         <div className={'orderDetail-overlay pt-2'}>
             <Row className="mb-2">
                 <Col md={12}>
@@ -79,9 +67,16 @@ const PaymentOverlay = (props) => {
             <Row className="mb-3">
                 <Col md={12} className="p-3">
                     <Card id={'payment-detail'} className="p-3">
+                        <Row>
                         <Col xs={10}>
                             <h4 className="card-title text-info"><i className="uil uil-truck"> </i> Datos del pago</h4>
                         </Col>
+                        <Col xs={2}>
+                            <StatusField color={PAYMENT_STATUS[payment.status].color}>
+                                {PAYMENT_STATUS[payment.status].name}
+                            </StatusField>
+                        </Col>
+                        </Row>
                         <Row>
                             <Col md={6}>
                                 <label>Nombre: </label>
@@ -89,7 +84,7 @@ const PaymentOverlay = (props) => {
                             </Col>
                             <Col md={6}>
                                 <label>Teléfono: </label>
-                                <span className="p-1">{payment.cellphone}</span>
+                                <span className="p-1">{payment.phone}</span>
                             </Col>
                             <Col md={6}>
                                 <label>Correo: </label>
@@ -97,7 +92,7 @@ const PaymentOverlay = (props) => {
                             </Col>
                             <Col md={6}>
                                 <label>Forma de pago: </label>
-                                <span className="p-1">{payment.paymentForm}</span>
+                                <span className="p-1">{payment.type}</span>
                             </Col>
                             {payment.originBank && (
                                 <Col md={6}>
@@ -125,7 +120,7 @@ const PaymentOverlay = (props) => {
                     </Card>
                 </Col>
                 <Col md={12} className="p-3">
-                    {!orderRelated && (
+                    {!payment.order && (
                         <Card id={'orders'} className="p-3">
                             <Col xs={10}>
                                 <h4 className="card-title text-info"><i className="uil uil-truck"> </i> Seleccionar venta</h4>
@@ -143,12 +138,17 @@ const PaymentOverlay = (props) => {
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    {orders.sort((a, b) => a.id < b.id).map((order, k) => (
+                                    {orders.length === 0 && (
+                                        <tr>
+                                            <td colSpan={6} style={{"textAlign": "center"}}>No hay registros que mostrar</td>
+                                        </tr>
+                                    )}
+                                    {orders.map((order, k) => (
                                         <tr>
                                             <td>{order.customer.name}</td>
                                             <td>{formatDate(order.createdAt)}</td>
                                             <td className="text-end">{priceFormat(order.subTotalAmount, "", true)}</td>
-                                            <td className="text-end">{priceFormat(order.totalAmount - order.subTotalAmount, "", true)}</td>
+                                            <td className="text-end">{priceFormat(parseFloat(order.totalAmount || 0) - parseFloat(order.subTotalAmount || 0), "", true)}</td>
                                             <td className="text-end">{priceFormat(order.totalAmount, "", true)}</td>
                                             <td>
                                                 <Tooltip placement="bottom" title="Asociar pedido" aria-label="add">
@@ -164,7 +164,7 @@ const PaymentOverlay = (props) => {
                             </Row>
                         </Card>
                     )}
-                    {orderRelated && (
+                    {payment.order && (
                         <Card id={'order-detail'} className="p-3">
                             <Col xs={10}>
                                 <h4 className="card-title text-info"><i className="uil uil-truck"> </i> Pedido asociado</h4>
@@ -172,45 +172,45 @@ const PaymentOverlay = (props) => {
                             <Row>
                                 <Col md={6}>
                                     <label>Pedido #: </label>
-                                    <span className="p-1">{orderRelated.id}</span>
+                                    <span className="p-1">{payment.order.id}</span>
                                 </Col>
                                 <Col md={6}>
                                     <label>Estado: </label>
                                     <span className="p-1">
-                                         <StatusField color={ORDER_STATUS[orderRelated.status].color} className={"font-size-10 mr-5"}>
-                                            {ORDER_STATUS[orderRelated.status].name}
+                                         <StatusField color={ORDER_STATUS[payment.order.status].color} className={"font-size-10 mr-5"}>
+                                            {ORDER_STATUS[payment.order.status].name}
                                         </StatusField>
                                     </span>
                                 </Col>
                                 <Col md={6}>
                                     <label>Cliente: </label>
-                                    <span className="p-1">{orderRelated.customer.name}</span>
+                                    <span className="p-1">{payment.order.customer.name}</span>
                                 </Col>
                                 <Col md={6}>
                                     <label>Correo: </label>
-                                    <span className="p-1">{orderRelated.customer.email}</span>
+                                    <span className="p-1">{payment.order.customer.email}</span>
                                 </Col>
                                 <Col md={6}>
                                     <label>Fecha: </label>
-                                    <span className="p-1">{formatDate(orderRelated.createdAt)}</span>
+                                    <span className="p-1">{formatDate(payment.order.createdAt)}</span>
                                 </Col>
                                 <Col md={6}>
                                     <label>Cantidad de prendas: </label>
-                                    <span className="p-1">{orderRelated.quantity}</span>
+                                    <span className="p-1">{payment.order.quantity}</span>
                                 </Col>
                             </Row>
                             <Row>
                                 <Col md={4}>
                                     <label>Monto: </label>
-                                    <span className="p-1">{priceFormat(orderRelated.subTotalAmount, "", true)}</span>
+                                    <span className="p-1">{priceFormat(payment.order.subTotalAmount, "", true)}</span>
                                 </Col>
                                 <Col md={4}>
                                     <label>Envio: </label>
-                                    <span className="p-1">{priceFormat(orderRelated.totalAmount - orderRelated.subTotalAmount, "", true)}</span>
+                                    <span className="p-1">{priceFormat(payment.order.totalAmount - payment.order.subTotalAmount, "", true)}</span>
                                 </Col>
                                 <Col md={4}>
                                     <label>Total: </label>
-                                    <span className="p-1">{priceFormat(orderRelated.totalAmount, "", true)}</span>
+                                    <span className="p-1">{priceFormat(payment.order.totalAmount, "", true)}</span>
                                 </Col>
                             </Row>
                         </Card>
@@ -224,10 +224,12 @@ const PaymentOverlay = (props) => {
 
 const mapStateToProps = state => {
     const {orders} = state.Order
-    return {orders}
+    const {payment, refresh} = state.Payments;
+    return {orders, payment, refresh}
 }
 
 const mapDispatchToProps = dispatch => ({
+    onGetPayment: (id) => dispatch(getPayment(id)),
     onGetOrders: (conditions) => dispatch(getOrders(conditions.all(), 500, 0)),
     onRelateOrder: (paymentId, payload) => dispatch(applyPayment(paymentId, payload))
 })
@@ -237,7 +239,7 @@ export default withRouter(
 )
 
 PaymentOverlay.propTypes = {
-    payment: PropTypes.object.isRequired,
+    paymentSelected: PropTypes.object.isRequired,
     showOverlay: PropTypes.bool,
     onCloseOverlay: PropTypes.func,
     error: PropTypes.any,

@@ -147,7 +147,7 @@ const PaymentEdit = (props) => {
                                                         name={"originBank"}
                                                         placeholder={"Seleccione un banco"}
                                                         defaultValue={paymentData.originBank}
-                                                        options={banks}
+                                                        options={BANKS_LIST}
                                                         required
                                                         isSearchable
                                                     />
@@ -161,7 +161,7 @@ const PaymentEdit = (props) => {
                                                         name={"targetBank"}
                                                         placeholder={"Seleccione un banco"}
                                                         defaultValue={paymentData.targetBank}
-                                                        options={BANKS_LIST}
+                                                        options={banks && banks.filter(item => item.value != "Efecty")}
                                                         required
                                                         isSearchable
                                                     />
@@ -172,12 +172,12 @@ const PaymentEdit = (props) => {
                                             {(PAYMENT_FORMS.DEPOSIT === paymentFormSelected) && (
                                                 <Col md="6">
                                                     <div className="mb-3">
-                                                        <Label htmlFor="state">Banco origen <span className="text-danger">*</span></Label>
+                                                        <Label htmlFor="state">Banco <span className="text-danger">*</span></Label>
                                                         <FieldSelect
-                                                            id="originBank"
-                                                            name={"originBank"}
+                                                            id="targetBank"
+                                                            name={"targetBank"}
                                                             placeholder={"Seleccione un banco"}
-                                                            defaultValue={paymentData.originBank}
+                                                            defaultValue={paymentData.targetBank}
                                                             options={banks}
                                                             required
                                                             isSearchable

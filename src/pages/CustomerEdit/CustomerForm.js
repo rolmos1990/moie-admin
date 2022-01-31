@@ -120,12 +120,12 @@ const CustomerForm = (props) => {
                                 <div className={"float-end"}>
                                     <Row>
                                         <Col>
-                                            ¿Activo?
+                                            ¿Contrapago?
                                         </Col>
                                         <Col>
                                             <FieldSwitch
                                                 value={customerData.status}
-                                                defaultValue={customerData.status}
+                                                defaultValue={customerData.document ? customerData.status : true}
                                                 name={"_status"}
                                             />
                                         </Col>

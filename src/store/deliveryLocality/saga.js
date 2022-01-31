@@ -62,9 +62,9 @@ function* get({ id }) {
 
 function* fetch({conditional, limit, offset}) {
     try {
-
+        const order = {field: "name", type: "asc"}
         const cond = Conditionals.getConditionalFormat(conditional);
-        const query = Conditionals.buildHttpGetQuery(cond, limit, offset);
+        const query = Conditionals.buildHttpGetQuery(cond, limit, offset, order);
         const response = yield call(LIST_API_REQUEST, query)
         yield put(LIST_SUCCESS_ACTION(response.data, response.meta));
     } catch (error) {

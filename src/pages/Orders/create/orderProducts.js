@@ -115,11 +115,18 @@ const OrderProducts = (props) => {
                                 urlStr={PRODUCT}
                                 placeholder="Código del producto"
                                 defaultValue={productReferenceDefault}
-                                hasWild={true}
+                                hasWild={false}
+                                isClearable={true}
                                 conditionalOptions={{fieldName: 'reference', operator: Conditionals.OPERATORS.EQUAL}}
-                                onChange={(d) => {
-                                    onGetProduct(d.value);
-                                    setProductDefault(getEmptyOptions());
+                                onChange={(d, meta) => {
+                                    if(meta.action === "clear"){
+                                        setProductDefault(getEmptyOptions());
+                                        setProductReferenceDefault(getEmptyOptions());
+                                        setProductData({})
+                                    } else {
+                                        onGetProduct(d.value);
+                                        setProductDefault(getEmptyOptions());
+                                    }
                                 }}
                             />
                         </Col>
@@ -132,9 +139,17 @@ const OrderProducts = (props) => {
                                 urlStr={PRODUCT}
                                 placeholder="Nombre del producto"
                                 defaultValue={productDefault}
-                                onChange={(d) => {
-                                    onGetProduct(d.value);
-                                    setProductReferenceDefault(getEmptyOptions());
+                                hasWild={true}
+                                isClearable={true}
+                                onChange={(d, meta) => {
+                                    if(meta.action === "clear"){
+                                        setProductDefault(getEmptyOptions());
+                                        setProductReferenceDefault(getEmptyOptions());
+                                        setProductData({})
+                                    } else {
+                                        onGetProduct(d.value);
+                                        setProductReferenceDefault(getEmptyOptions());
+                                    }
                                 }}
                             />
                         </Col>

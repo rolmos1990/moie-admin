@@ -26,6 +26,7 @@ const InputSearchField = (props) => {
                 required: {value: props.required ? true : false, errorMessage: messages.required}
             }}
             isSearchable={props.isSearchable}
+            isLoading={props.isLoading}
             name={props.name}
             value={selected}
             placeholder={props.placeholder}
@@ -53,7 +54,7 @@ InputSearchField.propTypes = {
 
 class AvSearchInput extends AvBaseInput {
     render() {
-        const {name, value, onChange, validate, options, placeholder, helpMessage, isSearchable, disabled} = this.props;
+        const {name, value, onChange, validate, options, placeholder, helpMessage, isSearchable, disabled, isLoading} = this.props;
         const validation = this.context.FormCtrl.getInputState(this.props.name);
         const feedback = validation.errorMessage ? (<div className="invalid-feedback" style={{display: "block"}}>{validation.errorMessage}</div>) : null;
         const help = helpMessage ? (<FormText>{helpMessage}</FormText>) : null;
@@ -67,6 +68,8 @@ class AvSearchInput extends AvBaseInput {
                         name={name}
                         value={value}
                         validate={validate}
+                        defaultValue={options[0]}
+                        isLoading={isLoading}
                         // menuIsOpen={true}
                         placeholder={placeholder || ""}
                         onChange={onChange}

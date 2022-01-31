@@ -12,6 +12,7 @@ const updateCustomer = (id, data) => put(`${url.CUSTOMER}/${id}`, data);
 const fetchCustomersApi = data => get(url.CUSTOMER, {}, data);
 const fetchCustomer = data => get((data && data.id) ? `${url.CUSTOMER}/${data.id}` : url.CUSTOMER, data);
 const deleteCustomerApi = (id) => del(`${url.CUSTOMER}/${id}`);
+const fetchCustomerRegisteredsApi = () => get(`${url.CUSTOMER}/stats/registereds`, {});
 
 //products
 const fetchProductsApi = params => get(url.PRODUCT, {}, params);
@@ -170,6 +171,7 @@ export {
     fetchCustomer,
     fetchCustomersApi,
     deleteCustomerApi,
+    fetchCustomerRegisteredsApi,
     fetchProductsApi,
 
     fetchStatesApi,

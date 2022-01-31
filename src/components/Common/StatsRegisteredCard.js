@@ -8,15 +8,9 @@ const StatsRegisteredCard = (props) => {
 
     useEffect(() => {
         if (getData) {
-            getData().then(data => setReportData(data));
+            setReportData({today: getDataToday, lastWeek: getData});
         }
     }, [getData]);
-
-    useEffect(() => {
-        if (reportData && !reportData.hasOwnProperty('countToday') && getDataToday) {
-            getDataToday().then(data => setReportData({...reportData, countToday: data.count}));
-        }
-    }, [reportData]);
 
 
     return (

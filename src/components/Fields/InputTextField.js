@@ -33,6 +33,39 @@ TextField.propTypes = {
     minLength: PropTypes.number,
     maxLength: PropTypes.number,
 }
+
+const TextAlphaField = (props) => (
+    <AvField
+        id ={props.id}
+        name={props.name}
+        value={props.value}
+        placeholder={props.placeholder}
+        onChange={props.onChange ? props.onChange : null}
+        onBlur={props.onBlur ? props.onBlur : null}
+        type={props.type ? props.type : "text"}
+        className={`form-control ${props.className ? props.className : ''}` }
+        validate={
+            {
+                required: { value: props.required ? true : false, errorMessage: messages.required },
+                minLength: { value: props.minLength ? props.minLength: 0, errorMessage: messages.minLength.replace("{length}", props.minLength)},
+                maxLength: { value: props.maxLength ? props.maxLength: 255, errorMessage: messages.maxLength.replace("{length}", props.maxLength)},
+                pattern: {value: '^[A-Za-z]+$', errorMessage: messages.onlyAlpha},
+            }
+        }
+    />
+)
+
+TextAlphaField.propTypes = {
+    name: PropTypes.string,
+    value: PropTypes.string,
+    placeholder: PropTypes.string,
+    type: PropTypes.string,
+    required: PropTypes.bool,
+    disabled: PropTypes.bool,
+    minLength: PropTypes.number,
+    maxLength: PropTypes.number,
+}
+
 const NumberField = (props) => (
     <AvField
         id ={props.id}
@@ -47,6 +80,7 @@ const NumberField = (props) => (
             {
                 required: { value: props.required === true, errorMessage: messages.required },
                 number: { value: true},
+                min: { value: 0, errorMessage: messages.minValue }
             }
         }
     />
@@ -76,6 +110,7 @@ const NumberDecimalField = (props) => (
             {
                 required: { value: props.required === true, errorMessage: messages.required },
                 number: { value: true},
+                min: { value: 1, errorMessage: messages.minValue }
             }
         }
     />
@@ -117,5 +152,6 @@ export {
     TextField,
     NumberField,
     NumberDecimalField,
-    EmailField
+    EmailField,
+    TextAlphaField
 };
