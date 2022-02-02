@@ -4,37 +4,13 @@ import {Button, Card, Tooltip} from "@material-ui/core";
 import {withRouter} from "react-router-dom"
 import {connect} from "react-redux";
 import PropTypes from "prop-types";
-import {
-    copyToClipboard,
-    formatDate,
-    getImageByQuality,
-    priceFormat,
-    printPartOfPage,
-    threeDots
-} from "../../common/utils";
+import {copyToClipboard, formatDate, getImageByQuality, priceFormat, printPartOfPage, threeDots} from "../../common/utils";
 import NoDataIndication from "../../components/Common/NoDataIndication";
 
-import {
-    canceledStatusOrder,
-    getOrder,
-    historicOrder,
-    nextStatusOrder,
-    printOrder,
-    resumeOrder,
-    updateCard,
-    updateOrder
-} from "../../store/order/actions";
+import {canceledStatusOrder, getOrder, historicOrder, nextStatusOrder, printOrder, resumeOrder, updateCard, updateOrder} from "../../store/order/actions";
 import CustomModal from "../../components/Modal/CommosModal";
 import OrderDeliveryOptions from "./create/orderDeliveryOptions";
-import {
-    COMMENT_ENTITIES,
-    DELIVERY_METHODS_PAYMENT_TYPES,
-    DELIVERY_TYPES,
-    EVENT_STATUS,
-    GROUPS,
-    ORDER_STATUS, ORDERS_ENUM,
-    PAYMENT_TYPES
-} from "../../common/constants";
+import {COMMENT_ENTITIES, DELIVERY_METHODS_PAYMENT_TYPES, DELIVERY_TYPES, EVENT_STATUS, GROUPS, ORDER_STATUS, ORDERS_ENUM, PAYMENT_TYPES} from "../../common/constants";
 import {map} from "lodash";
 import Images from "../../components/Common/Image";
 import OrderCustomer from "./create/orderCustomer";
@@ -428,6 +404,10 @@ const OrderEdit = (props) => {
                                     <Col md={12}>
                                         <label>Teléfono Residencial: </label>
                                         <span className="p-1">{orderData.customer.phone}</span>
+                                    </Col>
+                                    <Col md={12}>
+                                        <label>Dirección: </label>
+                                        <small className="p-1" style={{wordBreak: 'break-all'}}>{orderData.customer.address}</small>
                                     </Col>
                                 </Row>
                             </Card>

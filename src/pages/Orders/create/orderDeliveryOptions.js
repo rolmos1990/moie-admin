@@ -248,7 +248,7 @@ const OrderDeliveryOptions = (props) => {
                                     name={"pieceToChange"}
                                     value={pieceToChange}
                                     onChange={item => setPieceToChange(item.target.value)}
-                                    required/>
+                                    />
                             </Col>
                         </>
                     )}

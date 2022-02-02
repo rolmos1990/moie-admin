@@ -1,19 +1,18 @@
 import React, {useEffect, useState} from "react"
-import {Col, Label, Row, Spinner} from "reactstrap"
+import {Col, Label, Row} from "reactstrap"
 import {withRouter} from "react-router-dom"
 import {connect} from "react-redux";
 import PropTypes from "prop-types";
 import {FieldAsyncSelect, FieldSelect} from "../../../components/Fields";
 import {CUSTOMER} from "../../../helpers/url_helper";
 import {getCustomer, updateCustomer} from "../../../store/customer/actions";
-import {arrayToOptionsByFieldName, getEmptyOptions} from "../../../common/converters";
+import {getEmptyOptions} from "../../../common/converters";
 import {AvForm} from "availity-reactstrap-validation";
 import {Button, Tooltip} from "@material-ui/core";
 import Conditionals from "../../../common/conditionals";
 import CustomModal from "../../../components/Modal/CommosModal";
 import CustomerForm from "../../CustomerEdit/CustomerForm";
 import {updateCard} from "../../../store/order/actions";
-import {DEFAULT_PAGE_LIMIT} from "../../../common/pagination";
 import {hasCustomerOpenOrders} from "../../../helpers/service";
 import OrdersPieChart from "../../CustomerEdit/OrdersPieChart";
 import CategoriesPieChart from "../../CustomerEdit/CategoriesPieChart";
@@ -224,6 +223,10 @@ const OrderCustomer = (props) => {
                             <Col md={6}>
                                 <label>Teléfono Residencial: </label>
                                 <span className="p-1">{customerData.phone}</span>
+                            </Col>
+                            <Col md={12}>
+                                <label>Dirección: </label>
+                                <small className="p-1" style={{wordBreak: 'break-all'}}>{customerData.address}</small>
                             </Col>
                         </Row>
 

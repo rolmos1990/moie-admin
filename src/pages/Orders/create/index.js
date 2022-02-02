@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from "react"
+import React, {useEffect, useState} from "react"
 import {CardBody, Col, Container, Row} from "reactstrap"
 import {Card} from "@material-ui/core";
 import {withRouter} from "react-router-dom"
@@ -14,12 +14,7 @@ import {resetProduct} from "../../../store/product/actions";
 import {ConfirmationModalAction} from "../../../components/Modal/ConfirmationModal";
 import OrderSummary from "./orderSummary";
 import {registerOrder, resetCar} from "../../../store/order/actions";
-import {
-    CHARGE_ON_DELIVERY,
-    DELIVERY_METHODS_PAYMENT_TYPES,
-    DELIVERY_TYPES,
-    PAYMENT_TYPES
-} from "../../../common/constants";
+import {CHARGE_ON_DELIVERY, DELIVERY_METHODS_PAYMENT_TYPES, PAYMENT_TYPES} from "../../../common/constants";
 
 const CreateOrder = (props) => {
     const {onResetOrder, car, onRegisterOrder} = props;
@@ -37,7 +32,7 @@ const CreateOrder = (props) => {
         if (car) {
             const isValidCustomer = !!car.customer.id;
             const isValidProducts = car.products.length > 0;
-            const isValidDeliveryOptions = car.deliveryOptions && car.deliveryOptions.origin && car.deliveryOptions.type && car.deliveryOptions.method;
+            const isValidDeliveryOptions = car.deliveryOptions && car.deliveryOptions.origin && car.deliveryOptions.type && car.deliveryOptions.method && !!car.deliveryOptions.cost && car.deliveryOptions.cost >= 0;
             //se agrega valicacion para no permitir clientes contrapagos que esten inactivos
             const validCustomerType = car.customer && car.customer.status === true || (car.customer && car.customer.status === false && car.deliveryOptions  && car.deliveryOptions.type !== CHARGE_ON_DELIVERY);
             setIsValidOrder(isValidCustomer && isValidProducts && isValidDeliveryOptions && validCustomerType);

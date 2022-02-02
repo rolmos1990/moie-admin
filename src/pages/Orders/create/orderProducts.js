@@ -61,7 +61,6 @@ const OrderProducts = (props) => {
     useEffect(() => {
         if (onResetProduct) {
             onResetProduct();
-            console.log('YG onResetProduct');
         }
     }, [onResetProduct]);
 

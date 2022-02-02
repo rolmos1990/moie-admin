@@ -28,7 +28,6 @@ export const arrayToOptionsByFieldName = (array, fieldName) => {
     }));
 }
 export const getValue = (node, fieldName) => {
-    console.log(node, fieldName)
     if (fieldName.includes('.')) {
         const sp = fieldName.split('.');
         let value = node;
