@@ -146,11 +146,11 @@ const CustomerForm = (props) => {
                             </Col>
                             <Col md="6">
                                 <div className="mb-3">
-                                    <Label htmlFor="validationCustom02">Email <span className="text-danger">*</span></Label>
+                                    <Label htmlFor="validationCustom02">Email </Label>
                                     <FieldEmail
                                         name={"email"}
                                         value={customerData.email}
-                                        required/>
+                                    />
                                 </div>
                             </Col>
                         </Row>
