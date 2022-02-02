@@ -17,7 +17,7 @@ import {hasCustomerOpenOrders} from "../../../helpers/service";
 import OrdersPieChart from "../../CustomerEdit/OrdersPieChart";
 import CategoriesPieChart from "../../CustomerEdit/CategoriesPieChart";
 
-const searchByOptions = [{label: "Documento", value: "doc"}, {label: "Nombre", value: "name"}, {label: "Correo", value: "email"}];
+const searchByOptions = [{label: "Documento", value: "doc"}, {label: "Nombre", value: "name"}, {label: "Correo", value: "email"}, {label: "Teléfono", value: "phone"}];
 
 const OrderCustomer = (props) => {
     const {car, customer, onGetCustomer, hasCustomerOpenOrders, onUpdateCar, showAsModal, onUpdateCustomer} = props;
@@ -169,10 +169,30 @@ const OrderCustomer = (props) => {
                                 onChange={(c, meta) => {
                                     if(meta.action === "clear"){
                                         resetData();
+                                    } else {
+                                        onGetCustomer(c.value);
+                                        setCustomerEmailDefault(getEmptyOptions());
                                     }
-                                    else {
-                                    onGetCustomer(c.value);
-                                    setCustomerEmailDefault(getEmptyOptions());
+                                }}
+                            />
+                        </Col>
+                    )}
+                    {searchBy === "phone" && (
+                        <Col md={9}>
+                            <Label htmlFor="customer">Telefono</Label>
+                            <FieldAsyncSelect
+                                name={"phone"}
+                                urlStr={CUSTOMER}
+                                placeholder="Buscar por número de teléfono"
+                                defaultValue={customerEmailDefault}
+                                isClearable={true}
+                                hasWild={true}
+                                conditionalOptions={{fieldName: 'phone', operator: Conditionals.OPERATORS.EQUAL}}
+                                onChange={(c, meta) => {
+                                    if (meta.action === "clear") {
+                                        resetData();
+                                    } else {
+                                        onGetCustomer(c.value);
                                     }
                                 }}
                             />
