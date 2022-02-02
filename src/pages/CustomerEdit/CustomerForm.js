@@ -106,7 +106,6 @@ const CustomerForm = (props) => {
     }
 
     function handleSelectDepartment(option) {
-        getMunicipalities(option.value);
         setState(option.value);
     }
 
