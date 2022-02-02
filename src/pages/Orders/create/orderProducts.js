@@ -4,8 +4,8 @@ import {withRouter} from "react-router-dom"
 import {connect} from "react-redux";
 import PropTypes from "prop-types";
 import {FieldAsyncSelect, FieldSelect} from "../../../components/Fields";
-import {GET_CUSTOMER, PRODUCT} from "../../../helpers/url_helper";
-import {getProduct} from "../../../store/product/actions";
+import {PRODUCT} from "../../../helpers/url_helper";
+import {getProduct, resetProduct} from "../../../store/product/actions";
 import {getEmptyOptions} from "../../../common/converters";
 import {AvForm} from "availity-reactstrap-validation";
 import {map} from "lodash";
@@ -14,10 +14,10 @@ import {buildNumericOptions, getImageByQuality, priceFormat} from "../../../comm
 import Conditionals from "../../../common/conditionals";
 import {updateCard} from "../../../store/order/actions";
 
-const searchByOptions = [{label:"Codigo", value:"code"},{label:"Nombre", value:"name"}];
+const searchByOptions = [{label: "Codigo", value: "code"}];
 
 const OrderProducts = (props) => {
-    const {car, product, onGetProduct, onUpdateCar} = props;
+    const {car, product, onGetProduct, onUpdateCar, onResetProduct} = props;
     const [searchBy, setSearchBy] = useState(searchByOptions[0].value);
     const [productData, setProductData] = useState({});
     const [productDefault, setProductDefault] = useState(getEmptyOptions());
@@ -57,6 +57,13 @@ const OrderProducts = (props) => {
             resetData();
         }
     }, [product]);
+
+    useEffect(() => {
+        if (onResetProduct) {
+            onResetProduct();
+            console.log('YG onResetProduct');
+        }
+    }, [onResetProduct]);
 
     const addToOrder = (e, d) => {
         const prod = {
@@ -291,6 +298,7 @@ const mapStateToProps = state => {
 }
 
 const mapDispatchToProps = dispatch => ({
+    onResetProduct: () => dispatch(resetProduct()),
     onGetProduct: (id) => dispatch(getProduct(id)),
     onUpdateCar: (data) => dispatch(updateCard(data)),
 })
