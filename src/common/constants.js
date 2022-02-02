@@ -45,6 +45,7 @@ export const DELIVERY_METHODS_PAYMENT_TYPES = ['MENSAJERO'];
 export const DELIVERY_METHODS = {
     INTERRAPIDISIMO: 'INTERRAPIDISIMO',
     MENSAJERO: 'MENSAJERO',
+    OTRO: 'OTRO',
 };
 export const DELIVERY_METHODS_LIST = Object.keys(DELIVERY_METHODS).map((k,i) => ({label: DELIVERY_METHODS[k], value: i+1}));
 

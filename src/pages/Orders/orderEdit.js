@@ -160,6 +160,7 @@ const OrderEdit = (props) => {
                 tracking: car.deliveryOptions.tracking,
                 deliveryLocality: car.deliveryOptions.deliveryLocality,
                 deliveryType: parseInt(car.deliveryOptions.type),
+                otherMethod: car.deliveryOptions.otherMethod,
             };
 
             if (DELIVERY_METHODS_PAYMENT_TYPES.includes(deliveryData.deliveryMethod)) {

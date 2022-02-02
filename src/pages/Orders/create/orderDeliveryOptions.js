@@ -3,11 +3,11 @@ import {Col, Label, Row} from "reactstrap"
 import {withRouter} from "react-router-dom"
 import {connect} from "react-redux";
 import PropTypes from "prop-types";
-import {FieldNumber, FieldSelect} from "../../../components/Fields";
+import {FieldNumber, FieldSelect, FieldText} from "../../../components/Fields";
 import {getProduct} from "../../../store/product/actions";
 import {AvForm} from "availity-reactstrap-validation";
 import {getFieldOptionByGroups} from "../../../store/fieldOptions/actions";
-import {DELIVERY_METHODS_PAYMENT_TYPES, DELIVERY_TYPES, GROUPS, PAYMENT_TYPES, PAYMENT_TYPES_LIST} from "../../../common/constants";
+import {DELIVERY_METHODS, DELIVERY_METHODS_PAYMENT_TYPES, DELIVERY_TYPES, GROUPS, PAYMENT_TYPES, PAYMENT_TYPES_LIST} from "../../../common/constants";
 import {getDeliveryMethods, getDeliveryQuote, updateCard} from "../../../store/order/actions";
 import {arrayToOptions, getEmptyOptions} from "../../../common/converters";
 import {Button} from "@material-ui/core";
@@ -33,6 +33,7 @@ const OrderDeliveryOptions = (props) => {
     const [paymentType, setPaymentType] = useState(null);
     const [tracking, setTracking] = useState(null);
     const [deliveryCost, setDeliveryCost] = useState(0);
+    const [otherMethod, setOtherMethod] = useState(null);
     const [pieceToChange, setPieceToChange] = useState(0);
     const [showPaymentType, setShowPaymentType] = useState(false);
     const [hasAddress, setHasAddress] = useState(false);
@@ -100,7 +101,7 @@ const OrderDeliveryOptions = (props) => {
 
     useEffect(() => {
         onChangeDeliveryOptions();
-    }, [deliveryCost, paymentType, pieceToChange, tracking, deliveryLocality]);
+    }, [deliveryCost, paymentType, pieceToChange, tracking, deliveryLocality, otherMethod]);
 
     useEffect(() => {
         getQuote();
@@ -117,6 +118,7 @@ const OrderDeliveryOptions = (props) => {
             setPieceToChange(car.deliveryOptions.pieces);
             setDeliveryLocality(car.deliveryOptions.deliveryLocality);
             setTracking(car.deliveryOptions.tracking);
+            setOtherMethod(car.deliveryOptions.otherMethod);
             setShowPaymentType(DELIVERY_METHODS_PAYMENT_TYPES.includes(car.deliveryOptions.method));
 
             if (car.deliveryOptions.paymentType)
@@ -143,7 +145,8 @@ const OrderDeliveryOptions = (props) => {
             cost: (parseFloat(deliveryCost) || 0),
             paymentType: paymentType,
             pieces: pieceToChange,
-            deliveryLocality: deliveryLocality
+            deliveryLocality: deliveryLocality,
+            otherMethod: otherMethod,
         };
 
         //Se agrega validacion si es mensajero, previo pago o previo pago cod no tiene direccion de envio
@@ -163,7 +166,7 @@ const OrderDeliveryOptions = (props) => {
 
     return (
         <React.Fragment>
-            <AvForm className="needs-validation" autoComplete="off">
+            <AvForm className="needs-validation" autoComplete="off" onValidSubmit={(e, v) => acceptModal(e, v)}>
                 <Row>
                     <Col>
                         <h4 className="card-title text-info"><i className="uil uil-truck"> </i> Opciones de envio</h4>
@@ -212,6 +215,18 @@ const OrderDeliveryOptions = (props) => {
                             onChange={item => setDeliveryCost(item.target.value)}
                             required/>
                     </Col>
+                    {deliveryMethod === DELIVERY_METHODS.OTRO && (
+                        <Col md={6} className="p-1">
+                            <Label htmlFor="weight">Especifique</Label>
+                            <FieldText
+                                id={"otherMethod"}
+                                name={"otherMethod"}
+                                value={otherMethod}
+                                onChange={item => setOtherMethod(item.target.value)}
+                                required/>
+                        </Col>
+                    )}
+
                     {(deliveryMethod && !showPaymentType && hasAddress) && (
                         <Col md={12} className="p-1">
                             <Label htmlFor="weight">Localidad</Label>
@@ -256,7 +271,7 @@ const OrderDeliveryOptions = (props) => {
                         <Col md={6} className="p-1">
                             <Label htmlFor="weight">Guia número</Label>
                             <div className="form-control">{tracking}</div>
-                           {/* <FieldText
+                            {/* <FieldText
                                 id={"tracking"}
                                 name={"tracking"}
                                 value={tracking}
@@ -265,24 +280,22 @@ const OrderDeliveryOptions = (props) => {
                         </Col>
                     )}
                 </Row>
+                {showAsModal && (
+                    <>
+                        <hr/>
+                        <Row>
+                            <Col md={12} className="text-right">
+                                {onCloseModal && (
+                                    <button type="button" className="btn btn-light" onClick={() => props.onCloseModal()}>Cancelar</button>
+                                )}
+                                {onAcceptModal && (
+                                    <Button color="primary" type="submit">Guardar</Button>
+                                )}
+                            </Col>
+                        </Row>
+                    </>
+                )}
             </AvForm>
-            {showAsModal && (
-                <>
-                    <hr/>
-                    <Row>
-                        <Col md={12} className="text-right">
-                            {onCloseModal && (
-                                <button type="button" className="btn btn-light" onClick={() => props.onCloseModal()}>Cancelar</button>
-                            )}
-                            {onAcceptModal && (
-                                <Button color="primary" type="button" onClick={() => acceptModal()}>Guardar</Button>
-                            )}
-                        </Col>
-                    </Row>
-                </>
-
-            )}
-
         </React.Fragment>
     )
 }
