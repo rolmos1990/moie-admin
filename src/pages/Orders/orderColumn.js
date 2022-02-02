@@ -2,7 +2,7 @@ import React from "react"
 import {Link} from "react-router-dom"
 import {StatusField} from "../../components/StatusField";
 import {buildOptions} from "../../common/converters";
-import {DELIVERY_METHODS_LIST, ORDER_STATUS, ORDER_STATUS_LIST} from "../../common/constants";
+import {DELIVERY_METHODS_LIST, DELIVERY_TYPES, ORDER_STATUS, ORDER_STATUS_LIST} from "../../common/constants";
 import Conditionals from "../../common/conditionals";
 import {formatDate, priceFormat} from "../../common/utils";
 import {Tooltip} from "@material-ui/core";
@@ -88,9 +88,22 @@ const orderColumns = (onSelectedOrder, showAsModal, conciliationView) => {
                 <>
                     <div>{item.deliveryMethod.name}</div>
                     <small>{item.tracking}</small>
-                    {item.orderDelivery.deliveryType === 1 && <small className="badge badge-soft-primary bg-grey small-title">PP</small>}
-                    {item.orderDelivery.deliveryType === 2 && <small className="badge badge-soft-primary bg-grey small-title">PP</small>}
-                    {item.orderDelivery.deliveryType === 3 && <small className="badge badge-soft-primary bg-grey small-title">CC</small>}
+
+                    {item.orderDelivery.deliveryType === 1 && (
+                        <Tooltip placement="bottom" title={DELIVERY_TYPES[0].label} aria-label="add">
+                            <i className={"mdi mdi-cash font-size-18 mr-1 text-info"}> </i>
+                        </Tooltip>
+                    )}
+                    {item.orderDelivery.deliveryType === 2 && (
+                        <Tooltip placement="bottom" title={DELIVERY_TYPES[1].label} aria-label="add">
+                            <i className={"mdi mdi-cash font-size-18 mr-1 text-warning"}> </i>
+                        </Tooltip>
+                    )}
+                    {item.orderDelivery.deliveryType === 3 && (
+                        <Tooltip placement="bottom" title={DELIVERY_TYPES[2].label} aria-label="add">
+                            <i className={"mdi mdi-handshake font-size-18 mr-1 text-info"}> </i>
+                        </Tooltip>
+                    )}
                 </>
             ),
         },
