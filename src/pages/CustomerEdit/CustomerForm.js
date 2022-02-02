@@ -235,6 +235,7 @@ const CustomerForm = (props) => {
                                         id='address'
                                         name={"address"}
                                         value={customerData.address}
+                                        maxLength={80}
                                         required/>
                                 </div>
                             </Col>
