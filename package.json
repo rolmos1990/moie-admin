@@ -1,6 +1,6 @@
 {
   "name": "minible-react",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "private": true,
   "dependencies": {
     "@fullcalendar/bootstrap": "^5.4.0",

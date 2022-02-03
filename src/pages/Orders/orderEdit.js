@@ -41,6 +41,7 @@ const OrderEdit = (props) => {
     const [openCustomerModal, setOpenCustomerModal] = useState(false);
     const [openDeliveryModal, setOpenDeliveryModal] = useState(false);
     const [openProductsModal, setOpenProductsModal] = useState(false);
+    const [allowEdit, setAllowEdit] = useState(false);
 
     const productSummaryRef = React.createRef();
 
@@ -105,6 +106,8 @@ const OrderEdit = (props) => {
             setShowAsTable(isMobile);
 
         }
+
+        setAllowEdit(canEdit());
         //console.log(order);
     }, [order]);
 
@@ -240,11 +243,15 @@ const OrderEdit = (props) => {
     }
 
     const canEdit = () => {
-        const isPrevPayment = order.orderDelivery && ([1,2].includes(order.orderDelivery.deliveryType));
-        const canEditPreviewPayment = [ORDERS_ENUM.PENDING, ORDERS_ENUM.CONCILIED, ORDERS_ENUM.PRINTED].includes(parseInt(order.status)) && isPrevPayment;
-        const canEditChargeOnDelivery = [ORDERS_ENUM.PENDING, ORDERS_ENUM.CONFIRMED, ORDERS_ENUM.PRINTED].includes(parseInt(order.status)) && !isPrevPayment;
-        if(order && (canEditPreviewPayment || canEditChargeOnDelivery)){
-            return true;
+        if(order) {
+            const isPrevPayment = order.orderDelivery && ([1, 2].includes(order.orderDelivery.deliveryType));
+            const canEditPreviewPayment = [ORDERS_ENUM.PENDING, ORDERS_ENUM.CONCILIED, ORDERS_ENUM.PRINTED].includes(parseInt(order.status)) && isPrevPayment;
+            const canEditChargeOnDelivery = [ORDERS_ENUM.PENDING, ORDERS_ENUM.CONFIRMED, ORDERS_ENUM.PRINTED].includes(parseInt(order.status)) && !isPrevPayment;
+            if (order && (canEditPreviewPayment || canEditChargeOnDelivery)) {
+                return true;
+            } else {
+                return false;
+            }
         } else {
             return false;
         }
@@ -360,6 +367,7 @@ const OrderEdit = (props) => {
                                         <h4 className="card-title text-info"><i className="uil-users-alt me-2"> </i> Datos del cliente</h4>
                                     </Col>
                                     <Col xs={2} className="text-right">
+                                        {allowEdit && (
                                         <Tooltip placement="bottom" title="Editar cliente" aria-label="add">
                                             <button type="button"
                                                     size="small"
@@ -370,6 +378,7 @@ const OrderEdit = (props) => {
                                                 <i className="uil uil-pen font-size-18"> </i>
                                             </button>
                                         </Tooltip>
+                                        )}
                                     </Col>
                                 </Row>
                                 <Row>
@@ -420,6 +429,7 @@ const OrderEdit = (props) => {
                                         <h4 className="card-title text-info"><i className="uil uil-truck"> </i> Datos de envio</h4>
                                     </Col>
                                     <Col xs={2} className="text-right">
+                                        {allowEdit && (
                                         <Tooltip placement="bottom" title="Editar envio" aria-label="add">
                                             <button type="button"
                                                     size="small"
@@ -428,6 +438,7 @@ const OrderEdit = (props) => {
                                                 <i className="uil uil-pen font-size-18"> </i>
                                             </button>
                                         </Tooltip>
+                                        )}
                                     </Col>
                                 </Row>
                                 <Row>
@@ -514,7 +525,7 @@ const OrderEdit = (props) => {
                                                     </Tooltip>
                                                 </>
                                             )}
-                                            {canEdit() &&
+                                            {allowEdit &&
                                             <Tooltip placement="bottom" title="Editar products" aria-label="add">
                                                 <button type="button"
                                                         size="small"
