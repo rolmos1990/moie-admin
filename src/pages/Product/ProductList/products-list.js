@@ -228,6 +228,12 @@ const ProductList = props => {
                                                                     </Button>
                                                                 </Tooltip>
                                                             )}
+                                                            <Tooltip placement="bottom" title="Busqueda masiva" aria-label="add">
+                                                                <Link to={"/bq"} className="btn">
+                                                                    <i className="mdi mdi-text-box-search-outline"> </i>
+                                                                </Link>
+                                                            </Tooltip>
+
                                                             <Link to={"/product"} className="btn btn-primary waves-effect waves-light text-light">
                                                                 <i className="mdi mdi-plus"> </i> Nuevo Producto
                                                             </Link>

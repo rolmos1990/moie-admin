@@ -43,6 +43,7 @@ import Payments from "../pages/Payments";
 import PaymentEdit from "../pages/PaymentsEdit";
 import BillConfigs from "../pages/BillConfig";
 import BillConfigEdit from '../pages/BillConfigEdit';
+import BatchQueries from "../pages/batchQueries";
 
 const userRoutes = [
   { path: "/dashboard", component: Dashboard },
@@ -86,7 +87,8 @@ const userRoutes = [
   {path: "/payment", component: PaymentEdit},
   {path: "/billConfigs", component: BillConfigs},
   {path: "/billConfig/:id", component: BillConfigEdit},
-  {path: "/billConfig", component: BillConfigEdit },
+  {path: "/billConfig", component: BillConfigEdit},
+  {path: "/bq", component: BatchQueries},
 
   {path: "/404", component: PageNotFount},
 

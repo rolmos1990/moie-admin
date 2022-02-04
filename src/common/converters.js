@@ -54,11 +54,11 @@ export const getValue = (node, fieldName) => {
         return node[fieldName];
     }
 }
-export const getEmptyOptions = () => {
-    return {label: '-', value: null};
+export const getEmptyOptions = (label) => {
+    return {label: label ? label : '-', value: null};
 }
 export const normalizeColumnsList = (columns) => {
-    return columns.filter(r => !r.hidden).map(r =>({text: r.text, dataField: r.dataField, sort: r.sort, formatter: r.formatter}));
+    return columns.filter(r => !r.hidden).map(r => ({text: r.text, dataField: r.dataField, sort: r.sort, formatter: r.formatter}));
 }
 
 export const buildOptions =(options)=>{

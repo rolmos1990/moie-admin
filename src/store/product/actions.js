@@ -1,18 +1,23 @@
 import {
-    GET_PRODUCTS,
-    GET_PRODUCTS_SUCCESS,
-    GET_PRODUCTS_FAILED,
     GET_PRODUCT,
-    GET_PRODUCT_SUCCESS,
     GET_PRODUCT_FAILED,
+    GET_PRODUCT_SUCCESS,
+    GET_PRODUCTS,
+    GET_PRODUCTS_FAILED,
+    GET_PRODUCTS_SUCCESS,
+    QUERY_PENDING_PRODUCTS,
+    QUERY_PRODUCTS,
+    QUERY_PRODUCTS_FAILED,
+    QUERY_PRODUCTS_SUCCESS,
+    REGISTER_PRODUCT,
     REGISTER_PRODUCT_FAILED,
     REGISTER_PRODUCT_SUCCESS,
-    REGISTER_PRODUCT,
+    RESET_PRODUCT,
+    UPDATE_PRODUCT,
     UPDATE_PRODUCT_FAILED,
-    UPDATE_PRODUCT_SUCCESS, UPDATE_PRODUCT, RESET_PRODUCT, QUERY_PRODUCTS, QUERY_PRODUCTS_FAILED, QUERY_PRODUCTS_SUCCESS, QUERY_PENDING_PRODUCTS
+    UPDATE_PRODUCT_SUCCESS
 } from "./actionTypes";
 import Conditionals from "../../common/conditionals";
-import {getFieldOptions} from "../fieldOptions/actions";
 
 export const resetProduct = () => ({
     type: RESET_PRODUCT,
@@ -26,10 +31,14 @@ export const getProducts = (conditional, limit, offset) => ({
 })
 
 
-
+export const getProductsByRefs = (refs, offset) => {
+    const conditions = new Conditionals.Condition;
+    if (refs.length > 0) conditions.add("reference", refs.join("::"), Conditionals.OPERATORS.IN);
+    return getProducts(conditions.all(), refs.length, offset);
+}
 export const getProductsByIds = (ids, offset) => {
     const conditions = new Conditionals.Condition;
-    if(ids.length > 0) conditions.add("id", ids.join("::"), Conditionals.OPERATORS.IN);
+    if (ids.length > 0) conditions.add("id", ids.join("::"), Conditionals.OPERATORS.IN);
     return getProducts(conditions.all(), ids.length, offset);
 }
 
