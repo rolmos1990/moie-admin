@@ -9,7 +9,7 @@ import {connect} from "react-redux";
 import PropTypes from "prop-types";
 import {getProducts, resetProduct} from "../../store/product/actions";
 import {map} from "lodash";
-import {arrayToOptions, getEmptyOptions} from "../../common/converters";
+import {arrayToOptions} from "../../common/converters";
 import {getCategories} from "../../store/category/actions";
 import {getSizes} from "../../store/sizes/actions";
 import {ButtonCopy} from "../../components/Common/ButtonCopy";
@@ -24,6 +24,8 @@ const BatchQueriesForm = (props) => {
     const [sizeSelected, setSizeSelected] = useState(null);
     const [categorySelected, setCategorySelected] = useState(null);
     const [textToCopy, setTextToCopy] = useState(null);
+    const [form, setForm] = useState(null);
+    const [defaultValue, setDefaultValue] = useState(null);
 
     useEffect(() => {
         onResetProduct();
@@ -33,19 +35,19 @@ const BatchQueriesForm = (props) => {
 
     useEffect(() => {
         if (categories && categories.length > 0) {
-            const list = [getEmptyOptions('Todos'), ...arrayToOptions(categories)]
+            const list = [emptyOptions('Todos'), ...arrayToOptions(categories)]
             setCategoriesList(list);
         } else {
-            setCategoriesList([getEmptyOptions('Todos')]);
+            setCategoriesList([emptyOptions('Todos')]);
         }
     }, [categories])
 
     useEffect(() => {
         if (sizes && sizes.length > 0) {
-            const list = [getEmptyOptions('Todos'), ...arrayToOptions(sizes)]
+            const list = [emptyOptions('Todos'), ...arrayToOptions(sizes)]
             setSizesList(list);
         } else {
-            setSizesList([getEmptyOptions('Todos')]);
+            setSizesList([emptyOptions('Todos')]);
         }
     }, [sizes])
 
@@ -83,6 +85,10 @@ const BatchQueriesForm = (props) => {
         console.log('YG values', products);
     }, [products])
 
+    const emptyOptions = (label) => {
+        return {label: label ? label : '-', value: -1};
+    }
+
     const onSearchRefs = () => {
         if (productRefs.length === 0) {
             return;
@@ -99,21 +105,48 @@ const BatchQueriesForm = (props) => {
     const onSearch = () => {
         console.log('YG onSearch', categorySelected, sizeSelected);
         const conditions = new Conditionals.Condition;
-        if (sizeSelected && sizeSelected.value) {
+        if (sizeSelected && sizeSelected.value && sizeSelected.value > 0) {
             conditions.add("size.id", sizeSelected.value, Conditionals.OPERATORS.EQUAL);
         }
-        if (categorySelected && categorySelected.value) {
+        if (categorySelected && categorySelected.value && categorySelected.value > 0) {
             conditions.add("category.id", categorySelected.value, Conditionals.OPERATORS.EQUAL);
         }
         onGetProducts(conditions.all());
         setProductList([]);
     }
 
+    const clearFilters = () => {
+        setProductList([]);
+        setTextToCopy([]);
+        setCategorySelected(null)
+        setSizeSelected(null)
+        setProductRefs([])
+        setDefaultValue(-1)
+        if (form) form.reset();
+    }
+    console.log('YG listToCopy', props)
+
+
     return (
         <React.Fragment>
-            <AvForm className="needs-validation" autoComplete="off">
+            <AvForm className="needs-validation" autoComplete="off" ref={c => setForm(c)}>
                 <Card>
                     <CardBody>
+                        <Row className="mb-3">
+                            <Col xs={6}>
+                                <h4 className="text-info"><i className="fa fa-search"></i> Consultas Masivas</h4>
+                            </Col>
+                            <Col xs={6} className="text-right">
+                                <Tooltip placement="bottom" title="Limpiar" aria-label="add">
+                                    <button onClick={clearFilters} className="btn btn-xs btn-primary mr-5">
+                                        <i className="fa fa-eraser"></i> Limpiar
+                                    </button>
+                                </Tooltip>
+                                <Tooltip placement="bottom" title="Copiar" aria-label="add">
+                                    <ButtonCopy text={textToCopy} disabled={productList.length === 0}/>
+                                </Tooltip>
+                            </Col>
+                        </Row>
                         <Row className="mb-3">
                             <Col xs={10}>
                                 <Label htmlFor="orders">Productos</Label>
@@ -143,7 +176,8 @@ const BatchQueriesForm = (props) => {
                                     id={"field_category"}
                                     name={"category"}
                                     options={categoriesList}
-                                    defaultValue={null}
+                                    defaultValue={defaultValue}
+                                    isClearable={true}
                                     onChange={(e) => {
                                         setCategorySelected(e);
                                     }}
@@ -156,7 +190,8 @@ const BatchQueriesForm = (props) => {
                                     id={"field_sizes"}
                                     name={"size"}
                                     options={sizesList}
-                                    defaultValue={null}
+                                    defaultValue={defaultValue}
+                                    isClearable={true}
                                     onChange={(e) => {
                                         setSizeSelected(e);
                                     }}
@@ -176,11 +211,7 @@ const BatchQueriesForm = (props) => {
                         <hr/>
                         <Row>
                             <Col sx={12}>
-                                <div>
-                                    <Tooltip placement="bottom" title="Copiar" aria-label="add">
-                                        <ButtonCopy text={textToCopy}/>
-                                    </Tooltip>
-                                </div>
+
                                 {loading && <div className="text-center"><i className="fa fa-spinner fa-spin"> </i></div>}
                                 {map(productList, (prod, k) => (
                                     <div key={k}>
@@ -225,7 +256,7 @@ const mapDispatchToProps = dispatch => ({
     onResetProduct: () => dispatch(resetProduct()),
     onGetCategories: (conditional = null, limit = 100, page) => dispatch(getCategories(conditional, limit, page)),
     onGetSizes: (conditional = null, limit = 100, page) => dispatch(getSizes(conditional, limit, page)),
-    onGetProducts: (conditional = null, limit = 5000, page) => dispatch(getProducts(conditional, limit, page)),
+    onGetProducts: (conditional = null, limit = 1000, page) => dispatch(getProducts(conditional, limit, page)),
 })
 
 export default withRouter(

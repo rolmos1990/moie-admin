@@ -71,8 +71,8 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/t
 
 
 ## DOCKER UPLOAD
-    
+
     npm run build
     docker build -t rolmos/moie-admin .
-    docker tag {TAG_VERSION} rolmos/moie-admin
-    docker push rolmos/moie-admin
+    docker tag rolmos/moie-admin:latest rolmos/moie-admin:{TAG_VERSION}
+    docker push rolmos/moie-admin:{TAG_VERSION}

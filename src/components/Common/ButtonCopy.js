@@ -1,7 +1,7 @@
 import React, {useState} from 'react'
 import PropTypes from "prop-types";
 
-export const ButtonCopy = ({text}) => {
+export const ButtonCopy = ({text, disabled}) => {
 
     const [copying, setCopying] = useState(false);
 
@@ -19,7 +19,7 @@ export const ButtonCopy = ({text}) => {
     }
 
     return (
-        <button className="btn btn-xs btn-primary mr-2" onClick={copyToClipboard}>
+        <button className="btn btn-xs btn-primary mr-2" onClick={copyToClipboard} disabled={disabled}>
             <i className="mdi mdi-content-copy"> </i> {copying && (<span className="animated fadeIn">Copiado</span>)}
         </button>
     )
