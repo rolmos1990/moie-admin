@@ -67,7 +67,7 @@ const OrderEdit = (props) => {
                     origin: order.origen,
                     type: orderDelivery.deliveryType,
                     method: order.deliveryMethod.name,
-                    cost: parseFloat(orderDelivery.deliveryCost) || 0,
+                    cost: parseFloat(orderDelivery.deliveryCost) || null,
                     paymentType: order.paymentMode,
                     pieces: order.piecesForChanges || 0,
                     tracking: orderDelivery.tracking || '',

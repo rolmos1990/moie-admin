@@ -30,11 +30,14 @@ const CreateOrder = (props) => {
 
     useEffect(() => {
         if (car) {
+            const validCost = null != car.deliveryOptions.cost && car.deliveryOptions.cost >= 0
             const isValidCustomer = !!car.customer.id;
             const isValidProducts = car.products.length > 0;
-            const isValidDeliveryOptions = car.deliveryOptions && car.deliveryOptions.origin && car.deliveryOptions.type && car.deliveryOptions.method && !!car.deliveryOptions.cost && car.deliveryOptions.cost >= 0;
+            const isValidDeliveryOptions = car.deliveryOptions && car.deliveryOptions.origin && car.deliveryOptions.type && car.deliveryOptions.method && validCost;
             //se agrega valicacion para no permitir clientes contrapagos que esten inactivos
-            const validCustomerType = car.customer && car.customer.status === true || (car.customer && car.customer.status === false && car.deliveryOptions  && car.deliveryOptions.type !== CHARGE_ON_DELIVERY);
+            const validCustomerType = (car.customer && car.customer.status === true) || (car.customer && car.customer.status === false && car.deliveryOptions && car.deliveryOptions.type !== CHARGE_ON_DELIVERY);
+
+            console.log('YG valid card', validCost, isValidDeliveryOptions);
             setIsValidOrder(isValidCustomer && isValidProducts && isValidDeliveryOptions && validCustomerType);
         }
     }, [car]);

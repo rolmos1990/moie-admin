@@ -32,9 +32,9 @@ const OrderDeliveryOptions = (props) => {
     const [paymentTypes, setPaymentTypes] = useState(null);
     const [paymentType, setPaymentType] = useState(null);
     const [tracking, setTracking] = useState(null);
-    const [deliveryCost, setDeliveryCost] = useState(0);
+    const [deliveryCost, setDeliveryCost] = useState(null);
     const [otherMethod, setOtherMethod] = useState(null);
-    const [pieceToChange, setPieceToChange] = useState(0);
+    const [pieceToChange, setPieceToChange] = useState(null);
     const [showPaymentType, setShowPaymentType] = useState(false);
     const [hasAddress, setHasAddress] = useState(false);
     const [productQty, setProductQty] = useState(0);
@@ -51,8 +51,8 @@ const OrderDeliveryOptions = (props) => {
             setOriginOrder(null);
             setDeliveryType(null);
             setPaymentType(null);
-            setDeliveryCost(0);
-            setPieceToChange(0);
+            setDeliveryCost(null);
+            setPieceToChange(null);
             setShowPaymentType(false);
             setProductQty(0);
             setTracking("");
@@ -94,7 +94,10 @@ const OrderDeliveryOptions = (props) => {
 
     useEffect(() => {
         if (deliveryMethod && deliveryQuote) {
-            setDeliveryCost(parseFloat(deliveryQuote.amount || 0));
+            console.log('YG deliveryQuote', car.deliveryOptions, props)
+            if (!car.isEdit) {
+                setDeliveryCost(parseFloat(deliveryQuote.amount));
+            }
             onChangeDeliveryOptions();
         }
     }, [deliveryQuote]);
@@ -110,7 +113,7 @@ const OrderDeliveryOptions = (props) => {
     useEffect(() => {
         if (car.isEdit && car.deliveryOptions && car.deliveryOptions.origin && initComponent) {
             setInitComponent(false);
-            console.log('paso', car.deliveryOptions)
+            console.log('YG ', car.deliveryOptions, props)
             setDeliveryMethod(car.deliveryOptions.method);
             setOriginOrder(car.deliveryOptions.origin);
             setDeliveryType(car.deliveryOptions.type);
@@ -142,7 +145,7 @@ const OrderDeliveryOptions = (props) => {
             origin: originOrder,
             type: deliveryType,
             method: deliveryMethod,
-            cost: (parseFloat(deliveryCost) || 0),
+            cost: parseFloat(deliveryCost),
             paymentType: paymentType,
             pieces: pieceToChange,
             deliveryLocality: deliveryLocality,
