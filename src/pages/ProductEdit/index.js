@@ -157,6 +157,7 @@ const ProductEdit = (props) => {
             status: values._status,
             weight: values.weight ? Number.parseFloat(values.weight) : 0,
             price: Number.parseFloat(values.price),
+            providerReference: values.providerReference,
             cost: Number.parseFloat(values.cost),
         };
 
@@ -329,7 +330,20 @@ const ProductEdit = (props) => {
                                                     </div>
                                                 </Col>
 
-                                                <Col md="2">
+                                                <Col md="6">
+                                                    <div className="mb-3">
+                                                        <Label htmlFor="field_provider">Referencia Proveedor</Label>
+                                                        <FieldText
+                                                            id={"field_provider_reference"}
+                                                            name={"providerReference"}
+                                                            value={productData.providerReference}
+                                                            minLength={1}
+                                                            maxLength={12}
+                                                        />
+                                                    </div>
+                                                </Col>
+
+                                                <Col md="4">
                                                     <div className="mb-3">
                                                         <Label htmlFor="weight">Peso (g) </Label>
                                                         <FieldNumber
@@ -340,7 +354,7 @@ const ProductEdit = (props) => {
                                                         />
                                                     </div>
                                                 </Col>
-                                                <Col md="2">
+                                                <Col md="4">
                                                     <div className="mb-3">
                                                         <Label htmlFor="cost">Costo <span className="text-danger">*</span></Label>
                                                         <FieldNumber
@@ -351,7 +365,7 @@ const ProductEdit = (props) => {
                                                             required/>
                                                     </div>
                                                 </Col>
-                                                <Col md="2">
+                                                <Col md="4">
                                                     <div className="mb-3">
                                                         <Label htmlFor="price">Precio <span className="text-danger">*</span></Label>
                                                         <FieldNumber

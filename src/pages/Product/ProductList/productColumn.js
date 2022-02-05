@@ -41,12 +41,19 @@ const productColumns = (onDelete = false) => [
         dataField: "name",
         sort: true,
         formatter: (cellContent, item) => (
-            <div className="field-br" style={{width: '350px'}}>
-                <small>{item.name} </small>
-                {item.published === false && (
+            <div className={`field-br ${item.status === STATUS.ACTIVE ? '' : 'opacity-25'}`} style={{width: '350px'}}>
+                <small>{item.name}</small>
+                {(item.published === false && item.status === STATUS.ACTIVE) && (
                     <Tooltip placement="bottom" title="Producto no publicado" aria-label="add">
                         <i className={"mdi mdi-alert-octagram-outline font-size-18 mr-1 text-warning"}> </i>
                     </Tooltip>
+                )}
+                {item.providerReference && (
+                <div>
+                <Tooltip placement="bottom" title="Referencia de Proveedor" aria-label="provider_add">
+                    <p className="badge bg-soft-secondary p-1"><small><b><i className="mdi mdi-web-box mr-5"></i>{item.providerReference}</b></small></p>
+                </Tooltip>
+                </div>
                 )}
             </div>
         ),
@@ -62,7 +69,7 @@ const productColumns = (onDelete = false) => [
             return {textAlign: 'center'};
         },
         formatter: (cellContent, item) => (
-            <div className="text-right">
+            <div className={`text-right ${item.status === STATUS.ACTIVE ? '' : 'opacity-25'}`}>
                 {priceFormat(item.price, "", true)}
             </div>
         ),
@@ -78,7 +85,7 @@ const productColumns = (onDelete = false) => [
             return {textAlign: 'right'};
         },
         formatter: (cellContent, item) => (
-            <div className="text-right">
+            <div className={`text-right ${item.status === STATUS.ACTIVE ? '' : 'opacity-25'}`}>
                 {priceFormat(item.cost, "", true)}
             </div>
         ),
@@ -97,6 +104,7 @@ const productColumns = (onDelete = false) => [
                 )}
             </div>
         ),
+        hidden: true,
         filter: true,
         filterType: "asyncSelect",
         urlStr: CATEGORY,
@@ -109,13 +117,13 @@ const productColumns = (onDelete = false) => [
         formatter: (cellContent, item) => (
             <>
                 <Tooltip placement="bottom" title="Disponible" aria-label="add">
-                    <span className="mb-0 badge bg-success p-2" style={badgeStyles}>{item.productAvailable?.available || 0}</span>
+                    <span className={`mb-0 badge bg-success p-2 ${item.status === STATUS.ACTIVE ? '' : 'opacity-25'}`} style={badgeStyles}>{item.productAvailable?.available || 0}</span>
                 </Tooltip>
                 <Tooltip placement="bottom" title="Apartado" aria-label="add">
-                    <span className="mb-0 badge bg-danger p-2" style={badgeStyles}>{item.productAvailable?.reserved || 0}</span>
+                    <span className={`mb-0 badge bg-danger p-2 ${item.status === STATUS.ACTIVE ? '' : 'opacity-25'}`} style={badgeStyles}>{item.productAvailable?.reserved || 0}</span>
                 </Tooltip>
                 <Tooltip placement="bottom" title="Vendidos" aria-label="add">
-                    <span className="mb-0 badge bg-grey p-2" style={badgeStyles}>{item.productAvailable?.completed || 0}</span>
+                    <span className={`mb-0 badge bg-grey p-2 ${item.status === STATUS.ACTIVE ? '' : 'opacity-25'}`} style={badgeStyles}>{item.productAvailable?.completed || 0}</span>
                 </Tooltip>
             </>
         ),
@@ -144,6 +152,7 @@ const productColumns = (onDelete = false) => [
         dataField: "status",
         sort: true,
         filter: true,
+        hidden: true,
         filterType: "select",
         filterOptions: STATUS_OPTIONS,
         filterDefaultOption: STATUS_OPTIONS[0],
@@ -152,6 +161,14 @@ const productColumns = (onDelete = false) => [
                 {ConverterStatus(item.status)}
             </StatusField>
         ),
+    },
+    {
+        text: "Referencia de Proveedor",
+        dataField: "providerReference",
+        sort: false,
+        hidden: true,
+        filter: true,
+        filterType: "text"
     },
     {
         dataField: "menu",

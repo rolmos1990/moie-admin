@@ -148,7 +148,7 @@ const ProductSize = props => {
                                 <tr>
                                     <th>Color</th>
                                     {map(template?.sizes, (size, key) => (
-                                        <th key={'th_' + key} className="text-center">{size}</th>
+                                        <th key={'th_' + key} className="text-center">{size} {sizesList} {/* TODO -- Agregar aqui descripcion en letras pequenas una nueva linea */}</th>
                                     ))}
                                     <th>Borrar</th>
                                 </tr>
