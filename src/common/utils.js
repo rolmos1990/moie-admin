@@ -1,9 +1,10 @@
 import {BOOLEAN_STRING} from "./constants";
 import React from "react";
 import moment from "moment";
-import {baseImagePath, baseImagePathNew} from "../helpers/api_helper";
+import {baseImagePath, baseImagePathNew, get} from "../helpers/api_helper";
 import {showMessage} from "../components/MessageToast/ShowToastMessages";
 import userImage from "../assets/images/users/user.png"
+import { saveAs } from 'file-saver';
 
 export const BOOLEAN_STRING_OPTIONS = [
     {label: '-', value: null},
@@ -155,6 +156,16 @@ export const  copyToClipboard =(text)=> {
     document.addEventListener('copy', listener);
     document.execCommand('copy');
     document.removeEventListener('copy', listener);
+}
+
+export async function downloadFile(fileB64, name) {
+    try {
+
+        const blob = b64toBlob(fileB64);
+        saveAs(blob, name + ".pdf");
+    }catch(e){
+        console.log("DEBUG -- error ", e.message);
+    }
 }
 
 export const printPartOfPage=(htmlToPrint) => {

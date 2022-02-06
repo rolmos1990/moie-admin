@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react"
+import React, {useEffect, useState, useRef} from "react"
 import {CardBody, Col, Container, Label, Row} from "reactstrap"
 import {AvForm} from "availity-reactstrap-validation"
 import {Card} from "@material-ui/core";
@@ -13,6 +13,8 @@ import ButtonSubmit from "../../components/Common/ButtonSubmit";
 import useHookValue from "../../components/mentions/useHookValue";
 import MultiMention from "../../components/mentions/MultiMention";
 import {getFieldOptionByGroups} from "../../store/fieldOptions/actions";
+import { Editor } from '@tinymce/tinymce-react';
+
 
 const TemplateEdit = (props) => {
     const {onGetTemplate, template, onGetMentions, mentions} = props;
@@ -20,6 +22,8 @@ const TemplateEdit = (props) => {
     const [dataMentions, setDataMentions] = useState([]);
     const isEdit = props.match.params.id;
     const [sourceValue, onSourceChange, onSourceAdd, setSourceValue] = useHookValue('');
+
+    const editorRef = useRef(null);
 
     //carga inicial
     useEffect(() => {
@@ -107,19 +111,40 @@ const TemplateEdit = (props) => {
                                                 </div>
                                             </Col>
                                         </Row>
-                                        <Row>
-                                            <Col md="12">
-                                                <div className="mb-3">
-                                                    <Label htmlFor="field_name">Contenido <span className="text-danger">*</span></Label>
-                                                    <MultiMention
-                                                        value={sourceValue}
-                                                        data={dataMentions}
-                                                        onChange={onSourceChange}
-                                                        onAdd={onSourceAdd}
-                                                    />
-                                                </div>
-                                            </Col>
-                                        </Row>
+                                        {!templateData.hasEditor ? (
+                                                <Row>
+                                                    <Col md="12">
+                                                        <div className="mb-3">
+                                                            <Label htmlFor="field_name">Contenido <span
+                                                                className="text-danger">*</span></Label>
+                                                            <MultiMention
+                                                                value={sourceValue}
+                                                                data={dataMentions}
+                                                                onChange={onSourceChange}
+                                                                onAdd={onSourceAdd}
+                                                            />
+                                                        </div>
+                                                    </Col>
+                                                </Row>
+                                            ) :
+                                            <Row>
+                                                <Editor
+                                                    onInit={(evt, editor) => editorRef.current = editor}
+                                                    initialValue={sourceValue}
+                                                    onBlur={newContent => setSourceValue(newContent) && onSourceChange}
+                                                    init={{
+                                                        height: 500,
+                                                        menubar: false,
+                                                        plugins: "code",
+                                                        toolbar: 'undo redo | formatselect | code |',
+                                                        content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
+                                                        apply_source_formatting : true,
+                                                        cleanup : false,
+                                                        cleanup_on_startup : false
+                                                    }}
+                                                />
+                                            </Row>
+                                        }
                                         <Row>
                                             <Col md={12} className="text-right">
                                                 <ButtonSubmit loading={props.loading}/>

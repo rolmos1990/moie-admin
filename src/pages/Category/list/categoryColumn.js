@@ -32,20 +32,6 @@ const categoryColumns = (onDelete = false) => [
             </div>
         ),
     },
-    /*{
-        text: "Código DIAN",
-        dataField: "dianCode",
-        sort: true,
-        filter: true,
-        filterType: "text",
-    },
-    {
-        text: "Código ISO",
-        dataField: "isoCode",
-        sort: true,
-        filter: true,
-        filterType: "text",
-    },*/
     {
         text: "Estado",
         dataField: "status",

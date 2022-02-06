@@ -1,3 +1,4 @@
+
 export const BOOLEAN_STRING = {
     YES: 'Si',
     NO: 'No'
@@ -6,6 +7,17 @@ export const BOOLEAN_STRING = {
 export const STATUS = {
     ACTIVE: true,
     INACTIVE: false
+};
+
+export const BATCH_TYPES = {
+    PRINT_ORDER: 1,
+    CATALOGO_SINGLE: 2,
+    CATALOG_WITH_REFERENCES: 3
+}
+
+export const FILE_NAMES = {
+    CATALOGO_SINGLE: `catalogo-single`,
+    CATALOG_WITH_REFERENCES: `catalogo-references`
 };
 
 export const STATUS_LIST = Object.keys(STATUS).map(s => ({label: [s], value: s}))

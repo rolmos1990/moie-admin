@@ -22,6 +22,7 @@ import CountUp from "react-countup";
 import {getCatalogBatchRequest} from "../../../helpers/service";
 import {formatDate} from "../../../common/utils";
 import {resetProduct} from "../../../store/product/actions";
+import authHeader from "../../../helpers/jwt-token-access/auth-token-header";
 
 const CategoryList = props => {
     const {categories, onGetCategories, onResetCategories, onDeleteState, getCatalogBatchRequest, onCatalogPrintBatchRequest, refresh} = props;
@@ -89,14 +90,18 @@ const CategoryList = props => {
         });
     };
 
-    const printCatalogs= () => {
+    const printCatalogs= (hasReferences) => {
         let conditionals = conditional || [];
 
+        if(hasReferences){
+            conditionals.push({field:'references', value: '', operator: Conditionals.OPERATORS.TRUE});
+        }
+
         if(printCategoriesId && printCategoriesId.length === 1){
-            conditionals.push({field:'id', value:printCategoriesId[0], operator: Conditionals.OPERATORS.EQUAL});
+            conditionals.push({field:'category', value:printCategoriesId[0], operator: Conditionals.OPERATORS.EQUAL});
         }
         if(printCategoriesId && printCategoriesId.length > 1){
-            conditionals.push({field:'id', value:printCategoriesId.join('::'), operator: Conditionals.OPERATORS.IN});
+            conditionals.push({field:'category', value:printCategoriesId.join('::'), operator: Conditionals.OPERATORS.IN});
         }
         onCatalogPrintBatchRequest(conditionals);
     }
@@ -121,6 +126,19 @@ const CategoryList = props => {
         }
     };
 
+    const onOpenCatalog = (catalog) => {
+            // Change this to use your HTTP client
+            const headers = authHeader();
+            fetch(process.env.REACT_APP_BASE_SERVICE + catalog.body, {headers: headers}) // FETCH BLOB FROM IT
+                .then((response) => response.blob())
+                .then((blob) => { // RETRIEVE THE BLOB AND CREATE LOCAL URL
+                    var _url = window.URL.createObjectURL(blob);
+                    window.open(_url, "_blank").focus(); // window.open + focus
+                }).catch((err) => {
+                console.log(err);
+            });
+    }
+
     return (
         <>
             {!!(catalogs && catalogs.length > 0) && (
@@ -138,7 +156,7 @@ const CategoryList = props => {
                                         </Col>
                                         <Col xs={4}>
                                             <Tooltip placement="bottom" title="Imprimir Catálogo" aria-label="add">
-                                                <Button color="primary" onClick={() => onCatalogPrintBatchRequest(null, catalog)}>
+                                                <Button color="primary" onClick={() => onOpenCatalog(catalog)}>
                                                     <i className="mdi mdi-printer font-size-24"> </i>
                                                 </Button>
                                             </Tooltip>
@@ -195,9 +213,14 @@ const CategoryList = props => {
                                                                     </Button>
                                                                 </Tooltip>
                                                             )}
-                                                            <Tooltip placement="bottom" title="Impresión multiple" aria-label="add">
-                                                                <Button color="primary" onClick={() => printCatalogs()} disabled={printCategoriesId.length === 0 && (!conditional || conditional.length === 0)}>
-                                                                    <i className="mdi mdi-printer"> </i>
+                                                            <Tooltip placement="bottom" title="Descargar Catalogo" aria-label="add">
+                                                                <Button color="primary" onClick={() => printCatalogs(false)} disabled={printCategoriesId.length === 0 && (!conditional || conditional.length === 0)}>
+                                                                    <i className="mdi mdi-download"> </i>
+                                                                </Button>
+                                                            </Tooltip>
+                                                            <Tooltip placement="bottom" title="Descargar Catalogo con Referencias" aria-label="add">
+                                                                <Button color="primary" onClick={() => printCatalogs(true)} disabled={printCategoriesId.length === 0 && (!conditional || conditional.length === 0)}>
+                                                                    <i className="mdi mdi-download-circle"> </i>
                                                                 </Button>
                                                             </Tooltip>
                                                             <Link to={"/category"} className="btn btn-primary waves-effect waves-light text-light">
@@ -205,6 +228,7 @@ const CategoryList = props => {
                                                             </Link>
                                                         </div>
                                                     </Col>
+
                                                 </Row>
                                                 <Row>
                                                     <Col xl="12">

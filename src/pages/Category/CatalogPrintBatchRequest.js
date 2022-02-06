@@ -2,8 +2,9 @@ import React, {useEffect, useState} from "react"
 import {withRouter} from "react-router-dom"
 import {connect} from "react-redux";
 import PropTypes from "prop-types";
-import {printPartOfPage} from "../../common/utils";
+import {downloadFile, getMoment} from "../../common/utils";
 import {printCatalogBatchRequest, refreshCategory, resetCatalogBatchRequest} from "../../store/category/actions";
+import {BATCH_TYPES, FILE_NAMES} from "../../common/constants";
 
 const CatalogPrintBatchRequest = (props) => {
 
@@ -18,18 +19,18 @@ const CatalogPrintBatchRequest = (props) => {
 
     useEffect(() => {
         if (batch && batch.body) {
-            let html = null;
-            batch.body.forEach((body) => {
-                if (html) {
-                    html += '<br/>';
-                } else {
-                    html = '';
-                }
-                html += body.html;
-            })
-            printPartOfPage(html);
-            onResetBatchRequest();
-            onRefreshCategory();
+            let html = batch.body;
+            let name = FILE_NAMES.CATALOGO_SINGLE;
+            if(batch.type === BATCH_TYPES.CATALOG_WITH_REFERENCES){
+                name = FILE_NAMES.CATALOG_WITH_REFERENCES;
+            }
+
+            const filename = `${name}-${getMoment().format("YYYY-MM-DD")}.pdf`;
+
+            downloadFile(html, filename).then(() =>{
+                onResetBatchRequest();
+                onRefreshCategory();
+            });
         }
     }, [batch]);
 

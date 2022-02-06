@@ -12,6 +12,7 @@
     "@material-ui/lab": "^4.0.0-alpha.58",
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/user-event": "^12.1.10",
+    "@tinymce/tinymce-react": "^3.13.0",
     "@toast-ui/react-chart": "^1.0.2",
     "@vtaits/react-color-picker": "^0.1.1",
     "apexcharts": "^3.22.2",

@@ -7,7 +7,7 @@ import {connect} from "react-redux";
 import {apiError} from "../../store/auth/login/actions";
 import PropTypes from "prop-types";
 import {getCategory, registerCategory, updateCategory} from "../../store/category/actions";
-import {FieldSwitch, FieldText, FieldAlphaText} from "../../components/Fields";
+import {FieldSwitch, FieldText, FieldAlphaText, FieldNumber} from "../../components/Fields";
 import Breadcrumb from "../../components/Common/Breadcrumb";
 import {STATUS} from "../../common/constants";
 import ButtonSubmit from "../../components/Common/ButtonSubmit";
@@ -79,15 +79,13 @@ const CategoryEdit = (props) => {
                                             </Col>
                                             <Col md="4">
                                                 <div className="mb-3">
-                                                    <Label htmlFor="field_prefix">Prefijo <span className="text-danger">*</span></Label>
-                                                    <FieldAlphaText
-                                                        id={"field_prefix"}
-                                                        name={"prefix"}
-                                                        value={categoryData.prefix}
-                                                        minLength={1}
-                                                        maxLength={5}
-                                                        required
-                                                    />
+                                                    <Label htmlFor="field_discount">Descuento<span className="text-danger">*</span></Label>
+                                                    <FieldNumber
+                                                        id={"field_discount"}
+                                                        name={"discountPercent"}
+                                                        type="number"
+                                                        value={categoryData.discountPercent}
+                                                        required/>
                                                 </div>
                                             </Col>
                                         </Row>
