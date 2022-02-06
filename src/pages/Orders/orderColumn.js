@@ -2,7 +2,7 @@ import React from "react"
 import {Link} from "react-router-dom"
 import {StatusField} from "../../components/StatusField";
 import {buildOptions} from "../../common/converters";
-import {DELIVERY_METHODS_LIST, DELIVERY_TYPES, ORDER_STATUS, ORDER_STATUS_LIST} from "../../common/constants";
+import {DELIVERY_METHODS_LIST, DELIVERY_TYPES, DELIVERY_TYPES_LIST, ORDER_STATUS, ORDER_STATUS_LIST} from "../../common/constants";
 import Conditionals from "../../common/conditionals";
 import {formatDate, priceFormat} from "../../common/utils";
 import {Tooltip} from "@material-ui/core";
@@ -10,6 +10,7 @@ import {CUSTOMER, USER} from "../../helpers/url_helper";
 
 const statusOptions = buildOptions(ORDER_STATUS_LIST);
 const deliveryMethodsOptions = buildOptions(DELIVERY_METHODS_LIST);
+const deliveryTypeOptions = buildOptions(DELIVERY_TYPES_LIST);
 
 const orderColumns = (onSelectedOrder, showAsModal, conciliationView) => {
     let columns = [
@@ -56,7 +57,7 @@ const orderColumns = (onSelectedOrder, showAsModal, conciliationView) => {
                             <small className="bg-grey badge badge-soft-secondary"><i className="fa fa-user"></i> { item.user.name }</small>
                         </div>
                     </Link>)
-                    :(<>
+                    : (<>
                         {item.customer.name}
                         {item.customer.isMayorist === true && (
                             <Tooltip placement="bottom" title="Cliente mayorista" aria-label="add">
@@ -65,6 +66,16 @@ const orderColumns = (onSelectedOrder, showAsModal, conciliationView) => {
                         )}
                     </>)
             ),
+        },
+        {
+            text: "Tipo de envio",
+            dataField: "orderDelivery__deliveryType",
+            sort: true,
+            filter: true,
+            filterType: "select",
+            filterOptions: deliveryTypeOptions,
+            filterDefaultOption: deliveryTypeOptions[0],
+            hidden: true,
         },
         {
             text: "Fecha",
