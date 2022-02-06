@@ -383,7 +383,7 @@ const OfficeEdit = (props) => {
                                                 <Row>
                                                     <Col md={12}>
                                                         <label>Fecha: </label>
-                                                        <span className="p-1">{formatDate(officeData.batchDate, DATE_FORMAT.DD_MM_YYYY)}</span>
+                                                        <span className="p-1">{formatDate(officeData.batchDate, DATE_FORMAT.ONLY_DATE)}</span>
                                                     </Col>
                                                     <Col md={12}>
                                                         <label>Nombre: </label>
