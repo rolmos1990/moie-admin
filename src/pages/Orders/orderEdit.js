@@ -211,7 +211,7 @@ const OrderEdit = (props) => {
             .then(function (dataUrl) {
                 setDownloadingPhoto(false);
                 var link = document.createElement('a');
-                link.download = `pedido_${order.id}.png`;
+                link.download = `${order.customer.name.replace(/\s+/g, '_')}_NRO_${order.id}.png`.toUpperCase();
                 link.href = dataUrl;
                 link.click();
             })

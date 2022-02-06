@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import {Button, Card, CardBody, Col, Label, Row} from "reactstrap";
 import {AvForm} from "availity-reactstrap-validation";
 import PropTypes from "prop-types";
@@ -11,6 +11,7 @@ import {DATE_MODES} from "../Fields/InputDate";
 
 export const TableFilter = (props) => {
     const {fields} = props;
+    const [show, setShow] = useState(true);
     const form = React.createRef();
 
     if (!props.isActive) {
@@ -18,7 +19,6 @@ export const TableFilter = (props) => {
     }
 
     const handleValidSubmit = (event, values) => {
-        console.log('values', fields)
         if (props.onSubmit) {
 
             let data = {...values};
@@ -46,7 +46,7 @@ export const TableFilter = (props) => {
                     if (!field || field.length === 0) {
                         //para buscar dentro de nodos
                         field = fields.filter(field => field.filter)
-                            .filter(field => field.dataField.includes('.'))
+                            .filter(field => field.dataField.includes('.') || field.dataField.includes('__'))
                             .filter(field => field.dataField.startsWith(fieldName));
                     }
 
@@ -74,6 +74,7 @@ export const TableFilter = (props) => {
 
     const addConditionals = (conditions, data, field, dataField, fieldName) => {
         if (field && field.length) {
+            fieldName = fieldName.replace('__', ".")
             const filter = field[0];
             const value = data[dataField];
 
@@ -132,6 +133,10 @@ export const TableFilter = (props) => {
         const conditions = new Conditionals.Condition;
         props.onSubmit(conditions.all());
         form && form.current && form.current.reset();
+        setShow(false);
+        setTimeout(() => {
+            setShow(true);
+        }, 10)
     }
 
     return (<div className="col-md-4">
@@ -147,16 +152,17 @@ export const TableFilter = (props) => {
                 <div className="mb-4">
                     <h5><i className={"mdi mdi-filter-menu"}> </i> Filtros Avanzados &nbsp;</h5>
                 </div>
-                <AvForm className="needs-validation" autoComplete="off"
-                        onValidSubmit={(e, v) => {
-                            handleValidSubmit(e, v)
-                        }}
-                        ref={form}>
+                {show && (
+                    <AvForm className="needs-validation" autoComplete="off"
+                            onValidSubmit={(e, v) => {
+                                handleValidSubmit(e, v)
+                            }}
+                            ref={form}>
 
                         {fields.filter(f => f.filter).map((field, idx) => (
                             <Row key={idx}>
                                 {field.filterType === 'text' && (
-                                    <Col md="12" >
+                                    <Col md="12">
                                         <div className="mb-3">
                                             <Label htmlFor={"_" + field.dataField}>{field.text}</Label>
                                             <FieldText name={"_" + field.dataField}
@@ -166,31 +172,32 @@ export const TableFilter = (props) => {
                                     </Col>
                                 )}
                                 {field.filterType === 'number' && (
-                                        <Col md="12" >
-                                            <div className="mb-3">
-                                                <Label htmlFor={"_" + field.dataField}>{field.text}</Label>
-                                                <Row>
-                                                    <Col xs="6">
-                                                        <FieldNumber name={"_numberA_" + field.dataField}
-                                                                     defaultValue={field.filterDefaultOption}
-                                                                     placeholder="Desde"
-                                                        />
-                                                    </Col>
-                                                    <Col xs="6">
-                                                        <FieldNumber name={"_numberB_" + field.dataField}
-                                                                     defaultValue={field.filterDefaultOption}
-                                                                     placeholder="Hasta"
-                                                        />
-                                                    </Col>
-                                                </Row>
-                                            </div>
-                                        </Col>
+                                    <Col md="12">
+                                        <div className="mb-3">
+                                            <Label htmlFor={"_" + field.dataField}>{field.text}</Label>
+                                            <Row>
+                                                <Col xs="6">
+                                                    <FieldNumber name={"_numberA_" + field.dataField}
+                                                                 defaultValue={field.filterDefaultOption}
+                                                                 placeholder="Desde"
+                                                    />
+                                                </Col>
+                                                <Col xs="6">
+                                                    <FieldNumber name={"_numberB_" + field.dataField}
+                                                                 defaultValue={field.filterDefaultOption}
+                                                                 placeholder="Hasta"
+                                                    />
+                                                </Col>
+                                            </Row>
+                                        </div>
+                                    </Col>
                                 )}
                                 {field.filterType === 'select' && (
                                     <Col md="12" >
                                         <div className="mb-3">
                                             <Label htmlFor={"_" + field.dataField}>{field.text}</Label>
                                             <FieldSelect
+                                                id={"_" + field.dataField}
                                                 name={"_" + field.dataField}
                                                 options={field.filterOptions}
                                                 defaultValue={field.filterDefaultOption}
@@ -239,24 +246,25 @@ export const TableFilter = (props) => {
                                 )}
                             </Row>
                         ))}
-                    <Row>
-                        <Col md={"12"}>
-                            <div className={"float-end"}>
-                                <Button type="submit" color="primary" className="btn-sm btn-rounded waves-effect waves-light">
-                                    <i className={"mdi mdi-magnify"}> </i> Buscar
-                                </Button>
-                            </div>
-                            <div className={"float-end ml-5"}>
-                                <Button type="button"
-                                        onClick={cleanFilters}
-                                        color="default"
-                                        className="btn-sm btn-rounded waves-effect waves-light">
-                                    Limpiar
-                                </Button>
-                            </div>
-                        </Col>
-                    </Row>
-                </AvForm>
+                        <Row>
+                            <Col md={"12"}>
+                                <div className={"float-end"}>
+                                    <Button type="submit" color="primary" className="btn-sm btn-rounded waves-effect waves-light">
+                                        <i className={"mdi mdi-magnify"}> </i> Buscar
+                                    </Button>
+                                </div>
+                                <div className={"float-end ml-5"}>
+                                    <Button type="button"
+                                            onClick={cleanFilters}
+                                            color="default"
+                                            className="btn-sm btn-rounded waves-effect waves-light">
+                                        Limpiar
+                                    </Button>
+                                </div>
+                            </Col>
+                        </Row>
+                    </AvForm>
+                )}
             </CardBody>
         </Card>
     </div>)

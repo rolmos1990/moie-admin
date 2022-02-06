@@ -6,7 +6,7 @@ import {Link, withRouter} from "react-router-dom"
 import {connect} from "react-redux";
 import {apiError} from "../../store/auth/login/actions";
 import PropTypes from "prop-types";
-import {addOrderOffice, deleteOrderOffice, confirmOffice, deleteOffice, getOffice, printOfficeReport, registerOffice, resetPrintOfficeReport, updateOffice} from "../../store/office/actions";
+import {addOrderOffice, confirmOffice, deleteOffice, deleteOrderOffice, getOffice, printOfficeReport, registerOffice, resetPrintOfficeReport, updateOffice} from "../../store/office/actions";
 import {FieldDate, FieldSelect, FieldText} from "../../components/Fields";
 import Breadcrumb from "../../components/Common/Breadcrumb";
 import {DATE_FORMAT, formatDate, printPartOfPage} from "../../common/utils";
@@ -22,7 +22,6 @@ import CustomModal from "../../components/Modal/CommosModal";
 import OrderList from "../Orders/orderList";
 import Conditionals from "../../common/conditionals";
 import {fileOfficeTemplate} from "../../helpers/backend_helper";
-import DropZoneIcon from "../../components/Common/DropZoneIcon";
 
 const OfficeEdit = (props) => {
     const {getOffice, office, deliveryMethods, orders, printReportData, refresh, refreshOrders, deleteOrderOffice} = props;

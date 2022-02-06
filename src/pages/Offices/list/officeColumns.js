@@ -2,12 +2,14 @@ import React from "react"
 import {Link} from "react-router-dom"
 import {StatusField} from "../../../components/StatusField";
 import {buildOptions} from "../../../common/converters";
-import {DELIVERY_METHODS_LIST, DELIVERY_TYPES_LIST, OFFICE_STATUS, OFFICE_STATUS_LIST} from "../../../common/constants";
+import {DELIVERY_METHODS_LIST, DELIVERY_TYPES, DELIVERY_TYPES_LIST, OFFICE_STATUS, OFFICE_STATUS_LIST} from "../../../common/constants";
 import Conditionals from "../../../common/conditionals";
 import {DATE_FORMAT, formatDate} from "../../../common/utils";
+import {Tooltip} from "@material-ui/core";
 
 const statusOptions = buildOptions(OFFICE_STATUS_LIST);
 const deliveryMethodsOptions = buildOptions(DELIVERY_METHODS_LIST);
+const deliveryTypeOptions = buildOptions(DELIVERY_TYPES_LIST);
 
 const municipalityColumns = (onDelete = false) => [
     {
@@ -48,10 +50,27 @@ const municipalityColumns = (onDelete = false) => [
         dataField: "type",
         sort: true,
         filter: true,
-        filterType: "text",
-        formatter: (item) => (
+        filterType: "select",
+        filterOptions: deliveryTypeOptions,
+        filterDefaultOption: deliveryTypeOptions[0],
+        formatter: (cellContent) => (
             <>
-                <div>{DELIVERY_TYPES_LIST[item - 1].label }</div>
+                {/*<div>{DELIVERY_TYPES_LIST.find(d => d.value === cellContent).label }</div>*/}
+                {cellContent === 1 && (
+                    <Tooltip placement="bottom" title={DELIVERY_TYPES[0].label} aria-label="add">
+                        <i className={"mdi mdi-cash font-size-18 mr-1 text-info"}> </i>
+                    </Tooltip>
+                )}
+                {cellContent === 2 && (
+                    <Tooltip placement="bottom" title={DELIVERY_TYPES[1].label} aria-label="add">
+                        <i className={"mdi mdi-cash font-size-18 mr-1 text-warning"}> </i>
+                    </Tooltip>
+                )}
+                {cellContent === 3 && (
+                    <Tooltip placement="bottom" title={DELIVERY_TYPES[2].label} aria-label="add">
+                        <i className={"mdi mdi-handshake font-size-18 mr-1 text-info"}> </i>
+                    </Tooltip>
+                )}
             </>
         ),
     },
