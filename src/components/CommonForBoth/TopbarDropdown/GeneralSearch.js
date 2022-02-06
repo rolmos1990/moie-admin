@@ -3,11 +3,12 @@ import Conditionals from "../../../common/conditionals";
 import {generateReportRestart} from "../../../store/reports/actions";
 import {withRouter} from "react-router-dom";
 import {connect} from "react-redux";
-import {fetchCustomersApi, fetchProductsApi} from "../../../helpers/backend_helper";
+import {fetchCategoriesApi, fetchCustomersApi, fetchProductsApi} from "../../../helpers/backend_helper";
 
 const PREFIXES = {
     PRODUCT: "p:",
-    CUSTOMER: "c:"
+    CUSTOMER: "c:",
+    CATEGORY: "ca:"
 }
 
 const GeneralSearch = (props) => {
@@ -20,6 +21,9 @@ const GeneralSearch = (props) => {
         }
         if (prefix === PREFIXES.CUSTOMER) {
             findCustomer();
+        }
+        if (prefix === PREFIXES.CATEGORY) {
+            findCategory();
         }
     }, [prefix])
 
@@ -50,6 +54,17 @@ const GeneralSearch = (props) => {
         fetchCustomersApi(params).then((p => {
             if (p && p.data && p.data.length > 0) {
                 props.history.push(`/customer/detail/${p.data[0].id}`);
+            }
+        }))
+    };
+
+    const findCategory = () => {
+        const conditions = new Conditionals.Condition;
+        conditions.add("name", text.replace(prefix, ""), Conditionals.OPERATORS.EQUAL);
+        const params = parseConditions(conditions);
+        fetchCategoriesApi(params).then((p => {
+            if (p && p.data && p.data.length > 0) {
+                props.history.push(`/category/${p.data[0].id}`);
             }
         }))
     };
