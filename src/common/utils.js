@@ -26,7 +26,8 @@ export const STATUS_OPTIONS = [
 export const DATE_FORMAT = {
     FULL_DATE: 'FULL_DATE',
     ONLY_DATE: 'ONLY_DATE',
-    ONLY_TIME: 'ONLY_TIME'
+    ONLY_TIME: 'ONLY_TIME',
+    DD_MM_YYYY: 'DD_MM_YYYY'
 };
 
 export const isValidOption = (options, option) => {
@@ -61,11 +62,13 @@ const numberWithCommas =(x) =>{
 
 export const formatDate =(date, type = DATE_FORMAT.FULL_DATE) =>{
     try {
-        switch(type){
+        switch (type) {
             case DATE_FORMAT.FULL_DATE:
                 return moment(date, moment.ISO_8601).format('DD-MM-YYYY HH:mm:ss');
             case DATE_FORMAT.ONLY_DATE:
                 return moment(date, moment.ISO_8601).format('YYYY-MM-DD');
+            case DATE_FORMAT.DD_MM_YYYY:
+                return moment(date, moment.ISO_8601).format('DD-MM-YYYY');
             case DATE_FORMAT.ONLY_TIME:
                 return moment(date, moment.ISO_8601).format('HH:mm:ss');
             default:
