@@ -116,7 +116,7 @@ export const statsRegistered = (urlString, conditions) => {
 export const getCatalogBatchRequest = () => {
     const conditions = new Conditionals.Condition;
     conditions.add('createdAt', formatDateToServer(getMoment().startOf('day')), Conditionals.OPERATORS.GREATER_THAN_OR_EQUAL)
-    conditions.add('type', 2, Conditionals.OPERATORS.EQUAL);
+    conditions.add('type', [2,3].join("::"), Conditionals.OPERATORS.IN);
     conditions.add('status', 2, Conditionals.OPERATORS.EQUAL);
 
     const cond = Conditionals.getConditionalFormat(conditions.all());

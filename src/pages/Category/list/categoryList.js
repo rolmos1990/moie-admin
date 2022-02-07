@@ -129,7 +129,7 @@ const CategoryList = props => {
     const onOpenCatalog = (catalog) => {
             // Change this to use your HTTP client
             const headers = authHeader();
-            fetch(process.env.REACT_APP_BASE_SERVICE + catalog.body, {headers: headers}) // FETCH BLOB FROM IT
+            fetch(process.env.REACT_APP_BASE_SERVICE + catalog.body.url, {headers: headers}) // FETCH BLOB FROM IT
                 .then((response) => response.blob())
                 .then((blob) => { // RETRIEVE THE BLOB AND CREATE LOCAL URL
                     var _url = window.URL.createObjectURL(blob);
@@ -149,15 +149,16 @@ const CategoryList = props => {
                                 <CardBody>
                                     <Row>
                                         <Col xs={8}>
-                                            <h5 className="mb-1 mt-2"> Catálogo</h5>
-                                            <div className="text-muted mb-0 mt-3">
+                                            <h6 className="mb-1 mt-2"> Catálogo { catalog.type === 3 ? 'Ref' : ''}</h6>
+                                            <p className="badge bg-info">{catalog.body.name}</p>
+                                            <div className="text-muted mb-0 mt-1">
                                                 <small>{formatDate(catalog.createdAt)}</small>
                                             </div>
                                         </Col>
                                         <Col xs={4}>
-                                            <Tooltip placement="bottom" title="Imprimir Catálogo" aria-label="add">
+                                            <Tooltip placement="bottom" title="Descargar Catálogo" aria-label="add">
                                                 <Button color="primary" onClick={() => onOpenCatalog(catalog)}>
-                                                    <i className="mdi mdi-printer font-size-24"> </i>
+                                                    <i className="mdi mdi-download font-size-24"> </i>
                                                 </Button>
                                             </Tooltip>
                                         </Col>
