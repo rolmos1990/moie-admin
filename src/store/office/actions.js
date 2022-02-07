@@ -34,6 +34,11 @@ import {
     UPDATE_OFFICE_SUCCESS
 } from "./actionTypes";
 import Conditionals from "../../common/conditionals";
+import {
+    CATALOG_PRINT_BATCH_REQUEST,
+    CATALOG_PRINT_BATCH_REQUEST_FAILED,
+    CATALOG_PRINT_BATCH_REQUEST_SUCCESS
+} from "../category/actionTypes";
 
 export const resetOffice = () => ({
     type: RESET_OFFICE,

@@ -21,7 +21,7 @@ import {ConfirmationModalAction} from "../../components/Modal/ConfirmationModal"
 import CustomModal from "../../components/Modal/CommosModal";
 import OrderList from "../Orders/orderList";
 import Conditionals from "../../common/conditionals";
-import {fileOfficeTemplate} from "../../helpers/backend_helper";
+import {fileOfficeTemplate, officePdfApi} from "../../helpers/backend_helper";
 
 const OfficeEdit = (props) => {
     const {getOffice, office, deliveryMethods, orders, printReportData, refresh, refreshOrders, deleteOrderOffice} = props;
@@ -216,9 +216,24 @@ const OfficeEdit = (props) => {
     const onGetFieldOptions = (conditional = null, limit = 500, page) => props.getFieldOptionByGroups([GROUPS.ORDERS_ORIGIN], limit, page);
     const onGetOrders = (conditions) => props.getOrdersByOffice(conditions.all(), 200, 0);
     const handleDownloadTemplate = (id) => fileOfficeTemplate('test.xls', id);
+
     const printReport = (id) => {
         setReportBody(null);
         props.printOfficeReport(id);
+    }
+
+    /** Solicitar reporte PDF */
+    const requestPdfReport = async (id) => {
+        try {
+            const response = await officePdfApi(id);
+            if(response.status === 200) {
+                printPartOfPage(response.html);
+            }
+        }catch(e){
+            console.log("se ha producido un error", e);
+        }
+        //setReportBody(null);
+        //props.printPart(id);
     }
 
     return (
@@ -240,6 +255,14 @@ const OfficeEdit = (props) => {
                                 </div>
                                 <div className={"mb-3 float-md-end"}>
                                     <div className="button-items">
+
+                                        {!!([1,2].includes(officeData?.type)) &&  (
+                                        <Tooltip placement="bottom" title="Descargar PDF para Cajas" aria-label="add">
+                                            <button type="button" color="primary" className="btn-sm btn btn-outline-danger waves-effect waves-light" onClick={() => requestPdfReport(officeData.id)}>
+                                                <i className={"mdi mdi-file-pdf"}> </i> {printReportData.loading ? 'Generando...' : ''}
+                                            </button>
+                                        </Tooltip>
+                                        )}
 
                                         <Tooltip placement="bottom" title="Imprimir reporte" aria-label="add">
                                             <button type="button" color="primary" className="btn-sm btn btn-outline-info waves-effect waves-light" onClick={() => printReport(officeData.id)}>
