@@ -29,17 +29,26 @@ const GeneralSearch = (props) => {
 
     const search = (e) => {
         e.preventDefault();
+        let pre = null;
         Object.keys(PREFIXES).forEach(pre => {
             if (text.toLowerCase().startsWith(PREFIXES[pre])) {
-                setPrefix(PREFIXES[pre]);
+                pre = PREFIXES[pre];
             }
         })
+        if (null === pre) {
+            if (props.history.location.pathname === '/products') {
+                pre = PREFIXES.PRODUCT;
+            } else if (props.history.location.pathname === '/customers') {
+                pre = PREFIXES.CUSTOMER;
+            } else if (props.history.location.pathname === '/categories') {
+                pre = PREFIXES.CATEGORY;
+            }
+        }
+        setPrefix(pre)
     };
 
     const findProduct = () => {
-        const conditions = new Conditionals.Condition;
-        conditions.add("reference", text.replace(prefix, ""), Conditionals.OPERATORS.EQUAL);
-        const params = parseConditions(conditions);
+        const params = parseConditions("reference");
         fetchProductsApi(params).then((p => {
             if (p && p.data && p.data.length > 0) {
                 props.history.push(`/product/detail/${p.data[0].id}`);
@@ -48,9 +57,7 @@ const GeneralSearch = (props) => {
     };
 
     const findCustomer = () => {
-        const conditions = new Conditionals.Condition;
-        conditions.add("name", text.replace(prefix, ""), Conditionals.OPERATORS.EQUAL);
-        const params = parseConditions(conditions);
+        const params = parseConditions("name");
         fetchCustomersApi(params).then((p => {
             if (p && p.data && p.data.length > 0) {
                 props.history.push(`/customer/detail/${p.data[0].id}`);
@@ -59,9 +66,7 @@ const GeneralSearch = (props) => {
     };
 
     const findCategory = () => {
-        const conditions = new Conditionals.Condition;
-        conditions.add("name", text.replace(prefix, ""), Conditionals.OPERATORS.EQUAL);
-        const params = parseConditions(conditions);
+        const params = parseConditions("name");
         fetchCategoriesApi(params).then((p => {
             if (p && p.data && p.data.length > 0) {
                 props.history.push(`/category/${p.data[0].id}`);
@@ -69,7 +74,9 @@ const GeneralSearch = (props) => {
         }))
     };
 
-    const parseConditions = (conditions) => {
+    const parseConditions = (fieldName) => {
+        const conditions = new Conditionals.Condition;
+        conditions.add(fieldName, text.replace(prefix, ""), Conditionals.OPERATORS.EQUAL);
         const cond = Conditionals.getConditionalFormat(conditions.all());
         return Conditionals.buildHttpGetQuery(cond, 1);
     };
