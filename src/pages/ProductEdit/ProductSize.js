@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react"
 import PropTypes from 'prop-types'
-import {CardBody, Col, Row, Spinner} from "reactstrap"
+import {Col, Row} from "reactstrap"
 import {FieldText} from "../../components/Fields";
 import {map} from "lodash";
 import {Button} from "@material-ui/core";
@@ -133,7 +133,6 @@ const ProductSize = props => {
         setSizeTotals(totals);
     }
 
-
     return (
         <React.Fragment>
             <AvForm ref={form} className="needs-validation" autoComplete="off"
@@ -148,7 +147,12 @@ const ProductSize = props => {
                                 <tr>
                                     <th>Color</th>
                                     {map(template?.sizes, (size, key) => (
-                                        <th key={'th_' + key} className="text-center">{size} {/* TODO -- Agregar aqui descripcion en letras pequenas una nueva linea (ej: x,s,m,p) */}</th>
+                                        <th key={'th_' + key} className="text-center">
+                                            {size}
+                                            {!!(size.toUpperCase() === template.name.toUpperCase() && template.description) && (
+                                                <div><small className="text-muted">[{template.description}]</small></div>
+                                            )}
+                                        </th>
                                     ))}
                                     <th>Borrar</th>
                                 </tr>

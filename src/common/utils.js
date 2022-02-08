@@ -1,10 +1,10 @@
 import {BOOLEAN_STRING} from "./constants";
 import React from "react";
 import moment from "moment";
-import {baseImagePath, baseImagePathNew, get} from "../helpers/api_helper";
+import {baseImagePath, baseImagePathNew} from "../helpers/api_helper";
 import {showMessage} from "../components/MessageToast/ShowToastMessages";
 import userImage from "../assets/images/users/user.png"
-import { saveAs } from 'file-saver';
+import {saveAs} from 'file-saver';
 
 export const BOOLEAN_STRING_OPTIONS = [
     {label: '-', value: null},
@@ -113,7 +113,7 @@ export const getImageByQuality = (imgData, quality) => {
             result = thumbs[quality];
         }
     } catch (e) {
-        console.log(e);
+        console.error('Error: ' + imgData.thumbs, e);
     }
     return `${path}${result}`;
 }

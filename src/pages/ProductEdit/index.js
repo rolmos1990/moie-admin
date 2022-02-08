@@ -1,28 +1,25 @@
 import React, {useEffect, useState} from "react";
-import {Col, Collapse, Container, Label, Media, Row, Spinner} from "reactstrap";
+import {Col, Collapse, Container, Label, Media, Row} from "reactstrap";
 import Breadcrumb from "../../components/Common/Breadcrumb";
 import {Link, withRouter} from "react-router-dom";
 import {connect} from "react-redux";
 import PropTypes from "prop-types";
-import {getProduct, getProducts, registerProduct, updateProduct} from "../../store/product/actions";
+import {getProduct, registerProduct, updateProduct} from "../../store/product/actions";
 import {getFieldOptionByGroups, registerFieldOption} from "../../store/fieldOptions/actions";
 import {resetProductImages} from "../../store/productImages/actions";
 import {resetProductSize} from "../../store/productSize/actions";
 import {AvForm} from "availity-reactstrap-validation";
 import {FieldNumber, FieldSelect, FieldSwitch, FieldText} from '../../components/Fields';
-import {Button, Card} from "@material-ui/core";
+import {Card} from "@material-ui/core";
 import {getCategories} from "../../store/category/actions";
 import {getSizes} from "../../store/sizes/actions";
-import {parseJson} from "../../common/utils";
 import {arrayToOptions} from "../../common/converters";
 import {GROUPS, STATUS} from "../../common/constants";
 import ProductSize from "./ProductSize";
 import ProductImage from "./ProductImage";
 import ProductPublish from "./ProductPublish";
 import ButtonSubmit from "../../components/Common/ButtonSubmit";
-import FieldOption from "../../store/fieldOptions/reducer";
 import Autocomplete from "../../components/Fields/Autocomplete";
-import {DEFAULT_PAGE_LIMIT} from "../../common/pagination";
 
 const ProductEdit = (props) => {
 
@@ -86,9 +83,8 @@ const ProductEdit = (props) => {
     useEffect(() => {
         if (product.id) {
             setProductData({...product, _status: product.status});
-            const defaultCategory = product.category?.id || null;
-            setCategoryDefault(defaultCategory);
-
+            setCategoryDefault(product.category?.id || null);
+            setSizeDefault(product.size?.id || null);
             if (!isEdit) {
                 if (product.productSize.length === 0) {
                     setIsOpen(false)
