@@ -4,6 +4,10 @@ import {generateReportRestart} from "../../../store/reports/actions";
 import {withRouter} from "react-router-dom";
 import {connect} from "react-redux";
 import {fetchCategoriesApi, fetchCustomersApi, fetchProductsApi} from "../../../helpers/backend_helper";
+import {DEFAULT_PAGE_LIMIT} from "../../../common/pagination";
+import {getProducts} from "../../../store/product/actions";
+import {getCustomers} from "../../../store/customer/actions";
+import {getCategories} from "../../../store/category/actions";
 
 const PREFIXES = {
     PRODUCT: "p:",
@@ -37,11 +41,11 @@ const GeneralSearch = (props) => {
         })
         if (null === pre) {
             if (props.history.location.pathname === '/products') {
-                pre = PREFIXES.PRODUCT;
+                props.onGetProducts(singleConditions("reference"));
             } else if (props.history.location.pathname === '/customers') {
-                pre = PREFIXES.CUSTOMER;
+                props.onGetCustomers(singleConditions("name"));
             } else if (props.history.location.pathname === '/categories') {
-                pre = PREFIXES.CATEGORY;
+                props.onGetCategories(singleConditions("name"));
             }
         }
         setPrefix(pre)
@@ -81,6 +85,12 @@ const GeneralSearch = (props) => {
         return Conditionals.buildHttpGetQuery(cond, 1);
     };
 
+    const singleConditions = (fieldName) => {
+        const conditions = new Conditionals.Condition;
+        conditions.add(fieldName, text.replace(prefix, ""), Conditionals.OPERATORS.EQUAL);
+        return conditions.all();
+    };
+
     return (
         <>
             <form className="app-search d-none d-lg-block" onSubmit={search}>
@@ -104,6 +114,9 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => ({
     onRestartReport: () => dispatch(generateReportRestart()),
+    onGetProducts: (conditional = null, limit = DEFAULT_PAGE_LIMIT, page) => dispatch(getProducts(conditional, limit, page)),
+    onGetCustomers: (conditional = null, limit = DEFAULT_PAGE_LIMIT, page) => dispatch(getCustomers(conditional, limit, page)),
+    onGetCategories: (conditional = null, limit = DEFAULT_PAGE_LIMIT, page) => dispatch(getCategories(conditional, limit, page)),
 })
 
 export default withRouter(
