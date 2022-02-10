@@ -25,9 +25,6 @@ const profile = (state = initialState, action) => {
     case RESET_PROFILE_FLAG :
       state = {...state, success: null}
       break
-    case RESET_PROFILE_FLAG :
-      state = {...state, success: null}
-      break
     case RESET_CHANGE_PROFILE_PICTURE:
       state = {
         ...state,

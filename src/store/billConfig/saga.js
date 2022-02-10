@@ -12,9 +12,7 @@ import {
     getBillConfigSuccess,
     queryBillConfigsFailed,
     queryBillConfigsSuccess,
-    refreshList,
     registerBillConfigFailed,
-    registerBillConfigSuccess,
     updateBillConfigFail,
     updateBillConfigSuccess
 } from "./actions"
@@ -47,14 +45,12 @@ const LIST_SUCCESS_ACTION = getBillConfigsSuccess;
 const LIST_FAILED_ACTION = getBillConfigsFailed;
 const GET_SUCCESS_ACTION = getBillConfigSuccess;
 const GET_FAILED_ACTION = getBillConfigFailed;
-const CREATE_SUCCESS_ACTION = registerBillConfigSuccess;
 const CREATE_FAILED_ACTION = registerBillConfigFailed;
 const UPDATE_SUCCESS_ACTION = updateBillConfigSuccess;
 const UPDATE_FAILED_ACTION = updateBillConfigFail;
 
 
 const LIST_URL = "/billConfigs";
-const SHOW_URL = "/billConfig";
 
 function* get({id}) {
     try {

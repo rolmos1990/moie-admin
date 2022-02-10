@@ -1,20 +1,21 @@
 import {
-    GET_COMMENTS,
-    GET_COMMENTS_SUCCESS,
-    GET_COMMENTS_FAILED,
+    DELETE_COMMENT,
+    DELETE_COMMENT_FAILED,
+    DELETE_COMMENT_SUCCESS,
     GET_COMMENT,
-    GET_COMMENT_SUCCESS,
     GET_COMMENT_FAILED,
+    GET_COMMENT_SUCCESS,
+    GET_COMMENTS,
+    GET_COMMENTS_FAILED,
+    GET_COMMENTS_SUCCESS,
     REGISTER_COMMENT,
-    REGISTER_COMMENT_SUCCESS,
     REGISTER_COMMENT_FAILED,
+    REGISTER_COMMENT_SUCCESS,
     UPDATE_COMMENT,
+    UPDATE_COMMENT_FAILED,
     UPDATE_COMMENT_SUCCESS,
-    UPDATE_COMMENT_FAILED, DELETE_COMMENT, DELETE_COMMENT_SUCCESS, DELETE_COMMENT_FAILED,
 } from "./actionTypes";
-import {queryCustomers} from "../customer/actions";
 import Conditionals from "../../common/conditionals";
-import {DEFAULT_PAGE_LIMIT} from "../../common/pagination";
 
 export const getCommentsByEntity = (entity, idRelated) => {
     const conditions = new Conditionals.Condition;

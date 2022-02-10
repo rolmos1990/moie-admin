@@ -137,6 +137,7 @@ const conciliationReportApi = (data) => get(`${url.ORDERS}/gen/conciliationRepor
 const officeReportApi = (data) => get(`${url.OFFICES}/gen/officeReport`, {header: 'content-type: application/vnd.ms-excel'}, data);
 const officePdfApi = (id, data = {}) => get(`${url.OFFICES}/gen/officePdfReport/${id}`, {}, data);
 const fileOfficeTemplate = (filename, id) => file(filename, `${url.OFFICES}/${id}/getTemplate`, {header: 'content-type: application/vnd.ms-excel'});
+const statsApi = (path, data = {}) => get(`${path}`, {}, data);
 
 //templates
 const fetchTemplatesApi = data => get(url.TEMPLATES, {}, data);
@@ -291,6 +292,7 @@ export {
     conciliationReportApi,
     officeReportApi,
     officePdfApi,
+    statsApi,
 
     fetchPaymentsApi,
     fetchPaymentApi,

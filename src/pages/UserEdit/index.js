@@ -1,12 +1,12 @@
-import React, {useState, useEffect} from "react"
-import {CardBody, Col, Container, Label, Row, Spinner} from "reactstrap"
-import {AvForm, AvField} from "availity-reactstrap-validation"
-import {Button, Card} from "@material-ui/core";
-import {withRouter, Link} from "react-router-dom"
+import React, {useEffect, useState} from "react"
+import {CardBody, Col, Container, Label, Row} from "reactstrap"
+import {AvForm} from "availity-reactstrap-validation"
+import {Card} from "@material-ui/core";
+import {withRouter} from "react-router-dom"
 import {connect} from "react-redux";
 import {apiError} from "../../store/auth/login/actions";
 import PropTypes from "prop-types";
-import {registerUser, updateUser, getUser} from "../../store/user/actions";
+import {getUser, registerUser, updateUser} from "../../store/user/actions";
 import {FieldSwitch, FieldText} from "../../components/Fields";
 import Breadcrumb from "../../components/Common/Breadcrumb";
 import {STATUS} from "../../common/constants";

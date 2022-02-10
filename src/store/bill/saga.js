@@ -69,9 +69,6 @@ const GENERATE_REPORT_SUCCESS_ACTION = generateReportSuccess;
 const GENERATE_REPORT_FAILED_ACTION = generateReportFailed;
 
 
-const LIST_URL = "/bills";
-const SHOW_URL = "/bill";
-
 function* get({id}) {
     try {
         const response = yield call(GET_API_REQUEST, {id});
