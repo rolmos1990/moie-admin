@@ -1,6 +1,7 @@
 import React from "react"
 import {Container} from "reactstrap"
 import Breadcrumb from "../../components/Common/Breadcrumb";
+import Stats from "./Stats";
 
 const Reports = () => {
     return (
@@ -8,7 +9,7 @@ const Reports = () => {
             <div className="page-content">
                 <Container fluid>
                     <Breadcrumb path="/reports" title={null} item="Reportes"/>
-                    <h1>Coming soon</h1>
+                    <Stats/>
                 </Container>
             </div>
         </React.Fragment>

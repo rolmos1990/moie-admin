@@ -1,5 +1,4 @@
 import {BOOLEAN_STRING} from "./constants";
-import React from "react";
 import moment from "moment";
 import {baseImagePath, baseImagePathNew} from "../helpers/api_helper";
 import {showMessage} from "../components/MessageToast/ShowToastMessages";
@@ -75,11 +74,10 @@ export const formatDate =(date, type = DATE_FORMAT.FULL_DATE) =>{
             default:
                 return moment(date, moment.ISO_8601).format('DD-MM-YYYY HH:mm:ss');
         }
-        return moment(date, moment.ISO_8601).format('DD-MM-YYYY HH:mm:ss');
     }catch (e){
         console.log(e)
     }
-    return "";
+    return moment(date, moment.ISO_8601).format('DD-MM-YYYY HH:mm:ss');
 }
 export const formatDateToServer =(date) =>{
     try {

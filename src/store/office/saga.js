@@ -1,49 +1,42 @@
 import {all, call, fork, put, takeEvery} from "redux-saga/effects"
 
 //Account Redux states
-import {
-    GET_OFFICES,
-    GET_OFFICE,
-    REGISTER_OFFICE,
-    UPDATE_OFFICE,
-    QUERY_OFFICES,
-    DELETE_OFFICE,
-    CONFIRM_OFFICE, ADD_ORDER_OFFICE, IMPORT_FILE, PRINT_OFFICE_REPORT, DELETE_ORDER_OFFICE
-} from "./actionTypes"
+import {ADD_ORDER_OFFICE, CONFIRM_OFFICE, DELETE_OFFICE, DELETE_ORDER_OFFICE, GET_OFFICE, GET_OFFICES, IMPORT_FILE, PRINT_OFFICE_REPORT, QUERY_OFFICES, REGISTER_OFFICE, UPDATE_OFFICE} from "./actionTypes"
 
 import {
-    getOfficesSuccess,
-    getOfficesFailed,
-    registerOfficeSuccess,
-    getOfficeSuccess,
-    getOfficeFailed,
-    registerOfficeFailed,
-    updateOfficeSuccess,
-    updateOfficeFail,
-    queryOfficesSuccess,
-    queryOfficesFailed,
+    addOrderOfficeFailed,
+    addOrderOfficeSuccess,
+    confirmOfficeSuccess,
     deleteOfficeFailed,
     deleteOfficeSuccess,
-    confirmOfficeSuccess,
-    importFileSuccess,
-    importFileFailed,
     getOffice,
-    printOfficeReportSuccess,
+    getOfficeFailed,
+    getOfficesFailed,
+    getOfficesSuccess,
+    getOfficeSuccess,
+    importFileFailed,
+    importFileSuccess,
     printOfficeReportFailed,
-    addOrderOfficeSuccess, addOrderOfficeFailed
+    printOfficeReportSuccess,
+    queryOfficesFailed,
+    queryOfficesSuccess,
+    registerOfficeFailed,
+    registerOfficeSuccess,
+    updateOfficeFail,
+    updateOfficeSuccess
 } from "./actions"
 
 import {
-    registerOfficeApi,
-    updateOfficeApi,
+    addOrderOfficeApi,
+    confirmOfficeApi,
+    deleteOfficeApi,
+    deleteOrderOfficeApi,
     fetchOfficeApi,
     fetchOfficesApi,
-    deleteOfficeApi,
-    confirmOfficeApi,
-    addOrderOfficeApi,
     importFileApi,
     printOfficeReportApi,
-    deleteOrderOfficeApi
+    registerOfficeApi,
+    updateOfficeApi
 } from "../../helpers/backend_helper"
 
 import Conditionals from "../../common/conditionals";
@@ -86,7 +79,6 @@ const IMPORT_FILE_SUCCESS_ACTION = importFileSuccess;
 const IMPORT_FILE_FAILED_ACTION = importFileFailed;
 
 
-const LIST_URL = "/offices";
 const SHOW_URL = "/office";
 
 function* get({id}) {

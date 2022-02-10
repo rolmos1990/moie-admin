@@ -1,28 +1,25 @@
 import {all, call, fork, put, takeEvery} from "redux-saga/effects"
 
 //Account Redux states
-import {GET_COMMENTS, GET_COMMENT, REGISTER_COMMENT, UPDATE_COMMENT, DELETE_COMMENT} from "./actionTypes"
+import {DELETE_COMMENT, GET_COMMENT, GET_COMMENTS, REGISTER_COMMENT, UPDATE_COMMENT} from "./actionTypes"
 
 import {
-    getCommentsSuccess,
-    getCommentsFailed,
-    registerCommentSuccess,
-    getCommentSuccess,
+    deleteCommentFail,
+    deleteCommentSuccess,
     getCommentFailed,
+    getCommentsByEntity,
+    getCommentsFailed,
+    getCommentsSuccess,
+    getCommentSuccess,
     registerCommentFailed,
-    updateCommentSuccess,
-    updateCommentFail, deleteCommentSuccess, deleteCommentFail, getComments, getCommentsByEntity
+    registerCommentSuccess,
+    updateCommentFail,
+    updateCommentSuccess
 } from "./actions"
 
-import {
-    registerCommentApi,
-    updateCommentApi,
-    fetchCommentApi,
-    fetchCommentsApi, deleteCommentApi
-} from "../../helpers/backend_helper"
+import {deleteCommentApi, fetchCommentApi, fetchCommentsApi, registerCommentApi, updateCommentApi} from "../../helpers/backend_helper"
 
 import Conditionals from "../../common/conditionals";
-import {showResponseMessage} from "../../helpers/service";
 
 /**
  * *  Configuración de CRUD Saga (Realizar configuración para cada uno de las replicas)

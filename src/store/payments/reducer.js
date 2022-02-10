@@ -97,6 +97,7 @@ const payments = (state = initialState, action) => {
                 ...state,
                 loading: false,
             }
+            break
         case APPLY_PAYMENT:
             state = {
                 ...state,

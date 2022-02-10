@@ -1,25 +1,22 @@
 import {all, call, fork, put, takeEvery} from "redux-saga/effects"
 
 //Account Redux states
-import {GET_PRODUCTS, GET_PRODUCT, REGISTER_PRODUCT, UPDATE_PRODUCT, QUERY_PRODUCTS, QUERY_PENDING_PRODUCTS} from "./actionTypes"
+import {GET_PRODUCT, GET_PRODUCTS, QUERY_PENDING_PRODUCTS, QUERY_PRODUCTS, REGISTER_PRODUCT, UPDATE_PRODUCT} from "./actionTypes"
 
 import {
-    getProductsSuccess,
-    getProductsFailed,
-    registerProductSuccess,
-    getProductSuccess,
     getProductFailed,
+    getProductsFailed,
+    getProductsSuccess,
+    getProductSuccess,
+    queryProductsFailed,
+    queryProductsSuccess,
     registerProductFailed,
-    updateProductSuccess,
-    updateProductFail, queryProductsSuccess, queryProductsFailed
+    registerProductSuccess,
+    updateProductFail,
+    updateProductSuccess
 } from "./actions"
 
-import {
-    registerProductApi,
-    updateProductApi,
-    fetchProductApi,
-    fetchProductsApi, getProductsPendingApi
-} from "../../helpers/backend_helper"
+import {fetchProductApi, fetchProductsApi, getProductsPendingApi, registerProductApi, updateProductApi} from "../../helpers/backend_helper"
 
 import Conditionals from "../../common/conditionals";
 import {showResponseMessage} from "../../helpers/service";
@@ -53,8 +50,6 @@ const CREATE_FAILED_ACTION  =   registerProductFailed;
 const UPDATE_SUCCESS_ACTION =   updateProductSuccess;
 const UPDATE_FAILED_ACTION  =   updateProductFail;
 
-
-const LIST_URL = "/products";
 
 function* get({ id }) {
     try {

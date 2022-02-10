@@ -6,7 +6,8 @@ import {
     CONCILIATION_REQUEST,
     CONFIRM_CONCILIATION_REQUEST,
     GET_DELIVERY_METHODS,
-    GET_DELIVERY_QUOTE, GET_HISTORIC_ORDER,
+    GET_DELIVERY_QUOTE,
+    GET_HISTORIC_ORDER,
     GET_ORDER,
     GET_ORDERS,
     GET_ORDERS_OFFICE,
@@ -35,7 +36,9 @@ import {
     getOrdersByOfficeSuccess,
     getOrdersFailed,
     getOrdersSuccess,
-    getOrderSuccess, historicOrder, historicOrderFailed, historicOrderSuccess,
+    getOrderSuccess,
+    historicOrderFailed,
+    historicOrderSuccess,
     printBatchRequestFailed,
     printBatchRequestSuccess,
     refreshOrders,
@@ -46,14 +49,16 @@ import {
 } from "./actions"
 
 import {
-    batchPrintRequestApi, canceledStatusOrderApi,
+    batchPrintRequestApi,
+    canceledStatusOrderApi,
     conciliationRequestApi,
     confirmConciliationRequestApi,
     fetchDeliveryMethodsApi,
     fetchDeliveryQuoteApi,
     fetchOrderApi,
     fetchOrdersApi,
-    nextStatusOrderApi, orderHistoric,
+    nextStatusOrderApi,
+    orderHistoric,
     printOrderApi,
     registerOrderApi,
     resumeOrderApi,
@@ -107,8 +112,6 @@ const CONCILIATION_REQUEST_FAILED_ACTION = doConciliationFailed;
 const CONFIRM_CONCILIATION_REQUEST_SUCCESS_ACTION = confirmConciliationSuccess;
 const CONFIRM_CONCILIATION_REQUEST_FAILED_ACTION = confirmConciliationFailed;
 
-const ORDER_HISTORIC_SUCCESS_ACTION = historicOrderSuccess;
-const ORDER_HISTORIC_FAILED_ACTION = historicOrderFailed;
 
 function* get({id}) {
     try {
