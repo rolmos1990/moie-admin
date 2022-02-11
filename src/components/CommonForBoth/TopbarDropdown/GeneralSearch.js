@@ -41,9 +41,9 @@ const GeneralSearch = (props) => {
         })
         if (null === pre) {
             if (props.history.location.pathname === '/products') {
-                props.onGetProducts(singleConditions("reference"));
+                props.onGetProducts(multipleConditions(["reference","name","provider","providerReference"]));
             } else if (props.history.location.pathname === '/customers') {
-                props.onGetCustomers(singleConditions("name"));
+                props.onGetCustomers(multipleConditions(["name","email","phone","cellphone"]));
             } else if (props.history.location.pathname === '/categories') {
                 props.onGetCategories(singleConditions("name"));
             }
@@ -87,7 +87,18 @@ const GeneralSearch = (props) => {
 
     const singleConditions = (fieldName) => {
         const conditions = new Conditionals.Condition;
-        conditions.add(fieldName, text.replace(prefix, ""), Conditionals.OPERATORS.EQUAL);
+        conditions.add(fieldName, text.replace(prefix, ""), Conditionals.OPERATORS.LIKE);
+        return conditions.all();
+    };
+
+    const multipleConditions = (fieldNames) => {
+        const conditions = new Conditionals.Condition;
+        fieldNames.map(fieldName => {
+            conditions.add(fieldName, text.replace(prefix, ""), Conditionals.OPERATORS.LIKE);
+            if(fieldName !== fieldNames[fieldNames.length - 1]) {
+                conditions.addOr();
+            }
+        });
         return conditions.all();
     };
 

@@ -5,15 +5,25 @@
 /* recibe un arreglo de objetos y lo transforma en una condicion */
 function getConditionalFormat(options) {
     if (options && options.length > 0) {
+        let hasOr = false;
         let conditions = options.map(item => {
-            if (!item.moreValues) {
-                return (item.field + item.operator + item.value)
+            if(item != "$or") {
+                if (!item.moreValues) {
+                    return (item.field + item.operator + item.value)
+                } else {
+                    item.moreValues = item.moreValues.join("::");
+                    return (item.field + item.operator + item.value + "::" + item.moreValues)
+                }
             } else {
-                item.moreValues = item.moreValues.join("::");
-                return (item.field + item.operator + item.value + "::" + item.moreValues)
+                hasOr = true;
             }
-        });
-        conditions = conditions.join("|");
+        }).filter(item => item !== undefined);
+        if(hasOr){
+            conditions = conditions.join("$or");
+        }else {
+            conditions = conditions.join("|");
+        }
+        console.log(conditions);
         return conditions;
     }
     return null;
@@ -61,6 +71,9 @@ function buildCondition(field, value, operator = null, moreValues = []) {
 /* recibe field, value, operador y en caso de tener 2 o mas valores moreValues (Array) */
 class Condition {
     condition = [];
+    addOr() {
+        this.condition.push("$or");
+    }
     add(field, value, operator = null, moreValues = []) {
         this.condition.push(buildCondition(field, value, operator, moreValues))
     }
