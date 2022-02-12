@@ -42,7 +42,14 @@ import {
     UPDATE_ORDER_SUCCESS,
     GET_HISTORIC_ORDER,
     GET_HISTORIC_ORDER_FAILED,
-    GET_HISTORIC_ORDER_SUCCESS, RESET_ORDER
+    GET_HISTORIC_ORDER_SUCCESS,
+    RESET_ORDER,
+    SYNC_DELIVERY_ORDER,
+    SYNC_DELIVERY_ORDER_SUCCESS,
+    SYNC_DELIVERY_ORDER_FAILED,
+    REFRESH_DELIVERY_ORDER,
+    REFRESH_DELIVERY_ORDER_FAILED,
+    REFRESH_DELIVERY_ORDER_SUCCESS
 } from "./actionTypes";
 
 const initialState = {
@@ -445,6 +452,38 @@ const order = (state = initialState, action) => {
             return {
                 ...state,
                 historic: []
+            }
+        case SYNC_DELIVERY_ORDER:
+            return {
+                ...state,
+                loading: true
+            }
+        case SYNC_DELIVERY_ORDER_SUCCESS:
+            return {
+                ...state,
+                loading: false,
+                refresh: !state.refresh
+            }
+        case SYNC_DELIVERY_ORDER_FAILED:
+            return {
+                ...state,
+                loading: false,
+            }
+        case REFRESH_DELIVERY_ORDER:
+            return {
+                ...state,
+                loading: true
+            }
+        case REFRESH_DELIVERY_ORDER_SUCCESS:
+            return {
+                ...state,
+                loading: false,
+                refresh: !state.refresh
+            }
+        case REFRESH_DELIVERY_ORDER_FAILED:
+            return {
+                ...state,
+                loading: false,
             }
         default:
             state = {...state}

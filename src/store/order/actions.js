@@ -16,7 +16,10 @@ import {
     GET_DELIVERY_METHODS_SUCCESS,
     GET_DELIVERY_QUOTE,
     GET_DELIVERY_QUOTE_FAILED,
-    GET_DELIVERY_QUOTE_SUCCESS, GET_HISTORIC_ORDER, GET_HISTORIC_ORDER_FAILED, GET_HISTORIC_ORDER_SUCCESS,
+    GET_DELIVERY_QUOTE_SUCCESS,
+    GET_HISTORIC_ORDER,
+    GET_HISTORIC_ORDER_FAILED,
+    GET_HISTORIC_ORDER_SUCCESS,
     GET_ORDER,
     GET_ORDER_FAILED,
     GET_ORDER_RESTART,
@@ -42,6 +45,10 @@ import {
     UPDATE_ORDER,
     UPDATE_ORDER_FAILED,
     UPDATE_ORDER_SUCCESS,
+    SYNC_DELIVERY_ORDER,
+    SYNC_DELIVERY_ORDER_SUCCESS,
+    SYNC_DELIVERY_ORDER_FAILED,
+    REFRESH_DELIVERY_ORDER, REFRESH_DELIVERY_ORDER_SUCCESS, REFRESH_DELIVERY_ORDER_FAILED,
 } from "./actionTypes";
 
 export const resetOrder = () => ({
@@ -193,6 +200,45 @@ export const updateOrderSuccess = () => {
 export const updateOrderFail = error => {
     return {
         type: UPDATE_ORDER_FAILED,
+        payload: error,
+    }
+}
+
+export const syncOrder = (id, data) => {
+    return {
+        type: SYNC_DELIVERY_ORDER,
+        payload: { id, data },
+    }
+}
+
+export const syncOrderSuccess = () => {
+    return {
+        type: SYNC_DELIVERY_ORDER_SUCCESS,
+    }
+}
+export const syncOrderFail = error => {
+    return {
+        type: SYNC_DELIVERY_ORDER_FAILED,
+        payload: error,
+    }
+}
+
+export const refreshOrderDelivery = (id) => {
+    return {
+        type: REFRESH_DELIVERY_ORDER,
+        id: id
+    }
+}
+
+export const refreshOrderDeliverySuccess = () => {
+    return {
+        type: REFRESH_DELIVERY_ORDER_SUCCESS,
+        payload: true
+    }
+}
+export const refreshOrderDeliveryFail = error => {
+    return {
+        type: REFRESH_DELIVERY_ORDER_FAILED,
         payload: error,
     }
 }

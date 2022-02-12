@@ -99,6 +99,8 @@ const batchPrintRequestApi = (data) => get(`${url.ORDERS}/batch/printRequest`, {
 const conciliationRequestApi = (data) => post(`${url.ORDERS}/conciliation`, data);
 const confirmConciliationRequestApi = (data) => post(`${url.ORDERS}/ConfirmConciliation`, data);
 const postSaleGenerateReportApi = (data) => post(`${url.ORDERS}/generate/report`, data, {});
+const syncOrderDelivery = (id, data) => post(`${url.ORDERS}/${id}/sync/orderDelivery`, data);
+const refreshStatusDelivery = (id) => get(`${url.ORDERS}/${id}/refresh/orderDelivery`, {});
 
 //offices
 const fetchOfficesApi = params => get(url.OFFICES, {}, params);
@@ -200,6 +202,8 @@ export {
     conciliationRequestApi,
     confirmConciliationRequestApi,
     postSaleGenerateReportApi,
+    syncOrderDelivery,
+    refreshStatusDelivery,
 
     fetchSizesApi,
     fetchSizeApi,

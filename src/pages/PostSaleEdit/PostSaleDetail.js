@@ -10,7 +10,7 @@ import NoDataIndication from "../../components/Common/NoDataIndication";
 import {StatusField} from "../../components/StatusField";
 import {COMMENT_ENTITIES, GROUPS, ORDER_STATUS} from "../../common/constants";
 import Observations from "../../components/Common/Observations";
-import {getOrder, updateOrder} from "../../store/order/actions";
+import {getOrder, refreshOrderDelivery, syncOrder, updateOrder} from "../../store/order/actions";
 
 const PostSaleDetail = (props) => {
 
@@ -23,7 +23,11 @@ const PostSaleDetail = (props) => {
     }, [onGetOrder, refresh]);
 
     const updateDeliveryStatus = () => {
-        props.onUpdateOrder(order.id, {enablePostSale: !order.enablePostSale})
+        props.onUpdateSync(order.id, {sync: !order.orderDelivery.sync})
+    }
+
+    const refreshDeliveryStatus = () => {
+        props.onRefreshOrderDelivery(order.id);
     }
 
     return order.id ? (
@@ -40,13 +44,13 @@ const PostSaleDetail = (props) => {
                             <div className={"mb-3 float-md-end"}>
                                 <div className="button-items">
 
-                                    <Tooltip placement="bottom" title={order.enablePostSale ? 'Desactivar' : 'Activar'} aria-label="add">
+                                    <Tooltip placement="bottom" title={order.orderDelivery.sync ? 'Desactivar' : 'Activar'} aria-label="add">
                                         <button type="button" color="primary" className="btn-sm btn btn-outline-info waves-effect waves-light" onClick={() => updateDeliveryStatus(order)}>
-                                            <i className={`mdi mdi-${order.enablePostSale ? 'delete text-danger' : 'check text-success'}`}> </i>
+                                            <i className={`mdi mdi-${order.orderDelivery.sync ? 'delete text-danger' : 'check text-success'}`}> </i>
                                         </button>
                                     </Tooltip>
                                     <Tooltip placement="bottom" title="Refrescar" aria-label="add">
-                                        <button type="button" color="primary" className="btn-sm btn btn-outline-info waves-effect waves-light" onClick={() => onGetOrder(order.id)}>
+                                        <button type="button" color="primary" className="btn-sm btn btn-outline-info waves-effect waves-light" onClick={() => refreshDeliveryStatus(order.id)}>
                                             <i className={"mdi mdi-refresh"}> </i>
                                         </button>
                                     </Tooltip>
@@ -113,7 +117,7 @@ const PostSaleDetail = (props) => {
                                 <Row>
                                     <Col md={6}>
                                         <label>Activo: </label>
-                                        <span className="p-1">{order.enablePostSale ? 'SI': 'NO'}</span>
+                                        <span className="p-1">{order.orderDelivery.sync ? 'SI': 'NO'}</span>
                                     </Col>
                                 </Row>
                             </Col>
@@ -134,17 +138,13 @@ const PostSaleDetail = (props) => {
                                     </Col>
                                     <Col md={6}>
                                         <label>Fecha del estatus del envío: </label>
-                                        <span className="p-1">{formatDate(order.orderDelivery.deliveryDate || order.createdAt)}</span>
+                                        <span className="p-1">{order.orderDelivery.deliveryStatusDate ? formatDate(order.orderDelivery.deliveryStatusDate) : null}</span>
                                     </Col>
                                 </Row>
                                 <Row>
-                                    <Col md={6}>
+                                    <Col md={12}>
                                         <label>Ubicación estatus del envío: </label>
-                                        <span className="p-1">{order.orderDelivery.deliveryState}</span>
-                                    </Col>
-                                    <Col md={6}>
-                                        <label>Fecha del estatus del envío: </label>
-                                        <span className="p-1">{formatDate(order.orderDelivery.deliveryDate || order.createdAt)}</span>
+                                        <span className="p-1">{order.orderDelivery.deliveryCurrentLocality}</span>
                                     </Col>
                                 </Row>
                             </Col>
@@ -168,7 +168,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => ({
     onGetOrder: (id) => dispatch(getOrder(id)),
-    onUpdateOrder: (id, payload) => dispatch(updateOrder(id, payload)),
+    onUpdateSync: (id, payload) => dispatch(syncOrder(id,payload)),
+    onRefreshOrderDelivery: (id) => dispatch(refreshOrderDelivery(id))
 })
 
 export default withRouter(

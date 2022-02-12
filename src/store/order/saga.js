@@ -13,9 +13,9 @@ import {
     GET_ORDERS_OFFICE,
     NEXT_STATUS_ORDER,
     PRINT_BATCH_REQUEST,
-    PRINT_ORDER,
+    PRINT_ORDER, REFRESH_DELIVERY_ORDER,
     REGISTER_ORDER,
-    RESUME_ORDER,
+    RESUME_ORDER, SYNC_DELIVERY_ORDER,
     UPDATE_ORDER
 } from "./actionTypes"
 
@@ -40,10 +40,10 @@ import {
     historicOrderFailed,
     historicOrderSuccess,
     printBatchRequestFailed,
-    printBatchRequestSuccess,
+    printBatchRequestSuccess, refreshOrderDelivery, refreshOrderDeliveryFail, refreshOrderDeliverySuccess,
     refreshOrders,
     registerOrderFailed,
-    registerOrderSuccess,
+    registerOrderSuccess, syncOrder, syncOrderFail, syncOrderSuccess,
     updateOrderFail,
     updateOrderSuccess
 } from "./actions"
@@ -59,9 +59,9 @@ import {
     fetchOrdersApi,
     nextStatusOrderApi,
     orderHistoric,
-    printOrderApi,
+    printOrderApi, refreshStatusDelivery,
     registerOrderApi,
-    resumeOrderApi,
+    resumeOrderApi, syncOrderDelivery,
     updateOrderApi
 } from "../../helpers/backend_helper"
 
@@ -90,6 +90,8 @@ const BATCH_REQUEST_API_REQUEST = batchPrintRequestApi;
 const CONCILIATION_REQUEST_API_REQUEST = conciliationRequestApi;
 const CONFIRM_CONCILIATION_REQUEST_API_REQUEST = confirmConciliationRequestApi;
 const ORDER_HISTORIC_API_REQUEST = orderHistoric;
+const ORDER_DELIVERY_SYNC_API_REQUEST = syncOrderDelivery;
+const ORDER_DELIVERY_REFRESH_API_REQUEST = refreshStatusDelivery;
 
 //actions
 const CUSTOM_SUCCESS_ACTION = customOrderSuccess;
@@ -102,6 +104,10 @@ const CREATE_SUCCESS_ACTION = registerOrderSuccess;
 const CREATE_FAILED_ACTION = registerOrderFailed;
 const UPDATE_SUCCESS_ACTION = updateOrderSuccess;
 const UPDATE_FAILED_ACTION = updateOrderFail;
+const SYNC_DELIVERY_SUCCESS_ACTION = syncOrderSuccess;
+const SYNC_DELIVERY_FAILED_ACTION = syncOrderFail;
+const REFRESH_DELIVERY_ORDER_SUCCESS_ACTION = refreshOrderDeliverySuccess;
+const REFRESH_DELIVERY_ORDER_FAILED_ACTION = refreshOrderDeliveryFail;
 
 const PRINT_BATCH_REQUEST_SUCCESS_ACTION = printBatchRequestSuccess;
 const PRINT_BATCH_REQUEST_FAILED_ACTION = printBatchRequestFailed;
@@ -273,6 +279,28 @@ function* confirmConciliation({orders}) {
     }
 }
 
+function* orderDeliverySync({payload: {id, data}}) {
+    try {
+        const response = yield call(ORDER_DELIVERY_SYNC_API_REQUEST, id, data)
+        showResponseMessage(response, "Operación exitosa!", response.error);
+        yield put(SYNC_DELIVERY_SUCCESS_ACTION())
+    } catch (error) {
+        showResponseMessage({status: 500}, "Ocurrió un error!", error.message);
+        yield put(SYNC_DELIVERY_FAILED_ACTION(error.message))
+    }
+}
+
+function* orderDeliveryRefresh({id}) {
+    try {
+        const response = yield call(ORDER_DELIVERY_REFRESH_API_REQUEST, id)
+        showResponseMessage(response, "Operación exitosa!", response.error);
+        yield put(REFRESH_DELIVERY_ORDER_SUCCESS_ACTION())
+    } catch (error) {
+        showResponseMessage({status: 500}, "Ocurrió un error!", error.message);
+        yield put(REFRESH_DELIVERY_ORDER_FAILED_ACTION(error.message))
+    }
+}
+
 export function* watchOrder() {
     yield takeEvery(ACTION_NAME_CREATE, register);
     yield takeEvery(ACTION_NAME_UPDATE, update);
@@ -289,6 +317,8 @@ export function* watchOrder() {
     yield takeEvery(CONCILIATION_REQUEST, conciliation)
     yield takeEvery(CONFIRM_CONCILIATION_REQUEST, confirmConciliation)
     yield takeEvery(GET_HISTORIC_ORDER, fetchHistoric);
+    yield takeEvery(SYNC_DELIVERY_ORDER, orderDeliverySync);
+    yield takeEvery(REFRESH_DELIVERY_ORDER, orderDeliveryRefresh);
 }
 
 function* orderSaga() {
