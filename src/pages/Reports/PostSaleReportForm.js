@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react"
 import {CardBody, Col, Label, Row} from "reactstrap"
 import {AvForm} from "availity-reactstrap-validation"
-import {Card} from "@material-ui/core";
+import {Card, Tooltip} from "@material-ui/core";
 import {withRouter} from "react-router-dom"
 import {connect} from "react-redux";
 import PropTypes from "prop-types";
@@ -84,7 +84,7 @@ const PostSaleReportForm = ({onCloseModal, deliveryMethods, onGetDeliveryMethods
                             </Col>
                             <Col md="12">
                                 <div className="mb-3">
-                                    <Label htmlFor="field_name">Fechas <span className="text-danger">*</span></Label>
+                                    <Label htmlFor="field_name">Fechas <span className="text-danger">*</span> &nbsp; <Tooltip placement="bottom" title="Fecha de Envio" aria-label="add"><p className="fa fa-question-circle"></p></Tooltip></Label>
                                     <FieldDate
                                         name={"reportDate"}
                                         mode={DATE_MODES.RANGE}
