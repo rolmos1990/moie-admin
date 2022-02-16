@@ -134,6 +134,7 @@ const category = (state = initialState, action) => {
         case CATALOG_PRINT_BATCH_REQUEST_SUCCESS:
             return {
                 ...state,
+                refresh: !state.refresh,
                 batchRequest: {
                     ...state.batchRequest,
                     meta: action.meta,

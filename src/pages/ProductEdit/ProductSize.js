@@ -149,8 +149,8 @@ const ProductSize = props => {
                                     {map(template?.sizes, (size, key) => (
                                         <th key={'th_' + key} className="text-center">
                                             {size}
-                                            {!!(size.toUpperCase() === template.name.toUpperCase() && template.description) && (
-                                                <div><small className="text-muted">[{template.description}]</small></div>
+                                            {!!(product.sizeDescription) && (
+                                                <div><small className="text-muted">[{product.sizeDescription}]</small></div>
                                             )}
                                         </th>
                                     ))}

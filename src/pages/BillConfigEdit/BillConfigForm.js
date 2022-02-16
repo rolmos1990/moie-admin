@@ -101,9 +101,9 @@ const BillConfigForm = (props) => {
                         <Row>
                             <Col md="4">
                                 <div className="mb-3">
-                                    <Label htmlFor="validationCustom02">Numero Inicial <span className="text-danger">*</span></Label>
+                                    <Label htmlFor="_startNumber">Numero Inicial <span className="text-danger">*</span></Label>
                                     <FieldText
-                                        id='startNumber'
+                                        id='_startNumber'
                                         name={"startNumber"}
                                         value={billConfigData.startNumber}
                                         minLength={1}
@@ -113,9 +113,9 @@ const BillConfigForm = (props) => {
                             </Col>
                             <Col md="4">
                                 <div className="mb-3">
-                                    <Label htmlFor="finalNumber">Numero Final <span className="text-danger">*</span></Label>
+                                    <Label htmlFor="_finalNumber">Numero Final <span className="text-danger">*</span></Label>
                                     <FieldText
-                                        id='finalNumber'
+                                        id='_finalNumber'
                                         name={"finalNumber"}
                                         value={billConfigData.finalNumber}
                                         minLength={1}

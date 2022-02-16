@@ -269,7 +269,7 @@ const ProductEdit = (props) => {
                                                 )}
                                             </Row>
                                             <Row>
-                                                <Col md="6">
+                                                <Col md="12">
                                                     <div className="mb-3">
                                                         <Label className="control-label">Categoria <span className="text-danger">*</span></Label>
                                                         <FieldSelect
@@ -283,7 +283,7 @@ const ProductEdit = (props) => {
                                                         />
                                                     </div>
                                                 </Col>
-                                                <Col md="3">
+                                                <Col md="4">
                                                     <div className="mb-0">
                                                         <Label className="control-label">Tallas</Label>
                                                         <FieldSelect
@@ -292,6 +292,7 @@ const ProductEdit = (props) => {
                                                             options={sizesList}
                                                             defaultValue={sizeDefault}
                                                             onChange={(e) => {
+                                                                console.log("SIZE SELECTED", sizes.find(s => s.id === e.value));
                                                                 setSizeSelected(sizes.find(s => s.id === e.value));
                                                             }}
                                                             disabled={hasOrders}
@@ -299,7 +300,21 @@ const ProductEdit = (props) => {
                                                         />
                                                     </div>
                                                 </Col>
-                                                <Col md="3">
+                                                {((sizeSelected && sizeSelected.name == "Unica") || (!sizeSelected && sizeDefault == 9)) && (
+                                                    <Col md="3">
+                                                        <div className="mb-0">
+                                                            <Label className="control-label">Sirve  para</Label>
+                                                            <FieldText
+                                                                id={"size_descripcion"}
+                                                                name={"sizeDescription"}
+                                                                value={productData.sizeDescription}
+                                                                minLength={1}
+                                                                maxLength={30}
+                                                            />
+                                                        </div>
+                                                    </Col>
+                                                )}
+                                                <Col md="5">
                                                     <div className="mb-3">
                                                         <Label className="control-label">Material</Label>
                                                         <Autocomplete
