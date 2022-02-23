@@ -33,22 +33,22 @@ const GeneralSearch = (props) => {
 
     const search = (e) => {
         e.preventDefault();
-        let pre = null;
+        let pref = null;
         Object.keys(PREFIXES).forEach(pre => {
             if (text.toLowerCase().startsWith(PREFIXES[pre])) {
-                pre = PREFIXES[pre];
+                pref = PREFIXES[pre];
             }
         })
-        if (null === pre) {
+        if (null === pref) {
             if (props.history.location.pathname === '/products') {
-                props.onGetProducts(multipleConditions(["reference","name","provider","providerReference"]));
+                props.onGetProducts(multipleConditions(["reference", "name", "provider", "providerReference"]));
             } else if (props.history.location.pathname === '/customers') {
-                props.onGetCustomers(multipleConditions(["name","email","phone","cellphone"]));
+                props.onGetCustomers(multipleConditions(["name", "email", "phone", "cellphone"]));
             } else if (props.history.location.pathname === '/categories') {
                 props.onGetCategories(singleConditions("name"));
             }
         }
-        setPrefix(pre)
+        setPrefix(pref)
     };
 
     const findProduct = () => {
