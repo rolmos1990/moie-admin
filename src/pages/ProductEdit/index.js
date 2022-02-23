@@ -360,7 +360,6 @@ const ProductEdit = (props) => {
                                                         <FieldNumber
                                                             id={"field_weight"}
                                                             name={"weight"}
-                                                            type="number"
                                                             value={productData.weight}
                                                         />
                                                     </div>
@@ -371,7 +370,6 @@ const ProductEdit = (props) => {
                                                         <FieldNumber
                                                             id={"field_cost"}
                                                             name={"cost"}
-                                                            type="number"
                                                             value={productData.cost}
                                                             required/>
                                                     </div>

@@ -1,5 +1,5 @@
 import {AvField} from "availity-reactstrap-validation";
-import React from "react";
+import React, {useEffect, useState} from "react";
 import PropTypes from "prop-types";
 import messages from './messages';
 
@@ -66,25 +66,51 @@ TextAlphaField.propTypes = {
     maxLength: PropTypes.number,
 }
 
-const NumberField = (props) => (
-    <AvField
-        id ={props.id}
+const NumberField = (props) => {
+
+    const [value, setValue] = useState(props.value);
+
+    useEffect(() => {
+        if (null != props.value && props.value !== value) {
+            setValue(isNaN(props.value) ? "" : props.value);
+        }
+    }, [props.value])
+
+    const onChange = (e) => {
+        let val = e.target.value;
+        setValue(val);
+        if (isNaN(Number(val))) {
+            val = value || val;
+            setTimeout(() => {
+                setValue(clearValue(val));
+            }, 10)
+        }
+        if (props.onChange) {
+            props.onChange(clearValue(val));
+        }
+    }
+
+    const clearValue = (val) => {
+        return val && val.replace ? parseFloat(val.replace(/[^\d]/g, '')) : null;
+    }
+
+    return <AvField
+        id={props.id}
         name={props.name}
         value={props.value}
+        defaultValue={value}
         placeholder={props.placeholder}
         disabled={props.disabled}
-        onChange={props.onChange ? props.onChange : null}
-        type={"number"}
+        onChange={onChange}
+        type={"text"}
         className="form-control"
         validate={
             {
-                required: { value: props.required === true, errorMessage: messages.required },
-                number: { value: true},
-                min: { value: 0, errorMessage: messages.minValue }
+                required: {value: props.required === true, errorMessage: messages.required},
             }
         }
     />
-)
+}
 
 NumberField.propTypes = {
     name: PropTypes.string,
@@ -93,28 +119,50 @@ NumberField.propTypes = {
     required: PropTypes.bool
 }
 
-const NumberDecimalField = (props) => (
-    <AvField
-        id ={props.id}
+const NumberDecimalField = (props) => {
+
+    const [value, setValue] = useState(props.value);
+
+    useEffect(() => {
+        if (null != props.value && props.value !== value) {
+            setValue(isNaN(props.value) ? "" : props.value);
+        }
+    }, [props.value])
+
+    const onChange = (e) => {
+        let val = e.target.value;
+        setValue(val);
+        if (isNaN(Number(val))) {
+            val = value || val;
+            setTimeout(() => {
+                setValue(clearValue(val));
+            }, 10)
+        }
+        if (props.onChange) {
+            props.onChange(clearValue(val));
+        }
+    }
+
+    const clearValue = (val) => {
+        return val && val.replace ? parseFloat(val.replace(/[^\d.]/g, '')) : null;
+    }
+
+    return <AvField
+        id={props.id}
         name={props.name}
-        value={props.value > 0 ? props.value : "0"}
+        value={value}
+        defaultValue={value}
         placeholder={props.placeholder}
-        onChange={props.onChange ? props.onChange : null}
-        type="number"
+        onChange={onChange}
+        type="text"
         className="form-control"
-        min={props.min || "0.00"}
-        step={props.step || "0.01"}
-        max={props.max || "100.00"}
-        presicion={2}
         validate={
             {
-                required: { value: props.required === true, errorMessage: messages.required },
-                number: { value: true},
-                min: { value: 1, errorMessage: messages.minValue }
+                required: {value: props.required === true, errorMessage: messages.required},
             }
         }
     />
-)
+}
 
 NumberDecimalField.propTypes = {
     name: PropTypes.string,

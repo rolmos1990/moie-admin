@@ -106,9 +106,14 @@ export const getImageByQuality = (imgData, quality) => {
         return `${path}${result}`;
     }
     try {
-        const thumbs = JSON.parse(imgData.thumbs);
-        if (thumbs[quality]) {
-            result = thumbs[quality];
+        if (imgData.thumbs) {
+            let thumbs = imgData.thumbs;
+            if (imgData.thumbs.startsWith && imgData.thumbs.startsWith('{')) {
+                thumbs = JSON.parse(imgData.thumbs);
+            }
+            if (thumbs[quality]) {
+                result = thumbs[quality];
+            }
         }
     } catch (e) {
         console.error('Error: ' + imgData.thumbs, e);

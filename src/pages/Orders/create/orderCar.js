@@ -155,7 +155,7 @@ const OrderCar = (props) => {
                                                 id={"discountProd"}
                                                 name={"discountProd"}
                                                 value={product.discountPercentage}
-                                                onChange={el => onChangeDiscount((el.target.value ? el.target.value : 0), product)}
+                                                onChange={val => onChangeDiscount((val ? val : 0), product)}
                                             />
                                         )}
                                     </td>

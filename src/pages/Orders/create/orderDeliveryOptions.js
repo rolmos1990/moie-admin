@@ -3,7 +3,7 @@ import {Col, Label, Row} from "reactstrap"
 import {withRouter} from "react-router-dom"
 import {connect} from "react-redux";
 import PropTypes from "prop-types";
-import {FieldNumber, FieldSelect, FieldText} from "../../../components/Fields";
+import {FieldDecimalNumber, FieldNumber, FieldSelect, FieldText} from "../../../components/Fields";
 import {getProduct} from "../../../store/product/actions";
 import {AvForm} from "availity-reactstrap-validation";
 import {getFieldOptionByGroups} from "../../../store/fieldOptions/actions";
@@ -166,7 +166,7 @@ const OrderDeliveryOptions = (props) => {
     }
 
     const showGuia = () => car.deliveryOptions.tracking
-
+    // console.log('yg deliveryCost', deliveryCost)
     return (
         <React.Fragment>
             <AvForm className="needs-validation" autoComplete="off" onValidSubmit={(e, v) => acceptModal(e, v)}>
@@ -211,11 +211,11 @@ const OrderDeliveryOptions = (props) => {
                     </Col>
                     <Col md={6} className="p-1">
                         <Label htmlFor="weight">Costo del envio</Label>
-                        <FieldNumber
+                        <FieldDecimalNumber
                             id={"deliveryCost"}
                             name={"deliveryCost"}
                             value={deliveryCost}
-                            onChange={item => setDeliveryCost(item.target.value)}
+                            onChange={val => setDeliveryCost(val)}
                             required/>
                     </Col>
                     {deliveryMethod === DELIVERY_METHODS.OTRO && (
@@ -265,7 +265,7 @@ const OrderDeliveryOptions = (props) => {
                                     id={"pieceToChange"}
                                     name={"pieceToChange"}
                                     value={pieceToChange}
-                                    onChange={item => setPieceToChange(item.target.value)}
+                                    onChange={val => setPieceToChange(val)}
                                     />
                             </Col>
                         </>

@@ -204,7 +204,6 @@ const PaymentEdit = (props) => {
                                                     <FieldNumber
                                                         id={"consignmentAmount"}
                                                         name={"consignmentAmount"}
-                                                        type="number"
                                                         value={paymentData.consignmentAmount}
                                                         required/>
                                                 </div>

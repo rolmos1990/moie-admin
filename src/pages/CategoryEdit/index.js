@@ -7,7 +7,7 @@ import {connect} from "react-redux";
 import {apiError} from "../../store/auth/login/actions";
 import PropTypes from "prop-types";
 import {getCategory, registerCategory, updateCategory} from "../../store/category/actions";
-import {FieldSwitch, FieldText, FieldAlphaText, FieldNumber} from "../../components/Fields";
+import {FieldNumber, FieldSwitch, FieldText} from "../../components/Fields";
 import Breadcrumb from "../../components/Common/Breadcrumb";
 import {STATUS} from "../../common/constants";
 import ButtonSubmit from "../../components/Common/ButtonSubmit";
@@ -83,7 +83,6 @@ const CategoryEdit = (props) => {
                                                     <FieldNumber
                                                         id={"field_discount"}
                                                         name={"discountPercent"}
-                                                        type="number"
                                                         value={categoryData.discountPercent}
                                                         required/>
                                                 </div>
