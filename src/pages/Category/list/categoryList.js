@@ -16,9 +16,6 @@ import {doCatalogPrintBatchRequest, getCategories} from "../../../store/category
 import categoryColumns from "./categoryColumn";
 import Conditionals from "../../../common/conditionals";
 import NoDataIndication from "../../../components/Common/NoDataIndication";
-import StatsStatusCard from "../../../components/Common/StatsStatusCard";
-import StatsRegisteredCard from "../../../components/Common/StatsRegisteredCard";
-import CountUp from "react-countup";
 import {getCatalogBatchRequest} from "../../../helpers/service";
 import {formatDate} from "../../../common/utils";
 import {resetProduct} from "../../../store/product/actions";
@@ -32,6 +29,7 @@ const CategoryList = props => {
     const [currentPage, setCurrentPage] = useState(null);
     const [printCategoriesId, setPrintCategoriesId] = useState([]);
     const [catalogs, setCatalogs] = useState([]);
+    const [selectAll, setSelectAll] = useState(false);
 
     const pageOptions = {
         sizePerPage: DEFAULT_PAGE_LIMIT,
@@ -111,18 +109,21 @@ const CategoryList = props => {
     var selectRowProp = {
         mode: "checkbox",
         clickToSelect: true,
-        onSelect: (row) => {
+        onSelect: (row, selected, b) => {
+            // console.log('onSelect', selected ,b)
             let list = [...printCategoriesId]
             const index = list.indexOf(row.id);
-            if(index >= 0){
+            if (index >= 0) {
                 list.splice(index, 1);
-            } else{
+            } else {
                 list.push(row.id);
             }
             setPrintCategoriesId(list);
         },
-        onSelectAll: (rows) => {
+        onSelectAll: (selected) => {
+            // console.log('onSelectAll', selected,  selected)
             setPrintCategoriesId([]);
+            setSelectAll(selected);
         }
     };
 
@@ -215,12 +216,14 @@ const CategoryList = props => {
                                                                 </Tooltip>
                                                             )}
                                                             <Tooltip placement="bottom" title="Descargar Catalogo" aria-label="add">
-                                                                <Button color="primary" onClick={() => printCatalogs(false)} disabled={printCategoriesId.length === 0 && (!conditional || conditional.length === 0)}>
+                                                                <Button color="primary" onClick={() => printCatalogs(false)}
+                                                                        disabled={(printCategoriesId.length === 0 && !selectAll) && (!conditional || conditional.length === 0)}>
                                                                     <i className="mdi mdi-download"> </i>
                                                                 </Button>
                                                             </Tooltip>
                                                             <Tooltip placement="bottom" title="Descargar Catalogo con Referencias" aria-label="add">
-                                                                <Button color="primary" onClick={() => printCatalogs(true)} disabled={printCategoriesId.length === 0 && (!conditional || conditional.length === 0)}>
+                                                                <Button color="primary" onClick={() => printCatalogs(true)}
+                                                                        disabled={(printCategoriesId.length === 0 && !selectAll) && (!conditional || conditional.length === 0)}>
                                                                     <i className="mdi mdi-download-circle"> </i>
                                                                 </Button>
                                                             </Tooltip>
