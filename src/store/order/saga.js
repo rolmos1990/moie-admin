@@ -13,9 +13,11 @@ import {
     GET_ORDERS_OFFICE,
     NEXT_STATUS_ORDER,
     PRINT_BATCH_REQUEST,
-    PRINT_ORDER, REFRESH_DELIVERY_ORDER,
+    PRINT_ORDER,
+    REFRESH_DELIVERY_ORDER,
     REGISTER_ORDER,
-    RESUME_ORDER, SYNC_DELIVERY_ORDER,
+    RESUME_ORDER,
+    SYNC_DELIVERY_ORDER,
     UPDATE_ORDER
 } from "./actionTypes"
 
@@ -40,10 +42,14 @@ import {
     historicOrderFailed,
     historicOrderSuccess,
     printBatchRequestFailed,
-    printBatchRequestSuccess, refreshOrderDelivery, refreshOrderDeliveryFail, refreshOrderDeliverySuccess,
+    printBatchRequestSuccess,
+    refreshOrderDeliveryFail,
+    refreshOrderDeliverySuccess,
     refreshOrders,
     registerOrderFailed,
-    registerOrderSuccess, syncOrder, syncOrderFail, syncOrderSuccess,
+    registerOrderSuccess,
+    syncOrderFail,
+    syncOrderSuccess,
     updateOrderFail,
     updateOrderSuccess
 } from "./actions"
@@ -59,9 +65,11 @@ import {
     fetchOrdersApi,
     nextStatusOrderApi,
     orderHistoric,
-    printOrderApi, refreshStatusDelivery,
+    printOrderApi,
+    refreshStatusDelivery,
     registerOrderApi,
-    resumeOrderApi, syncOrderDelivery,
+    resumeOrderApi,
+    syncOrderDelivery,
     updateOrderApi
 } from "../../helpers/backend_helper"
 

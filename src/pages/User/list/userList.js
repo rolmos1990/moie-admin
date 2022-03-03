@@ -3,7 +3,7 @@ import PropTypes from "prop-types"
 import {connect} from "react-redux"
 import {Card, CardBody, Col, Row} from "reactstrap"
 import paginationFactory, {PaginationListStandalone, PaginationProvider,} from "react-bootstrap-table2-paginator"
-import ToolkitProvider, {Search} from "react-bootstrap-table2-toolkit"
+import ToolkitProvider from "react-bootstrap-table2-toolkit"
 import BootstrapTable from "react-bootstrap-table-next"
 
 import {Link} from "react-router-dom"
@@ -15,24 +15,23 @@ import {getUsers, resetUser, setUserToChangePassword} from "../../../store/user/
 import userColumns from "./userColumn";
 import NoDataIndication from "../../../components/Common/NoDataIndication";
 import ForgetPassword from "./forgetPassword";
-import {resetOrder} from "../../../store/order/actions";
 
 const UserList = props => {
-    const {users, meta, onGetUsers,onResetUsers, onSelectUser, loading, refresh} = props;
+    const {users, meta, onGetUsers, onResetUsers, onSelectUser, refresh} = props;
     const [usersList, setCategoriesList] = useState([])
     const [filter, setFilter] = useState(false);
     const [conditional, setConditional] = useState(null);
-    const [userSelected, setUserSelected] = useState(null);
-    const [newPassword, setNewPassword] = useState(null);
-    const [confirmPassword, setConfirmPassword] = useState(null);
-    const [openChangePasswordModal, setOpenChangePasswordModal] = useState(false);
+    // const [userSelected, setUserSelected] = useState(null);
+    // const [newPassword, setNewPassword] = useState(null);
+    // const [confirmPassword, setConfirmPassword] = useState(null);
+    // const [openChangePasswordModal, setOpenChangePasswordModal] = useState(false);
 
     const pageOptions = {
         sizePerPage: DEFAULT_PAGE_LIMIT,
         totalSize: meta?.totalRegisters, // replace later with size(users),
         custom: true,
     }
-    const {SearchBar} = Search
+    // const {SearchBar} = Search
 
     useEffect(() => {
         onGetUsers();

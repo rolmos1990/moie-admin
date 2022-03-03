@@ -1,11 +1,8 @@
 import React, {useEffect, useState} from "react"
 import PropTypes from "prop-types"
 import {connect} from "react-redux"
-import {Card, CardBody, Col, Row, Spinner} from "reactstrap"
-import paginationFactory, {
-    PaginationListStandalone,
-    PaginationProvider,
-} from "react-bootstrap-table2-paginator"
+import {Card, CardBody, Col, Row} from "reactstrap"
+import paginationFactory, {PaginationListStandalone, PaginationProvider,} from "react-bootstrap-table2-paginator"
 import ToolkitProvider, {Search} from "react-bootstrap-table2-toolkit"
 import BootstrapTable from "react-bootstrap-table-next"
 
@@ -67,11 +64,6 @@ const TemplateList = props => {
     };
 
     const columns = templateColumns(onDelete);
-
-    var selectRowProp = {
-        mode: "checkbox",
-        clickToSelect: true,
-    };
 
     const NoDataIndication = () => (
         <div className="spinner">
