@@ -73,6 +73,8 @@ const BillList = props => {
         const conditions = new Conditionals.Condition;
         // conditions.add("status", 4, Conditionals.OPERATORS.EQUAL);//Enviada
         conditions.add('office', '', Conditionals.OPERATORS.NOT_NULL);
+        conditions.add('deliveryMethod', 1, Conditionals.OPERATORS.EQUAL);
+        conditions.add('orderDelivery.deliveryType', 3, Conditionals.OPERATORS.EQUAL);
         console.log('conditions', conditions);
         setOrderListConditions(conditions.condition);
         setOpenOrdersModal(true);
