@@ -11,6 +11,7 @@ const TextField = (props) => (
         placeholder={props.placeholder}
         onChange={props.onChange ? props.onChange : null}
         onBlur={props.onBlur ? props.onBlur : null}
+        onKeyPress={props.onKeyPress ? props.onKeyPress : null}
         type={props.type ? props.type : "text"}
         className={`form-control ${props.className ? props.className : ''}` }
         validate={

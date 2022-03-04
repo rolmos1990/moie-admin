@@ -153,6 +153,11 @@ const BatchQueriesForm = (props) => {
                                 <FieldText
                                     id={"products"}
                                     name={"products"}
+                                    onKeyPress={e => {
+                                        if (e.key === "Enter") {
+                                            onSearchRefs();
+                                        }
+                                    }}
                                     onChange={(e) => {
                                         setProductRefs(e.target.value);
                                     }}
