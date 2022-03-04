@@ -37,7 +37,7 @@ const productColumns = (onDelete = false) => [
         ),
     },
     {
-        text: "Nombre",
+        text: "Descripcion",
         dataField: "name",
         sort: true,
         formatter: (cellContent, item) => (

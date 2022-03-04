@@ -97,8 +97,8 @@ const ProductDetail = (props) => {
                                 <Row>
                                     <Col md={12}>
                                         <ul style={{listStyle: 'none'}}>
-                                            <li><b>Nombre:</b> <small>{productData.name}</small></li>
-                                            <li><b>Descripción:</b> {productData.description}</li>
+                                            <li><b>Description:</b> <small>{productData.name}</small></li>
+                                            <li><b>Tipo:</b> {productData.description}</li>
                                             <li><b>Costo:</b> {priceFormat(productData.cost, "", true)}</li>
                                             <li><b>Precio:</b> {priceFormat(productData.price, "", true)}</li>
                                         </ul>

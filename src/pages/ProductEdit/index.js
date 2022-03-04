@@ -122,7 +122,10 @@ const ProductEdit = (props) => {
 
     useEffect(() => {
         if (fieldOptions && fieldOptions.length > 0) {
-            setMaterialsList(filterFieldOptions(fieldOptions, GROUPS.MATERIALS));
+            setMaterialsList(filterFieldOptions(fieldOptions, GROUPS.MATERIALS).map(op => {
+                const key = op.name ? op.name : '';
+                return {label: key, value: key};
+            }));
             setProviderList(filterFieldOptions(fieldOptions, GROUPS.PROVIDERS));
             setReferenceList(filterFieldOptions(fieldOptions, GROUPS.REFERENCE_KEY).map(op => {
                 const key = op.name ? op.name : '';
@@ -148,6 +151,7 @@ const ProductEdit = (props) => {
     const handleValidSubmit = (event, values) => {
         const data = {
             ...values,
+            material: values.material && values.material.value,
             category: values.category.value,
             size: values.size.value,
             status: values._status,
@@ -241,7 +245,7 @@ const ProductEdit = (props) => {
                                                 )}
                                                 <Col md={10}>
                                                     <div className="mb-3">
-                                                        <Label htmlFor="field_name">Nombre de Producto <span className="text-danger">*</span></Label>
+                                                        <Label htmlFor="field_name">Descripción <span className="text-danger">*</span></Label>
                                                         <FieldText
                                                             id={"field_name"}
                                                             name={"name"}
@@ -317,12 +321,12 @@ const ProductEdit = (props) => {
                                                 <Col md="5">
                                                     <div className="mb-3">
                                                         <Label className="control-label">Material</Label>
-                                                        <Autocomplete
+                                                        <FieldSelect
                                                             id={"field_material"}
                                                             name={"material"}
                                                             options={materialsList}
                                                             defaultValue={productData.material}
-                                                            onChange={(material) => setProductData({...productData, material: material})}
+                                                            isSearchable
                                                         />
                                                     </div>
                                                 </Col>
@@ -388,7 +392,7 @@ const ProductEdit = (props) => {
                                             <Row>
                                                 <Col md="12">
                                                     <div className="mb-0">
-                                                        <Label htmlFor="description">Descripción</Label>
+                                                        <Label htmlFor="description">Tipo</Label>
                                                         <FieldText
                                                             id={"field_description"}
                                                             name={"description"}
