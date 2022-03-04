@@ -80,11 +80,6 @@ const PaymentsList = props => {
 
     const columns = paymentsColumns(setPaymentSelected);
 
-    var selectRowProp = {
-        mode: "checkbox",
-        clickToSelect: true,
-    };
-
     return (
         <>
             <Row>

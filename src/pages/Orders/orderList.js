@@ -19,7 +19,6 @@ import Conditionals from "../../common/conditionals";
 import CustomModal from "../../components/Modal/CommosModal";
 import OrderConciliationForm from "./orderConciliationsForm";
 import ConciliationReportForm from "../Reports/ConciliationReportForm";
-import {resetCustomer} from "../../store/customer/actions";
 
 const OrderList = props => {
     const {orders, meta, onGetOrders, onResetOrders, refresh, customActions, conditionals, showAsModal, conciliation} = props;
@@ -34,6 +33,7 @@ const OrderList = props => {
     const [openConfirmConciliationModal, setOpenConfirmConciliationModal] = useState(false);
     const [openReportConciliationModal, setOpenReportConciliationModal] = useState(false);
     const [columns, setColumns] = useState(orderColumns(setOrderSelected, showAsModal, false));
+    const [selectAll, setSelectAll] = useState(false);
 
     const pageOptions = {
         sizePerPage: DEFAULT_PAGE_LIMIT,
@@ -138,15 +138,20 @@ const OrderList = props => {
             let list = [...ordersSelected]
 
             const index = list.indexOf(row.id);
-            if(index >= 0){
+            if (index >= 0) {
                 list.splice(index, 1);
-            } else{
+            } else {
                 list.push(row.id);
             }
             setOrdersSelected(list);
         },
-        onSelectAll: (rows) => {
-            setOrdersSelected([]);
+        onSelectAll: (selected, rows) => {
+            if (selected) {
+                setOrdersSelected(rows.map(r => r.id));
+            } else {
+                setOrdersSelected([]);
+            }
+            setSelectAll(selected);
         }
     };
 
@@ -207,7 +212,7 @@ const OrderList = props => {
                                                 {customActions ? <Col md={8}>
                                                     <div className="mb-3 float-md-end">
                                                         <Tooltip placement="bottom" title="Aceptar" aria-label="add">
-                                                            <Button onClick={() => onPressAction()} color="success">
+                                                            <Button onClick={() => onPressAction()} color="success" disabled={(ordersSelected.length === 0 && !selectAll) && (!conditional || conditional.length === 0)}>
                                                                 <i className={"mdi mdi-check"}> </i> &nbsp; Aceptar
                                                             </Button>
                                                         </Tooltip>
@@ -225,7 +230,8 @@ const OrderList = props => {
                                                             {!conciliationView && (
                                                                 <>
                                                                     <Tooltip placement="bottom" title="Impresión multiple" aria-label="add">
-                                                                        <Button color="primary" onClick={() => printOrders()} disabled={ordersSelected.length === 0 && (!conditional || conditional.length === 0)}>
+                                                                        <Button color="primary" onClick={() => printOrders()}
+                                                                                disabled={(ordersSelected.length === 0 && !selectAll) && (!conditional || conditional.length === 0)}>
                                                                             <i className="mdi mdi-printer"> </i>
                                                                         </Button>
                                                                     </Tooltip>

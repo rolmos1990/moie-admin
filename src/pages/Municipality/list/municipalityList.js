@@ -1,23 +1,19 @@
 import React, {useEffect, useState} from "react"
 import PropTypes from "prop-types"
 import {connect} from "react-redux"
-import {Card, CardBody, Col, Row, Spinner} from "reactstrap"
-import paginationFactory, {
-    PaginationListStandalone,
-    PaginationProvider,
-} from "react-bootstrap-table2-paginator"
+import {Card, CardBody, Col, Row} from "reactstrap"
+import paginationFactory, {PaginationListStandalone, PaginationProvider,} from "react-bootstrap-table2-paginator"
 import ToolkitProvider, {Search} from "react-bootstrap-table2-toolkit"
 import BootstrapTable from "react-bootstrap-table-next"
 
 import {Link} from "react-router-dom"
 import {Button, Tooltip} from "@material-ui/core";
 import {DEFAULT_PAGE_LIMIT} from "../../../common/pagination";
-import {ConfirmationModal, ConfirmationModalAction} from "../../../components/Modal/ConfirmationModal";
+import {ConfirmationModalAction} from "../../../components/Modal/ConfirmationModal";
 import {deleteMunicipality, getMunicipalities, getStates, resetLocation} from "../../../store/location/actions";
 import {TableFilter} from "../../../components/TableFilter";
 import municipalityColumns from "./municipalityColumns";
-import {normalizeColumnsList, statesToOptions} from "../../../common/converters";
-import {resetOffice} from "../../../store/office/actions";
+import {normalizeColumnsList} from "../../../common/converters";
 
 const MunicipalityList = props => {
     const {states, municipalities, meta, getStates, onGetMunicipalities, onResetLocation, onDeleteMunicipality, loading, refresh} = props;
@@ -81,11 +77,6 @@ const MunicipalityList = props => {
         });
     };
     const columns = municipalityColumns(onDelete);
-
-    var selectRowProp = {
-        mode: "checkbox",
-        clickToSelect: true,
-    };
 
     const NoDataIndication = () => (
         <div className="spinner">

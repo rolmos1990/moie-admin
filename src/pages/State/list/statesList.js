@@ -67,11 +67,6 @@ const StatesList = props => {
 
     const columns = statesColumns(onDelete);
 
-    var selectRowProp = {
-        mode: "checkbox",
-        clickToSelect: true,
-    };
-
     return (
         <Row>
             <TableFilter

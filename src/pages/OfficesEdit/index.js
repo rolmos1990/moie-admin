@@ -10,7 +10,7 @@ import {addOrderOffice, confirmOffice, deleteOffice, deleteOrderOffice, getOffic
 import {FieldDate, FieldSelect, FieldText} from "../../components/Fields";
 import Breadcrumb from "../../components/Common/Breadcrumb";
 import {DATE_FORMAT, formatDate, printPartOfPage} from "../../common/utils";
-import {DELIVERY_METHODS, DELIVERY_TYPES, GROUPS, OFFICE_STATUS, STATUS} from "../../common/constants";
+import {DELIVERY_METHODS, DELIVERY_TYPES, GROUPS, OFFICE_STATUS, ORDERS_ENUM, STATUS} from "../../common/constants";
 import ButtonSubmit from "../../components/Common/ButtonSubmit";
 import {DATE_MODES} from "../../components/Fields/InputDate";
 import {ConverterDeliveryType, getEmptyOptions} from "../../common/converters";
@@ -192,10 +192,10 @@ const OfficeEdit = (props) => {
 
     const addOrders = () => {
         const conditions = new Conditionals.Condition;
-        conditions.add("status", 3, Conditionals.OPERATORS.EQUAL);//IMPRESA
+        conditions.add("status", ORDERS_ENUM.PRINTED, Conditionals.OPERATORS.EQUAL);//IMPRESA
         conditions.add("deliveryMethod.id", office.deliveryMethod.id, Conditionals.OPERATORS.EQUAL);
         conditions.add("orderDelivery.deliveryType", office.type, Conditionals.OPERATORS.EQUAL);
-        conditions.add('office', '',  Conditionals.OPERATORS.NULL);
+        conditions.add('office', '', Conditionals.OPERATORS.NULL);
         console.log('conditions', conditions);
         setOrderListConditions(conditions.condition);
         setOpenOrdersModal(true);
