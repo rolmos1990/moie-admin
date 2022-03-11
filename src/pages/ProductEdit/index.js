@@ -57,8 +57,8 @@ const ProductEdit = (props) => {
     const [sizesList, setSizesList] = useState([]);
     const [sizeDefault, setSizeDefault] = useState({});
     const [sizeSelected, setSizeSelected] = useState(null);
-    const [isEdit, setIsEdit] = useState(!!props.match.params.id);
 
+    const isEdit = props.match.params.id;
     const hasOrders = false;
 
     //Carga inicial
@@ -81,23 +81,19 @@ const ProductEdit = (props) => {
 
     //cargar info relacionada al prod
     useEffect(() => {
-        if (product && product.id) {
-
+        if (product.id) {
             setProductData({...product, _status: product.status});
             setCategoryDefault(product.category?.id || null);
             setSizeDefault(product.size?.id || null);
-
-            if (product.productSize.length === 0) {
-                setIsOpen(false)
-                setIsOpenInventary(true);
-            } else if (product.productImage.length === 0) {
-                setIsOpen(false)
-                setIsOpenInventary(false);
-                setIsOpenDropImages(true);
-            }
-
             if (!isEdit) {
-                setIsEdit(true);
+                if (product.productSize.length === 0) {
+                    setIsOpen(false)
+                    setIsOpenInventary(true);
+                } else if (product.productImage.length === 0) {
+                    setIsOpen(false)
+                    setIsOpenInventary(false);
+                    setIsOpenDropImages(true);
+                }
             }
         }
         //console.log('Product', product)
@@ -172,7 +168,8 @@ const ProductEdit = (props) => {
         }
 
         if (!isEdit) {
-            onCreateProduct({...data, status: 1}, props.history)
+            data.status = 1;
+            onCreateProduct(data, props.history)
         } else {
             onUpdateProduct(props.match.params.id, data, props.history)
         }

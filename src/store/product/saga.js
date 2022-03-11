@@ -93,7 +93,9 @@ function* register({ payload: { data, history } }) {
         const response = yield call(POST_API_REQUEST, data)
         showResponseMessage(response, "Producto creado!");
         yield put(CREATE_SUCCESS_ACTION(response))
-       //history.push(LIST_URL)
+        if (response && response.product && response.product.id) {
+            history.push("/product/" + response.product.id)
+        }
     } catch (error) {
         yield put(CREATE_FAILED_ACTION(error))
     }

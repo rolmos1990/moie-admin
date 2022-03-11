@@ -104,7 +104,6 @@ const OrderEdit = (props) => {
 
             //setShowAsTable(order.orderDetails.length > 8);
             setShowAsTable(isMobile);
-
         }
 
         setAllowEdit(canEdit());
@@ -129,7 +128,8 @@ const OrderEdit = (props) => {
 
     const printOrder = () => {
         printPartOfPage(orderPrint);
-        setTimeout(() => setOpenPrintConfirmModal(true), 3000);
+        setTimeout(() => setOpenPrintConfirmModal(true), 1000);
+        onUpdateOrder(orderData.id, {prints: order.prints + 1});
     }
 
     const toggleModal = () => {
@@ -214,6 +214,7 @@ const OrderEdit = (props) => {
                 link.download = `${order.customer.name.replace(/\s+/g, '_')}_NRO_${order.id}.png`.toUpperCase();
                 link.href = dataUrl;
                 link.click();
+                onUpdateOrder(orderData.id, {photos: order.photos + 1});
             })
             .catch(function (error) {
                 console.error('oops, something went wrong!', error);
@@ -339,6 +340,7 @@ const OrderEdit = (props) => {
                                 <Tooltip placement="bottom" title="Imprimir" aria-label="add">
                                     <button type="button" color="primary" className="btn-sm btn btn-outline-info waves-effect waves-light" onClick={() => printOrder()}>
                                         <i className={"mdi mdi-printer"}> </i>
+                                        <span className="badge bg-info rounded-pill noti-icon">{order.prints || 0}</span>
                                     </button>
                                 </Tooltip>
 
@@ -349,8 +351,9 @@ const OrderEdit = (props) => {
                                 </button>
                             </Tooltip>
                             <Tooltip placement="bottom" title="Descargar foto" aria-label="add">
-                                <button type="button" color="primary" className="btn-sm btn btn-outline-info waves-effect waves-light" onClick={() => takePhoto()}>
+                                <button type="button" color="primary" className="btn-sm btn btn-outline-info waves-effect waves-light " onClick={() => takePhoto()}>
                                     <i className={"mdi mdi-camera"}> </i> {downloadingPhoto ? 'Descargando...' : ''}
+                                    <span className="badge bg-info rounded-pill noti-icon">{order.photos || 0}</span>
                                 </button>
                             </Tooltip>
                         </div>
