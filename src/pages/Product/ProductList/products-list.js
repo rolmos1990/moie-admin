@@ -15,6 +15,7 @@ import NoDataIndication from "../../../components/Common/NoDataIndication";
 import productColumns from "./productColumn";
 import StatsStatusCard from "../../../components/Common/StatsStatusCard";
 import {countProductsByStatus} from "../../../helpers/service";
+import HasRole from "../../../components/HasRole";
 
 
 const series2 = [70]
@@ -233,10 +234,11 @@ const ProductList = props => {
                                                                     <i className="mdi mdi-text-box-search-outline"> </i>
                                                                 </Link>
                                                             </Tooltip>
-
-                                                            <Link to={"/product"} className="btn btn-primary waves-effect waves-light text-light">
-                                                                <i className="mdi mdi-plus"> </i> Nuevo Producto
-                                                            </Link>
+                                                            <HasRole role="public">
+                                                                <Link to={"/product"} className="btn btn-primary waves-effect waves-light text-light">
+                                                                    <i className="mdi mdi-plus"> </i> Nuevo Producto
+                                                                </Link>
+                                                            </HasRole>
                                                         </div>
                                                     </Col>
                                                 </Row>
