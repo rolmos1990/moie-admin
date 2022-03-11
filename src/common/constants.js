@@ -69,14 +69,14 @@ export const PAYMENT_TYPES = {
 export const PAYMENT_TYPES_LIST = Object.keys(PAYMENT_TYPES).map(k => ({label: PAYMENT_TYPES[k], value: PAYMENT_TYPES[k]}));
 
 export const EVENT_STATUS = {
-    1: {name: 'Pendiente', color:'danger', colorCss: "#f44336"},
-    2: {name: 'Confirmado', color:'success', colorCss: "#4caf50"},
-    3: {name: 'Impreso', color:'warning', colorCss: "#ffeb3b"},
-    4: {name: 'Enviado', color:'warning', colorCss: "#ffeb3b"},
-    5: {name: 'Conciliado', color:'info', colorCss: "#2196f3"},
-    6: {name: 'Anulado', color:'info', colorCss: "#2196f3"},
-    7: {name: 'Finalizado', color:'success', colorCss: "#4caf50"},
-    8: {name: 'Actualizado', color:'danger', colorCss: "#f44336"},
+    1: {name: 'Pendiente', color: 'danger', colorCss: "#f44336"},
+    2: {name: 'Confirmado', color: 'success', colorCss: "#4caf50"},
+    3: {name: 'Impreso', color: 'warning', colorCss: "#23848d"},
+    4: {name: 'Enviado', color: 'warning', colorCss: "#126237"},
+    5: {name: 'Conciliado', color: 'info', colorCss: "#2196f3"},
+    6: {name: 'Anulado', color: 'info', colorCss: "#f39f21"},
+    7: {name: 'Finalizado', color: 'success', colorCss: "#4caf50"},
+    8: {name: 'Actualizado', color: 'danger', colorCss: "#f44336"},
 };
 
 
@@ -86,12 +86,12 @@ export const PAYMENT_STATUS = {
 };
 
 export const ORDER_STATUS = {
-    1: {name: 'Pendiente', color:'danger', colorCss: "#f44336"},
-    2: {name: 'Confirmado', color:'success', colorCss: "#4caf50"},
-    3: {name: 'Impreso', color:'warning', colorCss: "#ffeb3b"},
-    4: {name: 'Enviado', color:'warning', colorCss: "#ffeb3b"},
-    5: {name: 'Conciliado', color:'info', colorCss: "#2196f3"},
-    6: {name: 'Anulado', color:'info', colorCss: "#2196f3"},
+    1: {name: 'Pendiente', color: 'danger', colorCss: "#f44336"},
+    2: {name: 'Confirmado', color: 'success', colorCss: "#4caf50"},
+    3: {name: 'Impreso', color: 'warning', colorCss: "#23848d"},
+    4: {name: 'Enviado', color: 'warning', colorCss: "#126237"},
+    5: {name: 'Conciliado', color: 'info', colorCss: "#2196f3"},
+    6: {name: 'Anulado', color: 'info', colorCss: "#f39f21"},
 };
 
 export const ORDERS_ENUM = {
