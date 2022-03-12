@@ -17,6 +17,7 @@ import {importFile} from "../../store/office/actions";
 import CustomModal from "../../components/Modal/CommosModal";
 import PostSaleImportFileForm from "./PostSaleImportFileForm";
 import PostSaleReportForm from "../Reports/PostSaleReportForm";
+import {refreshAllStatusDelivery} from "../../helpers/backend_helper";
 
 const PostSaleList = props => {
     const {orders, meta, onGetOrders, loading, refresh, customActions} = props;
@@ -63,6 +64,11 @@ const PostSaleList = props => {
     const handleImportFile = (reload) => {
         setOpenImportFileModal(false);
         if(reload) onGetOrders(conditional, DEFAULT_PAGE_LIMIT, currentPage * DEFAULT_PAGE_LIMIT);
+    }
+
+    const syncAllDeliveries = async () => {
+        await refreshAllStatusDelivery();
+        onGetOrders(conditional, DEFAULT_PAGE_LIMIT, currentPage * DEFAULT_PAGE_LIMIT);
     }
 
     const columns = postSaleColumns();
@@ -114,6 +120,11 @@ const PostSaleList = props => {
                                                         <Tooltip placement="bottom" title="Generar reporte" aria-label="add">
                                                             <Button onClick={() => setOpenReportModal(true)}>
                                                                 <i className={"mdi mdi-file"}> </i>
+                                                            </Button>
+                                                        </Tooltip>
+                                                        <Tooltip placement="bottom" title="Sincronizar todas" aria-label="add">
+                                                            <Button onClick={() => syncAllDeliveries()}>
+                                                                <i className={"mdi mdi-refresh"}> </i>
                                                             </Button>
                                                         </Tooltip>
                                                     </div>

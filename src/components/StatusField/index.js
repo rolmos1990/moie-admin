@@ -5,6 +5,9 @@ export const STATUS_COLORS = {
     SUCCESS: 'success',
     WARNING: 'warning',
     INFO: 'info',
+    PURPLE: 'purple',
+    PINK: 'pink',
+    SECONDARY: 'secondary'
 };
 
 export const StatusField = (props) => {
@@ -23,6 +26,15 @@ export const StatusField = (props) => {
             break;
         case STATUS_COLORS.INFO:
             bg='bg-soft-info';
+            break;
+        case STATUS_COLORS.PURPLE:
+            bg='bg-soft-purple';
+            break;
+        case STATUS_COLORS.PINK:
+            bg='bg-soft-pink';
+            break;
+        case STATUS_COLORS.SECONDARY:
+            bg='bg-soft-secondary';
             break;
         default:
             bg='bg-light';

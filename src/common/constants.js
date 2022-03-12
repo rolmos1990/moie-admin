@@ -72,10 +72,10 @@ export const EVENT_STATUS = {
     1: {name: 'Pendiente', color: 'danger', colorCss: "#f44336"},
     2: {name: 'Confirmado', color: 'success', colorCss: "#4caf50"},
     3: {name: 'Impreso', color: 'warning', colorCss: "#23848d"},
-    4: {name: 'Enviado', color: 'warning', colorCss: "#126237"},
+    4: {name: 'Enviado', color: 'purple', colorCss: "#6f42c1"},
     5: {name: 'Conciliado', color: 'info', colorCss: "#2196f3"},
-    6: {name: 'Anulado', color: 'info', colorCss: "#f39f21"},
-    7: {name: 'Finalizado', color: 'success', colorCss: "#4caf50"},
+    6: {name: 'Anulado', color: 'secondary', colorCss: "#f39f21"},
+    7: {name: 'Finalizado', color: 'pink', colorCss: "#74788d"},
     8: {name: 'Actualizado', color: 'danger', colorCss: "#f44336"},
 };
 
@@ -89,9 +89,10 @@ export const ORDER_STATUS = {
     1: {name: 'Pendiente', color: 'danger', colorCss: "#f44336"},
     2: {name: 'Confirmado', color: 'success', colorCss: "#4caf50"},
     3: {name: 'Impreso', color: 'warning', colorCss: "#23848d"},
-    4: {name: 'Enviado', color: 'warning', colorCss: "#126237"},
+    4: {name: 'Enviado', color: 'purple', colorCss: "#6f42c1"},
     5: {name: 'Conciliado', color: 'info', colorCss: "#2196f3"},
-    6: {name: 'Anulado', color: 'info', colorCss: "#f39f21"},
+    6: {name: 'Anulado', color: 'secondary', colorCss: "#f39f21"},
+    7: {name: 'Finalizado', color: 'pink', colorCss: "#74788d"},
 };
 
 export const ORDERS_ENUM = {
