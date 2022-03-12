@@ -130,10 +130,11 @@ const initialState = {
                     text: 'Monto'
                 }
             }],
-            series: [{
-                name: 'Página Web',
-                data: []
-            },
+            series: [
+                /*{
+                    name: 'Página Web',
+                    data: []
+                },
                 {
                     name: 'Página Web Movil',
                     data: []
@@ -157,7 +158,8 @@ const initialState = {
                 {
                     name: 'Otros',
                     data: []
-                }]
+                }*/
+            ]
         },
         opciones: {
             grupo: 'dia'
@@ -576,6 +578,7 @@ const Stats = ({users, onGetUsers}) => {
             //leer estadisticas de ventas
             statsApi(url).then(function (resp) {
                 var fechas = [];
+                var series = [];
                 var datosWeb = [];
                 var datosWebMovil = [];
                 var datosFacebook = [];
@@ -587,24 +590,26 @@ const Stats = ({users, onGetUsers}) => {
                 for (var i = 0; i < keys.length; i++) {
                     var data = resp[keys[i]];
                     fechas[i] = data.fecha;
-                    datosWeb[i] = parseFloat(data.web);
+                    series[i] = data.data;
+                    /* datosWeb[i] = parseFloat(data.web);
                     datosWebMovil[i] = parseFloat(data.webMovil);
                     datosFacebook[i] = parseFloat(data.facebook);
                     datosApp[i] = parseFloat(data.app);
                     datosWhatsapp[i] = parseFloat(data.whatsapp);
                     datosBlackberry[i] = parseFloat(data.blackberry);
-                    datosOtros[i] = parseFloat(data.otros);
+                    datosOtros[i] = parseFloat(data.otros);*/
                 }
                 const newStats = {...stats};
                 newStats.ventasOrigen.data.subtitle.text = parserClientDate(stats.ventasOrigen.fecha.inicial) + ' a ' + parserClientDate(stats.ventasOrigen.fecha.final)
                 newStats.ventasOrigen.data.xAxis.categories = fechas;
-                newStats.ventasOrigen.data.series[0].data = datosWeb;
+                newStats.ventasOrigen.data.series = series;
+                /*newStats.ventasOrigen.data.series[0].data = datosWeb;
                 newStats.ventasOrigen.data.series[1].data = datosWebMovil;
                 newStats.ventasOrigen.data.series[2].data = datosFacebook;
                 newStats.ventasOrigen.data.series[3].data = datosApp;
                 newStats.ventasOrigen.data.series[4].data = datosWhatsapp;
                 newStats.ventasOrigen.data.series[5].data = datosBlackberry;
-                newStats.ventasOrigen.data.series[6].data = datosOtros;
+                newStats.ventasOrigen.data.series[6].data = datosOtros;*/
                 newStats.cargando = '';
                 setStats(newStats);
             })
