@@ -129,10 +129,11 @@ const PaymentOverlay = (props) => {
                                 <table className="table table-sm table-striped table-bordered table-centered table-nowrap font-size-11">
                                     <thead>
                                     <tr>
+                                        <th style={{width: '10%'}}># Pedido</th>
                                         <th style={{width: '35%'}}>Cliente</th>
-                                        <th style={{width: '20%'}}>Fecha</th>
+                                        <th style={{width: '15%'}}>Fecha</th>
                                         <th style={{width: '15%'}}>Monto</th>
-                                        <th style={{width: '15%'}}>Envio</th>
+                                        <th style={{width: '10%'}}>Envio</th>
                                         <th style={{width: '15%'}}>Total</th>
                                         <th></th>
                                     </tr>
@@ -145,6 +146,7 @@ const PaymentOverlay = (props) => {
                                     )}
                                     {orders.map((order, k) => (
                                         <tr>
+                                            <td>{order.id}</td>
                                             <td>{order.customer.name}</td>
                                             <td>{formatDate(order.createdAt)}</td>
                                             <td className="text-end">{priceFormat(order.subTotalAmount, "", true)}</td>

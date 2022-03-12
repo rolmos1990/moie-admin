@@ -340,7 +340,9 @@ const OrderEdit = (props) => {
                                 <Tooltip placement="bottom" title="Imprimir" aria-label="add">
                                     <button type="button" color="primary" className="btn-sm btn btn-outline-info waves-effect waves-light" onClick={() => printOrder()}>
                                         <i className={"mdi mdi-printer"}> </i>
-                                        <span className="badge bg-info rounded-pill noti-icon">{order.prints || 0}</span>
+                                        {order.prints && order.prints > 0 && (
+                                            <span className="badge bg-danger rounded-pill noti-icon">{order.prints || 0}</span>
+                                        )}
                                     </button>
                                 </Tooltip>
 
@@ -353,7 +355,9 @@ const OrderEdit = (props) => {
                             <Tooltip placement="bottom" title="Descargar foto" aria-label="add">
                                 <button type="button" color="primary" className="btn-sm btn btn-outline-info waves-effect waves-light " onClick={() => takePhoto()}>
                                     <i className={"mdi mdi-camera"}> </i> {downloadingPhoto ? 'Descargando...' : ''}
-                                    <span className="badge bg-info rounded-pill noti-icon">{order.photos || 0}</span>
+                                    {order.photos && order.photos > 0 && (
+                                    <span className="badge bg-danger rounded-pill noti-icon">{order.photos || 0}</span>
+                                    )}
                                 </button>
                             </Tooltip>
                         </div>
