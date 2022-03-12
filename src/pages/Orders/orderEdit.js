@@ -129,7 +129,6 @@ const OrderEdit = (props) => {
     const printOrder = () => {
         printPartOfPage(orderPrint);
         setTimeout(() => setOpenPrintConfirmModal(true), 1000);
-        onUpdateOrder(orderData.id, {prints: order.prints + 1});
     }
 
     const toggleModal = () => {
@@ -279,6 +278,7 @@ const OrderEdit = (props) => {
 
     const onConfirmPrintOrder = () => {
         setOpenPrintConfirmModal(false);
+        onUpdateOrder(orderData.id, {prints: order.prints + 1});
         onNextStatusOrder(order.id);
     }
 
