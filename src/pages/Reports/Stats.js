@@ -11,12 +11,12 @@ import {generateReport} from "../../store/reports/actions";
 import {statsApi} from "../../helpers/backend_helper";
 
 import Highcharts from 'highcharts'
-import HighchartsReact from 'highcharts-react-official'
 import {FieldDate, FieldSelect} from "../../components/Fields";
 import {DATE_MODES} from "../../components/Fields/InputDate";
 import {DEFAULT_PAGE_LIMIT} from "../../common/pagination";
 import {getUsers} from "../../store/user/actions";
 import {getEmptyOptions} from "../../common/converters";
+import HighChartsWrapper from "../../components/Common/HishChartsWrapper";
 
 const showByList = [getEmptyOptions(), ...['dia', 'Semana', 'Mes', 'Año'].map((g) => ({label: g, value: g}))]
 const hoy = new Date();
@@ -338,54 +338,63 @@ const initialState = {
     },
     horas: {
         data: {
+            chart: {
+                zoomType: 'xy'
+            },
             title: {
                 text: 'Pedidos por hora'
             },
             subtitle: {
-                text: null
+                text: "sub"
             },
             xAxis: {
-                categories: []
+                categories: [],
+                crosshair: true
             },
-            series: [{
-                name: 'Monto',
-                type: 'column',
-                data: []
-            },
+            yAxis: [
+                {
+                    labels: {
+                        format: '$ {value}',
+                        style: {
+                            color: Highcharts.getOptions().colors[1]
+                        }
+                    },
+                    title: {
+                        text: 'Monto',
+                        style: {
+                            color: Highcharts.getOptions().colors[1]
+                        }
+                    }
+                },
+                // Secondary yAxis
+                {
+                    labels: {
+                        format: '{value}',
+                        style: {
+                            color: Highcharts.getOptions().colors[0]
+                        }
+                    },
+                    title: {
+                        text: 'Pedidos',
+                        style: {
+                            color: Highcharts.getOptions().colors[0]
+                        }
+                    },
+                    opposite: true
+                }],
+            series: [
+                {
+                    name: 'Monto',
+                    type: 'column',
+                    yAxis: 1,
+                    data: []
+                },
                 {
                     name: 'Cantidad',
                     type: 'spline',
-                    yAxis: 1,
                     data: []
-                }],
-            yAxis: [{
-                labels: {
-                    format: '$ {value}',
-                    style: {
-                        color: Highcharts.getOptions().colors[1]
-                    }
-                },
-                title: {
-                    text: 'Monto',
-                    style: {
-                        color: Highcharts.getOptions().colors[1]
-                    }
                 }
-            }, { // Secondary yAxis
-                labels: {
-                    format: '{value}',
-                    style: {
-                        color: Highcharts.getOptions().colors[0]
-                    }
-                },
-                title: {
-                    text: 'Pedidos',
-                    style: {
-                        color: Highcharts.getOptions().colors[0]
-                    }
-                },
-                opposite: true
-            }]
+            ]
         },
         fecha: {
             inicial: new Date(hoy.getTime() - 518400000),
@@ -482,22 +491,26 @@ const Stats = ({users, onGetUsers}) => {
         if (valida(stats.ventas.fecha)) {
             stats.cargando = 'Cargando estadisticas de ventas...';
             //definir la url para la consulta a la API
-            var url = '/estadistica_ventas';
+            var url = '/stats/estadistica_ventas';
             url += '/' + parserServerDate(stats.ventas.fecha.inicial);
             url += '/' + parserServerDate(stats.ventas.fecha.final);
             url += '/' + stats.ventas.opciones.grupo;
             url += '/' + stats.ventas.opciones.usuario;
             //leer estadisticas de ventas
-            statsApi(url).then((data) => {
+            statsApi(url).then((resp) => {
                 var fechas = [];
                 var datosVentas = [];
                 var datosGanancias = [];
                 var datosPiezas = [];
-                for (var i = 0; i < data.length; i++) {
-                    fechas[i] = data[i].fecha;
-                    datosVentas[i] = parseFloat(data[i].monto);
-                    datosGanancias[i] = parseFloat(data[i].ganancia);
-                    datosPiezas[i] = parseFloat(data[i].piezas);
+
+                var keys = Object.keys(resp);
+
+                for (var i = 0; i < keys.length; i++) {
+                    var data = resp[keys[i]];
+                    fechas[i] = data.fecha;
+                    datosVentas[i] = parseFloat(data.monto);
+                    datosGanancias[i] = parseFloat(data.ganancia);
+                    datosPiezas[i] = parseFloat(data.piezas);
                 }
                 const newStats = {...stats};
                 newStats.ventas.data.subtitle.text = parserClientDate(stats.ventas.fecha.inicial) + ' a ' + parserClientDate(stats.ventas.fecha.final)
@@ -522,16 +535,18 @@ const Stats = ({users, onGetUsers}) => {
         if (valida(stats.ventasEstado.fecha)) {
             stats.cargando = 'Cargando estadisticas de ventas...';
             //definir la url para la consulta a la API
-            var url = '/estadistica_ventas_estado';
+            var url = '/stats/estadistica_ventas_estado';
             url += '/' + parserServerDate(stats.ventasEstado.fecha.inicial);
             url += '/' + parserServerDate(stats.ventasEstado.fecha.final);
             //leer estadisticas de ventas
-            statsApi(url).then(function (data) {
+            statsApi(url).then(function (resp) {
                 var estados = [];
                 var datosVentas = [];
-                for (var i = 0; i < data.length; i++) {
-                    estados[i] = data[i].estado;
-                    datosVentas[i] = parseFloat(data[i].monto);
+                var keys = Object.keys(resp);
+                for (var i = 0; i < keys.length; i++) {
+                    var data = resp[keys[i]];
+                    estados[i] = data.estado;
+                    datosVentas[i] = parseFloat(data.monto);
                 }
                 const newStats = {...stats};
                 newStats.ventasEstado.data.subtitle.text = parserClientDate(stats.ventasEstado.fecha.inicial) + ' a ' + parserClientDate(stats.ventasEstado.fecha.final)
@@ -554,12 +569,12 @@ const Stats = ({users, onGetUsers}) => {
         if (valida(stats.ventasOrigen.fecha)) {
             stats.cargando = 'Cargando estadisticas de ventas...';
             //definir la url para la consulta a la API
-            var url = '/estadistica_ventas_origen';
+            var url = '/stats/estadistica_ventas_origen';
             url += '/' + parserServerDate(stats.ventasOrigen.fecha.inicial);
             url += '/' + parserServerDate(stats.ventasOrigen.fecha.final);
             url += '/' + stats.ventasOrigen.opciones.grupo;
             //leer estadisticas de ventas
-            statsApi(url).then(function (data) {
+            statsApi(url).then(function (resp) {
                 var fechas = [];
                 var datosWeb = [];
                 var datosWebMovil = [];
@@ -568,15 +583,17 @@ const Stats = ({users, onGetUsers}) => {
                 var datosWhatsapp = [];
                 var datosBlackberry = [];
                 var datosOtros = [];
-                for (var i = 0; i < data.length; i++) {
-                    fechas[i] = data[i].fecha;
-                    datosWeb[i] = parseFloat(data[i].web);
-                    datosWebMovil[i] = parseFloat(data[i].webMovil);
-                    datosFacebook[i] = parseFloat(data[i].facebook);
-                    datosApp[i] = parseFloat(data[i].app);
-                    datosWhatsapp[i] = parseFloat(data[i].whatsapp);
-                    datosBlackberry[i] = parseFloat(data[i].blackberry);
-                    datosOtros[i] = parseFloat(data[i].otros);
+                var keys = Object.keys(resp);
+                for (var i = 0; i < keys.length; i++) {
+                    var data = resp[keys[i]];
+                    fechas[i] = data.fecha;
+                    datosWeb[i] = parseFloat(data.web);
+                    datosWebMovil[i] = parseFloat(data.webMovil);
+                    datosFacebook[i] = parseFloat(data.facebook);
+                    datosApp[i] = parseFloat(data.app);
+                    datosWhatsapp[i] = parseFloat(data.whatsapp);
+                    datosBlackberry[i] = parseFloat(data.blackberry);
+                    datosOtros[i] = parseFloat(data.otros);
                 }
                 const newStats = {...stats};
                 newStats.ventasOrigen.data.subtitle.text = parserClientDate(stats.ventasOrigen.fecha.inicial) + ' a ' + parserClientDate(stats.ventasOrigen.fecha.final)
@@ -605,7 +622,7 @@ const Stats = ({users, onGetUsers}) => {
         if (valida(stats.reincidencias.fecha)) {
             stats.cargando = 'Cargando estadisticas de ventas...';
             //definir la url para la consulta a la API
-            var url = '/estadistica_reincidencias';
+            var url = '/stats/estadistica_reincidencias';
             url += '/' + parserServerDate(stats.reincidencias.fecha.inicial);
             url += '/' + parserServerDate(stats.reincidencias.fecha.final);
             //leer estadisticas de ventas
@@ -636,16 +653,18 @@ const Stats = ({users, onGetUsers}) => {
         if (valida(stats.ventasWhatsapp.fecha)) {
             stats.cargando = 'Cargando estadisticas de ventas...';
             //definir la url para la consulta a la API
-            var url = '/estadistica_ventas_whatsapp';
+            var url = '/stats/estadistica_ventas_whatsapp';
             url += '/' + parserServerDate(stats.ventasWhatsapp.fecha.inicial);
             url += '/' + parserServerDate(stats.ventasWhatsapp.fecha.final);
             //leer estadisticas de ventas
-            statsApi(url).then(function (data) {
+            statsApi(url).then(function (resp) {
                 var whatsapp = [];
                 var datosVentas = [];
-                for (var i = 0; i < data.length; i++) {
-                    whatsapp[i] = data[i].origen;
-                    datosVentas[i] = parseFloat(data[i].monto);
+                var keys = Object.keys(resp);
+                for (var i = 0; i < keys.length; i++) {
+                    var data = resp[keys[i]];
+                    whatsapp[i] = data.origen;
+                    datosVentas[i] = parseFloat(data.monto);
                 }
                 const newStats = {...stats};
                 newStats.ventasWhatsapp.data.subtitle.text = parserClientDate(stats.ventasWhatsapp.fecha.inicial) + ' a ' + parserClientDate(stats.ventasWhatsapp.fecha.final)
@@ -668,23 +687,25 @@ const Stats = ({users, onGetUsers}) => {
         if (valida(stats.ventasTipo.fecha)) {
             stats.cargando = 'Cargando estadisticas de ventas...';
             //definir la url para la consulta a la API
-            var url = '/estadistica_ventas_tipo';
+            var url = '/stats/estadistica_ventas_tipo';
             url += '/' + parserServerDate(stats.ventasTipo.fecha.inicial);
             url += '/' + parserServerDate(stats.ventasTipo.fecha.final);
             url += '/' + stats.ventasTipo.opciones.grupo;
             //leer estadisticas de ventas
-            statsApi(url).then(function (data) {
+            statsApi(url).then(function (resp) {
                 var fechas = [];
                 var cantidadPrevioPago = [];
                 var montoPrevioPago = [];
                 var cantidadContraEntrega = [];
                 var montoContraEntrega = [];
-                for (var i = 0; i < data.length; i++) {
-                    fechas[i] = data[i].fecha;
-                    cantidadPrevioPago[i] = parseFloat(data[i].cantidadPrevioPago);
-                    montoPrevioPago[i] = parseFloat(data[i].montoPrevioPago);
-                    cantidadContraEntrega[i] = parseFloat(data[i].cantidadContraEntrega);
-                    montoContraEntrega[i] = parseFloat(data[i].montoContraEntrega);
+                var keys = Object.keys(resp);
+                for (var i = 0; i < keys.length; i++) {
+                    var data = resp[keys[i]];
+                    fechas[i] = data.fecha;
+                    cantidadPrevioPago[i] = parseFloat(data.cantidadPrevioPago);
+                    montoPrevioPago[i] = parseFloat(data.montoPrevioPago);
+                    cantidadContraEntrega[i] = parseFloat(data.cantidadContraEntrega);
+                    montoContraEntrega[i] = parseFloat(data.montoContraEntrega);
                 }
                 const newStats = {...stats};
                 newStats.ventasTipo.data.subtitle.text = parserClientDate(stats.ventasTipo.fecha.inicial) + ' a ' + parserClientDate(stats.ventasTipo.fecha.final)
@@ -710,18 +731,20 @@ const Stats = ({users, onGetUsers}) => {
         if (valida(stats.masVendidos.fecha)) {
             stats.cargando = 'Cargando estadisticas de ventas...';
             //definir la url para la consulta a la API
-            var url = '/estadistica_mas_vendidos';
+            var url = '/stats/estadistica_mas_vendidos';
             url += '/' + parserServerDate(stats.masVendidos.fecha.inicial);
             url += '/' + parserServerDate(stats.masVendidos.fecha.final);
             //leer estadisticas de ventas
-            statsApi(url).then(function (data) {
+            statsApi(url).then(function (resp) {
                 var ids = [];
                 var cantidad = [];
                 var existencia = [];
-                for (var i = 0; i < data.length; i++) {
-                    ids[i] = data[i].id;
-                    cantidad[i] = parseFloat(data[i].cantidad);
-                    existencia[i] = parseFloat(data[i].existencia);
+                var keys = Object.keys(resp);
+                for (var i = 0; i < keys.length; i++) {
+                    var data = resp[keys[i]];
+                    ids[i] = data.id;
+                    cantidad[i] = parseFloat(data.cantidad);
+                    existencia[i] = parseFloat(data.existencia);
                 }
                 const newStats = {...stats};
                 newStats.masVendidos.data.subtitle.text = parserClientDate(stats.masVendidos.fecha.inicial) + ' a ' + parserClientDate(stats.masVendidos.fecha.final)
@@ -745,18 +768,20 @@ const Stats = ({users, onGetUsers}) => {
         if (valida(stats.horas.fecha)) {
             stats.cargando = 'Cargando estadisticas de ventas...';
             //definir la url para la consulta a la API
-            var url = '/estadistica_horas';
+            var url = '/stats/estadistica_horas';
             url += '/' + parserServerDate(stats.horas.fecha.inicial);
             url += '/' + parserServerDate(stats.horas.fecha.final);
             //leer estadisticas de ventas
-            statsApi(url).then(function (data) {
+            statsApi(url).then(function (resp) {
                 var horas = [];
                 var cantidad = [];
                 var monto = [];
-                for (var i = 0; i < data.length; i++) {
-                    horas[i] = data[i].hora;
-                    cantidad[i] = parseInt(data[i].cantidad);
-                    monto[i] = parseFloat(data[i].monto);
+                var keys = Object.keys(resp);
+                for (var i = 0; i < keys.length; i++) {
+                    var data = resp[keys[i]];
+                    horas[i] = data.hora;
+                    cantidad[i] = parseInt(data.cantidad);
+                    monto[i] = parseFloat(data.monto);
                 }
                 const newStats = {...stats};
                 newStats.horas.data.subtitle.text = parserClientDate(stats.horas.fecha.inicial) + ' a ' + parserClientDate(stats.horas.fecha.final)
@@ -864,10 +889,7 @@ const Stats = ({users, onGetUsers}) => {
                                 </div>
                             </Col>
                             <Col md={12}>
-                                <HighchartsReact
-                                    highcharts={Highcharts}
-                                    options={stats.ventas.data}
-                                />
+                                <HighChartsWrapper options={stats.ventas.data}/>
                             </Col>
                         </Row>
                     </CardBody>
@@ -890,10 +912,7 @@ const Stats = ({users, onGetUsers}) => {
                                 </div>
                             </Col>
                             <Col md={12}>
-                                <HighchartsReact
-                                    highcharts={Highcharts}
-                                    options={stats.ventasEstado.data}
-                                />
+                                <HighChartsWrapper options={stats.ventasEstado.data}/>
                             </Col>
                         </Row>
                     </CardBody>
@@ -927,10 +946,7 @@ const Stats = ({users, onGetUsers}) => {
                                 </div>
                             </Col>
                             <Col md={12}>
-                                <HighchartsReact
-                                    highcharts={Highcharts}
-                                    options={stats.ventasOrigen.data}
-                                />
+                                <HighChartsWrapper options={stats.ventasOrigen.data}/>
                             </Col>
                         </Row>
                     </CardBody>
@@ -953,10 +969,7 @@ const Stats = ({users, onGetUsers}) => {
                                 </div>
                             </Col>
                             <Col md={12}>
-                                <HighchartsReact
-                                    highcharts={Highcharts}
-                                    options={stats.ventasWhatsapp.data}
-                                />
+                                <HighChartsWrapper options={stats.ventasWhatsapp.data}/>
                             </Col>
                         </Row>
                     </CardBody>
@@ -990,10 +1003,7 @@ const Stats = ({users, onGetUsers}) => {
                                 </div>
                             </Col>
                             <Col md={12}>
-                                <HighchartsReact
-                                    highcharts={Highcharts}
-                                    options={stats.ventasTipo.data}
-                                />
+                                <HighChartsWrapper options={stats.ventasTipo.data}/>
                             </Col>
                         </Row>
                     </CardBody>
@@ -1016,10 +1026,7 @@ const Stats = ({users, onGetUsers}) => {
                                 </div>
                             </Col>
                             <Col md={12}>
-                                <HighchartsReact
-                                    highcharts={Highcharts}
-                                    options={stats.masVendidos.data}
-                                />
+                                <HighChartsWrapper options={stats.masVendidos.data}/>
                             </Col>
                         </Row>
                     </CardBody>
@@ -1042,10 +1049,7 @@ const Stats = ({users, onGetUsers}) => {
                                 </div>
                             </Col>
                             <Col md={12}>
-                                <HighchartsReact
-                                    highcharts={Highcharts}
-                                    options={stats.horas.data}
-                                />
+                                <HighChartsWrapper options={stats.horas.data}/>
                             </Col>
                         </Row>
                     </CardBody>
@@ -1068,10 +1072,7 @@ const Stats = ({users, onGetUsers}) => {
                                 </div>
                             </Col>
                             <Col md={12}>
-                                <HighchartsReact
-                                    highcharts={Highcharts}
-                                    options={stats.reincidencias.data}
-                                />
+                                <HighChartsWrapper options={stats.reincidencias.data}/>
                             </Col>
                         </Row>
                     </CardBody>
