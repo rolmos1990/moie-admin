@@ -482,7 +482,7 @@ const Stats = ({users, onGetUsers}) => {
         if (valida(stats.ventas.fecha)) {
             stats.cargando = 'Cargando estadisticas de ventas...';
             //definir la url para la consulta a la API
-            var url = '/estadistica_ventas';
+            var url = '/stats/estadistica_ventas';
             url += '/' + parserServerDate(stats.ventas.fecha.inicial);
             url += '/' + parserServerDate(stats.ventas.fecha.final);
             url += '/' + stats.ventas.opciones.grupo;
@@ -522,7 +522,7 @@ const Stats = ({users, onGetUsers}) => {
         if (valida(stats.ventasEstado.fecha)) {
             stats.cargando = 'Cargando estadisticas de ventas...';
             //definir la url para la consulta a la API
-            var url = '/estadistica_ventas_estado';
+            var url = '/stats/estadistica_ventas_estado';
             url += '/' + parserServerDate(stats.ventasEstado.fecha.inicial);
             url += '/' + parserServerDate(stats.ventasEstado.fecha.final);
             //leer estadisticas de ventas
@@ -554,7 +554,7 @@ const Stats = ({users, onGetUsers}) => {
         if (valida(stats.ventasOrigen.fecha)) {
             stats.cargando = 'Cargando estadisticas de ventas...';
             //definir la url para la consulta a la API
-            var url = '/estadistica_ventas_origen';
+            var url = '/stats/estadistica_ventas_origen';
             url += '/' + parserServerDate(stats.ventasOrigen.fecha.inicial);
             url += '/' + parserServerDate(stats.ventasOrigen.fecha.final);
             url += '/' + stats.ventasOrigen.opciones.grupo;
@@ -605,7 +605,7 @@ const Stats = ({users, onGetUsers}) => {
         if (valida(stats.reincidencias.fecha)) {
             stats.cargando = 'Cargando estadisticas de ventas...';
             //definir la url para la consulta a la API
-            var url = '/estadistica_reincidencias';
+            var url = '/stats/estadistica_reincidencias';
             url += '/' + parserServerDate(stats.reincidencias.fecha.inicial);
             url += '/' + parserServerDate(stats.reincidencias.fecha.final);
             //leer estadisticas de ventas
@@ -636,7 +636,7 @@ const Stats = ({users, onGetUsers}) => {
         if (valida(stats.ventasWhatsapp.fecha)) {
             stats.cargando = 'Cargando estadisticas de ventas...';
             //definir la url para la consulta a la API
-            var url = '/estadistica_ventas_whatsapp';
+            var url = '/stats/estadistica_ventas_whatsapp';
             url += '/' + parserServerDate(stats.ventasWhatsapp.fecha.inicial);
             url += '/' + parserServerDate(stats.ventasWhatsapp.fecha.final);
             //leer estadisticas de ventas
@@ -668,7 +668,7 @@ const Stats = ({users, onGetUsers}) => {
         if (valida(stats.ventasTipo.fecha)) {
             stats.cargando = 'Cargando estadisticas de ventas...';
             //definir la url para la consulta a la API
-            var url = '/estadistica_ventas_tipo';
+            var url = '/stats/estadistica_ventas_tipo';
             url += '/' + parserServerDate(stats.ventasTipo.fecha.inicial);
             url += '/' + parserServerDate(stats.ventasTipo.fecha.final);
             url += '/' + stats.ventasTipo.opciones.grupo;
@@ -710,7 +710,7 @@ const Stats = ({users, onGetUsers}) => {
         if (valida(stats.masVendidos.fecha)) {
             stats.cargando = 'Cargando estadisticas de ventas...';
             //definir la url para la consulta a la API
-            var url = '/estadistica_mas_vendidos';
+            var url = '/stats/estadistica_mas_vendidos';
             url += '/' + parserServerDate(stats.masVendidos.fecha.inicial);
             url += '/' + parserServerDate(stats.masVendidos.fecha.final);
             //leer estadisticas de ventas
@@ -745,7 +745,7 @@ const Stats = ({users, onGetUsers}) => {
         if (valida(stats.horas.fecha)) {
             stats.cargando = 'Cargando estadisticas de ventas...';
             //definir la url para la consulta a la API
-            var url = '/estadistica_horas';
+            var url = '/stats/estadistica_horas';
             url += '/' + parserServerDate(stats.horas.fecha.inicial);
             url += '/' + parserServerDate(stats.horas.fecha.final);
             //leer estadisticas de ventas

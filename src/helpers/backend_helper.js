@@ -101,6 +101,7 @@ const confirmConciliationRequestApi = (data) => post(`${url.ORDERS}/ConfirmConci
 const postSaleGenerateReportApi = (data) => post(`${url.ORDERS}/generate/report`, data, {});
 const syncOrderDelivery = (id, data) => post(`${url.ORDERS}/${id}/sync/orderDelivery`, data);
 const refreshStatusDelivery = (id) => get(`${url.ORDERS}/${id}/refresh/orderDelivery`, {});
+const refreshAllStatusDelivery = () => get(`${url.ORDERS}/refresh/all/orderDelivery`, {});
 
 //offices
 const fetchOfficesApi = params => get(url.OFFICES, {}, params);
@@ -204,6 +205,7 @@ export {
     postSaleGenerateReportApi,
     syncOrderDelivery,
     refreshStatusDelivery,
+    refreshAllStatusDelivery,
 
     fetchSizesApi,
     fetchSizeApi,
