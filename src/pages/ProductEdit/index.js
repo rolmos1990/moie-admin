@@ -392,7 +392,7 @@ const ProductEdit = (props) => {
                                             <Row>
                                                 <Col md="12">
                                                     <div className="mb-0">
-                                                        <Label htmlFor="description">Tipo</Label>
+                                                        <Label htmlFor="description">Nombre en el Catálogo</Label>
                                                         <FieldText
                                                             id={"field_description"}
                                                             name={"description"}
