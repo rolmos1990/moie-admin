@@ -44,6 +44,7 @@ import PaymentEdit from "../pages/PaymentsEdit";
 import BillConfigs from "../pages/BillConfig";
 import BillConfigEdit from '../pages/BillConfigEdit';
 import BatchQueries from "../pages/batchQueries";
+import Security from "../pages/Security";
 
 const userRoutes = [
   { path: "/dashboard", component: Dashboard },
@@ -89,6 +90,7 @@ const userRoutes = [
   {path: "/billConfig/:id", component: BillConfigEdit},
   {path: "/billConfig", component: BillConfigEdit},
   {path: "/bq", component: BatchQueries},
+  {path: "/Security", component: Security},
 
   {path: "/404", component: PageNotFount},
 
