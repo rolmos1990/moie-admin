@@ -573,7 +573,7 @@ const Stats = ({users, onGetUsers}) => {
             //leer estadisticas de ventas
             statsApi(url).then(function (resp) {
                 var fechas = [];
-                var series = initialState.ventasOrigen.data.series;
+                var series = [];
                 var datosWeb = [];
                 var datosWebMovil = [];
                 var datosFacebook = [];
@@ -582,10 +582,33 @@ const Stats = ({users, onGetUsers}) => {
                 var datosBlackberry = [];
                 var datosOtros = [];
 
+                var seriesList = [];
+                for (var i = 0; i < resp.length; i++) {
+                    var r = resp[i];
+                    Object.keys(r).filter(k => k !== 'fecha').forEach(k => {
+                        if (!seriesList.includes(k)) {
+                            seriesList.push(k);
+                        }
+                    });
+                }
+
+                var seriesMap = {};
+
                 for (var i = 0; i < resp.length; i++) {
                     var data = resp[i];
                     fechas[i] = data.fecha;
-                    series = Object.keys(data).filter(k => k !== 'fecha').map(k => ({name: k, data: [data[k]]}));
+
+                    seriesList.forEach(serieName => {
+                        if (!seriesMap[serieName]) {
+                            seriesMap[serieName] = {name: serieName, data: []};
+                        }
+                        if (!data[serieName]) {
+                            seriesMap[serieName].data.push(parseFloat(0));
+                        } else {
+                            seriesMap[serieName].data.push(parseFloat(data[serieName]));
+                        }
+                    })
+
                     /* datosWeb[i] = parseFloat(data.web);
                     datosWebMovil[i] = parseFloat(data.webMovil);
                     datosFacebook[i] = parseFloat(data.facebook);
@@ -594,6 +617,14 @@ const Stats = ({users, onGetUsers}) => {
                     datosBlackberry[i] = parseFloat(data.blackberry);
                     datosOtros[i] = parseFloat(data.otros);*/
                 }
+                Object.keys(seriesMap).filter(k => k !== 'fecha').forEach(k => {
+                    series.push(seriesMap[k]);
+                });
+
+                if (series.length === 0) {
+                    series = initialState.ventasOrigen.data.series;
+                }
+
                 const newStats = {...stats};
                 newStats.ventasOrigen.data.subtitle.text = parserClientDate(stats.ventasOrigen.fecha.inicial) + ' a ' + parserClientDate(stats.ventasOrigen.fecha.final)
                 newStats.ventasOrigen.data.xAxis.categories = fechas;
