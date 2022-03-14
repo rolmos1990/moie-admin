@@ -131,12 +131,8 @@ const initialState = {
                 }
             }],
             series: [
-                /*{
-                    name: 'Página Web',
-                    data: []
-                },
                 {
-                    name: 'Página Web Movil',
+                    name: 'Página Web',
                     data: []
                 },
                 {
@@ -144,21 +140,13 @@ const initialState = {
                     data: []
                 },
                 {
-                    name: 'App',
-                    data: []
-                },
-                {
                     name: 'Whatsapp',
-                    data: []
-                },
-                {
-                    name: 'Blackberry',
                     data: []
                 },
                 {
                     name: 'Otros',
                     data: []
-                }*/
+                }
             ]
         },
         opciones: {
@@ -408,6 +396,13 @@ const initialState = {
 const Stats = ({users, onGetUsers}) => {
 
     const [stats, setStats] = useState(initialState);
+    const [ventasOrigenReload, setVentasOrigenReload] = useState(false);
+
+    useEffect(() => {
+        if (ventasOrigenReload) {
+            setVentasOrigenReload(false);
+        }
+    }, [ventasOrigenReload]);
 
     useEffect(() => {
         if (onGetUsers) {
@@ -578,7 +573,7 @@ const Stats = ({users, onGetUsers}) => {
             //leer estadisticas de ventas
             statsApi(url).then(function (resp) {
                 var fechas = [];
-                var series = [];
+                var series = initialState.ventasOrigen.data.series;
                 var datosWeb = [];
                 var datosWebMovil = [];
                 var datosFacebook = [];
@@ -586,11 +581,11 @@ const Stats = ({users, onGetUsers}) => {
                 var datosWhatsapp = [];
                 var datosBlackberry = [];
                 var datosOtros = [];
-                var keys = Object.keys(resp);
-                for (var i = 0; i < keys.length; i++) {
-                    var data = resp[keys[i]];
+
+                for (var i = 0; i < resp.length; i++) {
+                    var data = resp[i];
                     fechas[i] = data.fecha;
-                    series[i] = data.data;
+                    series = Object.keys(data).filter(k => k !== 'fecha').map(k => ({name: k, data: [data[k]]}));
                     /* datosWeb[i] = parseFloat(data.web);
                     datosWebMovil[i] = parseFloat(data.webMovil);
                     datosFacebook[i] = parseFloat(data.facebook);
@@ -612,6 +607,7 @@ const Stats = ({users, onGetUsers}) => {
                 newStats.ventasOrigen.data.series[6].data = datosOtros;*/
                 newStats.cargando = '';
                 setStats(newStats);
+                setVentasOrigenReload(true);
             })
             /*.error(function(data,status){
             if(status===403){
@@ -951,7 +947,9 @@ const Stats = ({users, onGetUsers}) => {
                                 </div>
                             </Col>
                             <Col md={12}>
-                                <HighChartsWrapper options={stats.ventasOrigen.data}/>
+                                {!ventasOrigenReload && (
+                                    <HighChartsWrapper options={stats.ventasOrigen.data}/>
+                                )}
                             </Col>
                         </Row>
                     </CardBody>
