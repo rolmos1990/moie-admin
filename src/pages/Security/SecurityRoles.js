@@ -7,6 +7,7 @@ import {deleteDataApi, fetchDataApi, postApi, registerDataApi, updateDataApi} fr
 import * as url from "../../helpers/url_helper";
 import {FieldSelect, FieldText} from "../../components/Fields";
 import PropTypes from "prop-types";
+import {sortList} from "../../common/utils";
 
 const SecurityRoles = ({reloadPermissions}) => {
 
@@ -47,7 +48,7 @@ const SecurityRoles = ({reloadPermissions}) => {
 
     const getRoles = (rol) => {
         fetchDataApi(url.SECURITY_ROLES).then(resp => {
-            let data = sort(resp.data, 'name');
+            let data = sortList(resp.data, 'name');
             setRoles(data);
             let selected = null;
             if (rol && rol.id && (!roleSelected || roleSelected.id !== rol.id)) {
@@ -61,12 +62,8 @@ const SecurityRoles = ({reloadPermissions}) => {
 
     const getPermissions = () => {
         fetchDataApi(url.SECURITY_PERMISSIONS).then(resp => {
-            setPermissions(sort(resp.data, 'permission'));
+            setPermissions(sortList(resp.data, 'permission'));
         })
-    };
-
-    const sort = (data, fieldName) => {
-        return (data || []).sort((a, b) => a[fieldName] === b[fieldName] ? 0 : (a[fieldName] > b[fieldName]) ? 1 : -1)
     };
 
     const onAddPermission = (data) => {

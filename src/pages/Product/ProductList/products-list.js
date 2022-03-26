@@ -234,7 +234,7 @@ const ProductList = props => {
                                                                     <i className="mdi mdi-text-box-search-outline"> </i>
                                                                 </Link>
                                                             </Tooltip>
-                                                            <HasRole role="public">
+                                                            <HasRole role="product.create">
                                                                 <Link to={"/product"} className="btn btn-primary waves-effect waves-light text-light">
                                                                     <i className="mdi mdi-plus"> </i> Nuevo Producto
                                                                 </Link>

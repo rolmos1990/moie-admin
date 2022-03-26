@@ -7,31 +7,54 @@ import {connect} from "react-redux";
 import {apiError} from "../../store/auth/login/actions";
 import PropTypes from "prop-types";
 import {getUser, registerUser, updateUser} from "../../store/user/actions";
-import {FieldSwitch, FieldText} from "../../components/Fields";
+import {FieldSelect, FieldSwitch, FieldText} from "../../components/Fields";
 import Breadcrumb from "../../components/Common/Breadcrumb";
 import {STATUS} from "../../common/constants";
 import ButtonSubmit from "../../components/Common/ButtonSubmit";
+import {fetchDataApi} from "../../helpers/backend_helper";
+import * as url from "../../helpers/url_helper";
+import {sortList} from "../../common/utils";
 
 const UserEdit = (props) => {
     const {registerUser, updateUser, getUser, user} = props;
-    const [userData, setUserData] = useState({_status:STATUS.ACTIVE});
+    const [userData, setUserData] = useState({_status: STATUS.ACTIVE});
+    const [rolesOptions, setRolesOptions] = useState([]);
+    const [roles, setRoles] = useState([]);//group
     const isEdit = props.match.params.id;
 
     //carga inicial
     useEffect(() => {
         if (isEdit && getUser) {
+            getRoles();
             getUser(props.match.params.id);
         }
     }, [getUser]);
 
     useEffect(() => {
         if (user.id && isEdit) {
-            setUserData({...user, _status:user.status});
+            let rol = null;
+            if (user.securityRol) {
+                rol = {label: user.securityRol.name, value: user.securityRol.id}
+            }
+            setUserData({...user, _status: user.status, rol});
         }
     }, [user]);
 
+    const getRoles = () => {
+        fetchDataApi(url.SECURITY_ROLES).then(resp => {
+            let list = sortList(resp.data, 'name');
+            setRoles(list);
+            setRolesOptions(list.map(p => ({label: p.name, value: p.id})));
+        })
+    };
+
     const handleValidSubmit = (event, values) => {
-        const data = {...values, status:values._status};
+        const data = {...values, status: values._status};
+        if (data.rol) {
+            data.securityRol = roles.find(r => r.id === data.rol.value);
+        }
+        debugger
+        delete data.rol;
         delete data._status;
         if (!isEdit) {
             registerUser(data, props.history)
@@ -57,7 +80,7 @@ const UserEdit = (props) => {
                                                         ¿Activo?
                                                     </Col>
                                                     <Col>
-                                                        <FieldSwitch defaultValue={userData._status} name={"_status"} />
+                                                        <FieldSwitch defaultValue={userData._status} name={"_status"}/>
                                                     </Col>
                                                 </Row>
                                             </div>
@@ -117,6 +140,18 @@ const UserEdit = (props) => {
                                             </Col>
                                         </Row>
                                         <Row>
+                                            <Col md="6">
+                                                <div className="mb-3">
+                                                    <Label htmlFor="lastname">Rol <span className="text-danger">*</span></Label>
+                                                    <FieldSelect
+                                                        id={"rol"}
+                                                        name={"rol"}
+                                                        options={rolesOptions}
+                                                        defaultValue={userData.rol}
+                                                        isSearchable
+                                                    />
+                                                </div>
+                                            </Col>
                                             {!userData.id && (
                                                 <Col md="6">
                                                     <div className="mb-3">
@@ -134,7 +169,7 @@ const UserEdit = (props) => {
                                         </Row>
                                         <Row>
                                             <Col md={12} className="text-right">
-                                                <ButtonSubmit loading={props.loading} />
+                                                <ButtonSubmit loading={props.loading}/>
                                             </Col>
                                         </Row>
                                     </CardBody>

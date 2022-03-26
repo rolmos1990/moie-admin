@@ -229,3 +229,7 @@ export const b64toBlob = (b64Data, contentType='', sliceSize=512) => {
     const blob = new Blob(byteArrays, {type: contentType});
     return blob;
 }
+
+export const sortList = (data, fieldName) => {
+    return (data || []).sort((a, b) => a[fieldName] === b[fieldName] ? 0 : (a[fieldName] > b[fieldName]) ? 1 : -1)
+};
