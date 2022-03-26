@@ -45,13 +45,17 @@ const SecurityRoles = ({reloadPermissions}) => {
         setPermissionsOptions(permissions.filter(p => !roleSelected.permissions.includes(p.permission)).map(p => ({label: p.permission, value: p.id})));
     };
 
-    const getRoles = () => {
+    const getRoles = (rol) => {
         fetchDataApi(url.SECURITY_ROLES).then(resp => {
             let data = sort(resp.data, 'name');
             setRoles(data);
-            if (roleSelected && roleSelected.id) {
-                setRoleSelected(data.find(d => d.id === roleSelected.id));
+            let selected = null;
+            if (rol && rol.id && (!roleSelected || roleSelected.id !== rol.id)) {
+                selected = data.find(d => d.id === rol.id);
+            } else if (roleSelected && roleSelected.id) {
+                selected = data.find(d => d.id === roleSelected.id);
             }
+            setRoleSelected(selected || {});
         })
     };
 
@@ -65,9 +69,9 @@ const SecurityRoles = ({reloadPermissions}) => {
         return (data || []).sort((a, b) => a[fieldName] === b[fieldName] ? 0 : (a[fieldName] > b[fieldName]) ? 1 : -1)
     };
 
-    const onAddPermission = (ev, data) => {
-        if (!data || !data.permission || !data.permission.label) return;
-        const payload = {permission: data.permission.label};
+    const onAddPermission = (data) => {
+        if (!data || !data.label) return;
+        const payload = {permission: data.label};
         postApi(`${url.SECURITY_ROLES}/${roleSelected.id}/addPermission`, payload).then(resp => {
             if (resp.status === 200) {
                 getRoles();
@@ -104,7 +108,7 @@ const SecurityRoles = ({reloadPermissions}) => {
 
         func.then(resp => {
             if (resp.status === 200) {
-                getRoles();
+                getRoles(resp.securityrol);
             }
             setRolEdited(null)
         })
@@ -112,12 +116,14 @@ const SecurityRoles = ({reloadPermissions}) => {
 
     const onDeleteRole = (role) => {
         deleteDataApi(url.SECURITY_ROLES, role.id, {}).then(resp => {
-            if (resp.success) {
+            if (resp.status === 200) {
+                if (roleSelected && roleSelected.id === role.id) {
+                    setRoleSelected({});
+                }
                 getRoles();
             }
         })
     };
-
 
     const onCancel = (index) => {
         const list = [...roles];
@@ -149,7 +155,7 @@ const SecurityRoles = ({reloadPermissions}) => {
                                         </thead>
                                         <tbody>
                                         {map(roles, (rol, key) => (
-                                            <tr key={key} className={rol.id === roleSelected.id ? 'bg-light' : ''}>
+                                            <tr key={key} className={rol.id === roleSelected.id ? 'bg-light font-weight-600' : ''}>
                                                 <td>
                                                     {rolEdited !== rol.id && (
                                                         <>
@@ -189,9 +195,11 @@ const SecurityRoles = ({reloadPermissions}) => {
                                                                             <button type="submit" size="small" className="btn btn-sm text-success">
                                                                                 <i className="uil uil-check font-size-18"> </i>
                                                                             </button>
-                                                                            <button type="submit" size="small" className="btn btn-sm text-danger" onClick={() => onCancel(key)}>
-                                                                                <small className="font-size-18">x</small>
-                                                                            </button>
+                                                                            {!rol.id && (
+                                                                                <button type="submit" size="small" className="btn btn-sm text-danger" onClick={() => onCancel(key)}>
+                                                                                    <i className="uil uil-multiply font-size-18"> </i>
+                                                                                </button>
+                                                                            )}
                                                                             {rol.id && (
                                                                                 <button type="button" size="small" className="btn btn-sm text-primary" onClick={() => setRolEdited(null)}>
                                                                                     <i className="uil uil-multiply font-size-18"> </i>
@@ -217,25 +225,19 @@ const SecurityRoles = ({reloadPermissions}) => {
             <Col md={6}>
                 <Card>
                     <CardBody>
-                        <AvForm className="needs-validation" autoComplete="off" onValidSubmit={(e, v) => onAddPermission(e, v)}>
+                        <AvForm className="needs-validation" autoComplete="off">
                             <Row className="mb-3">
-                                <Col sm={9}>
-                                    <Label className="control-label">Nombre del permiso</Label>
+                                <Col sm={12}>
+                                    <Label className="control-label">Permisos</Label>
                                     <FieldSelect
                                         id={"permission"}
                                         name={"permission"}
                                         options={permissionsOptions}
                                         defaultValue={permissionsOptionSelected}
-                                        onChange={(e) => setPermissionsOptionSelected(e)}
+                                        onChange={(e) => onAddPermission(e)}
                                         isSearchable
                                         disabled={!(roleSelected && roleSelected.id)}
                                     />
-                                </Col>
-                                <Col sm={3} style={{'display': 'flex', 'alignItems': 'flex-end', 'justifyContent': 'center'}}>
-                                    <button size="small" type="submit" className="btn btn-sm text-primary"
-                                            disabled={!permissionsOptionSelected || permissionsOptionSelected === -1 || !(roleSelected && roleSelected.id)}>
-                                        <i className="uil uil-plus font-size-18"> </i> Agregar
-                                    </button>
                                 </Col>
                             </Row>
                         </AvForm>

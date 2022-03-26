@@ -139,9 +139,11 @@ const SecurityPermissions = (props) => {
                                                                             <button type="submit" size="small" className="btn btn-sm text-success">
                                                                                 <i className="uil uil-check font-size-18"> </i>
                                                                             </button>
-                                                                            <button type="submit" size="small" className="btn btn-sm text-danger" onClick={() => onCancel(key)}>
-                                                                                <small className="font-size-18">x</small>
-                                                                            </button>
+                                                                            {!permission.id && (
+                                                                                <button type="submit" size="small" className="btn btn-sm text-danger" onClick={() => onCancel(key)}>
+                                                                                    <i className="uil uil-multiply font-size-18"> </i>
+                                                                                </button>
+                                                                            )}
                                                                             {permission.id && (
                                                                                 <button type="button" size="small" className="btn btn-sm text-primary" onClick={() => setPermissionEdited(null)}>
                                                                                     <i className="uil uil-multiply font-size-18"> </i>

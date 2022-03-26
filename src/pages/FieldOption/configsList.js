@@ -4,10 +4,10 @@ import {connect} from "react-redux"
 import {Card, CardBody, Col, Row} from "reactstrap"
 
 import {ConfirmationModalAction} from "../../components/Modal/ConfirmationModal";
-import {deleteFieldOption, getFieldOptionByGroup, getFieldOptionByGroups, getProductFieldOption, registerFieldOption, updateFieldOption} from "../../store/fieldOptions/actions";
-import {GROUPS, NAMES} from "../../common/constants";
+import {deleteFieldOption, getFieldOptionByGroup, registerFieldOption, updateFieldOption} from "../../store/fieldOptions/actions";
+import {GROUPS} from "../../common/constants";
 import {map} from "lodash";
-import {FieldNumber, FieldSelect, FieldText} from "../../components/Fields";
+import {FieldNumber, FieldText} from "../../components/Fields";
 import {AvForm} from "availity-reactstrap-validation";
 
 const ConfigsList = props => {
@@ -127,7 +127,7 @@ const ConfigsList = props => {
                                         </thead>
                                         <tbody>
                                         {map(groupsList, (group, key) => (
-                                            <tr key={key} className={group === groupSelected ? 'bg-light' : ''}>
+                                            <tr key={key} className={group === groupSelected ? 'bg-light font-weight-600' : ''}>
                                                 <td>{group}</td>
                                                 <td className="text-center">
                                                     <ul className="list-inline font-size-20 contact-links mb-0">
