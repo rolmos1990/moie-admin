@@ -90,8 +90,8 @@ export const GET_PROJECT_DETAIL = "/project"
 export const GET_TASKS = "/tasks"
 
 //SECURITY
-export const SECURITY_PERMISSIONS = "/sec/permissions"
-export const SECURITY_ROLES = "/sec/roles"
+export const SECURITY_PERMISSIONS = "/securityPermission"
+export const SECURITY_ROLES = "/securityRol"
 export const SECURITY_PERMISSIONS_ROLES = "/sec/relate"
 
 //CONTACTS
