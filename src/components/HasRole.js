@@ -17,8 +17,17 @@ HasRole.propTypes = {
     renderNoAccess: PropTypes.func
 }
 
-const mapStateToProps = (state, props) => ({
-    roles: state.Login.roles || []
-})
+const mapStateToProps = (state, props) => {
+    const {user} = state.Login;
+    let roles = [];
+    if (user && user.securityRol) {
+        roles = user.securityRol.permissions;
+    }
+    return {
+        roles
+    };
+
+
+}
 
 export default connect(mapStateToProps)(HasRole);
