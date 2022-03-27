@@ -51,9 +51,8 @@ const UserEdit = (props) => {
     const handleValidSubmit = (event, values) => {
         const data = {...values, status: values._status};
         if (data.rol) {
-            data.securityRol = roles.find(r => r.id === data.rol.value);
+            data.securityRol = {id: data.rol.value};
         }
-        debugger
         delete data.rol;
         delete data._status;
         if (!isEdit) {

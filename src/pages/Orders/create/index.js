@@ -17,7 +17,7 @@ import {registerOrder, resetCar} from "../../../store/order/actions";
 import {CHARGE_ON_DELIVERY, DELIVERY_METHODS_PAYMENT_TYPES, PAYMENT_TYPES} from "../../../common/constants";
 
 const CreateOrder = (props) => {
-    const {onResetOrder, car, onRegisterOrder} = props;
+    const {onResetOrder, car, onRegisterOrder, error} = props;
     const [initComponent, setInitComponent] = useState(true);
     const [isValidOrder, setIsValidOrder] = useState(false);
 
@@ -83,9 +83,9 @@ const CreateOrder = (props) => {
             }))
         };
 
-        if(DELIVERY_METHODS_PAYMENT_TYPES.includes(order.deliveryMethod)){
+        if (DELIVERY_METHODS_PAYMENT_TYPES.includes(order.deliveryMethod)) {
             order.piecesForChanges = parseInt(car.deliveryOptions.pieces);
-            order.paymentMode = car.deliveryOptions.paymentType === PAYMENT_TYPES.CASH? 1:2;
+            order.paymentMode = car.deliveryOptions.paymentType === PAYMENT_TYPES.CASH ? 1 : 2;
         } else {
             order.deliveryLocality = car.deliveryOptions.deliveryLocality;
         }
@@ -126,11 +126,19 @@ const CreateOrder = (props) => {
                             <hr/>
                             <Row>
                                 <Col md={12}>
-                                    <OrderSummary />
+                                    <OrderSummary/>
                                 </Col>
                             </Row>
                             <hr/>
                             <Row>
+                                {error && (
+                                    <Col md={12} className="text-center">
+                                        <div className="alert alert-danger">
+                                            {error}
+                                        </div>
+                                    </Col>
+                                )}
+
                                 <Col md={12} className="text-center">
                                     <div className="btn-group">
                                         <button type="button" className="btn btn-light text-danger" onClick={() => onCancelOrder()}>
@@ -151,8 +159,8 @@ const CreateOrder = (props) => {
 }
 
 const mapStateToProps = state => {
-    const {car, loading} = state.Order
-    return {car, loading}
+    const {car, loading, error} = state.Order
+    return {car, loading, error}
 }
 
 const mapDispatchToProps = dispatch => ({

@@ -75,6 +75,7 @@ import {
 
 import Conditionals from "../../common/conditionals";
 import {showResponseMessage} from "../../helpers/service";
+import {getErrorMessage} from "../../common/utils";
 
 /**
  * *  Configuración de CRUD Saga (Realizar configuración para cada uno de las replicas)
@@ -132,7 +133,7 @@ function* get({id}) {
         const response = yield call(GET_API_REQUEST, id);
         yield put(GET_SUCCESS_ACTION(response))
     } catch (error) {
-        yield put(GET_FAILED_ACTION(error))
+        yield put(GET_FAILED_ACTION(getErrorMessage(error)))
     }
 }
 
@@ -144,7 +145,7 @@ function* fetch({conditional, limit, offset}) {
         const response = yield call(LIST_API_REQUEST, query)
         yield put(LIST_SUCCESS_ACTION(response.data, response.meta));
     } catch (error) {
-        yield put(LIST_FAILED_ACTION(error))
+        yield put(LIST_FAILED_ACTION(getErrorMessage(error)))
     }
 }
 function* fetchByOffice({conditional, limit, offset}) {
@@ -155,7 +156,7 @@ function* fetchByOffice({conditional, limit, offset}) {
         const response = yield call(LIST_API_REQUEST, query)
         yield put(LIST_OFFICE_SUCCESS_ACTION(response.data, response.meta));
     } catch (error) {
-        yield put(LIST_OFFICE_FAILED_ACTION(error))
+        yield put(LIST_OFFICE_FAILED_ACTION(getErrorMessage(error)))
     }
 }
 
@@ -168,7 +169,7 @@ function* register({payload: {data, history}}) {
         }
         yield put(CREATE_SUCCESS_ACTION(response))
     } catch (error) {
-        yield put(CREATE_FAILED_ACTION(error))
+        yield put(CREATE_FAILED_ACTION(getErrorMessage(error)))
     }
 }
 
@@ -180,7 +181,7 @@ function* nextStatus({payload: {data, history}}) {
         yield put(UPDATE_SUCCESS_ACTION(response.order))
 
     } catch (error) {
-        yield put(UPDATE_FAILED_ACTION(error))
+        yield put(UPDATE_FAILED_ACTION(getErrorMessage(error)))
     }
 }
 
@@ -192,7 +193,7 @@ function* canceledStatus({payload: {data, history}}) {
         yield put(UPDATE_SUCCESS_ACTION(response.order))
 
     } catch (error) {
-        yield put(UPDATE_FAILED_ACTION(error))
+        yield put(UPDATE_FAILED_ACTION(getErrorMessage(error)))
     }
 }
 
@@ -201,7 +202,7 @@ function* printOrder({payload: {id, history}}) {
         const response = yield call(PRINT_ORDER_API, id)
         yield put(CUSTOM_SUCCESS_ACTION(response.html, "print"))
     } catch (error) {
-        yield put(CUSTOM_FAILED_ACTION(error))
+        yield put(CUSTOM_FAILED_ACTION(getErrorMessage(error)))
     }
 }
 
@@ -210,7 +211,7 @@ function* resumeOrder({payload: {id, history}}) {
         const response = yield call(RESUME_ORDER_API, id)
         yield put(CUSTOM_SUCCESS_ACTION(response.text, "resume"))
     } catch (error) {
-        yield put(CUSTOM_FAILED_ACTION(error))
+        yield put(CUSTOM_FAILED_ACTION(getErrorMessage(error)))
     }
 }
 
@@ -221,7 +222,7 @@ function* update({payload: {id, data, history}}) {
         yield put(UPDATE_SUCCESS_ACTION(response.order))
         yield put(getOrder(id))
     } catch (error) {
-        yield put(UPDATE_FAILED_ACTION(error))
+        yield put(UPDATE_FAILED_ACTION(getErrorMessage(error)))
     }
 }
 
@@ -231,7 +232,7 @@ function* fetchDeliveryMethods({conditional, limit, offset}) {
         const response = yield call(fetchDeliveryMethodsApi, Conditionals.buildHttpGetQuery(cond, limit, offset))
         yield put(getDeliveryMethodsSuccess(response.data, response.meta));
     } catch (error) {
-        yield put(getDeliveryMethodsFailed(error))
+        yield put(getDeliveryMethodsFailed(getErrorMessage(error)))
     }
 }
 
@@ -240,7 +241,7 @@ function* fetchDeliveryQuote({data}) {
         const response = yield call(fetchDeliveryQuoteApi, data)
         yield put(getDeliveryQuoteSuccess(response));
     } catch (error) {
-        yield put(getDeliveryQuoteFailed(error))
+        yield put(getDeliveryQuoteFailed(getErrorMessage(error)))
     }
 }
 
@@ -252,7 +253,7 @@ function* batchRequest({conditionals}) {
         showResponseMessage(response, "Operación en curso!", response.error);
         yield put(PRINT_BATCH_REQUEST_SUCCESS_ACTION(response.batch, response.meta))
     } catch (error) {
-        yield put(PRINT_BATCH_REQUEST_FAILED_ACTION(error))
+        yield put(PRINT_BATCH_REQUEST_FAILED_ACTION(getErrorMessage(error)))
     }
 }
 
@@ -262,8 +263,8 @@ function* conciliation({orders}) {
         showResponseMessage(response, "Operación exitosa!", response.error);
         yield put(CONCILIATION_REQUEST_SUCCESS_ACTION())
     } catch (error) {
-        showResponseMessage({status: 500}, "Ocurrió un error!", error.message);
-        yield put(CONCILIATION_REQUEST_FAILED_ACTION(error.message))
+        showResponseMessage({status: 500}, "Ocurrió un error!", getErrorMessage(error));
+        yield put(CONCILIATION_REQUEST_FAILED_ACTION(getErrorMessage(error)))
     }
 }
 
@@ -272,7 +273,7 @@ function* fetchHistoric({payload}) {
         const response = yield call(ORDER_HISTORIC_API_REQUEST, payload.id);
         yield put(historicOrderSuccess(response.orderHistoric));
     } catch (error) {
-        yield put(historicOrderFailed(error))
+        yield put(historicOrderFailed(getErrorMessage(error)))
     }
 }
 
@@ -282,8 +283,8 @@ function* confirmConciliation({orders}) {
         showResponseMessage(response, "Operación exitosa!", response.error);
         yield put(CONFIRM_CONCILIATION_REQUEST_SUCCESS_ACTION())
     } catch (error) {
-        showResponseMessage({status: 500}, "Ocurrió un error!", error.message);
-        yield put(CONFIRM_CONCILIATION_REQUEST_FAILED_ACTION(error.message))
+        showResponseMessage({status: 500}, "Ocurrió un error!", getErrorMessage(error));
+        yield put(CONFIRM_CONCILIATION_REQUEST_FAILED_ACTION(getErrorMessage(error)))
     }
 }
 
@@ -293,8 +294,8 @@ function* orderDeliverySync({payload: {id, data}}) {
         showResponseMessage(response, "Operación exitosa!", response.error);
         yield put(SYNC_DELIVERY_SUCCESS_ACTION())
     } catch (error) {
-        showResponseMessage({status: 500}, "Ocurrió un error!", error.message);
-        yield put(SYNC_DELIVERY_FAILED_ACTION(error.message))
+        showResponseMessage({status: 500}, "Ocurrió un error!", getErrorMessage(error));
+        yield put(SYNC_DELIVERY_FAILED_ACTION(getErrorMessage(error)))
     }
 }
 
@@ -304,10 +305,11 @@ function* orderDeliveryRefresh({id}) {
         showResponseMessage(response, "Operación exitosa!", response.error);
         yield put(REFRESH_DELIVERY_ORDER_SUCCESS_ACTION())
     } catch (error) {
-        showResponseMessage({status: 500}, "Ocurrió un error!", error.message);
-        yield put(REFRESH_DELIVERY_ORDER_FAILED_ACTION(error.message))
+        showResponseMessage({status: 500}, "Ocurrió un error!", getErrorMessage(error));
+        yield put(REFRESH_DELIVERY_ORDER_FAILED_ACTION(getErrorMessage(error)))
     }
 }
+
 
 export function* watchOrder() {
     yield takeEvery(ACTION_NAME_CREATE, register);

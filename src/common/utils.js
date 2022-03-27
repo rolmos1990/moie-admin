@@ -127,17 +127,19 @@ export const getImagePath = (photoPath) => {
 }
 
 export const getErrorMessage = (error) => {
-    if (error.response) {
-        return error.response.data?.error || "Se ha producido un error";
-    } else {
+    if (!error) {
         return "Se ha producido un error";
     }
-}
+    if (!error.response || !error.response.data || !error.response.data.error) {
+        return error.message || "Se ha producido un error";
+    }
+    return error.response.data.error;
+};
 export const parseJson = (data) => {
     let result = null;
     try {
         return JSON.parse(data)
-    }catch (e){
+    } catch (e) {
         console.error('parseJson', e);
     }
     return result;

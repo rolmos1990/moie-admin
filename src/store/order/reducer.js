@@ -15,6 +15,9 @@ import {
     GET_DELIVERY_QUOTE,
     GET_DELIVERY_QUOTE_FAILED,
     GET_DELIVERY_QUOTE_SUCCESS,
+    GET_HISTORIC_ORDER,
+    GET_HISTORIC_ORDER_FAILED,
+    GET_HISTORIC_ORDER_SUCCESS,
     GET_ORDER,
     GET_ORDER_FAILED,
     GET_ORDER_RESTART,
@@ -29,27 +32,24 @@ import {
     PRINT_BATCH_REQUEST_FAILED,
     PRINT_BATCH_REQUEST_SUCCESS,
     PRINT_ORDER,
+    REFRESH_DELIVERY_ORDER,
+    REFRESH_DELIVERY_ORDER_FAILED,
+    REFRESH_DELIVERY_ORDER_SUCCESS,
     REFRESH_ORDER,
     REGISTER_ORDER,
     REGISTER_ORDER_FAILED,
     REGISTER_ORDER_SUCCESS,
     RESET_BATCH_REQUEST,
     RESET_CAR,
+    RESET_ORDER,
     RESUME_ORDER,
+    SYNC_DELIVERY_ORDER,
+    SYNC_DELIVERY_ORDER_FAILED,
+    SYNC_DELIVERY_ORDER_SUCCESS,
     UPDATE_CAR,
     UPDATE_ORDER,
     UPDATE_ORDER_FAILED,
-    UPDATE_ORDER_SUCCESS,
-    GET_HISTORIC_ORDER,
-    GET_HISTORIC_ORDER_FAILED,
-    GET_HISTORIC_ORDER_SUCCESS,
-    RESET_ORDER,
-    SYNC_DELIVERY_ORDER,
-    SYNC_DELIVERY_ORDER_SUCCESS,
-    SYNC_DELIVERY_ORDER_FAILED,
-    REFRESH_DELIVERY_ORDER,
-    REFRESH_DELIVERY_ORDER_FAILED,
-    REFRESH_DELIVERY_ORDER_SUCCESS
+    UPDATE_ORDER_SUCCESS
 } from "./actionTypes";
 
 const initialState = {
@@ -202,6 +202,7 @@ const order = (state = initialState, action) => {
             state = {
                 ...state,
                 loading: false,
+                error: action.payload
             }
             break
         case UPDATE_ORDER:
@@ -221,6 +222,7 @@ const order = (state = initialState, action) => {
             state = {
                 ...state,
                 loading: false,
+                error: action.payload
             }
             break
         case GET_DELIVERY_METHODS:

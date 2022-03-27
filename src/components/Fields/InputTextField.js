@@ -103,6 +103,11 @@ const NumberField = (props) => {
         placeholder={props.placeholder}
         disabled={props.disabled}
         onChange={onChange}
+        onKeyPress={(event) => {
+            if (!/[0-9]/.test(event.key)) {
+                event.preventDefault();
+            }
+        }}
         type={"text"}
         className="form-control"
         validate={
@@ -155,6 +160,11 @@ const NumberDecimalField = (props) => {
         defaultValue={value}
         placeholder={props.placeholder}
         onChange={onChange}
+        onKeyPress={(event) => {
+            if (!/[0-9.]/.test(event.key)) {
+                //event.preventDefault();
+            }
+        }}
         type="text"
         className="form-control"
         validate={
