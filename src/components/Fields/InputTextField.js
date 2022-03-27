@@ -162,7 +162,7 @@ const NumberDecimalField = (props) => {
         onChange={onChange}
         onKeyPress={(event) => {
             if (!/[0-9.]/.test(event.key)) {
-                //event.preventDefault();
+                event.preventDefault();
             }
         }}
         type="text"
