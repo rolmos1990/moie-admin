@@ -141,12 +141,12 @@ const UserEdit = (props) => {
                                         <Row>
                                             <Col md="6">
                                                 <div className="mb-3">
-                                                    <Label htmlFor="lastname">Rol <span className="text-danger">*</span></Label>
+                                                    <Label htmlFor="rol">Rol <span className="text-danger">*</span></Label>
                                                     <FieldSelect
                                                         id={"rol"}
                                                         name={"rol"}
                                                         options={rolesOptions}
-                                                        defaultValue={userData.rol}
+                                                        defaultValue={userData.rol && userData.rol.value}
                                                         isSearchable
                                                     />
                                                 </div>
