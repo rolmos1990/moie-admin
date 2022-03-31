@@ -20,6 +20,8 @@ import {getCatalogBatchRequest} from "../../../helpers/service";
 import {formatDate} from "../../../common/utils";
 import {resetProduct} from "../../../store/product/actions";
 import authHeader from "../../../helpers/jwt-token-access/auth-token-header";
+import {PERMISSIONS} from "../../../helpers/security_rol";
+import HasRole from "../../../components/HasRole";
 
 const CategoryList = props => {
     const {categories, onGetCategories, onResetCategories, onDeleteState, getCatalogBatchRequest, onCatalogPrintBatchRequest, refresh} = props;
@@ -215,18 +217,22 @@ const CategoryList = props => {
                                                                     </Button>
                                                                 </Tooltip>
                                                             )}
+                                                            <HasRole role={PERMISSIONS.CATEGORY_DOWNLOAD}>
                                                             <Tooltip placement="bottom" title="Descargar Catalogo" aria-label="add">
                                                                 <Button color="primary" onClick={() => printCatalogs(false)}
                                                                         disabled={(printCategoriesId.length === 0 && !selectAll) && (!conditional || conditional.length === 0)}>
                                                                     <i className="mdi mdi-download"> </i>
                                                                 </Button>
                                                             </Tooltip>
+                                                            </HasRole>
+                                                            <HasRole role={PERMISSIONS.CATEGORY_DOWNLOAD}>
                                                             <Tooltip placement="bottom" title="Descargar Catalogo con Referencias" aria-label="add">
                                                                 <Button color="primary" onClick={() => printCatalogs(true)}
                                                                         disabled={(printCategoriesId.length === 0 && !selectAll) && (!conditional || conditional.length === 0)}>
                                                                     <i className="mdi mdi-download-circle"> </i>
                                                                 </Button>
                                                             </Tooltip>
+                                                            </HasRole>
                                                             <Link to={"/category"} className="btn btn-primary waves-effect waves-light text-light">
                                                                 <i className="mdi mdi-plus"> </i> Nueva Categoria
                                                             </Link>

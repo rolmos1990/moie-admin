@@ -4,6 +4,8 @@ import {ConverterCustomerStatus} from "../customer_status";
 import {Button, Tooltip} from "@material-ui/core";
 import {STATUS_COLORS, StatusField} from "../../../components/StatusField";
 import {formatDate, STATUS_OPTIONS, YES_NO_OPTIONS} from "../../../common/utils";
+import {PERMISSIONS} from "../../../helpers/security_rol";
+import HasRole from "../../../components/HasRole";
 
 const customerListColumns = (onDelete = false) => [
     {
@@ -27,6 +29,7 @@ const customerListColumns = (onDelete = false) => [
                         alt={item.name}
                     />
                 )}
+                <HasRole role={PERMISSIONS.CUSTOMER_SHOW}>
                 <Link to={`/customer/detail/${item.id}`} className="text-body">
                     {item.name}
                     {item.isMayorist === true && (
@@ -35,6 +38,7 @@ const customerListColumns = (onDelete = false) => [
                         </Tooltip>
                     )}
                 </Link>
+                </HasRole>
             </>
         ),
     },
@@ -99,8 +103,11 @@ const customerListColumns = (onDelete = false) => [
         formatter: (cellContent, item) => (
             <ul className="list-inline font-size-20 contact-links mb-0">
                 <li className="list-inline-item">
+                    <HasRole role={PERMISSIONS.CUSTOMER_EDIT}>
                     <Link to={`/customer/${item.id}`} className="px-2 text-primary"><i className="uil uil-pen font-size-18"></i></Link>
+                    </HasRole>
                 </li>
+                <HasRole role={PERMISSIONS.CUSTOMER_EDIT}>
                 {onDelete && (
                     <li className="list-inline-item">
                         <button size="small" className="btn btn-sm text-danger" onClick={() => onDelete(item.id)}>
@@ -108,6 +115,7 @@ const customerListColumns = (onDelete = false) => [
                         </button>
                     </li>
                 )}
+                </HasRole>
             </ul>
         ),
     },

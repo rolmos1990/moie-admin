@@ -16,6 +16,7 @@ import productColumns from "./productColumn";
 import StatsStatusCard from "../../../components/Common/StatsStatusCard";
 import {countProductsByStatus} from "../../../helpers/service";
 import HasRole from "../../../components/HasRole";
+import {PERMISSIONS} from "../../../helpers/security_rol";
 
 
 const series2 = [70]
@@ -234,7 +235,7 @@ const ProductList = props => {
                                                                     <i className="mdi mdi-text-box-search-outline"> </i>
                                                                 </Link>
                                                             </Tooltip>
-                                                            <HasRole role="product.create">
+                                                            <HasRole role={PERMISSIONS.PRODUCT_CREATE}>
                                                                 <Link to={"/product"} className="btn btn-primary waves-effect waves-light text-light">
                                                                     <i className="mdi mdi-plus"> </i> Nuevo Producto
                                                                 </Link>

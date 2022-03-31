@@ -21,6 +21,8 @@ import StatsRegisteredCard from "../../../components/Common/StatsRegisteredCard"
 import CountUp from "react-countup";
 import ReactApexChart from "react-apexcharts";
 import {resetProduct} from "../../../store/product/actions";
+import {PERMISSIONS} from "../../../helpers/security_rol";
+import HasRole from "../../../components/HasRole";
 
 const CustomersList = props => {
     const {customers, meta, onGetCustomers, onResetCustomers, onDeleteCustomer, onGetCustomerRegistereds, refresh, countCustomersByStatus, registereds} = props;
@@ -153,9 +155,11 @@ const CustomersList = props => {
                                                                 <Button onClick={() => setFilter(!filter)}>
                                                                     <i className={"mdi mdi-filter"}></i></Button>
                                                             </Tooltip>
+                                                            <HasRole role={PERMISSIONS.CUSTOMER_CREATE}>
                                                             <Link to={"/customer"} className="btn btn-primary waves-effect waves-light text-light">
                                                                 <i className="mdi mdi-plus"></i> Nuevo Cliente
                                                             </Link>
+                                                            </HasRole>
                                                         </div>
                                                     </Col>
                                                 </Row>

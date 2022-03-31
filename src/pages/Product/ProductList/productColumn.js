@@ -9,6 +9,8 @@ import {getImageByQuality, priceFormat, STATUS_OPTIONS, YES_NO_OPTIONS} from "..
 import {CATEGORY, SIZE} from "../../../helpers/url_helper";
 import {Tooltip} from "@material-ui/core";
 import Images from "../../../components/Common/Image";
+import HasRole from "../../../components/HasRole";
+import {PERMISSIONS} from "../../../helpers/security_rol";
 
 const badgeStyles = {minWidth: '30px', margin: '2px'}
 
@@ -30,9 +32,11 @@ const productColumns = (onDelete = false) => [
                                 className="img-fluid mx-auto d-block tab-img rounded"/>
                     </React.Fragment>
                 }>
-                <Link to={`/product/detail/${item.id}`} className="text-body">
-                    <span className="text-info">{item.reference} </span>
-                </Link>
+                <HasRole role={PERMISSIONS.PRODUCT_SHOW}>
+                    <Link to={`/product/detail/${item.id}`} className="text-body">
+                        <span className="text-info">{item.reference} </span>
+                    </Link>
+                </HasRole>
             </HtmlTooltip>
         ),
     },
@@ -177,9 +181,11 @@ const productColumns = (onDelete = false) => [
         formatter: (cellContent, item) => (
             <ul className="list-inline font-size-20 contact-links mb-0">
                 <li className="list-inline-item">
-                    <Link to={`/product/${item.id}`} className="px-2 text-primary">
-                        <i className="uil uil-pen font-size-18"> </i>
-                    </Link>
+                    <HasRole role={PERMISSIONS.PRODUCT_EDIT}>
+                        <Link to={`/product/${item.id}`} className="px-2 text-primary">
+                            <i className="uil uil-pen font-size-18"> </i>
+                        </Link>
+                    </HasRole>
                 </li>
                 {/*<li className="list-inline-item">
                     <button size="small" className="btn btn-sm text-danger" onClick={() => onDelete(item.id)}>

@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react"
-import {Col, Row} from "reactstrap"
+import {Col, Container, Row} from "reactstrap"
 import {Button, Card, Tooltip} from "@material-ui/core";
 import {withRouter} from "react-router-dom"
 import {connect} from "react-redux";
@@ -23,6 +23,8 @@ import {StatusField} from "../../components/StatusField";
 import * as htmlToImage from 'html-to-image';
 import Observations from "../../components/Common/Observations";
 import {isMobile} from "react-device-detect";
+import HasRole from "../../components/HasRole";
+import {PERMISSIONS} from "../../helpers/security_rol";
 
 // import {toPng, toJpeg, toBlob, toPixelData, toSvg} from 'html-to-image';
 
@@ -314,6 +316,7 @@ const OrderEdit = (props) => {
                         <small className="badge rounded-pill bg-soft-info font-size-14 mr-5 p-2">Operador: {order.user?.name}</small>
                     </div>
                     <div className={"mb-3 float-md-end"}>
+                        <HasRole role={PERMISSIONS.ORDER_EDIT}>
                         <div className="button-items">
                             {canCancel() && (
                                 <Tooltip placement="bottom" title="Anular" aria-label="add">
@@ -361,6 +364,7 @@ const OrderEdit = (props) => {
                                 </button>
                             </Tooltip>
                         </div>
+                        </HasRole>
                     </div>
                 </Col>
             </Row>
@@ -374,6 +378,7 @@ const OrderEdit = (props) => {
                                         <h4 className="card-title text-info"><i className="uil-users-alt me-2"> </i> Datos del cliente</h4>
                                     </Col>
                                     <Col xs={2} className="text-right">
+                                        <HasRole role={PERMISSIONS.ORDER_EDIT}>
                                         {allowEdit && (
                                         <Tooltip placement="bottom" title="Editar cliente" aria-label="add">
                                             <button type="button"
@@ -386,6 +391,7 @@ const OrderEdit = (props) => {
                                             </button>
                                         </Tooltip>
                                         )}
+                                        </HasRole>
                                     </Col>
                                 </Row>
                                 <Row>
@@ -436,6 +442,7 @@ const OrderEdit = (props) => {
                                         <h4 className="card-title text-info"><i className="uil uil-truck"> </i> Datos de envio</h4>
                                     </Col>
                                     <Col xs={2} className="text-right">
+                                        <HasRole role={PERMISSIONS.ORDER_EDIT}>
                                         {allowEdit && (
                                         <Tooltip placement="bottom" title="Editar envio" aria-label="add">
                                             <button type="button"
@@ -446,6 +453,7 @@ const OrderEdit = (props) => {
                                             </button>
                                         </Tooltip>
                                         )}
+                                        </HasRole>
                                     </Col>
                                 </Row>
                                 <Row>
@@ -532,6 +540,7 @@ const OrderEdit = (props) => {
                                                     </Tooltip>
                                                 </>
                                             )}
+                                            <HasRole role={PERMISSIONS.ORDER_EDIT}>
                                             {allowEdit &&
                                             <Tooltip placement="bottom" title="Editar products" aria-label="add">
                                                 <button type="button"
@@ -544,6 +553,7 @@ const OrderEdit = (props) => {
                                                 </button>
                                             </Tooltip>
                                             }
+                                            </HasRole>
                                         </Col>
                                     </Row>
                                     {!showAsTable && (
@@ -733,6 +743,7 @@ const OrderEdit = (props) => {
                                 </a>
                             </li>
                         </ul>
+                        <HasRole role={PERMISSIONS.COMMENT_LIST}>
                         <div className="tab-content p-3 text-muted">
                             <div className={`tab-pane ${activeTab === 1 ? 'active' : ''}`} id="tab1" role="tabpanel">
                                 <p className="mb-0">
@@ -783,7 +794,8 @@ const OrderEdit = (props) => {
                                     entityId={orderData.customer?.id}/>
                             </div>
                         </div>
-                    </Card>
+                        </HasRole>
+                        </Card>
                 </Col>
             </Row>
 
@@ -843,7 +855,7 @@ const OrderEdit = (props) => {
 }
 
 const mapStateToProps = state => {
-    const {products} = state.Product
+    const {products} = state.Product;
     const {error, car, order, loading, custom, refresh, historic} = state.Order;
     const print = custom.data && custom.data.print ? custom.data.print : null;
     const resume = custom.data && custom.data.resume ? custom.data.resume : null;

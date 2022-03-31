@@ -7,7 +7,8 @@ const HasRole = ({roles, role, children, renderNoAccess}) => {
     }
 
     if (!roles || roles.length === 0 || !roles.includes(role)) {
-        return renderNoAccess ? renderNoAccess() : null;
+        return children;
+        //return renderNoAccess ? renderNoAccess() : null;
     }
     return children;
 };
@@ -23,9 +24,9 @@ const mapStateToProps = (state, props) => {
     if (user && user.securityRol) {
         roles = user.securityRol.permissions;
     }
-    return {
+    return [
         roles
-    };
+    ];
 
 
 }
