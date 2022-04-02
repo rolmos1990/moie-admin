@@ -16,6 +16,8 @@ import {COMMENT_ENTITIES, GROUPS} from "../../common/constants";
 import Observations from "../../components/Common/Observations";
 import OrdersPieChart from "./OrdersPieChart";
 import CategoriesPieChart from "./CategoriesPieChart";
+import {PERMISSIONS} from "../../helpers/security_rol";
+import HasPermissions from "../../components/HasPermissions";
 
 const CustomerDetail = (props) => {
 
@@ -23,7 +25,7 @@ const CustomerDetail = (props) => {
     const [customerData, setCustomerData] = useState({});
     const [hasPendingOrders, setHasPendingOrders] = useState(false);
     const [activeTab, setActiveTab] = useState(1);
-    const [productChart, setProductChart] = useState({series: [], labels:[]});
+    const [productChart, setProductChart] = useState({series: [], labels: []});
 
     useEffect(() => {
         if (props.match.params.id) {
@@ -67,11 +69,13 @@ const CustomerDetail = (props) => {
                                         <h4 className="card-title text-info">Descripción del cliente</h4>
                                     </Col>
                                     <Col md={2} className="text-right">
-                                        <li className="list-inline-item">
-                                            <Link to={`/customer/${customerData.id}`} className="px-2 text-primary">
-                                                <i className="uil uil-pen font-size-18"> </i>
-                                            </Link>
-                                        </li>
+                                        <HasPermissions permission={PERMISSIONS.CUSTOMER_EDIT}>
+                                            <li className="list-inline-item">
+                                                <Link to={`/customer/${customerData.id}`} className="px-2 text-primary">
+                                                    <i className="uil uil-pen font-size-18"> </i>
+                                                </Link>
+                                            </li>
+                                        </HasPermissions>
                                     </Col>
                                 </Row>
                                 <Row>

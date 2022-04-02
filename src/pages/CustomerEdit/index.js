@@ -8,6 +8,9 @@ import {getCustomer} from "../../store/customer/actions";
 import Breadcrumb from "../../components/Common/Breadcrumb";
 import CustomerForm from "./CustomerForm";
 import {Card} from "@material-ui/core";
+import {PERMISSIONS} from "../../helpers/security_rol";
+import NoAccess from "../../components/Common/NoAccess";
+import HasPermissions from "../../components/HasPermissions";
 
 const CustomerEdit = (props) => {
     const {getCustomer, customer} = props;
@@ -25,11 +28,13 @@ const CustomerEdit = (props) => {
             <div className="page-content">
                 <Container fluid>
                     <Breadcrumb hasBack path="/customers" title={customer.name} item={"Cliente"}/>
-                    <Card>
-                        <CardBody>
-                            <CustomerForm customer={customer}/>
-                        </CardBody>
-                    </Card>
+                    <HasPermissions permissions={[PERMISSIONS.CUSTOMER_CREATE, PERMISSIONS.CUSTOMER_EDIT]} renderNoAccess={() => <NoAccess/>}>
+                        <Card>
+                            <CardBody>
+                                <CustomerForm customer={customer}/>
+                            </CardBody>
+                        </Card>
+                    </HasPermissions>
                 </Container>
             </div>
         </React.Fragment>
