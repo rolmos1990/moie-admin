@@ -4,9 +4,9 @@ import {STATUS_COLORS, StatusField} from "../../../components/StatusField";
 import {ConverterStatus} from "../../../common/converters";
 import {STATUS} from "../../../common/constants";
 import Conditionals from "../../../common/conditionals";
-import {formatDate, isValidOption, STATUS_OPTIONS} from "../../../common/utils";
+import {formatDate, STATUS_OPTIONS} from "../../../common/utils";
 import {PERMISSIONS} from "../../../helpers/security_rol";
-import HasRole from "../../../components/HasRole";
+import HasPermissions from "../../../components/HasPermissions";
 
 const categoryColumns = (onDelete = false) => [
     {
@@ -14,11 +14,11 @@ const categoryColumns = (onDelete = false) => [
         dataField: "name",
         sort: true,
         formatter: (cellContent, item) => (
-            <HasRole role={PERMISSIONS.CATEGORY_SHOW}>
-            <Link to={`/category/${item.id}`} className="text-body">
-                {item.name}
-            </Link>
-            </HasRole>
+            <HasPermissions permission={PERMISSIONS.CATEGORY_SHOW}>
+                <Link to={`/category/${item.id}`} className="text-body">
+                    {item.name}
+                </Link>
+            </HasPermissions>
         ),
         filter: true,
         filterType: "text",
@@ -57,11 +57,11 @@ const categoryColumns = (onDelete = false) => [
         formatter: (cellContent, item) => (
             <ul className="list-inline font-size-20 contact-links mb-0">
                 <li className="list-inline-item">
-                    <HasRole role={PERMISSIONS.CATEGORY_EDIT}>
-                    <Link to={`/category/${item.id}`} className="px-2 text-primary">
-                        <i className="uil uil-pen font-size-18"> </i>
-                    </Link>
-                    </HasRole>
+                    <HasPermissions permission={PERMISSIONS.CATEGORY_EDIT}>
+                        <Link to={`/category/${item.id}`} className="px-2 text-primary">
+                            <i className="uil uil-pen font-size-18"> </i>
+                        </Link>
+                    </HasPermissions>
                 </li>
                 {/*{onDelete && (
                     <li className="list-inline-item">
