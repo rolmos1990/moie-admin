@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react"
-import {Col, Container, Row} from "reactstrap"
+import {Col, Row} from "reactstrap"
 import {Button, Card, Tooltip} from "@material-ui/core";
 import {withRouter} from "react-router-dom"
 import {connect} from "react-redux";
@@ -23,7 +23,7 @@ import {StatusField} from "../../components/StatusField";
 import * as htmlToImage from 'html-to-image';
 import Observations from "../../components/Common/Observations";
 import {isMobile} from "react-device-detect";
-import HasRole from "../../components/HasRole";
+import HasPermissions from "../../components/HasPermissions";
 import {PERMISSIONS} from "../../helpers/security_rol";
 
 // import {toPng, toJpeg, toBlob, toPixelData, toSvg} from 'html-to-image';
@@ -31,7 +31,25 @@ import {PERMISSIONS} from "../../helpers/security_rol";
 
 const OrderEdit = (props) => {
 
-    const {orderId, onGetOrder, onUpdateCar, onUpdateOrder, onCloseOverlay, onNextStatusOrder, onCanceledStatusOrder, onResumeOrder, onPrintOrder, print, resume, order, car, refresh, showOrderOverlay = false, onGetHistoric, historic} = props;
+    const {
+        orderId,
+        onGetOrder,
+        onUpdateCar,
+        onUpdateOrder,
+        onCloseOverlay,
+        onNextStatusOrder,
+        onCanceledStatusOrder,
+        onResumeOrder,
+        onPrintOrder,
+        print,
+        resume,
+        order,
+        car,
+        refresh,
+        showOrderOverlay = false,
+        onGetHistoric,
+        historic
+    } = props;
     const [orderData, setOrderData] = useState({});
     const [orderResume, setOrderResume] = useState('');
     const [showAsTable, setShowAsTable] = useState(false);
@@ -225,10 +243,10 @@ const OrderEdit = (props) => {
 
     //Permite cancelar la orden
     const canCancel = () => {
-        const isPrevPayment = order.orderDelivery && ([1,2].includes(order.orderDelivery.deliveryType));
+        const isPrevPayment = order.orderDelivery && ([1, 2].includes(order.orderDelivery.deliveryType));
         const canCancelPreviewPayment = [ORDERS_ENUM.PENDING].includes(parseInt(order.status)) && isPrevPayment;
-        const canCancelChargeOnDelivery = [ORDERS_ENUM.PENDING,ORDERS_ENUM.CONFIRMED,ORDERS_ENUM.PRINTED,ORDERS_ENUM.SENT].includes(parseInt(order.status)) && !isPrevPayment;
-        if(order && (canCancelPreviewPayment || canCancelChargeOnDelivery)){
+        const canCancelChargeOnDelivery = [ORDERS_ENUM.PENDING, ORDERS_ENUM.CONFIRMED, ORDERS_ENUM.PRINTED, ORDERS_ENUM.SENT].includes(parseInt(order.status)) && !isPrevPayment;
+        if (order && (canCancelPreviewPayment || canCancelChargeOnDelivery)) {
             return true;
         } else {
             return false;
@@ -237,7 +255,7 @@ const OrderEdit = (props) => {
 
     //Permite confirmar la orden
     const canConfirm = () => {
-        if(order && order.status === ORDERS_ENUM.PENDING && order.orderDelivery && ![1,2].includes(order.orderDelivery.deliveryType)){
+        if (order && order.status === ORDERS_ENUM.PENDING && order.orderDelivery && ![1, 2].includes(order.orderDelivery.deliveryType)) {
             return true;
         } else {
             return false;
@@ -245,7 +263,7 @@ const OrderEdit = (props) => {
     }
 
     const canEdit = () => {
-        if(order) {
+        if (order) {
             const isPrevPayment = order.orderDelivery && ([1, 2].includes(order.orderDelivery.deliveryType));
             const canEditPreviewPayment = [ORDERS_ENUM.PENDING, ORDERS_ENUM.CONCILIED, ORDERS_ENUM.PRINTED].includes(parseInt(order.status)) && isPrevPayment;
             const canEditChargeOnDelivery = [ORDERS_ENUM.PENDING, ORDERS_ENUM.CONFIRMED, ORDERS_ENUM.PRINTED].includes(parseInt(order.status)) && !isPrevPayment;
@@ -261,9 +279,9 @@ const OrderEdit = (props) => {
 
     //Permite imprimir la orden
     const canPrint = () => {
-        if(order && order.status < ORDERS_ENUM.CONCILIED){
+        if (order && order.status < ORDERS_ENUM.CONCILIED) {
             return true;
-        } else if(order && order.status === ORDERS_ENUM.CONCILIED && order.orderDelivery && order.orderDelivery.deliveryType === 1){
+        } else if (order && order.status === ORDERS_ENUM.CONCILIED && order.orderDelivery && order.orderDelivery.deliveryType === 1) {
             return true;
         } else {
             return false;
@@ -271,7 +289,7 @@ const OrderEdit = (props) => {
     }
 
     const isNextPrint = () => {
-        if(order.status === ORDERS_ENUM.CONFIRMED || (order && order.status === ORDERS_ENUM.CONCILIED && order.orderDelivery && order.orderDelivery.deliveryType === 1)){
+        if (order.status === ORDERS_ENUM.CONFIRMED || (order && order.status === ORDERS_ENUM.CONCILIED && order.orderDelivery && order.orderDelivery.deliveryType === 1)) {
             return true;
         } else {
             return false;
@@ -316,55 +334,55 @@ const OrderEdit = (props) => {
                         <small className="badge rounded-pill bg-soft-info font-size-14 mr-5 p-2">Operador: {order.user?.name}</small>
                     </div>
                     <div className={"mb-3 float-md-end"}>
-                        <HasRole role={PERMISSIONS.ORDER_EDIT}>
-                        <div className="button-items">
-                            {canCancel() && (
-                                <Tooltip placement="bottom" title="Anular" aria-label="add">
-                                    <button type="button" color="primary" className="btn-sm btn btn-outline-danger waves-effect waves-light" onClick={() => onCanceledStatusOrder(order.id)}>
-                                        <i className={"mdi mdi-delete"}> </i>
+                        <HasPermissions permission={PERMISSIONS.ORDER_EDIT}>
+                            <div className="button-items">
+                                {canCancel() && (
+                                    <Tooltip placement="bottom" title="Anular" aria-label="add">
+                                        <button type="button" color="primary" className="btn-sm btn btn-outline-danger waves-effect waves-light" onClick={() => onCanceledStatusOrder(order.id)}>
+                                            <i className={"mdi mdi-delete"}> </i>
+                                        </button>
+                                    </Tooltip>
+                                )}
+                                {canConfirm() && (
+                                    <Tooltip placement="bottom" title="Confirmar" aria-label="add">
+                                        <button type="button" color="primary" className="btn-sm btn btn-outline-success waves-effect waves-light" onClick={() => onNextStatusOrder(order.id)}>
+                                            <i className={"mdi mdi-check"}> </i>
+                                        </button>
+                                    </Tooltip>
+                                )}
+                                {(order && order.status === 3) && (
+                                    <Tooltip placement="bottom" title="Confirmar envio" aria-label="add">
+                                        <button type="button" color="primary" className="btn-sm btn btn-outline-success waves-effect waves-light" onClick={() => onNextStatusOrder(order.id)}>
+                                            <i className={"mdi mdi-check"}> </i>
+                                        </button>
+                                    </Tooltip>
+                                )}
+                                {canPrint() && (
+                                    <Tooltip placement="bottom" title="Imprimir" aria-label="add">
+                                        <button type="button" color="primary" className="btn-sm btn btn-outline-info waves-effect waves-light" onClick={() => printOrder()}>
+                                            <i className={"mdi mdi-printer"}> </i>
+                                            {order.prints && order.prints > 0 && (
+                                                <span className="badge bg-danger rounded-pill noti-icon">{order.prints || 0}</span>
+                                            )}
+                                        </button>
+                                    </Tooltip>
+
+                                )}
+                                <Tooltip placement="bottom" title="Copiar resumen" aria-label="add">
+                                    <button type="button" color="primary" className="btn-sm btn btn-outline-info waves-effect waves-light" onClick={() => copyResume()}>
+                                        <i className={"mdi mdi-content-copy"}> </i>
                                     </button>
                                 </Tooltip>
-                            )}
-                            {canConfirm() && (
-                                <Tooltip placement="bottom" title="Confirmar" aria-label="add">
-                                    <button type="button" color="primary" className="btn-sm btn btn-outline-success waves-effect waves-light" onClick={() => onNextStatusOrder(order.id)}>
-                                        <i className={"mdi mdi-check"}> </i>
-                                    </button>
-                                </Tooltip>
-                            )}
-                            {(order && order.status === 3) && (
-                                <Tooltip placement="bottom" title="Confirmar envio" aria-label="add">
-                                    <button type="button" color="primary" className="btn-sm btn btn-outline-success waves-effect waves-light" onClick={() => onNextStatusOrder(order.id)}>
-                                        <i className={"mdi mdi-check"}> </i>
-                                    </button>
-                                </Tooltip>
-                            )}
-                            {canPrint() && (
-                                <Tooltip placement="bottom" title="Imprimir" aria-label="add">
-                                    <button type="button" color="primary" className="btn-sm btn btn-outline-info waves-effect waves-light" onClick={() => printOrder()}>
-                                        <i className={"mdi mdi-printer"}> </i>
-                                        {order.prints && order.prints > 0 && (
-                                            <span className="badge bg-danger rounded-pill noti-icon">{order.prints || 0}</span>
+                                <Tooltip placement="bottom" title="Descargar foto" aria-label="add">
+                                    <button type="button" color="primary" className="btn-sm btn btn-outline-info waves-effect waves-light " onClick={() => takePhoto()}>
+                                        <i className={"mdi mdi-camera"}> </i> {downloadingPhoto ? 'Descargando...' : ''}
+                                        {order.photos && order.photos > 0 && (
+                                            <span className="badge bg-danger rounded-pill noti-icon">{order.photos || 0}</span>
                                         )}
                                     </button>
                                 </Tooltip>
-
-                            )}
-                            <Tooltip placement="bottom" title="Copiar resumen" aria-label="add">
-                                <button type="button" color="primary" className="btn-sm btn btn-outline-info waves-effect waves-light" onClick={() => copyResume()}>
-                                    <i className={"mdi mdi-content-copy"}> </i>
-                                </button>
-                            </Tooltip>
-                            <Tooltip placement="bottom" title="Descargar foto" aria-label="add">
-                                <button type="button" color="primary" className="btn-sm btn btn-outline-info waves-effect waves-light " onClick={() => takePhoto()}>
-                                    <i className={"mdi mdi-camera"}> </i> {downloadingPhoto ? 'Descargando...' : ''}
-                                    {order.photos && order.photos > 0 && (
-                                    <span className="badge bg-danger rounded-pill noti-icon">{order.photos || 0}</span>
-                                    )}
-                                </button>
-                            </Tooltip>
-                        </div>
-                        </HasRole>
+                            </div>
+                        </HasPermissions>
                     </div>
                 </Col>
             </Row>
@@ -378,20 +396,20 @@ const OrderEdit = (props) => {
                                         <h4 className="card-title text-info"><i className="uil-users-alt me-2"> </i> Datos del cliente</h4>
                                     </Col>
                                     <Col xs={2} className="text-right">
-                                        <HasRole role={PERMISSIONS.ORDER_EDIT}>
-                                        {allowEdit && (
-                                        <Tooltip placement="bottom" title="Editar cliente" aria-label="add">
-                                            <button type="button"
-                                                    size="small"
-                                                    className="btn btn-sm text-primary"
-                                                    onClick={() => {
-                                                        toggleModal();
-                                                    }}>
-                                                <i className="uil uil-pen font-size-18"> </i>
-                                            </button>
-                                        </Tooltip>
-                                        )}
-                                        </HasRole>
+                                        <HasPermissions permission={PERMISSIONS.ORDER_EDIT}>
+                                            {allowEdit && (
+                                                <Tooltip placement="bottom" title="Editar cliente" aria-label="add">
+                                                    <button type="button"
+                                                            size="small"
+                                                            className="btn btn-sm text-primary"
+                                                            onClick={() => {
+                                                                toggleModal();
+                                                            }}>
+                                                        <i className="uil uil-pen font-size-18"> </i>
+                                                    </button>
+                                                </Tooltip>
+                                            )}
+                                        </HasPermissions>
                                     </Col>
                                 </Row>
                                 <Row>
@@ -442,18 +460,18 @@ const OrderEdit = (props) => {
                                         <h4 className="card-title text-info"><i className="uil uil-truck"> </i> Datos de envio</h4>
                                     </Col>
                                     <Col xs={2} className="text-right">
-                                        <HasRole role={PERMISSIONS.ORDER_EDIT}>
-                                        {allowEdit && (
-                                        <Tooltip placement="bottom" title="Editar envio" aria-label="add">
-                                            <button type="button"
-                                                    size="small"
-                                                    className="btn btn-sm text-primary"
-                                                    onClick={toggleDeliveryModal}>
-                                                <i className="uil uil-pen font-size-18"> </i>
-                                            </button>
-                                        </Tooltip>
-                                        )}
-                                        </HasRole>
+                                        <HasPermissions permission={PERMISSIONS.ORDER_EDIT}>
+                                            {allowEdit && (
+                                                <Tooltip placement="bottom" title="Editar envio" aria-label="add">
+                                                    <button type="button"
+                                                            size="small"
+                                                            className="btn btn-sm text-primary"
+                                                            onClick={toggleDeliveryModal}>
+                                                        <i className="uil uil-pen font-size-18"> </i>
+                                                    </button>
+                                                </Tooltip>
+                                            )}
+                                        </HasPermissions>
                                     </Col>
                                 </Row>
                                 <Row>
@@ -540,20 +558,20 @@ const OrderEdit = (props) => {
                                                     </Tooltip>
                                                 </>
                                             )}
-                                            <HasRole role={PERMISSIONS.ORDER_EDIT}>
-                                            {allowEdit &&
-                                            <Tooltip placement="bottom" title="Editar products" aria-label="add">
-                                                <button type="button"
-                                                        size="small"
-                                                        className="btn btn-sm text-primary"
-                                                        onClick={() => {
-                                                            toggleProductsModal();
-                                                        }}>
-                                                    <i className="uil uil-pen font-size-18"> </i>
-                                                </button>
-                                            </Tooltip>
-                                            }
-                                            </HasRole>
+                                            <HasPermissions permission={PERMISSIONS.ORDER_EDIT}>
+                                                {allowEdit &&
+                                                    <Tooltip placement="bottom" title="Editar products" aria-label="add">
+                                                        <button type="button"
+                                                                size="small"
+                                                                className="btn btn-sm text-primary"
+                                                                onClick={() => {
+                                                                    toggleProductsModal();
+                                                                }}>
+                                                            <i className="uil uil-pen font-size-18"> </i>
+                                                        </button>
+                                                    </Tooltip>
+                                                }
+                                            </HasPermissions>
                                         </Col>
                                     </Row>
                                     {!showAsTable && (
@@ -676,12 +694,13 @@ const OrderEdit = (props) => {
                                     <Row>
                                         <Row>
                                             <Col md={10}>
-                                            <h4 className="card-title text-info"><i className="uil uil-bill"> </i> Totales</h4>
+                                                <h4 className="card-title text-info"><i className="uil uil-bill"> </i> Totales</h4>
                                             </Col>
                                             <Col md={2}>
                                                 <div className="card-title text-right"><span><Tooltip placement="bottom" title="Peso" aria-label="add">
                                                     <i className="fa fa-weight text-info"></i>
-                                                </Tooltip></span> : {priceFormat(orderData.totalWeight)}g</div>
+                                                </Tooltip></span> : {priceFormat(orderData.totalWeight)}g
+                                                </div>
                                             </Col>
                                         </Row>
                                         <Col md={12}>
@@ -743,59 +762,59 @@ const OrderEdit = (props) => {
                                 </a>
                             </li>
                         </ul>
-                        <HasRole role={PERMISSIONS.COMMENT_LIST}>
-                        <div className="tab-content p-3 text-muted">
-                            <div className={`tab-pane ${activeTab === 1 ? 'active' : ''}`} id="tab1" role="tabpanel">
-                                <p className="mb-0">
-                                    <table className="table table-sm table-striped table-bordered table-centered table-nowrap">
-                                        <thead>
-                                        <tr>
-                                            <th className="text-center">Fecha</th>
-                                            <th className="text-center">Usuario</th>
-                                            <th className="text-center">Estado</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        {(historic) ?
-                                            historic.map(item => <tr>
-                                                <td>
-                                                    {formatDate(item.createdAt)}
-                                                </td>
-                                                <td>
-                                                    {item.user.name}
-                                                </td>
-                                                <td>
-                                                    <StatusField color={EVENT_STATUS[item.status].color} className={"font-size-14 mr-5"}>
-                                                        {EVENT_STATUS[item.status].name}
-                                                    </StatusField>
-                                                </td>
-                                            </tr>)
-                                        : (
+                        <HasPermissions permission={PERMISSIONS.COMMENT_LIST}>
+                            <div className="tab-content p-3 text-muted">
+                                <div className={`tab-pane ${activeTab === 1 ? 'active' : ''}`} id="tab1" role="tabpanel">
+                                    <p className="mb-0">
+                                        <table className="table table-sm table-striped table-bordered table-centered table-nowrap">
+                                            <thead>
                                             <tr>
-                                                <td colSpan={3}>
-                                                    No se encontraron datos.
-                                                </td>
+                                                <th className="text-center">Fecha</th>
+                                                <th className="text-center">Usuario</th>
+                                                <th className="text-center">Estado</th>
                                             </tr>
-                                        )}
-                                        </tbody>
-                                    </table>
-                                </p>
+                                            </thead>
+                                            <tbody>
+                                            {(historic) ?
+                                                historic.map(item => <tr>
+                                                    <td>
+                                                        {formatDate(item.createdAt)}
+                                                    </td>
+                                                    <td>
+                                                        {item.user.name}
+                                                    </td>
+                                                    <td>
+                                                        <StatusField color={EVENT_STATUS[item.status].color} className={"font-size-14 mr-5"}>
+                                                            {EVENT_STATUS[item.status].name}
+                                                        </StatusField>
+                                                    </td>
+                                                </tr>)
+                                                : (
+                                                    <tr>
+                                                        <td colSpan={3}>
+                                                            No se encontraron datos.
+                                                        </td>
+                                                    </tr>
+                                                )}
+                                            </tbody>
+                                        </table>
+                                    </p>
+                                </div>
+                                <div className={`tab-pane ${activeTab === 2 ? 'active' : ''}`} id="tab2" role="tabpanel">
+                                    <Observations
+                                        entitySuggested={GROUPS.ORDER_OBSERVATIONS}
+                                        entity={COMMENT_ENTITIES.ORDER}
+                                        entityId={orderData.id}/>
+                                </div>
+                                <div className={`tab-pane ${activeTab === 3 ? 'active' : ''}`} id="tab2" role="tabpanel">
+                                    <Observations
+                                        entitySuggested={GROUPS.CUSTOMER_OBSERVATIONS}
+                                        entity={COMMENT_ENTITIES.CUSTOMER}
+                                        entityId={orderData.customer?.id}/>
+                                </div>
                             </div>
-                            <div className={`tab-pane ${activeTab === 2 ? 'active' : ''}`} id="tab2" role="tabpanel">
-                                <Observations
-                                    entitySuggested={GROUPS.ORDER_OBSERVATIONS}
-                                    entity={COMMENT_ENTITIES.ORDER}
-                                    entityId={orderData.id}/>
-                            </div>
-                            <div className={`tab-pane ${activeTab === 3 ? 'active' : ''}`} id="tab2" role="tabpanel">
-                                <Observations
-                                    entitySuggested={GROUPS.CUSTOMER_OBSERVATIONS}
-                                    entity={COMMENT_ENTITIES.CUSTOMER}
-                                    entityId={orderData.customer?.id}/>
-                            </div>
-                        </div>
-                        </HasRole>
-                        </Card>
+                        </HasPermissions>
+                    </Card>
                 </Col>
             </Row>
 

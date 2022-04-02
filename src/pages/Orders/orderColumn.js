@@ -7,6 +7,8 @@ import Conditionals from "../../common/conditionals";
 import {formatDate, priceFormat} from "../../common/utils";
 import {Tooltip} from "@material-ui/core";
 import {CUSTOMER, USER} from "../../helpers/url_helper";
+import HasPermissionsFunc from "../../components/HasPermissionsFunc";
+import {PERMISSIONS} from "../../helpers/security_rol";
 
 const statusOptions = buildOptions(ORDER_STATUS_LIST);
 const deliveryMethodsOptions = buildOptions(DELIVERY_METHODS_LIST);
@@ -160,7 +162,7 @@ const orderColumns = (onSelectedOrder, showAsModal, conciliationView) => {
         }
     ];
 
-    if (!showAsModal && !conciliationView) {
+    if (!showAsModal && !conciliationView && HasPermissionsFunc([PERMISSIONS.ORDER_EDIT])) {
         columns.push({
             dataField: "menu",
             isDummyField: true,

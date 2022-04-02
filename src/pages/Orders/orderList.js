@@ -19,6 +19,8 @@ import Conditionals from "../../common/conditionals";
 import CustomModal from "../../components/Modal/CommosModal";
 import OrderConciliationForm from "./orderConciliationsForm";
 import ConciliationReportForm from "../Reports/ConciliationReportForm";
+import {PERMISSIONS} from "../../helpers/security_rol";
+import HasPermissions from "../../components/HasPermissions";
 
 const OrderList = props => {
     const {orders, meta, onGetOrders, onResetOrders, refresh, customActions, conditionals, showAsModal, conciliation} = props;
@@ -250,9 +252,11 @@ const OrderList = props => {
                                                                             <i className={"mdi mdi-file"}> </i>
                                                                         </Button>
                                                                     </Tooltip>
-                                                                    <Link to={"/orders/create"} className="btn btn-primary waves-effect waves-light text-light">
-                                                                        <i className="mdi mdi-plus"> </i> Crear pedido
-                                                                    </Link>
+                                                                    <HasPermissions permission={PERMISSIONS.ORDER_CREATE}>
+                                                                        <Link to={"/orders/create"} className="btn btn-primary waves-effect waves-light text-light">
+                                                                            <i className="mdi mdi-plus"> </i> Crear pedido
+                                                                        </Link>
+                                                                    </HasPermissions>
                                                                 </>
                                                             )}
 

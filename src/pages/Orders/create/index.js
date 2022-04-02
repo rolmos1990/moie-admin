@@ -15,6 +15,9 @@ import {ConfirmationModalAction} from "../../../components/Modal/ConfirmationMod
 import OrderSummary from "./orderSummary";
 import {registerOrder, resetCar} from "../../../store/order/actions";
 import {CHARGE_ON_DELIVERY, DELIVERY_METHODS_PAYMENT_TYPES, PAYMENT_TYPES} from "../../../common/constants";
+import {PERMISSIONS} from "../../../helpers/security_rol";
+import NoAccess from "../../../components/Common/NoAccess";
+import HasPermissions from "../../../components/HasPermissions";
 
 const CreateOrder = (props) => {
     const {onResetOrder, car, onRegisterOrder, error} = props;
@@ -98,60 +101,62 @@ const CreateOrder = (props) => {
             <div className="page-content">
                 <Container fluid>
                     <Breadcrumb hasBack path="/orders" title="Crear pedido" item={"Pedido"}/>
-                    <Card className="mb-3">
-                        <CardBody>
-                            <Row>
-                                <Col md={12}>
-                                    <OrderCustomer/>
-                                </Col>
-                            </Row>
-                            <hr/>
-                            <Row>
-                                <Col md={12}>
-                                    <OrderProducts/>
-                                </Col>
-                            </Row>
-                            <hr/>
-                            <Row>
-                                <Col md={12}>
-                                    <OrderCar/>
-                                </Col>
-                            </Row>
-                            <hr/>
-                            <Row>
-                                <Col md={12}>
-                                    <OrderDeliveryOptions/>
-                                </Col>
-                            </Row>
-                            <hr/>
-                            <Row>
-                                <Col md={12}>
-                                    <OrderSummary/>
-                                </Col>
-                            </Row>
-                            <hr/>
-                            <Row>
-                                {error && (
+                    <HasPermissions permission={PERMISSIONS.ORDER_CREATE} renderNoAccess={() => <NoAccess/>}>
+                        <Card className="mb-3">
+                            <CardBody>
+                                <Row>
+                                    <Col md={12}>
+                                        <OrderCustomer/>
+                                    </Col>
+                                </Row>
+                                <hr/>
+                                <Row>
+                                    <Col md={12}>
+                                        <OrderProducts/>
+                                    </Col>
+                                </Row>
+                                <hr/>
+                                <Row>
+                                    <Col md={12}>
+                                        <OrderCar/>
+                                    </Col>
+                                </Row>
+                                <hr/>
+                                <Row>
+                                    <Col md={12}>
+                                        <OrderDeliveryOptions/>
+                                    </Col>
+                                </Row>
+                                <hr/>
+                                <Row>
+                                    <Col md={12}>
+                                        <OrderSummary/>
+                                    </Col>
+                                </Row>
+                                <hr/>
+                                <Row>
+                                    {error && (
+                                        <Col md={12} className="text-center">
+                                            <div className="alert alert-danger">
+                                                {error}
+                                            </div>
+                                        </Col>
+                                    )}
+
                                     <Col md={12} className="text-center">
-                                        <div className="alert alert-danger">
-                                            {error}
+                                        <div className="btn-group">
+                                            <button type="button" className="btn btn-light text-danger" onClick={() => onCancelOrder()}>
+                                                Cancelar
+                                            </button>
+                                            <button type="button" className="btn btn-primary" disabled={!isValidOrder} onClick={() => onCreateOrder()}>
+                                                <i className="uil uil-shopping-cart-alt me-2"> </i> Crear pedido
+                                            </button>
                                         </div>
                                     </Col>
-                                )}
-
-                                <Col md={12} className="text-center">
-                                    <div className="btn-group">
-                                        <button type="button" className="btn btn-light text-danger" onClick={() => onCancelOrder()}>
-                                            Cancelar
-                                        </button>
-                                        <button type="button" className="btn btn-primary" disabled={!isValidOrder} onClick={() => onCreateOrder()}>
-                                            <i className="uil uil-shopping-cart-alt me-2"> </i> Crear pedido
-                                        </button>
-                                    </div>
-                                </Col>
-                            </Row>
-                        </CardBody>
-                    </Card>
+                                </Row>
+                            </CardBody>
+                        </Card>
+                    </HasPermissions>
                 </Container>
             </div>
         </React.Fragment>

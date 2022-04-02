@@ -11,7 +11,7 @@ import {ConfirmationModalAction} from "../Modal/ConfirmationModal";
 import {threeDots} from "../../common/utils";
 import {deleteComment, getCommentsByEntity, registerComment} from "../../store/comment/actions";
 import {findFieldOptionByGroup} from "../../helpers/service";
-import HasRole from "../HasRole";
+import HasPermissions from "../HasPermissions";
 import {PERMISSIONS} from "../../helpers/security_rol";
 
 const Observations = (props) => {
@@ -94,9 +94,9 @@ const Observations = (props) => {
                                     <input id={"observation"} name={"observation"} className="form-control" value={observation} onChange={(e) => setObservation(e.target.value)} required/>
                                 </Col>
                                 <Col md={2}>
-                                    <HasRole role={PERMISSIONS.COMMENT_CREATE}>
+                                    <HasPermissions permission={PERMISSIONS.COMMENT_CREATE}>
                                         <ButtonSubmit loading={props.loading} disabled={!observation}/>
-                                    </HasRole>
+                                    </HasPermissions>
                                 </Col>
                             </Row>
                         </AvForm>
@@ -105,11 +105,11 @@ const Observations = (props) => {
                         <hr/>
                         <h4 className="card-title text-info">Observaciones</h4>
                     </Col>
-                    <HasRole role={PERMISSIONS.COMMENT_EDIT}>
-                    <Col md={12} style={{maxHeight: '500px', overflowY: 'auto'}}>
-                        {observationList.length > 0 ? (<CustomizedTimeline data={observationList} onDelete={onDelete}/>) : "No hay observaciones"}
-                    </Col>
-                    </HasRole>
+                    <HasPermissions permission={PERMISSIONS.COMMENT_EDIT}>
+                        <Col md={12} style={{maxHeight: '500px', overflowY: 'auto'}}>
+                            {observationList.length > 0 ? (<CustomizedTimeline data={observationList} onDelete={onDelete}/>) : "No hay observaciones"}
+                        </Col>
+                    </HasPermissions>
                 </Row>
             </Card>
         </React.Fragment>
