@@ -22,6 +22,9 @@ import CustomModal from "../../components/Modal/CommosModal";
 import OrderList from "../Orders/orderList";
 import Conditionals from "../../common/conditionals";
 import {fileOfficeTemplate, officePdfApi} from "../../helpers/backend_helper";
+import {PERMISSIONS} from "../../helpers/security_rol";
+import NoAccess from "../../components/Common/NoAccess";
+import HasPermissions from "../../components/HasPermissions";
 
 const OfficeEdit = (props) => {
     const {getOffice, office, deliveryMethods, orders, printReportData, refresh, refreshOrders, deleteOrderOffice} = props;
@@ -104,7 +107,7 @@ const OfficeEdit = (props) => {
     const handleValidSubmit = (event, values) => {
 
         const selectedDelivery = deliveryMethods.filter(item => item.code === values?.deliveryMethod?.value)[0];
-        if(!selectedDelivery){
+        if (!selectedDelivery) {
             return false;
         }
 
@@ -115,11 +118,11 @@ const OfficeEdit = (props) => {
             type: values.deliveryType.value,
             batchDate: values.batchDate[0] ? formatDate(values.batchDate[0], DATE_FORMAT.ONLY_DATE) : null
         };
-        if(values.batchDate && values.batchDate.length === 1){
-            data.batchDate= values.batchDate[0] ? formatDate(values.batchDate[0], DATE_FORMAT.ONLY_DATE) : null
+        if (values.batchDate && values.batchDate.length === 1) {
+            data.batchDate = values.batchDate[0] ? formatDate(values.batchDate[0], DATE_FORMAT.ONLY_DATE) : null
         }
-        if(values.batchDate && values.batchDate.length > 1){
-            data.batchDate= values.batchDate ? formatDate(values.batchDate, DATE_FORMAT.ONLY_DATE) : null
+        if (values.batchDate && values.batchDate.length > 1) {
+            data.batchDate = values.batchDate ? formatDate(values.batchDate, DATE_FORMAT.ONLY_DATE) : null
         }
         delete data._status;
         delete data.deliveryType;
@@ -138,28 +141,28 @@ const OfficeEdit = (props) => {
     };
 
     const getOrdersByConditionalAndFilter = (filter) => {
-            const conditions = new Conditionals.Condition;
-            conditions.add("office", props.match.params.id, Conditionals.OPERATORS.EQUAL);
+        const conditions = new Conditionals.Condition;
+        conditions.add("office", props.match.params.id, Conditionals.OPERATORS.EQUAL);
 
-            if(filter.includes("c:")){
-                filter = filter.replace("c:", "");
-                conditions.add("customer.name", filter, Conditionals.OPERATORS.LIKE);
-            } else if(filter.includes("cc:")) {
-                filter = filter.replace("cc:", "");
-                conditions.add("customer.name", filter, Conditionals.OPERATORS.EQUAL);
-            } else if(filter.includes("cemail:")) {
-                filter = filter.replace("cemail:", "");
-                conditions.add("customer.email", filter, Conditionals.OPERATORS.EQUAL);
-            } else if(filter.includes("p:")){
-                filter = filter.replace("p:", "");
-                conditions.add("id", filter, Conditionals.OPERATORS.LIKE);
-            } else if(filter.includes("w:")){
-                filter = filter.replace("w:", "");
-                conditions.add("totalWeight", filter, Conditionals.OPERATORS.LIKE);
-            } else {
-                conditions.add("customer.name", filter, Conditionals.OPERATORS.LIKE);
-            }
-            onGetOrders(conditions);
+        if (filter.includes("c:")) {
+            filter = filter.replace("c:", "");
+            conditions.add("customer.name", filter, Conditionals.OPERATORS.LIKE);
+        } else if (filter.includes("cc:")) {
+            filter = filter.replace("cc:", "");
+            conditions.add("customer.name", filter, Conditionals.OPERATORS.EQUAL);
+        } else if (filter.includes("cemail:")) {
+            filter = filter.replace("cemail:", "");
+            conditions.add("customer.email", filter, Conditionals.OPERATORS.EQUAL);
+        } else if (filter.includes("p:")) {
+            filter = filter.replace("p:", "");
+            conditions.add("id", filter, Conditionals.OPERATORS.LIKE);
+        } else if (filter.includes("w:")) {
+            filter = filter.replace("w:", "");
+            conditions.add("totalWeight", filter, Conditionals.OPERATORS.LIKE);
+        } else {
+            conditions.add("customer.name", filter, Conditionals.OPERATORS.LIKE);
+        }
+        onGetOrders(conditions);
     };
 
     const onDelete = (id) => {
@@ -206,7 +209,7 @@ const OfficeEdit = (props) => {
             title: '¿Seguro desea eliminar el pedido?',
             description: 'Usted está confirmando eliminar este pedido, al confirmar no podrá recuperarlo nuevamente.',
             id: '_clienteModal',
-            onConfirm: () => deleteOrderOffice(office.id , {order: id})
+            onConfirm: () => deleteOrderOffice(office.id, {order: id})
         });
     }
 
@@ -226,10 +229,10 @@ const OfficeEdit = (props) => {
     const requestPdfReport = async (id) => {
         try {
             const response = await officePdfApi(id);
-            if(response.status === 200) {
+            if (response.status === 200) {
                 printPartOfPage(response.html);
             }
-        }catch(e){
+        } catch (e) {
             console.log("se ha producido un error", e);
         }
         //setReportBody(null);
@@ -244,164 +247,165 @@ const OfficeEdit = (props) => {
             <div className="page-content">
                 <Container fluid>
                     <Breadcrumb hasBack path="/offices" title={officeData.name} item={"Despachos"}/>
-                    {officeData.status && (
-                        <Row className="mb-2">
-                            <Col md={12}>
-                                <div className={"mb-3 float-md-start"}>
-                                    <StatusField color={OFFICE_STATUS[officeData.status].color} className={"font-size-14 mr-5"}>
-                                        {OFFICE_STATUS[officeData.status].name}
-                                    </StatusField>
-                                    <small className="badge rounded-pill bg-soft-info font-size-14 mr-5 p-2">Operador: {officeData?.user?.name}</small>
-                                </div>
-                                <div className={"mb-3 float-md-end"}>
-                                    <div className="button-items">
+                    <HasPermissions permissions={[PERMISSIONS.OFFICE_EDIT]} renderNoAccess={() => <NoAccess/>}>
+                        {officeData.status && (
+                            <Row className="mb-2">
+                                <Col md={12}>
+                                    <div className={"mb-3 float-md-start"}>
+                                        <StatusField color={OFFICE_STATUS[officeData.status].color} className={"font-size-14 mr-5"}>
+                                            {OFFICE_STATUS[officeData.status].name}
+                                        </StatusField>
+                                        <small className="badge rounded-pill bg-soft-info font-size-14 mr-5 p-2">Operador: {officeData?.user?.name}</small>
+                                    </div>
+                                    <div className={"mb-3 float-md-end"}>
+                                        <div className="button-items">
 
-                                        {!!([1,2].includes(officeData?.type)) &&  (
-                                        <Tooltip placement="bottom" title="Descargar PDF para Cajas" aria-label="add">
-                                            <button type="button" color="primary" className="btn-sm btn btn-outline-danger waves-effect waves-light" onClick={() => requestPdfReport(officeData.id)}>
-                                                <i className={"mdi mdi-file-pdf"}> </i> {printReportData.loading ? 'Generando...' : ''}
-                                            </button>
-                                        </Tooltip>
-                                        )}
+                                            {!!([1, 2].includes(officeData?.type)) && (
+                                                <Tooltip placement="bottom" title="Descargar PDF para Cajas" aria-label="add">
+                                                    <button type="button" color="primary" className="btn-sm btn btn-outline-danger waves-effect waves-light" onClick={() => requestPdfReport(officeData.id)}>
+                                                        <i className={"mdi mdi-file-pdf"}> </i> {printReportData.loading ? 'Generando...' : ''}
+                                                    </button>
+                                                </Tooltip>
+                                            )}
 
-                                        {/* <Tooltip placement="bottom" title="Imprimir reporte" aria-label="add">
+                                            {/* <Tooltip placement="bottom" title="Imprimir reporte" aria-label="add">
                                             <button type="button" color="primary" className="btn-sm btn btn-outline-info waves-effect waves-light" onClick={() => printReport(officeData.id)}>
                                                 <i className={"mdi mdi-printer"}> </i> {printReportData.loading ? 'Generando...' : ''}
                                             </button>
                                         </Tooltip>*/}
 
-                                        {!!(officeData?.type === 3 && DELIVERY_METHODS.INTERRAPIDISIMO === officeData?.deliveryMethod?.code) &&  (
-                                            <Tooltip placement="bottom" title="Descargar Plantilla Excel" aria-label="add">
-                                                <button type="button" color="primary" className="btn-sm btn btn-outline-info waves-effect waves-light" onClick={() => handleDownloadTemplate(officeData.id)}>
-                                                    <i className={"mdi mdi-file-excel"}> </i>
-                                                </button>
-                                            </Tooltip>
-                                        )}
-                                        {officeData.status === 1 && (
-                                            <>
-                                                <Tooltip placement="bottom" title="Eliminar despacho" aria-label="add">
-                                                    <button type="button" color="primary" className="btn-sm btn btn-outline-danger waves-effect waves-light" onClick={() => onDelete(officeData.id)}>
-                                                        <i className={"mdi mdi-delete"}> </i>
+                                            {!!(officeData?.type === 3 && DELIVERY_METHODS.INTERRAPIDISIMO === officeData?.deliveryMethod?.code) && (
+                                                <Tooltip placement="bottom" title="Descargar Plantilla Excel" aria-label="add">
+                                                    <button type="button" color="primary" className="btn-sm btn btn-outline-info waves-effect waves-light" onClick={() => handleDownloadTemplate(officeData.id)}>
+                                                        <i className={"mdi mdi-file-excel"}> </i>
                                                     </button>
                                                 </Tooltip>
-                                                <Tooltip placement="bottom" title="Agregar pedidos" aria-label="add">
-                                                    <button type="button" color="primary" className="btn-sm btn btn-outline-info waves-effect waves-light" onClick={() => addOrders()}>
-                                                        <i className={"mdi mdi-plus"}> </i>
-                                                    </button>
-                                                </Tooltip>
-                                                <Tooltip placement="bottom" title="Finalizar" aria-label="add">
-                                                    <button type="button" color="primary" className="btn-sm btn btn-outline-success waves-effect waves-light" onClick={() => onConfirm(officeData.id)}>
-                                                        <i className={"mdi mdi-check"}> </i>
-                                                    </button>
-                                                </Tooltip>
-                                            </>
-                                        )}
+                                            )}
+                                            {officeData.status === 1 && (
+                                                <>
+                                                    <Tooltip placement="bottom" title="Eliminar despacho" aria-label="add">
+                                                        <button type="button" color="primary" className="btn-sm btn btn-outline-danger waves-effect waves-light" onClick={() => onDelete(officeData.id)}>
+                                                            <i className={"mdi mdi-delete"}> </i>
+                                                        </button>
+                                                    </Tooltip>
+                                                    <Tooltip placement="bottom" title="Agregar pedidos" aria-label="add">
+                                                        <button type="button" color="primary" className="btn-sm btn btn-outline-info waves-effect waves-light" onClick={() => addOrders()}>
+                                                            <i className={"mdi mdi-plus"}> </i>
+                                                        </button>
+                                                    </Tooltip>
+                                                    <Tooltip placement="bottom" title="Finalizar" aria-label="add">
+                                                        <button type="button" color="primary" className="btn-sm btn btn-outline-success waves-effect waves-light" onClick={() => onConfirm(officeData.id)}>
+                                                            <i className={"mdi mdi-check"}> </i>
+                                                        </button>
+                                                    </Tooltip>
+                                                </>
+                                            )}
+                                        </div>
                                     </div>
-                                </div>
-                            </Col>
-                        </Row>
-                    )}
+                                </Col>
+                            </Row>
+                        )}
                         <AvForm className="needs-validation" autoComplete="off"
                                 onValidSubmit={(e, v) => {
                                     handleValidSubmit(e, v)
                                 }}>
                             <Row>
                                 {editable ? (
-                                <Col xl="4" className="mb-2">
-                                    <Card>
-                                        <CardBody>
-                                            <Row>
-                                                <Col md="12">
-                                                    <div className="mb-3">
-                                                        <Label htmlFor="field_name">Fecha <span className="text-danger">*</span></Label>
-                                                        <FieldDate
-                                                            name={"batchDate"}
-                                                            mode={DATE_MODES.SINGLE}
-                                                            defaultValue={officeData.batchDate}
-                                                        />
-                                                    </div>
-                                                </Col>
-                                                <Col md="12">
-                                                    <div className="mb-3">
-                                                        <Label htmlFor="field_name">Nombre <span className="text-danger">*</span></Label>
-                                                        <FieldText
-                                                            id={"field_name"}
-                                                            name={"name"}
-                                                            value={officeData.name}
-                                                            minLength={3}
-                                                            maxLength={255}
-                                                            required
-                                                        />
-                                                    </div>
-                                                </Col>
-                                            </Row>
-                                            <Row>
-                                                <Col md="12">
-                                                    <div className="mb-3">
-                                                        <Label htmlFor="field_name">Tipo <span className="text-danger">*</span></Label>
-                                                        <FieldSelect
-                                                            id={"deliveryType"}
-                                                            name={"deliveryType"}
-                                                            options={deliveryTypes}
-                                                            defaultValue={deliveryType}
-                                                            onChange={item => setDeliveryType(item.value)}
-                                                            required
-                                                        />
-                                                    </div>
-                                                </Col>
-                                                <Col md="12">
-                                                    <div className="mb-3">
-                                                        <Label htmlFor="field_name">Metodo<span className="text-danger">*</span></Label>
-                                                        <FieldSelect
-                                                            id={"deliveryMethod"}
-                                                            name={"deliveryMethod"}
-                                                            options={deliveryMethodList}
-                                                            defaultValue={deliveryMethod?.code}
-                                                            onChange={item => setDeliveryMethod(item.value)}
-                                                            required
-                                                        />
-                                                    </div>
-                                                </Col>
-                                            </Row>
-                                            <Row>
-                                                <Col md="12">
-                                                    <div className="mb-3">
-                                                        <Label htmlFor="field_name">Descripción <span className="text-danger">*</span></Label>
-                                                        <FieldText
-                                                            type={"textarea"}
-                                                            id={"description"}
-                                                            name={"description"}
-                                                            value={officeData.description}
-                                                            minLength={3}
-                                                            maxLength={255}
-                                                            required
-                                                        />
-                                                    </div>
-                                                </Col>
-                                            </Row>
+                                    <Col xl="4" className="mb-2">
+                                        <Card>
+                                            <CardBody>
+                                                <Row>
+                                                    <Col md="12">
+                                                        <div className="mb-3">
+                                                            <Label htmlFor="field_name">Fecha <span className="text-danger">*</span></Label>
+                                                            <FieldDate
+                                                                name={"batchDate"}
+                                                                mode={DATE_MODES.SINGLE}
+                                                                defaultValue={officeData.batchDate}
+                                                            />
+                                                        </div>
+                                                    </Col>
+                                                    <Col md="12">
+                                                        <div className="mb-3">
+                                                            <Label htmlFor="field_name">Nombre <span className="text-danger">*</span></Label>
+                                                            <FieldText
+                                                                id={"field_name"}
+                                                                name={"name"}
+                                                                value={officeData.name}
+                                                                minLength={3}
+                                                                maxLength={255}
+                                                                required
+                                                            />
+                                                        </div>
+                                                    </Col>
+                                                </Row>
+                                                <Row>
+                                                    <Col md="12">
+                                                        <div className="mb-3">
+                                                            <Label htmlFor="field_name">Tipo <span className="text-danger">*</span></Label>
+                                                            <FieldSelect
+                                                                id={"deliveryType"}
+                                                                name={"deliveryType"}
+                                                                options={deliveryTypes}
+                                                                defaultValue={deliveryType}
+                                                                onChange={item => setDeliveryType(item.value)}
+                                                                required
+                                                            />
+                                                        </div>
+                                                    </Col>
+                                                    <Col md="12">
+                                                        <div className="mb-3">
+                                                            <Label htmlFor="field_name">Metodo<span className="text-danger">*</span></Label>
+                                                            <FieldSelect
+                                                                id={"deliveryMethod"}
+                                                                name={"deliveryMethod"}
+                                                                options={deliveryMethodList}
+                                                                defaultValue={deliveryMethod?.code}
+                                                                onChange={item => setDeliveryMethod(item.value)}
+                                                                required
+                                                            />
+                                                        </div>
+                                                    </Col>
+                                                </Row>
+                                                <Row>
+                                                    <Col md="12">
+                                                        <div className="mb-3">
+                                                            <Label htmlFor="field_name">Descripción <span className="text-danger">*</span></Label>
+                                                            <FieldText
+                                                                type={"textarea"}
+                                                                id={"description"}
+                                                                name={"description"}
+                                                                value={officeData.description}
+                                                                minLength={3}
+                                                                maxLength={255}
+                                                                required
+                                                            />
+                                                        </div>
+                                                    </Col>
+                                                </Row>
 
-                                            <Row>
-                                                <Col md={12} className="text-right">
-                                                    <button type="button" className="btn btn-light" onClick={() => setEditable(false)}> Cerrar </button>
-                                                    <ButtonSubmit loading={props.loading}/>
-                                                </Col>
-                                            </Row>
-                                        </CardBody>
-                                    </Card>
-                                </Col>) : (
+                                                <Row>
+                                                    <Col md={12} className="text-right">
+                                                        <button type="button" className="btn btn-light" onClick={() => setEditable(false)}> Cerrar</button>
+                                                        <ButtonSubmit loading={props.loading}/>
+                                                    </Col>
+                                                </Row>
+                                            </CardBody>
+                                        </Card>
+                                    </Col>) : (
                                     <Col xl="4" className="mb-2">
                                         <Card>
                                             <div className="float-end">
-                                            <Tooltip placement="bottom" title="Editar despacho" aria-label="add">
-                                                <button type="button"
-                                                        size="small"
-                                                        className="btn btn-sm text-primary cursor-pointer"
-                                                        onClick={() => {
-                                                            setEditable(true);
-                                                        }}>
-                                                    <i className="uil uil-pen font-size-18"> </i>
-                                                </button>
-                                            </Tooltip>
+                                                <Tooltip placement="bottom" title="Editar despacho" aria-label="add">
+                                                    <button type="button"
+                                                            size="small"
+                                                            className="btn btn-sm text-primary cursor-pointer"
+                                                            onClick={() => {
+                                                                setEditable(true);
+                                                            }}>
+                                                        <i className="uil uil-pen font-size-18"> </i>
+                                                    </button>
+                                                </Tooltip>
                                             </div>
                                             <CardBody>
                                                 <Row>
@@ -436,8 +440,8 @@ const OfficeEdit = (props) => {
                                         <CardBody>
                                             <h4 className="card-title text-info"><i
                                                 className="uil-shopping-cart-alt me-2"> </i> Pedidos en despacho</h4> <br/>
-                                                <Col md="8">
-                                                    <div className="mb-3">
+                                            <Col md="8">
+                                                <div className="mb-3">
                                                     <FieldText
                                                         id={"searchBar"}
                                                         name={"dianCode"}
@@ -447,10 +451,10 @@ const OfficeEdit = (props) => {
                                                         placeholder="Buscar un pedido..."
                                                         onChange={item => item.target.value === "" ? getOrdersByConditional() : getOrdersByConditionalAndFilter(item.target.value)}
                                                     />
-                                                    </div>
-                                                </Col>
+                                                </div>
+                                            </Col>
                                             <Row>
-                                                {ordersList.length === 0 && <p><i className="fa fa-box-open text-muted"></i> Este despacho se encuentra vacio</p> }
+                                                {ordersList.length === 0 && <p><i className="fa fa-box-open text-muted"></i> Este despacho se encuentra vacio</p>}
                                                 {ordersList.sort((a, b) => a.id < b.id).map((order, k) => (
                                                     <Col md={4} className="">
                                                         <div key={k} className="order-box">
@@ -483,6 +487,7 @@ const OfficeEdit = (props) => {
                                 </Col>
                             </Row>
                         </AvForm>
+                    </HasPermissions>
                 </Container>
             </div>
         </React.Fragment>

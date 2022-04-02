@@ -16,10 +16,12 @@ import officeColumns from "./officeColumns";
 import {normalizeColumnsList} from "../../../common/converters";
 import CustomModal from "../../../components/Modal/CommosModal";
 import OfficeReportForm from "../../Reports/OfficeReportForm";
-import {resetOrder} from "../../../store/order/actions";
+import NoDataIndication from "../../../components/Common/NoDataIndication";
+import {PERMISSIONS} from "../../../helpers/security_rol";
+import HasPermissions from "../../../components/HasPermissions";
 
 const OfficeList = props => {
-    const {states, offices, meta, getStates, onGetOffices, onResetOffices, loading, refresh} = props; //onDeleteOffice,
+    const {offices, onGetOffices, onResetOffices, refresh} = props; //onDeleteOffice,
     const [officeList, setOfficeList] = useState([])
     const [filter, setFilter] = useState(false);
     const [conditional, setConditional] = useState(null);
@@ -45,9 +47,8 @@ const OfficeList = props => {
         setOfficeList(offices);
     }, [offices])
 
-    // eslint-disable-next-line no-unused-vars
-    const handleTableChange = (type, {page, searchText}) => {
-        onGetOffices(conditional, DEFAULT_PAGE_LIMIT, (page - 1)*DEFAULT_PAGE_LIMIT);
+    const handleTableChange = (type, {page}) => {
+        onGetOffices(conditional, DEFAULT_PAGE_LIMIT, (page - 1) * DEFAULT_PAGE_LIMIT);
     }
 
     const onFilterAction = (condition) => {
@@ -67,21 +68,6 @@ const OfficeList = props => {
         });
     };
     const columns = officeColumns(onDelete);
-
-    var selectRowProp = {
-        mode: "checkbox",
-        clickToSelect: true,
-    };
-
-    const NoDataIndication = () => (
-        <div className="spinner">
-            <div className="rect1"/>
-            <div className="rect2"/>
-            <div className="rect3"/>
-            <div className="rect4"/>
-            <div className="rect5"/>
-        </div>
-    );
 
     return (
         <Row>
@@ -129,9 +115,11 @@ const OfficeList = props => {
                                                             </Button>
                                                         </Tooltip>
 
-                                                        <Link to={"/office"} className="btn btn-primary waves-effect waves-light text-light">
-                                                            <i className="mdi mdi-plus"> </i> Generar Despacho
-                                                        </Link>
+                                                        <HasPermissions permissions={[PERMISSIONS.OFFICE_CREATE]}>
+                                                            <Link to={"/office"} className="btn btn-primary waves-effect waves-light text-light">
+                                                                <i className="mdi mdi-plus"> </i> Generar Despacho
+                                                            </Link>
+                                                        </HasPermissions>
                                                     </div>
                                                 </Col>
                                             </Row>
