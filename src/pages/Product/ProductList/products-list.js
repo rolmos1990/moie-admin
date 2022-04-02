@@ -15,7 +15,7 @@ import NoDataIndication from "../../../components/Common/NoDataIndication";
 import productColumns from "./productColumn";
 import StatsStatusCard from "../../../components/Common/StatsStatusCard";
 import {countProductsByStatus} from "../../../helpers/service";
-import HasRole from "../../../components/HasRole";
+import HasPermissions from "../../../components/HasPermissions";
 import {PERMISSIONS} from "../../../helpers/security_rol";
 
 
@@ -235,11 +235,11 @@ const ProductList = props => {
                                                                     <i className="mdi mdi-text-box-search-outline"> </i>
                                                                 </Link>
                                                             </Tooltip>
-                                                            <HasRole role={PERMISSIONS.PRODUCT_CREATE}>
+                                                            <HasPermissions permission={PERMISSIONS.PRODUCT_CREATE}>
                                                                 <Link to={"/product"} className="btn btn-primary waves-effect waves-light text-light">
                                                                     <i className="mdi mdi-plus"> </i> Nuevo Producto
                                                                 </Link>
-                                                            </HasRole>
+                                                            </HasPermissions>
                                                         </div>
                                                     </Col>
                                                 </Row>

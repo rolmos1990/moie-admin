@@ -12,6 +12,8 @@ import {getImageByQuality, priceFormat} from "../../common/utils";
 import NoDataIndication from "../../components/Common/NoDataIndication";
 import {map} from "lodash";
 import ProductsPendingList from "./ProductsPending";
+import {PERMISSIONS} from "../../helpers/security_rol";
+import HasPermissions from "../../components/HasPermissions";
 
 const ProductDetail = (props) => {
 
@@ -87,11 +89,13 @@ const ProductDetail = (props) => {
                                         <h4 className="card-title">Descripción del producto</h4>
                                     </Col>
                                     <Col xs={2} className="text-right">
-                                        <li className="list-inline-item">
-                                            <Link to={`/product/${productData.id}`} className="px-2 text-primary">
-                                                <i className="uil uil-pen font-size-18"> </i>
-                                            </Link>
-                                        </li>
+                                        <HasPermissions permission={PERMISSIONS.PRODUCT_EDIT}>
+                                            <li className="list-inline-item">
+                                                <Link to={`/product/${productData.id}`} className="px-2 text-primary">
+                                                    <i className="uil uil-pen font-size-18"> </i>
+                                                </Link>
+                                            </li>
+                                        </HasPermissions>
                                     </Col>
                                 </Row>
                                 <Row>
