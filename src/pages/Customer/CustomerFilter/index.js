@@ -1,13 +1,12 @@
 import React, {useState} from "react";
 import {Button, Card, CardBody, Col, Label, Row} from "reactstrap";
-import {FieldEmail, FieldText, FieldSelect,FieldDate} from "../../../components/Fields";
+import {FieldDate, FieldEmail, FieldSelect, FieldText} from "../../../components/Fields";
 import {AvForm} from "availity-reactstrap-validation";
 import {DATE_MODES} from "../../../components/Fields/InputDate";
 import PropTypes from "prop-types";
 import Conditionals from "../../../common/conditionals";
 import moment from 'moment';
 import {Button as ButtonMaterial} from "@material-ui/core";
-import ButtonSubmit from "../../../components/Common/ButtonSubmit";
 
 export const CustomerFilter = (props) => {
 
