@@ -11,10 +11,13 @@ import {FieldNumber, FieldSwitch, FieldText} from "../../components/Fields";
 import Breadcrumb from "../../components/Common/Breadcrumb";
 import {STATUS} from "../../common/constants";
 import ButtonSubmit from "../../components/Common/ButtonSubmit";
+import HasPermissions from "../../components/HasPermissions";
+import {PERMISSIONS} from "../../helpers/security_rol";
+import NoAccess from "../../components/Common/NoAccess";
 
 const CategoryEdit = (props) => {
     const {getCategory, category} = props;
-    const [categoryData, setCategory] = useState({_status:STATUS.ACTIVE});
+    const [categoryData, setCategory] = useState({_status: STATUS.ACTIVE});
     const isEdit = props.match.params.id;
 
     //carga inicial
@@ -45,59 +48,60 @@ const CategoryEdit = (props) => {
             <div className="page-content">
                 <Container fluid>
                     <Breadcrumb hasBack path="/categories" title={categoryData.name} item={"Categoria"}/>
-
-                    <AvForm className="needs-validation" autoComplete="off" onValidSubmit={(e, v) => handleValidSubmit(e, v)}>
-                        <Row>
-                            <Col xl="8">
-                                <Card>
-                                    <CardBody>
-                                        <div className={"mt-1 mb-5"} style={{position: "relative"}}>
-                                            <div className={"float-end"}>
-                                                <Row>
-                                                    <Col>
-                                                        ¿Activo?
-                                                    </Col>
-                                                    <Col>
-                                                        <FieldSwitch defaultValue={categoryData._status} name={"_status"} />
-                                                    </Col>
-                                                </Row>
+                    <HasPermissions permission={PERMISSIONS.CATEGORY_EDIT} renderNoAccess={() => <NoAccess/>}>
+                        <AvForm className="needs-validation" autoComplete="off" onValidSubmit={(e, v) => handleValidSubmit(e, v)}>
+                            <Row>
+                                <Col xl="8">
+                                    <Card>
+                                        <CardBody>
+                                            <div className={"mt-1 mb-5"} style={{position: "relative"}}>
+                                                <div className={"float-end"}>
+                                                    <Row>
+                                                        <Col>
+                                                            ¿Activo?
+                                                        </Col>
+                                                        <Col>
+                                                            <FieldSwitch defaultValue={categoryData._status} name={"_status"}/>
+                                                        </Col>
+                                                    </Row>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <Row>
-                                            <Col md="8">
-                                                <div className="mb-3">
-                                                    <Label htmlFor="field_name">Nombre <span className="text-danger">*</span></Label>
-                                                    <FieldText
-                                                        id={"field_name"}
-                                                        name={"name"}
-                                                        value={categoryData.name}
-                                                        minLength={3}
-                                                        maxLength={150}
-                                                        required
-                                                    />
-                                                </div>
-                                            </Col>
-                                            <Col md="4">
-                                                <div className="mb-3">
-                                                    <Label htmlFor="field_discount">Descuento<span className="text-danger">*</span></Label>
-                                                    <FieldNumber
-                                                        id={"field_discount"}
-                                                        name={"discountPercent"}
-                                                        value={categoryData.discountPercent}
-                                                        required/>
-                                                </div>
-                                            </Col>
-                                        </Row>
-                                        <Row>
-                                            <Col md={12} className="text-right">
-                                                <ButtonSubmit loading={props.loading} />
-                                            </Col>
-                                        </Row>
-                                    </CardBody>
-                                </Card>
-                            </Col>
-                        </Row>
-                    </AvForm>
+                                            <Row>
+                                                <Col md="8">
+                                                    <div className="mb-3">
+                                                        <Label htmlFor="field_name">Nombre <span className="text-danger">*</span></Label>
+                                                        <FieldText
+                                                            id={"field_name"}
+                                                            name={"name"}
+                                                            value={categoryData.name}
+                                                            minLength={3}
+                                                            maxLength={150}
+                                                            required
+                                                        />
+                                                    </div>
+                                                </Col>
+                                                <Col md="4">
+                                                    <div className="mb-3">
+                                                        <Label htmlFor="field_discount">Descuento<span className="text-danger">*</span></Label>
+                                                        <FieldNumber
+                                                            id={"field_discount"}
+                                                            name={"discountPercent"}
+                                                            value={categoryData.discountPercent}
+                                                            required/>
+                                                    </div>
+                                                </Col>
+                                            </Row>
+                                            <Row>
+                                                <Col md={12} className="text-right">
+                                                    <ButtonSubmit loading={props.loading}/>
+                                                </Col>
+                                            </Row>
+                                        </CardBody>
+                                    </Card>
+                                </Col>
+                            </Row>
+                        </AvForm>
+                    </HasPermissions>
                 </Container>
             </div>
         </React.Fragment>

@@ -35,7 +35,6 @@ const CategoryList = props => {
 
     const pageOptions = {
         sizePerPage: DEFAULT_PAGE_LIMIT,
-        //totalSize: meta?.totalRegisters, // replace later with size(users),
         custom: true,
     }
 
@@ -54,11 +53,10 @@ const CategoryList = props => {
         setCategoriesList(categories)
     }, [categories])
 
-    // eslint-disable-next-line no-unused-vars
-    const handleTableChange = (type, {page, searchText}) => {
+    const handleTableChange = (type, {page}) => {
         let p = page - 1;
         setCurrentPage(p);
-        onGetCategories(conditional, DEFAULT_PAGE_LIMIT, p*DEFAULT_PAGE_LIMIT);
+        onGetCategories(conditional, DEFAULT_PAGE_LIMIT, p * DEFAULT_PAGE_LIMIT);
     }
 
     const onFilterAction = (condition) => {
@@ -112,7 +110,6 @@ const CategoryList = props => {
         mode: "checkbox",
         clickToSelect: true,
         onSelect: (row, selected, b) => {
-            // console.log('onSelect', selected ,b)
             let list = [...printCategoriesId]
             const index = list.indexOf(row.id);
             if (index >= 0) {
@@ -123,7 +120,6 @@ const CategoryList = props => {
             setPrintCategoriesId(list);
         },
         onSelectAll: (selected) => {
-            // console.log('onSelectAll', selected,  selected)
             setPrintCategoriesId([]);
             setSelectAll(selected);
         }
@@ -199,12 +195,6 @@ const CategoryList = props => {
                                                         <div className="form-inline mb-3">
                                                         <div className="search-box ms-2">
                                                             <h4 className="text-info"><i className="uil-box me-2 me-2"></i> Categorias</h4>
-                                                            {/*{!filter && (
-                                                                <div className="position-relative">
-                                                                    <SearchBar {...toolkitProps.searchProps}/>
-                                                                    <i className="mdi mdi-magnify search-icon"> </i>
-                                                                </div>
-                                                            )}*/}
                                                         </div>
                                                     </div>
                                                     </Col>
@@ -233,9 +223,11 @@ const CategoryList = props => {
                                                                     </Button>
                                                                 </Tooltip>
                                                             </HasPermissions>
-                                                            <Link to={"/category"} className="btn btn-primary waves-effect waves-light text-light">
-                                                                <i className="mdi mdi-plus"> </i> Nueva Categoria
-                                                            </Link>
+                                                            <HasPermissions permission={PERMISSIONS.CATEGORY_CREATE}>
+                                                                <Link to={"/category"} className="btn btn-primary waves-effect waves-light text-light">
+                                                                    <i className="mdi mdi-plus"> </i> Nueva Categoria
+                                                                </Link>
+                                                            </HasPermissions>
                                                         </div>
                                                     </Col>
 
@@ -279,7 +271,6 @@ const CategoryList = props => {
 CategoryList.propTypes = {
     categories: PropTypes.array,
     onGetCategories: PropTypes.func,
-    // onDeleteStates: PropTypes.func,
 }
 
 const mapStateToProps = state => {
