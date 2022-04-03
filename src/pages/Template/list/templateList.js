@@ -14,6 +14,9 @@ import {TableFilter} from "../../../components/TableFilter";
 import {normalizeColumnsList} from "../../../common/converters";
 import {getTemplates, resetTemplate} from "../../../store/template/actions";
 import templateColumns from "./templateColumn";
+import NoDataIndication from "../../../components/Common/NoDataIndication";
+import {PERMISSIONS} from "../../../helpers/security_rol";
+import HasPermissions from "../../../components/HasPermissions";
 
 const TemplateList = props => {
     const {templates, meta, onGetTemplates, onResetTemplate, onDeleteState, loading, refresh} = props;
@@ -41,9 +44,8 @@ const TemplateList = props => {
         setTemplatesList(templates)
     }, [templates])
 
-    // eslint-disable-next-line no-unused-vars
-    const handleTableChange = (type, {page, searchText}) => {
-        onGetTemplates(conditional, DEFAULT_PAGE_LIMIT, (page - 1)*DEFAULT_PAGE_LIMIT);
+    const handleTableChange = (type, {page}) => {
+        onGetTemplates(conditional, DEFAULT_PAGE_LIMIT, (page - 1) * DEFAULT_PAGE_LIMIT);
     }
 
     const onFilterAction = (condition) => {
@@ -65,15 +67,6 @@ const TemplateList = props => {
 
     const columns = templateColumns(onDelete);
 
-    const NoDataIndication = () => (
-        <div className="spinner">
-            <div className="rect1"/>
-            <div className="rect2"/>
-            <div className="rect3"/>
-            <div className="rect4"/>
-            <div className="rect5"/>
-        </div>
-    );
     return (
         <Row>
             <TableFilter
@@ -101,27 +94,23 @@ const TemplateList = props => {
                                                     <div className="form-inline mb-3">
                                                         <div className="search-box ms-2">
                                                             <h4 className="text-info"><i className="uil-shopping-cart-alt me-2"></i> Plantillas</h4>
-                                                           {/* {!filter && (
-                                                                <div className="position-relative">
-                                                                    <SearchBar {...toolkitProps.searchProps}/>
-                                                                    <i className="mdi mdi-magnify search-icon"> </i>
-                                                                </div>
-                                                            )}*/}
                                                         </div>
                                                     </div>
                                                 </Col>
                                                 <Col md={6}>
                                                     <div className="mb-3 float-md-end">
                                                         {columns.some(s => s.filter) && (
-                                                            <Tooltip placement="bottom" title="Filtros Avanzados" aria-label="add" >
+                                                            <Tooltip placement="bottom" title="Filtros Avanzados" aria-label="add">
                                                                 <Button onClick={() => setFilter(!filter)}>
                                                                     <i className={"mdi mdi-filter"}> </i>
                                                                 </Button>
                                                             </Tooltip>
                                                         )}
-                                                        <Link to={"/template"} className="btn btn-primary waves-effect waves-light text-light">
-                                                            <i className="mdi mdi-plus"> </i> Nueva Plantilla
-                                                        </Link>
+                                                        <HasPermissions permissions={[PERMISSIONS.TEMPLATE_CREATE]}>
+                                                            <Link to={"/template"} className="btn btn-primary waves-effect waves-light text-light">
+                                                                <i className="mdi mdi-plus"> </i> Nueva Plantilla
+                                                            </Link>
+                                                        </HasPermissions>
                                                     </div>
                                                 </Col>
                                             </Row>
