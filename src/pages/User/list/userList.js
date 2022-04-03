@@ -15,16 +15,14 @@ import {getUsers, resetUser, setUserToChangePassword} from "../../../store/user/
 import userColumns from "./userColumn";
 import NoDataIndication from "../../../components/Common/NoDataIndication";
 import ForgetPassword from "./forgetPassword";
+import {PERMISSIONS} from "../../../helpers/security_rol";
+import HasPermissions from "../../../components/HasPermissions";
 
 const UserList = props => {
     const {users, meta, onGetUsers, onResetUsers, onSelectUser, refresh} = props;
     const [usersList, setCategoriesList] = useState([])
     const [filter, setFilter] = useState(false);
     const [conditional, setConditional] = useState(null);
-    // const [userSelected, setUserSelected] = useState(null);
-    // const [newPassword, setNewPassword] = useState(null);
-    // const [confirmPassword, setConfirmPassword] = useState(null);
-    // const [openChangePasswordModal, setOpenChangePasswordModal] = useState(false);
 
     const pageOptions = {
         sizePerPage: DEFAULT_PAGE_LIMIT,
@@ -46,9 +44,8 @@ const UserList = props => {
         setCategoriesList(users)
     }, [users])
 
-    // eslint-disable-next-line no-unused-vars
-    const handleTableChange = (type, {page, searchText}) => {
-        onGetUsers(conditional, DEFAULT_PAGE_LIMIT, (page - 1)*DEFAULT_PAGE_LIMIT);
+    const handleTableChange = (type, {page}) => {
+        onGetUsers(conditional, DEFAULT_PAGE_LIMIT, (page - 1) * DEFAULT_PAGE_LIMIT);
     }
 
     const onFilterAction = (condition) => {
@@ -92,15 +89,17 @@ const UserList = props => {
                                                     <Col md={6}>
                                                         <div className="mb-3 float-md-end">
                                                             {columns.some(s => s.filter) && (
-                                                                <Tooltip placement="bottom" title="Filtros Avanzados" aria-label="add" >
+                                                                <Tooltip placement="bottom" title="Filtros Avanzados" aria-label="add">
                                                                     <Button onClick={() => setFilter(!filter)}>
                                                                         <i className={"mdi mdi-filter"}> </i>
                                                                     </Button>
                                                                 </Tooltip>
                                                             )}
-                                                            <Link to={"/user"} className="btn btn-primary waves-effect waves-light text-light">
-                                                                <i className="mdi mdi-plus"> </i> Nuevo usuario
-                                                            </Link>
+                                                            <HasPermissions permissions={[PERMISSIONS.USER_CREATE]}>
+                                                                <Link to={"/user"} className="btn btn-primary waves-effect waves-light text-light">
+                                                                    <i className="mdi mdi-plus"> </i> Nuevo usuario
+                                                                </Link>
+                                                            </HasPermissions>
                                                         </div>
                                                     </Col>
                                                 </Row>
