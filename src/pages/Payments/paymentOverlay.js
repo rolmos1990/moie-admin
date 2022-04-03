@@ -12,6 +12,8 @@ import {ConfirmationModalAction} from "../../components/Modal/ConfirmationModal"
 import {StatusField} from "../../components/StatusField";
 import {ORDER_STATUS, PAYMENT_STATUS} from "../../common/constants";
 import {applyPayment, getPayment} from "../../store/payments/actions";
+import {PERMISSIONS} from "../../helpers/security_rol";
+import HasPermissions from "../../components/HasPermissions";
 
 const PaymentOverlay = (props) => {
 
@@ -68,14 +70,14 @@ const PaymentOverlay = (props) => {
                 <Col md={12} className="p-3">
                     <Card id={'payment-detail'} className="p-3">
                         <Row>
-                        <Col xs={10}>
-                            <h4 className="card-title text-info"><i className="uil uil-truck"> </i> Datos del pago</h4>
-                        </Col>
-                        <Col xs={2}>
-                            <StatusField color={PAYMENT_STATUS[payment.status].color}>
-                                {PAYMENT_STATUS[payment.status].name}
-                            </StatusField>
-                        </Col>
+                            <Col xs={10}>
+                                <h4 className="card-title text-info"><i className="uil uil-truck"> </i> Datos del pago</h4>
+                            </Col>
+                            <Col xs={2}>
+                                <StatusField color={PAYMENT_STATUS[payment.status].color}>
+                                    {PAYMENT_STATUS[payment.status].name}
+                                </StatusField>
+                            </Col>
                         </Row>
                         <Row>
                             <Col md={6}>
@@ -135,13 +137,18 @@ const PaymentOverlay = (props) => {
                                         <th style={{width: '15%'}}>Monto</th>
                                         <th style={{width: '10%'}}>Envio</th>
                                         <th style={{width: '15%'}}>Total</th>
-                                        <th></th>
+                                        <HasPermissions permissions={[PERMISSIONS.PAYMENT_EDIT]}>
+                                            <th></th>
+                                        </HasPermissions>
                                     </tr>
                                     </thead>
                                     <tbody>
                                     {orders.length === 0 && (
+
                                         <tr>
-                                            <td colSpan={6} style={{"textAlign": "center"}}>No hay registros que mostrar</td>
+                                            <HasPermissions permissions={[PERMISSIONS.PAYMENT_EDIT]} renderNoAccess={() => <td colSpan={5} style={{"textAlign": "center"}}>No hay registros que mostrar</td>}>
+                                                <td colSpan={6} style={{"textAlign": "center"}}>No hay registros que mostrar</td>
+                                            </HasPermissions>
                                         </tr>
                                     )}
                                     {orders.map((order, k) => (
@@ -152,13 +159,15 @@ const PaymentOverlay = (props) => {
                                             <td className="text-end">{priceFormat(order.subTotalAmount, "", true)}</td>
                                             <td className="text-end">{priceFormat(parseFloat(order.totalAmount || 0) - parseFloat(order.subTotalAmount || 0), "", true)}</td>
                                             <td className="text-end">{priceFormat(order.totalAmount, "", true)}</td>
-                                            <td>
-                                                <Tooltip placement="bottom" title="Asociar pedido" aria-label="add">
-                                                    <button size="small" className="btn btn-sm btn-primary" onClick={() => selectOrder(order)}>
-                                                        <i className="uil uil-plus-circle font-size-18"> </i>
-                                                    </button>
-                                                </Tooltip>
-                                            </td>
+                                            <HasPermissions permissions={[PERMISSIONS.PAYMENT_EDIT]}>
+                                                <td>
+                                                    <Tooltip placement="bottom" title="Asociar pedido" aria-label="add">
+                                                        <button size="small" className="btn btn-sm btn-primary" onClick={() => selectOrder(order)}>
+                                                            <i className="uil uil-plus-circle font-size-18"> </i>
+                                                        </button>
+                                                    </Tooltip>
+                                                </td>
+                                            </HasPermissions>
                                         </tr>
                                     ))}
                                     </tbody>

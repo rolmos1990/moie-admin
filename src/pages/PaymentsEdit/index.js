@@ -11,6 +11,9 @@ import {BANKS_LIST, GROUPS, PAYMENT_FORMS, PAYMENT_FORMS_LIST, STATUS} from "../
 import ButtonSubmit from "../../components/Common/ButtonSubmit";
 import {getPayment, registerPayment, updatePayment} from "../../store/payments/actions";
 import {getFieldOptionByGroups, registerFieldOption} from "../../store/fieldOptions/actions";
+import {PERMISSIONS} from "../../helpers/security_rol";
+import NoAccess from "../../components/Common/NoAccess";
+import HasPermissions from "../../components/HasPermissions";
 
 const PaymentEdit = (props) => {
     const {onGetPayment, payment, onGetFieldOptions, fieldOptions} = props;
@@ -65,13 +68,13 @@ const PaymentEdit = (props) => {
             <div className="page-content">
                 <Container fluid>
                     <Breadcrumb hasBack path="/payments" title={paymentData.name} item={"Pagos"}/>
-
-                    <AvForm className="needs-validation" autoComplete="off" onValidSubmit={(e, v) => handleValidSubmit(e, v)}>
-                        <Row>
-                            <Col xl="12">
-                                <Card>
-                                    <CardBody>
-                                        {/*<div className={"mt-1 mb-5"} style={{position: "relative"}}>
+                    <HasPermissions permissions={[PERMISSIONS.PAYMENT_CREATE]} renderNoAccess={() => <NoAccess/>}>
+                        <AvForm className="needs-validation" autoComplete="off" onValidSubmit={(e, v) => handleValidSubmit(e, v)}>
+                            <Row>
+                                <Col xl="12">
+                                    <Card>
+                                        <CardBody>
+                                            {/*<div className={"mt-1 mb-5"} style={{position: "relative"}}>
                                             <div className={"float-end"}>
                                                 <Row>
                                                     <Col>
@@ -83,142 +86,143 @@ const PaymentEdit = (props) => {
                                                 </Row>
                                             </div>
                                         </div>*/}
-                                        <Row>
-                                            <Col md="6">
-                                                <div className="mb-3">
-                                                    <Label htmlFor="field_name">Nombre <span className="text-danger">*</span></Label>
-                                                    <FieldText
-                                                        id={"field_name"}
-                                                        name={"name"}
-                                                        value={paymentData.name}
-                                                        minLength={3}
-                                                        maxLength={255}
-                                                        required
-                                                    />
-                                                </div>
-                                            </Col>
-                                            <Col md="6">
-                                                <div className="mb-3">
-                                                    <Label htmlFor="field_name">Correo <span className="text-danger">*</span></Label>
-                                                    <FieldEmail
-                                                        name={"email"}
-                                                        value={paymentData.email}
-                                                        required/>
-                                                </div>
-                                            </Col>
-                                            <Col md="6">
-                                                <div className="mb-3">
-                                                    <Label htmlFor="field_name">Teléfono <span className="text-danger">*</span></Label>
-                                                    <FieldPhone
-                                                        id="phone"
-                                                        name="phone"
-                                                        value={paymentData.phone}
-                                                        placeholder=""
-                                                        type="text"
-                                                        errorMessage="Ingrese un número valido (Ejemplo: 00000000)"
-                                                        className="form-control"
-                                                        validate={{required: {value: true}}}
-                                                        onChange={(value) => setPaymentData({...paymentData, phone: value})}
-                                                    />
-                                                </div>
-                                            </Col>
-                                            <Col md="6">
-                                                <div className="mb-3">
-                                                    <Label htmlFor="state">Forma de pago <span className="text-danger">*</span></Label>
-                                                    <FieldSelect
-                                                        id="type"
-                                                        name={"type"}
-                                                        placeholder={"Indique una forma de pago"}
-                                                        defaultValue={paymentData.type}
-                                                        options={PAYMENT_FORMS_LIST}
-                                                        onChange={item => setPaymentFormSelected(item.value)}
-                                                        required
-                                                        isSearchable
-                                                    />
-                                                </div>
-                                            </Col>
-                                            {(PAYMENT_FORMS.BANK_TRANSFER === paymentFormSelected) && (
-                                            <>
-                                            <Col md="6">
-                                                <div className="mb-3">
-                                                    <Label htmlFor="state">Banco origen <span className="text-danger">*</span></Label>
-                                                    <FieldSelect
-                                                        id="originBank"
-                                                        name={"originBank"}
-                                                        placeholder={"Seleccione un banco"}
-                                                        defaultValue={paymentData.originBank}
-                                                        options={BANKS_LIST}
-                                                        required
-                                                        isSearchable
-                                                    />
-                                                </div>
-                                            </Col>
-                                            <Col md="6">
-                                                <div className="mb-3">
-                                                    <Label htmlFor="state">Banco destino <span className="text-danger">*</span></Label>
-                                                    <FieldSelect
-                                                        id="targetBank"
-                                                        name={"targetBank"}
-                                                        placeholder={"Seleccione un banco"}
-                                                        defaultValue={paymentData.targetBank}
-                                                        options={banks && banks.filter(item => item.value != "Efecty")}
-                                                        required
-                                                        isSearchable
-                                                    />
-                                                </div>
-                                            </Col>
-                                            </>
-                                            )}
-                                            {(PAYMENT_FORMS.DEPOSIT === paymentFormSelected) && (
+                                            <Row>
                                                 <Col md="6">
                                                     <div className="mb-3">
-                                                        <Label htmlFor="state">Banco <span className="text-danger">*</span></Label>
+                                                        <Label htmlFor="field_name">Nombre <span className="text-danger">*</span></Label>
+                                                        <FieldText
+                                                            id={"field_name"}
+                                                            name={"name"}
+                                                            value={paymentData.name}
+                                                            minLength={3}
+                                                            maxLength={255}
+                                                            required
+                                                        />
+                                                    </div>
+                                                </Col>
+                                                <Col md="6">
+                                                    <div className="mb-3">
+                                                        <Label htmlFor="field_name">Correo <span className="text-danger">*</span></Label>
+                                                        <FieldEmail
+                                                            name={"email"}
+                                                            value={paymentData.email}
+                                                            required/>
+                                                    </div>
+                                                </Col>
+                                                <Col md="6">
+                                                    <div className="mb-3">
+                                                        <Label htmlFor="field_name">Teléfono <span className="text-danger">*</span></Label>
+                                                        <FieldPhone
+                                                            id="phone"
+                                                            name="phone"
+                                                            value={paymentData.phone}
+                                                            placeholder=""
+                                                            type="text"
+                                                            errorMessage="Ingrese un número valido (Ejemplo: 00000000)"
+                                                            className="form-control"
+                                                            validate={{required: {value: true}}}
+                                                            onChange={(value) => setPaymentData({...paymentData, phone: value})}
+                                                        />
+                                                    </div>
+                                                </Col>
+                                                <Col md="6">
+                                                    <div className="mb-3">
+                                                        <Label htmlFor="state">Forma de pago <span className="text-danger">*</span></Label>
                                                         <FieldSelect
-                                                            id="targetBank"
-                                                            name={"targetBank"}
-                                                            placeholder={"Seleccione un banco"}
-                                                            defaultValue={paymentData.targetBank}
-                                                            options={banks}
+                                                            id="type"
+                                                            name={"type"}
+                                                            placeholder={"Indique una forma de pago"}
+                                                            defaultValue={paymentData.type}
+                                                            options={PAYMENT_FORMS_LIST}
+                                                            onChange={item => setPaymentFormSelected(item.value)}
                                                             required
                                                             isSearchable
                                                         />
                                                     </div>
                                                 </Col>
-                                            )}
-                                            <Col md="6">
-                                                <div className="mb-3">
-                                                    <Label htmlFor="field_name">Número de consignación o transferencia <span className="text-danger">*</span></Label>
-                                                    <FieldText
-                                                        id={"consignmentNumber"}
-                                                        name={"consignmentNumber"}
-                                                        value={paymentData.consignmentNumber}
-                                                        minLength={1}
-                                                        maxLength={255}
-                                                        required
-                                                    />
-                                                </div>
-                                            </Col>
-                                            <Col md="6">
-                                                <div className="mb-3">
-                                                    <Label htmlFor="field_name">Monto de consignación o transferencia <span className="text-danger">*</span></Label>
-                                                    <FieldNumber
-                                                        id={"consignmentAmount"}
-                                                        name={"consignmentAmount"}
-                                                        value={paymentData.consignmentAmount}
-                                                        required/>
-                                                </div>
-                                            </Col>
-                                        </Row>
-                                        <Row>
-                                            <Col md={12} className="text-right">
-                                                <ButtonSubmit loading={props.loading}/>
-                                            </Col>
-                                        </Row>
-                                    </CardBody>
-                                </Card>
-                            </Col>
-                        </Row>
-                    </AvForm>
+                                                {(PAYMENT_FORMS.BANK_TRANSFER === paymentFormSelected) && (
+                                                    <>
+                                                        <Col md="6">
+                                                            <div className="mb-3">
+                                                                <Label htmlFor="state">Banco origen <span className="text-danger">*</span></Label>
+                                                                <FieldSelect
+                                                                    id="originBank"
+                                                                    name={"originBank"}
+                                                                    placeholder={"Seleccione un banco"}
+                                                                    defaultValue={paymentData.originBank}
+                                                                    options={BANKS_LIST}
+                                                                    required
+                                                                    isSearchable
+                                                                />
+                                                            </div>
+                                                        </Col>
+                                                        <Col md="6">
+                                                            <div className="mb-3">
+                                                                <Label htmlFor="state">Banco destino <span className="text-danger">*</span></Label>
+                                                                <FieldSelect
+                                                                    id="targetBank"
+                                                                    name={"targetBank"}
+                                                                    placeholder={"Seleccione un banco"}
+                                                                    defaultValue={paymentData.targetBank}
+                                                                    options={banks && banks.filter(item => item.value != "Efecty")}
+                                                                    required
+                                                                    isSearchable
+                                                                />
+                                                            </div>
+                                                        </Col>
+                                                    </>
+                                                )}
+                                                {(PAYMENT_FORMS.DEPOSIT === paymentFormSelected) && (
+                                                    <Col md="6">
+                                                        <div className="mb-3">
+                                                            <Label htmlFor="state">Banco <span className="text-danger">*</span></Label>
+                                                            <FieldSelect
+                                                                id="targetBank"
+                                                                name={"targetBank"}
+                                                                placeholder={"Seleccione un banco"}
+                                                                defaultValue={paymentData.targetBank}
+                                                                options={banks}
+                                                                required
+                                                                isSearchable
+                                                            />
+                                                        </div>
+                                                    </Col>
+                                                )}
+                                                <Col md="6">
+                                                    <div className="mb-3">
+                                                        <Label htmlFor="field_name">Número de consignación o transferencia <span className="text-danger">*</span></Label>
+                                                        <FieldText
+                                                            id={"consignmentNumber"}
+                                                            name={"consignmentNumber"}
+                                                            value={paymentData.consignmentNumber}
+                                                            minLength={1}
+                                                            maxLength={255}
+                                                            required
+                                                        />
+                                                    </div>
+                                                </Col>
+                                                <Col md="6">
+                                                    <div className="mb-3">
+                                                        <Label htmlFor="field_name">Monto de consignación o transferencia <span className="text-danger">*</span></Label>
+                                                        <FieldNumber
+                                                            id={"consignmentAmount"}
+                                                            name={"consignmentAmount"}
+                                                            value={paymentData.consignmentAmount}
+                                                            required/>
+                                                    </div>
+                                                </Col>
+                                            </Row>
+                                            <Row>
+                                                <Col md={12} className="text-right">
+                                                    <ButtonSubmit loading={props.loading}/>
+                                                </Col>
+                                            </Row>
+                                        </CardBody>
+                                    </Card>
+                                </Col>
+                            </Row>
+                        </AvForm>
+                    </HasPermissions>
                 </Container>
             </div>
         </React.Fragment>

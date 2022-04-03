@@ -9,26 +9,15 @@ import BootstrapTable from "react-bootstrap-table-next"
 import {Link} from "react-router-dom"
 import {Button, Tooltip} from "@material-ui/core";
 import {DEFAULT_PAGE_LIMIT} from "../../../common/pagination";
-import {ConfirmationModalAction} from "../../../components/Modal/ConfirmationModal";
 import {getPayments} from "../../../store/payments/actions";
 import paymentsColumns from "./paymentsColumn";
 import {TableFilter} from "../../../components/TableFilter";
 import {normalizeColumnsList} from "../../../common/converters";
 import NoDataIndication from "../../../components/Common/NoDataIndication";
 import PaymentOverlay from "../paymentOverlay";
+import {PERMISSIONS} from "../../../helpers/security_rol";
+import HasPermissions from "../../../components/HasPermissions";
 
-const list = [{
-    id: 1,
-    name: "asdasdasd",
-    email: "yoel.gonzalez@warnermedia.com",
-    cellphone: "+57 434 333 4",
-    paymentForm: "Transferencia bancaria",
-    originBank: "Banco Colpatria",
-    targetBank: "BANCO1",
-    consignmentAmount: "43434334",
-    consignmentNumber: "sdfsfdffsd",
-    date: "2021-11-13"
-}]
 
 const PaymentsList = props => {
     const {payments, meta, onGetPayments, onDeletePayment, loading, refresh} = props;
@@ -53,11 +42,9 @@ const PaymentsList = props => {
 
     useEffect(() => {
         setPaymentsList(payments)
-        // setPaymentsList(list)
     }, [payments])
 
-    // eslint-disable-next-line no-unused-vars
-    const handleTableChange = (type, {page, searchText}) => {
+    const handleTableChange = (type, {page}) => {
         onGetPayments(conditional, DEFAULT_PAGE_LIMIT, (page - 1) * DEFAULT_PAGE_LIMIT);
     }
 
@@ -65,18 +52,6 @@ const PaymentsList = props => {
         setConditional(condition);
         onGetPayments(condition, DEFAULT_PAGE_LIMIT, 0);
     }
-    const onConfirmDelete = (id) => {
-        onDeletePayment(id);
-    };
-
-    const onDelete = (id) => {
-        ConfirmationModalAction({
-            title: '¿Seguro desea eliminar el Estado?',
-            description: 'Usted está eliminado este Estado, una vez eliminado no podrá ser recuperado.',
-            id: '_clienteModal',
-            onConfirm: () => onConfirmDelete(id)
-        });
-    };
 
     const columns = paymentsColumns(setPaymentSelected);
 
@@ -120,9 +95,12 @@ const PaymentsList = props => {
                                                                     </Button>
                                                                 </Tooltip>
                                                             )}
-                                                            <Link to={"/payment"} className="btn btn-primary waves-effect waves-light text-light">
-                                                                <i className="mdi mdi-plus"></i> Nuevo pago
-                                                            </Link>
+                                                            <HasPermissions permissions={[PERMISSIONS.PAYMENT_CREATE]}>
+                                                                <Link to={"/payment"} className="btn btn-primary waves-effect waves-light text-light">
+                                                                    <i className="mdi mdi-plus"></i> Nuevo pago
+                                                                </Link>
+                                                            </HasPermissions>
+
                                                         </div>
                                                     </Col>
                                                 </Row>
