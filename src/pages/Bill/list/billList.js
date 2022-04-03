@@ -17,7 +17,8 @@ import NoDataIndication from "../../../components/Common/NoDataIndication";
 import CustomModal from "../../../components/Modal/CommosModal";
 import OrderList from "../../Orders/orderList";
 import BillGenerateReportForm from "../../Reports/BillsReportForm";
-import {resetOffice} from "../../../store/office/actions";
+import HasPermissions from "../../../components/HasPermissions";
+import {PERMISSIONS} from "../../../helpers/security_rol";
 
 const BillList = props => {
     const {states, bills, meta, getStates, onGetBills, onResetBill, loading, refresh} = props; //onDeleteBill,
@@ -145,9 +146,12 @@ const BillList = props => {
                                                                     <i className="mdi mdi-file"> </i>
                                                                 </Button>
                                                             </Tooltip>
-                                                            <Button color="primary" className="btn-sm btn-rounded waves-effect waves-light" onClick={addOrders}>
-                                                                <i className="mdi mdi-plus"> </i> Generar Factura
-                                                            </Button>
+
+                                                            <HasPermissions permission={PERMISSIONS.BILL_CREATE}>
+                                                                <Button color="primary" className="btn btn-rounded waves-effect waves-light" onClick={addOrders}>
+                                                                    <i className="mdi mdi-plus"> </i> Generar Factura
+                                                                </Button>
+                                                            </HasPermissions>
                                                         </div>
                                                     </Col>
                                                 </Row>

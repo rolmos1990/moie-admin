@@ -10,6 +10,9 @@ import NoDataIndication from "../../components/Common/NoDataIndication";
 import {createCreditNote, getBill} from "../../store/bill/actions";
 import {ConfirmationModalAction} from "../../components/Modal/ConfirmationModal";
 import {BILL_STATUS} from "../../common/constants";
+import {PERMISSIONS} from "../../helpers/security_rol";
+import NoAccess from "../../components/Common/NoAccess";
+import HasPermissions from "../../components/HasPermissions";
 
 const BillDetail = (props) => {
 
@@ -47,81 +50,81 @@ const BillDetail = (props) => {
                 <Container fluid className="pb-3">
                     <Breadcrumb hasBack path="/bills" title={`Factura #${bill.id}`} item={`Factura #${bill.id}`}/>
 
-                    <Row className="mb-2">
-                        <Col md={12}>
-                            <div className={"mb-3 float-md-start"}>
+                    <HasPermissions permissions={[PERMISSIONS.BILL_LIST]} renderNoAccess={() => <NoAccess/>}>
+                        <Row className="mb-2">
+                            <Col md={12}>
+                                <div className={"mb-3 float-md-start"}>
 
-                            </div>
-                            <div className={"mb-3 float-md-end"}>
-                                <div className="button-items">
-                                    {!!(bill.status === BILL_STATUS.SENT && !bill.creditNote) && (
-                                        <Tooltip placement="bottom" title="Generar nota de crédito" aria-label="add">
-                                            <button type="button" color="primary" className="btn-sm btn btn-outline-info waves-effect waves-light" onClick={() => createCreditNote()}>
-                                                <i className={`uil-bill text-danger`}> </i>
-                                            </button>
-                                        </Tooltip>
-                                    )}
                                 </div>
-                            </div>
-                        </Col>
-                    </Row>
-
-                    <Card id={'details'} className="mb-3 p-3">
-                        <Row>
-                            <Col md={12}>
-                                <h4 className="card-title text-info">Información básica</h4>
-                                <hr/>
-                            </Col>
-                            <Col md={12}>
-                                <Row>
-                                    <Col md={6}>
-                                        <label>ID: </label>
-                                        <span className="p-1">{bill.id}</span>
-                                    </Col>
-                                </Row>
-                                <Row>
-                                    <Col md={6}>
-                                        <label>Número legal: </label>
-                                        <span className="p-1">{bill.legalNumber}</span>
-                                    </Col>
-                                    <Col md={6}>
-                                        <label>Pedido: </label>
-                                        <span className="p-1">{bill.order.id}</span>
-                                    </Col>
-                                </Row>
-                                <Row>
-                                    <Col md={6}>
-                                        <label>Estatus:</label>
-                                        <span className="p-1">{bill.status}</span>
-                                    </Col>
-                                    <Col md={6}>
-                                        <label>Fecha: </label>
-                                        <span className="p-1">{formatDate(bill.createdAt)}</span>
-                                    </Col>
-                                </Row>
-                                <Row>
-                                    <Col md={6}>
-                                        <label>Cliente:</label>
-                                        <span className="p-1">{bill.order.customer.name}</span>
-                                    </Col>
-                                    <Col md={6}>
-                                        <label>Correo: </label>
-                                        <span className="p-1">{bill.order.customer.email}</span>
-                                    </Col>
-                                </Row>
+                                <div className={"mb-3 float-md-end"}>
+                                    <div className="button-items">
+                                        {!!(bill.status === BILL_STATUS.SENT && !bill.creditNote) && (
+                                            <Tooltip placement="bottom" title="Generar nota de crédito" aria-label="add">
+                                                <button type="button" color="primary" className="btn-sm btn btn-outline-info waves-effect waves-light" onClick={() => createCreditNote()}>
+                                                    <i className={`uil-bill text-danger`}> </i>
+                                                </button>
+                                            </Tooltip>
+                                        )}
+                                    </div>
+                                </div>
                             </Col>
                         </Row>
-                    </Card>
-
-                    <Card id={'log'} className="mb-3 p-3">
-                        <Row>
-                            <Col md={12}>
-                                <h4 className="card-title text-info">Bitacora Dian</h4>
-                                <hr/>
-                                <div dangerouslySetInnerHTML={{ __html: formatLog(bill.dianLog) }} />
-                            </Col>
-                        </Row>
-                    </Card>
+                        <Card id={'details'} className="mb-3 p-3">
+                            <Row>
+                                <Col md={12}>
+                                    <h4 className="card-title text-info">Información básica</h4>
+                                    <hr/>
+                                </Col>
+                                <Col md={12}>
+                                    <Row>
+                                        <Col md={6}>
+                                            <label>ID: </label>
+                                            <span className="p-1">{bill.id}</span>
+                                        </Col>
+                                    </Row>
+                                    <Row>
+                                        <Col md={6}>
+                                            <label>Número legal: </label>
+                                            <span className="p-1">{bill.legalNumber}</span>
+                                        </Col>
+                                        <Col md={6}>
+                                            <label>Pedido: </label>
+                                            <span className="p-1">{bill.order.id}</span>
+                                        </Col>
+                                    </Row>
+                                    <Row>
+                                        <Col md={6}>
+                                            <label>Estatus:</label>
+                                            <span className="p-1">{bill.status}</span>
+                                        </Col>
+                                        <Col md={6}>
+                                            <label>Fecha: </label>
+                                            <span className="p-1">{formatDate(bill.createdAt)}</span>
+                                        </Col>
+                                    </Row>
+                                    <Row>
+                                        <Col md={6}>
+                                            <label>Cliente:</label>
+                                            <span className="p-1">{bill.order.customer.name}</span>
+                                        </Col>
+                                        <Col md={6}>
+                                            <label>Correo: </label>
+                                            <span className="p-1">{bill.order.customer.email}</span>
+                                        </Col>
+                                    </Row>
+                                </Col>
+                            </Row>
+                        </Card>
+                        <Card id={'log'} className="mb-3 p-3">
+                            <Row>
+                                <Col md={12}>
+                                    <h4 className="card-title text-info">Bitacora Dian</h4>
+                                    <hr/>
+                                    <div dangerouslySetInnerHTML={{__html: formatLog(bill.dianLog)}}/>
+                                </Col>
+                            </Row>
+                        </Card>
+                    </HasPermissions>
                 </Container>
             </div>
         </React.Fragment>

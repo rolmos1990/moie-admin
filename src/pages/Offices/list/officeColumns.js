@@ -21,9 +21,7 @@ const officeColumns = (onDelete = false) => {
             sort: true,
             formatter: (cellContent, item) => (
                 <>
-                    <Link to="#" className="text-body">
-                        {item.id}
-                    </Link>
+                    {item.id}
                 </>
             ),
             filter: true,
