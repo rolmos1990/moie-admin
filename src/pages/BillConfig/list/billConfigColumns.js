@@ -1,12 +1,11 @@
 import React from "react"
 import {Link} from "react-router-dom"
 import {STATUS_COLORS, StatusField} from "../../../components/StatusField";
-import {buildOptions} from "../../../common/converters";
 import Conditionals from "../../../common/conditionals";
 import {DATE_FORMAT, formatDate, STATUS_OPTIONS} from "../../../common/utils";
 import {ConverterCustomerStatus} from "../../Customer/customer_status";
-
-//const statusOptions = buildOptions(STATUS_OPTIONS);
+import {PERMISSIONS} from "../../../helpers/security_rol";
+import HasPermissions from "../../../components/HasPermissions";
 
 
 const billConfigColumns = (onDelete = false) => [
@@ -16,9 +15,11 @@ const billConfigColumns = (onDelete = false) => [
         sort: true,
         formatter: (cellContent, item) => (
             <>
-                <Link to={`/billConfig/${item.id}`} className="text-body">
-                    <b className="text-info">{item.id}</b>
-                </Link>
+                <HasPermissions permission={PERMISSIONS.BILL_CREATE} renderNoAccess={() => item.id}>
+                    <Link to={`/billConfig/${item.id}`} className="text-body">
+                        <b className="text-info">{item.id}</b>
+                    </Link>
+                </HasPermissions>
             </>
         ),
         filter: true,

@@ -8,6 +8,9 @@ import {getBillConfig} from "../../store/billConfig/actions";
 import Breadcrumb from "../../components/Common/Breadcrumb";
 import {Card} from "@material-ui/core";
 import BillConfigForm from "./BillConfigForm";
+import {PERMISSIONS} from "../../helpers/security_rol";
+import NoAccess from "../../components/Common/NoAccess";
+import HasPermissions from "../../components/HasPermissions";
 
 const BillConfigEdit = (props) => {
     const {getBillConfig, billConfig} = props;
@@ -25,11 +28,13 @@ const BillConfigEdit = (props) => {
             <div className="page-content">
                 <Container fluid>
                     <Breadcrumb hasBack path="/billConfigs" title={billConfig.name} item={"Resolución"}/>
-                    <Card>
-                        <CardBody>
-                            <BillConfigForm billConfig={billConfig}/>
-                        </CardBody>
-                    </Card>
+                    <HasPermissions permissions={[PERMISSIONS.BILL_CREATE, PERMISSIONS.BILL_EDIT]} renderNoAccess={() => <NoAccess/>}>
+                        <Card>
+                            <CardBody>
+                                <BillConfigForm billConfig={billConfig}/>
+                            </CardBody>
+                        </Card>
+                    </HasPermissions>
                 </Container>
             </div>
         </React.Fragment>

@@ -2,29 +2,16 @@ import React from "react"
 import {Link} from "react-router-dom"
 import {StatusField} from "../../../components/StatusField";
 import {buildOptions} from "../../../common/converters";
-import {
-    ORDER_STATUS, ORDER_STATUS_LIST,
-} from "../../../common/constants";
+import {ORDER_STATUS, ORDER_STATUS_LIST,} from "../../../common/constants";
 import Conditionals from "../../../common/conditionals";
 import {DATE_FORMAT, formatDate} from "../../../common/utils";
 import {CUSTOMER} from "../../../helpers/url_helper";
 import {Tooltip} from "@material-ui/core";
+import HasPermissions from "../../../components/HasPermissions";
+import {PERMISSIONS} from "../../../helpers/security_rol";
 
 const statusOptions = buildOptions(ORDER_STATUS_LIST);
 
-/**
- *
- * createdAt: "2021-08-29T04:20:38.018Z"
- id: 1
- legalNumber: 1
- order: {id: 5, createdAt: "2021-08-28T22:10:10.565Z", status: 1}
- createdAt: "2021-08-28T22:10:10.565Z"
- id: 5
- status: 1
- status: "Pendiente"
-
-
- */
 const municipalityColumns = (onDelete = false) => [
     {
         text: "#",
@@ -32,9 +19,11 @@ const municipalityColumns = (onDelete = false) => [
         sort: true,
         formatter: (cellContent, item) => (
             <>
-                <Link to={`/bill/detail/${item.id}`} className="text-body">
-                    <b className="text-info">{item.id}</b>
-                </Link>
+                <HasPermissions permission={PERMISSIONS.BILL_CREATE} renderNoAccess={() => item.id}>
+                    <Link to={`/bill/detail/${item.id}`} className="text-body">
+                        <b className="text-info">{item.id}</b>
+                    </Link>
+                </HasPermissions>
             </>
         ),
         filter: true,

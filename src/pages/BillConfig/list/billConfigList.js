@@ -14,6 +14,8 @@ import billConfigColumns from "./billConfigColumns";
 import {normalizeColumnsList} from "../../../common/converters";
 import NoDataIndication from "../../../components/Common/NoDataIndication";
 import {Link} from "react-router-dom";
+import {PERMISSIONS} from "../../../helpers/security_rol";
+import HasPermissions from "../../../components/HasPermissions";
 
 const BillConfigList = props => {
     const {billConfigs, onGetBillConfigs, onResetBillConfig, refresh} = props; //onDeleteBillConfig,
@@ -103,9 +105,11 @@ const BillConfigList = props => {
                                                                     </Button>
                                                                 </Tooltip>
                                                             )}
-                                                            <Link to={"/billConfig"} className="btn btn-primary waves-effect waves-light text-light">
-                                                                <i className="mdi mdi-plus"></i> Nueva resolución
-                                                            </Link>
+                                                            <HasPermissions permission={PERMISSIONS.BILL_CREATE}>
+                                                                <Link to={"/billConfig"} className="btn btn-primary waves-effect waves-light text-light">
+                                                                    <i className="mdi mdi-plus"></i> Nueva resolución
+                                                                </Link>
+                                                            </HasPermissions>
                                                         </div>
                                                     </Col>
                                                 </Row>
