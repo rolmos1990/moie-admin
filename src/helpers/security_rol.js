@@ -1,5 +1,4 @@
 import React from 'react';
-import {connect} from "react-redux";
 
 export const PERMISSIONS = {
     PRODUCT_CREATE: 'product.create',
@@ -17,7 +16,7 @@ export const PERMISSIONS = {
     ORDER_EDIT: 'order.edit',
     ORDER_SHOW: 'order.show',
     ORDER_LIST: 'order.list',
-    ORDER_CREATE: 'office.create',
+    ORDER_CREATE: 'order.create',
     OFFICE_CREATE: 'office.create',
     OFFICE_EDIT: 'office.edit',
     OFFICE_SHOW: 'office.show',
