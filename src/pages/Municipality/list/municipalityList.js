@@ -14,6 +14,10 @@ import {deleteMunicipality, getMunicipalities, getStates, resetLocation} from ".
 import {TableFilter} from "../../../components/TableFilter";
 import municipalityColumns from "./municipalityColumns";
 import {normalizeColumnsList} from "../../../common/converters";
+import NoDataIndication from "../../../components/Common/NoDataIndication";
+import {PERMISSIONS} from "../../../helpers/security_rol";
+import NoAccess from "../../../components/Common/NoAccess";
+import HasPermissions from "../../../components/HasPermissions";
 
 const MunicipalityList = props => {
     const {states, municipalities, meta, getStates, onGetMunicipalities, onResetLocation, onDeleteMunicipality, loading, refresh} = props;
@@ -45,19 +49,8 @@ const MunicipalityList = props => {
         }))
     }, [municipalities])
 
-    /*useEffect(() => {
-        const cols = statesColumns(onDelete).map(col => {
-            if (col.dataField === 'state' && (!col.filterOptions || !col.filterOptions.length)) {
-                col.filterOptions = statesToOptions(states);
-            }
-            return col;
-        });
-        setColumns(cols);
-    }, [states])*/
-
-    // eslint-disable-next-line no-unused-vars
-    const handleTableChange = (type, {page, searchText}) => {
-        onGetMunicipalities(conditional, DEFAULT_PAGE_LIMIT, (page - 1)*DEFAULT_PAGE_LIMIT);
+    const handleTableChange = (type, {page}) => {
+        onGetMunicipalities(conditional, DEFAULT_PAGE_LIMIT, (page - 1) * DEFAULT_PAGE_LIMIT);
     }
 
     const onFilterAction = (condition) => {
@@ -77,16 +70,6 @@ const MunicipalityList = props => {
         });
     };
     const columns = municipalityColumns(onDelete);
-
-    const NoDataIndication = () => (
-        <div className="spinner">
-            <div className="rect1"/>
-            <div className="rect2"/>
-            <div className="rect3"/>
-            <div className="rect4"/>
-            <div className="rect5"/>
-        </div>
-    );
 
     return (
         <Row>
@@ -133,9 +116,11 @@ const MunicipalityList = props => {
                                                                 </Button>
                                                             </Tooltip>
                                                         )}
-                                                        <Link to={"/municipality"} className="btn btn-primary waves-effect waves-light text-light">
-                                                            <i className="mdi mdi-plus"> </i> Nuevo Municipio
-                                                        </Link>
+                                                        <HasPermissions permissions={[PERMISSIONS.LOCALITY_CREATE]} renderNoAccess={() => <NoAccess/>}>
+                                                            <Link to={"/municipality"} className="btn btn-primary waves-effect waves-light text-light">
+                                                                <i className="mdi mdi-plus"> </i> Nuevo Municipio
+                                                            </Link>
+                                                        </HasPermissions>
                                                     </div>
                                                 </Col>
                                             </Row>

@@ -15,6 +15,9 @@ import statesColumns from "./statesColumn";
 import {TableFilter} from "../../../components/TableFilter";
 import {normalizeColumnsList} from "../../../common/converters";
 import NoDataIndication from "../../../components/Common/NoDataIndication";
+import HasPermissions from "../../../components/HasPermissions";
+import {PERMISSIONS} from "../../../helpers/security_rol";
+import NoAccess from "../../../components/Common/NoAccess";
 
 const StatesList = props => {
     const {states, meta, onGetStates, onDeleteState, onResetLocation, loading, refresh} = props;
@@ -106,15 +109,17 @@ const StatesList = props => {
                                                 <Col md={6}>
                                                     <div className="mb-3 float-md-end">
                                                         {columns.some(s => s.filter) && (
-                                                            <Tooltip placement="bottom" title="Filtros Avanzados" aria-label="add" >
+                                                            <Tooltip placement="bottom" title="Filtros Avanzados" aria-label="add">
                                                                 <Button onClick={() => setFilter(!filter)}>
                                                                     <i className={"mdi mdi-filter"}></i>
                                                                 </Button>
                                                             </Tooltip>
                                                         )}
-                                                        <Link to={"/state"} className="btn btn-primary waves-effect waves-light text-light">
-                                                            <i className="mdi mdi-plus"></i> Nuevo Estado
-                                                        </Link>
+                                                        <HasPermissions permissions={[PERMISSIONS.LOCALITY_CREATE]} renderNoAccess={() => <NoAccess/>}>
+                                                            <Link to={"/state"} className="btn btn-primary waves-effect waves-light text-light">
+                                                                <i className="mdi mdi-plus"></i> Nuevo Estado
+                                                            </Link>
+                                                        </HasPermissions>
                                                     </div>
                                                 </Col>
                                             </Row>
