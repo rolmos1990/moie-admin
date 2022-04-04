@@ -43,6 +43,15 @@ const Navbar = props => {
         }
     })
 
+    function renderMenuNoAccess(name, to, className){
+        return <li className="nav-item">
+            <Link className="nav-link disabled" to={to}>
+                <i className={className}></i>
+                {" "}{props.t(name)}
+            </Link>
+        </li>
+    }
+
     function activateParentDropdown(item) {
         item.classList.add("active")
         const parent = item.parentElement
@@ -91,7 +100,7 @@ const Navbar = props => {
                                     </Link>
                                 </li>
 
-                                <HasPermissions permission={PERMISSIONS.PRODUCT_SHOW}>
+                                <HasPermissions permission={PERMISSIONS.PRODUCT_SHOW} renderNoAccess={() => renderMenuNoAccess("Productos", "/products", "uil-box me-2")}>
                                     <li className="nav-item">
                                         <Link className="nav-link" to="/products">
                                             <i className="uil-box me-2"></i>
@@ -102,14 +111,14 @@ const Navbar = props => {
 
                                 <HasPermissions permission={PERMISSIONS.CATEGORY_SHOW}>
                                     <li className="nav-item">
-                                        <Link className="nav-link" to="/categories">
+                                        <Link className="nav-link" to="/categories" renderNoAccess={() => renderMenuNoAccess("Categorias", "/categories", "uil-box me-2")}>
                                             <i className="uil-box me-2"></i>
                                             {" "}{props.t("Categorias")}
                                         </Link>
                                     </li>
                                 </HasPermissions>
 
-                                <HasPermissions permission={PERMISSIONS.CUSTOMER_SHOW}>
+                                <HasPermissions permission={PERMISSIONS.CUSTOMER_SHOW} renderNoAccess={() => renderMenuNoAccess("Cliente", "/customers", "uil-users-alt me-2")}>
                                     <li className="nav-item">
                                         <Link className="nav-link" to="/customers">
                                             <i className="uil-users-alt me-2"></i>
@@ -118,7 +127,7 @@ const Navbar = props => {
                                     </li>
                                 </HasPermissions>
 
-                                <HasPermissions permission={PERMISSIONS.ORDER_SHOW}>
+                                <HasPermissions permission={PERMISSIONS.ORDER_SHOW} renderNoAccess={() => renderMenuNoAccess("Pedidos", "/orders", "uil-shopping-cart-alt me-2")}>
                                     <li className="nav-item">
                                         <Link className="nav-link" to="/orders">
                                             <i className="uil-shopping-cart-alt me-2"></i>
@@ -127,7 +136,7 @@ const Navbar = props => {
                                     </li>
                                 </HasPermissions>
 
-                                <HasPermissions permissions={[PERMISSIONS.OFFICE_SHOW, PERMISSIONS.BILL_SHOW, PERMISSIONS.POSTSALE_SHOW, PERMISSIONS.PAYMENT_SHOW]}>
+                                <HasPermissions permissions={[PERMISSIONS.OFFICE_SHOW, PERMISSIONS.BILL_SHOW, PERMISSIONS.POSTSALE_SHOW, PERMISSIONS.PAYMENT_SHOW]} renderNoAccess={() => renderMenuNoAccess("Servicios", "#", "uil-cog me-2")}>
                                     <li className="nav-item dropdown">
                                         <Link className="nav-link dropdown-toggle arrow-none" to="#" onClick={e => {
                                             e.preventDefault()
@@ -181,8 +190,7 @@ const Navbar = props => {
                                     </li>
                                 </HasPermissions>
 
-                                <HasPermissions
-                                    permissions={[PERMISSIONS.SECURITY_SHOW, PERMISSIONS.USER_SHOW, PERMISSIONS.LOCALITY_SHOW, PERMISSIONS.TEMPLATE_SHOW, PERMISSIONS.RESOLUTION_SHOW, PERMISSIONS.CONFIG_SHOW]}>
+                                <HasPermissions permissions={[PERMISSIONS.SECURITY_SHOW, PERMISSIONS.USER_SHOW, PERMISSIONS.LOCALITY_SHOW, PERMISSIONS.TEMPLATE_SHOW, PERMISSIONS.RESOLUTION_SHOW, PERMISSIONS.CONFIG_SHOW]} renderNoAccess={() => renderMenuNoAccess("Sistema", "#", "uil-cog me-2")}>
                                     <li className="nav-item dropdown">
                                         <Link className="nav-link dropdown-toggle arrow-none" to="#" onClick={e => {
                                             e.preventDefault()
