@@ -11,7 +11,7 @@ class ListItem extends Component {
         const user = this.props.user;
 
         return (
-            <li id={user.id} className={listClass} style={style}>
+            <li id={this.props.key} className={listClass} style={style}>
                 <div style={{display: 'flex', alignItems: 'center', margin: '0 5px'}}>
                     <img src={user.image} className="rounded-circle header-profile-user" alt="user-pic"/>
                     <div className="flex-1">
@@ -31,7 +31,7 @@ const FooterUsers = ({data, user}) => {
     const [users, setUsers] = useState([])
 
     useEffect(() => {
-        findData();
+        getData();
     }, [data])
 
     const findData = () => {
@@ -43,22 +43,28 @@ const FooterUsers = ({data, user}) => {
                     name: o.user.name,
                     sales: o.origen,
                     amount: priceFormat(o.totalAmount),
-                    image: o.user.photo || "https://picsum.photos/200/300?random=1"
+                    image: o.user.photo || "https://picsum.photos/200/300?random=" + (i + 1)
                 }));
 
+                const limit = 6;
+
                 //TO TEST
-                /*Array.from({length: 9}, () => Math.floor(Math.random() * 20)).forEach((item, i) => {
-                    const user = {...u[0]};
-                    user.image = "https://picsum.photos/200/300?random=" + (i+1);
-                    user.sales = item;
-                    user.id = i+1;
-                    u.push(user);
+                /*u = [];
+                Array.from({length: limit}, () => Math.floor(Math.random() * 20)).forEach((item, i) => {
+                    u.push({
+                        id: i+1,
+                        name: "User " + i+1,
+                        sales: item,
+                        amount: priceFormat(Math.floor(Math.random() * 20)),
+                        image: "https://picsum.photos/200/300?random=" + (i+1)
+                    });
                 });*/
+                //TO TEST
 
                 u = u.sort((a, b) => a.sales === b.sales ? 0 : (a.sales > b.sales) ? 1 : -1);
 
-                if (u.length > 6) {
-                    u.splice(4);
+                if (u.length > limit) {
+                    u.splice(limit);
                 }
 
                 if (u.length > 0) {
@@ -77,10 +83,20 @@ const FooterUsers = ({data, user}) => {
         findData();
         let newTimeout = setTimeout(() => {
             getData();
-        }, 25000);
+        }, 45000);
 
         if (currentTimeout) clearTimeout(currentTimeout);
         setCurrentTimeout(newTimeout);
+    }
+
+    const render = () => {
+        return users.map((user, i) => (
+            <ListItem
+                key={user.id}
+                index={i}
+                user={user}
+            />
+        ))
     }
 
     console.log("users", users)
@@ -91,22 +107,10 @@ const FooterUsers = ({data, user}) => {
                 staggerDurationBy="30"
                 duration={500}
                 enterAnimation={"accordionHorizontal"}
-                leaveAnimation={"accordionHorizontal"}
+                leaveAnimation='accordionHorizontal'
                 typeName="ul"
-                onFinish={(a, b) => {
-                    console.log(a, b);
-                }}
-                onStart={(a, b) => {
-                    console.log(a, b);
-                }}
             >
-                {users.map((user, i) => (
-                    <ListItem
-                        key={user.id}
-                        index={i}
-                        user={user}
-                    />
-                ))}
+                {render()}
             </FlipMove>
         </React.Fragment>
     )

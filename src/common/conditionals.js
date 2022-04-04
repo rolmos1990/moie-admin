@@ -23,7 +23,6 @@ function getConditionalFormat(options) {
         }else {
             conditions = conditions.join("|");
         }
-        console.log(conditions);
         return conditions;
     }
     return null;
