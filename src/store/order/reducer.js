@@ -48,7 +48,7 @@ import {
     SYNC_DELIVERY_ORDER_SUCCESS,
     UPDATE_CAR,
     UPDATE_ORDER,
-    UPDATE_ORDER_FAILED,
+    UPDATE_ORDER_FAILED, UPDATE_ORDER_PRODUCTS,
     UPDATE_ORDER_SUCCESS
 } from "./actionTypes";
 
@@ -331,7 +331,8 @@ const order = (state = initialState, action) => {
                     conditionals: action.conditionals,
                     doRequest: false,
                     loading: true
-                }
+                },
+                error: null
             }
         case PRINT_BATCH_REQUEST_SUCCESS:
             return {
@@ -350,7 +351,8 @@ const order = (state = initialState, action) => {
                     ...state.batchRequest,
                     error: action.error,
                     loading: false
-                }
+                },
+                error: action.error
             }
         case RESET_BATCH_REQUEST:
             return {
@@ -487,8 +489,13 @@ const order = (state = initialState, action) => {
                 ...state,
                 loading: false,
             }
+        case UPDATE_ORDER_PRODUCTS:
+            return {
+                ...state,
+                error: null
+            }
         default:
-            state = {...state}
+            state = {...state, error: null}
             break
     }
     return state

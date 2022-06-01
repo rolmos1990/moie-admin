@@ -36,7 +36,7 @@ const ConciliationReportForm = ({onCloseModal, deliveryMethods, onGetDeliveryMet
         if (deliveryMethods && deliveryMethods.length > 0) {
             setDeliveryMethod(deliveryMethods.find(op => op.name === DELIVERY_METHODS.INTERRAPIDISIMO).code);
             setDeliveryMethodList([getEmptyOptions(),
-                ...deliveryMethods.filter(op => op.name === DELIVERY_METHODS.INTERRAPIDISIMO).map(op => ({label: op.name, value: op.code}))]
+                ...deliveryMethods.filter(op => op.name === DELIVERY_METHODS.INTERRAPIDISIMO || op.name === DELIVERY_METHODS.MENSAJERO).map(op => ({label: op.name, value: op.code}))]
             );
         }
     }, [deliveryMethods]);

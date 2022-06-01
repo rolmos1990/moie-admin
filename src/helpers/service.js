@@ -17,6 +17,7 @@ export const getData = (urlStr, name, conditionalOptions, defaultConditions) => 
             conditions.add('name', name, Conditionals.OPERATORS.LIKE);
         }
     }
+    
     const cond = Conditionals.getConditionalFormat(conditions.all());
     const query = Conditionals.buildHttpGetQuery(cond, DEFAULT_PAGE_LIMIT, 0);
     return fetchDataApi(urlStr, query);
@@ -78,7 +79,7 @@ export const countMayoristas = () => {
 export const countUsersOrders = () => {
     const conditions = new Conditionals.Condition;
     conditions.add('status', '1::5', Conditionals.OPERATORS.BETWEEN);
-    // conditions.add('createdAt', formatDateToServer(getMoment().startOf('day')), Conditionals.OPERATORS.GREATER_THAN_OR_EQUAL)
+    conditions.add('createdAt', formatDateToServer(getMoment().startOf('day')), Conditionals.OPERATORS.GREATER_THAN_OR_EQUAL)
 
     const query = {};
     query.conditional = Conditionals.getConditionalFormat(conditions.all());

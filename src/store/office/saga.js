@@ -41,6 +41,8 @@ import {
 
 import Conditionals from "../../common/conditionals";
 import {showResponseMessage} from "../../helpers/service";
+import {getErrorMessage} from "../../common/utils";
+import {getErrorModuleMessage} from "../../common/errors_messages";
 
 /**
  * *  Configuración de CRUD Saga (Realizar configuración para cada uno de las replicas)
@@ -153,7 +155,7 @@ function* officeConfirm({payload: {id, history}}) {
         history.push("/offices")
 
     } catch (error) {
-        console.log("error", error);
+        showResponseMessage({status: 500}, "Ocurrió un error!", getErrorModuleMessage(error));
         yield put(deleteOfficeFailed(error))
     }
 }

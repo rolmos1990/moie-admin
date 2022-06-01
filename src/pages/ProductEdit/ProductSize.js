@@ -11,7 +11,7 @@ import {AvForm} from "availity-reactstrap-validation";
 import ButtonSubmit from "../../components/Common/ButtonSubmit";
 
 const ProductSize = props => {
-    const {product, template, onGetProductSizes, productSizes, refresh} = props
+    const {product, template, onGetProductSizes, productSizes, refresh, readonly} = props
     const [productSizesList, setProductSizesList] = useState([]);
     const [selectValues, setSelectValues] = useState([]);
     const [sizeTotals, setSizeTotals] = useState({});
@@ -154,7 +154,7 @@ const ProductSize = props => {
                                             )}
                                         </th>
                                     ))}
-                                    <th>Borrar</th>
+                                    {!readonly && <th>Borrar</th>}
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -171,6 +171,7 @@ const ProductSize = props => {
                                                 defaultValue={model.color}
                                                 onBlur={(e) => handleChangeColors(k1, e.target.value)}
                                                 validate={{myValidation: validateColorDuplicate}}
+                                                disabled={readonly}
                                                 required/>
                                         </td>
                                         {map(template.sizes, (size, k2) => (
@@ -182,6 +183,7 @@ const ProductSize = props => {
                                                     // defaultValue={parseDefaultValue(model, size)}
                                                     onChange={(e) => handleChangeSizes(k1, size, e.target.value, model)}
                                                     className="form-control"
+                                                    disabled={readonly}
                                                 >
                                                     {map(selectValues, (o, k3) => (
                                                         <option key={k3} value={o.value}>{o.label}</option>
@@ -189,11 +191,13 @@ const ProductSize = props => {
                                                 </select>
                                             </td>
                                         ))}
-                                        <th>
-                                            <button size="small" className="btn btn-sm text-danger" onClick={() => removeColor(k1)}>
-                                                <i className="uil uil-trash-alt font-size-18"> </i>
-                                            </button>
-                                        </th>
+                                        {!readonly && (
+                                            <th>
+                                                <button size="small" className="btn btn-sm text-danger" onClick={() => removeColor(k1)}>
+                                                    <i className="uil uil-trash-alt font-size-18"> </i>
+                                                </button>
+                                            </th>
+                                        )}
                                     </tr>
                                 ))}
                                 <tr>
@@ -210,20 +214,24 @@ const ProductSize = props => {
                         </div>
                     </Col>
                 </Row>
-                <Row>
-                    <Col md="12">
-                        <div className="text-center m-3">
-                            <Button color="default" type="button" onClick={() => addColor()}>
-                                Agregar color
-                            </Button>
-                        </div>
-                    </Col>
-                </Row>
-                <Row>
-                    <Col md={12} className="text-right">
-                        <ButtonSubmit loading={props.loading}/>
-                    </Col>
-                </Row>
+                {!readonly && (
+                    <Row>
+                        <Col md="12">
+                            <div className="text-center m-3">
+                                <Button color="default" type="button" onClick={() => addColor()}>
+                                    Agregar color
+                                </Button>
+                            </div>
+                        </Col>
+                    </Row>
+                )}
+                {!readonly && (
+                    <Row>
+                        <Col md={12} className="text-right">
+                            <ButtonSubmit loading={props.loading}/>
+                        </Col>
+                    </Row>
+                )}
             </AvForm>
         </React.Fragment>
     )
@@ -233,6 +241,7 @@ ProductSize.propTypes = {
     product: PropTypes.object,
     productSizes: PropTypes.array,
     onGetProductSizes: PropTypes.func,
+    readonly: PropTypes.bool
 }
 
 const mapStateToProps = state => {

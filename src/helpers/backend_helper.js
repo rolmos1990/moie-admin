@@ -94,6 +94,7 @@ const printOrderApi = id => get(`${url.ORDERS}/${id}/print`, {}, {});
 const orderHistoric = (id) => get(`${url.ORDERS}/${id}/historic`, {});
 const resumeOrderApi = id => get(`${url.ORDERS}/${id}/boardResume`, {}, {});
 const updateOrderApi = (id, data) => put(`${url.ORDERS}/${id}`, data);
+const updateOrderProductsApi = (id, data) => put(`${url.ORDERS}/${id}/update/inventary`, data);
 const deleteOrderApi = (id) => del(`${url.ORDERS}/${id}`);
 const batchPrintRequestApi = (data) => get(`${url.ORDERS}/batch/printRequest`, {}, data);
 const conciliationRequestApi = (data) => post(`${url.ORDERS}/conciliation`, data);
@@ -102,6 +103,7 @@ const postSaleGenerateReportApi = (data) => post(`${url.ORDERS}/generate/report`
 const syncOrderDelivery = (id, data) => post(`${url.ORDERS}/${id}/sync/orderDelivery`, data);
 const refreshStatusDelivery = (id) => get(`${url.ORDERS}/${id}/refresh/orderDelivery`, {});
 const refreshAllStatusDelivery = () => get(`${url.ORDERS}/refresh/all/orderDelivery`, {});
+const increasePhotoCounterApi = (id) => get(`${url.ORDERS}/${id}/counters/increasePhoto`, {});
 
 //offices
 const fetchOfficesApi = params => get(url.OFFICES, {}, params);
@@ -250,6 +252,7 @@ export {
     fetchOrderApi,
     registerOrderApi,
     updateOrderApi,
+    updateOrderProductsApi,
     deleteOrderApi,
     batchPrintRequestApi,
 
@@ -264,6 +267,7 @@ export {
     printOrderApi,
     orderHistoric,
     resumeOrderApi,
+    increasePhotoCounterApi,
 
     fetchCommentsApi,
     fetchCommentApi,

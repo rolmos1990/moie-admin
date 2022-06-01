@@ -2,8 +2,9 @@ import React, {useEffect, useState} from "react"
 import PropTypes from "prop-types";
 import {customerCategoryStats, customerOrdersStats} from "../../helpers/service";
 import moment from "moment";
-import {ORDER_STATUS} from "../../common/constants";
+import {ORDER_STATUS, ORDERS_ENUM} from "../../common/constants";
 import PieChart from "../../components/Common/PieChart";
+import BarChart from "../../components/Common/BarChart";
 
 const CategoriesPieChart = ({customerId}) => {
 
@@ -28,7 +29,7 @@ const CategoriesPieChart = ({customerId}) => {
         <>
             <h4 className="card-title text-info">Categorias</h4>
             <div style={{background: '#f6f6f6', height: '100%'}}>
-                <PieChart data={categoryChart}/>
+                <BarChart data={categoryChart}/>
             </div>
         </>
     );

@@ -141,7 +141,7 @@ const OrderCar = (props) => {
                                         <FieldSelect
                                             id={"quantity"}
                                             name={"quantity"}
-                                            options={buildNumericOptions(product.quantityAvailable)}
+                                            options={buildNumericOptions((product.quantityAvailable > 0) ? product.quantityAvailable : product.quantity)}
                                             defaultValue={product.quantity}
                                             onChange={item => onChangeQuantity(item.value, product)}
                                             required

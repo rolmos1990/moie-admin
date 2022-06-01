@@ -54,6 +54,12 @@ export const DELIVERY_TYPES = [
 
 export const DELIVERY_METHODS_PAYMENT_TYPES = ['MENSAJERO'];
 
+export const DELIVERY_METHODS_IDS = {
+    INTERRAPIDISIMO: 1,
+    MENSAJERO: 2,
+    OTRO: 3,
+};
+
 export const DELIVERY_METHODS = {
     INTERRAPIDISIMO: 'INTERRAPIDISIMO',
     MENSAJERO: 'MENSAJERO',
@@ -69,14 +75,14 @@ export const PAYMENT_TYPES = {
 export const PAYMENT_TYPES_LIST = Object.keys(PAYMENT_TYPES).map(k => ({label: PAYMENT_TYPES[k], value: PAYMENT_TYPES[k]}));
 
 export const EVENT_STATUS = {
-    1: {name: 'Pendiente', color: 'danger', colorCss: "#f44336"},
-    2: {name: 'Confirmado', color: 'success', colorCss: "#4caf50"},
-    3: {name: 'Impreso', color: 'warning', colorCss: "#23848d"},
+    1: {name: 'Pendiente', color: 'danger', colorCss: "#f46a6a"},
+    2: {name: 'Confirmado', color: 'success', colorCss: "#34c38f"},
+    3: {name: 'Impreso', color: 'warning', colorCss: "#f1b44c"},
     4: {name: 'Enviado', color: 'purple', colorCss: "#6f42c1"},
-    5: {name: 'Conciliado', color: 'info', colorCss: "#2196f3"},
+    5: {name: 'Conciliado', color: 'info', colorCss: "#50a5f1"},
     6: {name: 'Anulado', color: 'secondary', colorCss: "#f39f21"},
     7: {name: 'Finalizado', color: 'pink', colorCss: "#74788d"},
-    8: {name: 'Actualizado', color: 'danger', colorCss: "#f44336"},
+    8: {name: 'Actualizado', color: 'danger', colorCss: "#f46a6a"},
 };
 
 
@@ -86,14 +92,16 @@ export const PAYMENT_STATUS = {
 };
 
 export const ORDER_STATUS = {
-    1: {name: 'Pendiente', color: 'danger', colorCss: "#f44336"},
-    2: {name: 'Confirmado', color: 'success', colorCss: "#4caf50"},
-    3: {name: 'Impreso', color: 'warning', colorCss: "#23848d"},
+    1: {name: 'Pendiente', color: 'danger', colorCss: "#f46a6a"},
+    2: {name: 'Confirmado', color: 'success', colorCss: "#34c38f"},
+    3: {name: 'Impreso', color: 'warning', colorCss: "#f1b44c"},
     4: {name: 'Enviado', color: 'purple', colorCss: "#6f42c1"},
-    5: {name: 'Conciliado', color: 'info', colorCss: "#2196f3"},
-    6: {name: 'Anulado', color: 'secondary', colorCss: "#f39f21"},
-    7: {name: 'Finalizado', color: 'pink', colorCss: "#74788d"},
+    5: {name: 'Conciliado', color: 'info', colorCss: "#50a5f1"},
+    6: {name: 'Anulado', color: 'secondary', colorCss: "#74788d"},
+    7: {name: 'Finalizado', color: 'pink', colorCss: "#e83e8c"},
 };
+
+export const ORDER_COLORS = ["#f44336", "#4caf50", "#23848d", "#6f42c1", "#2196f3", "#f39f21", "#74788d"];
 
 export const ORDERS_ENUM = {
     PENDING: 1,

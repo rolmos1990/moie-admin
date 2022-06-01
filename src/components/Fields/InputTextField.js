@@ -14,6 +14,7 @@ const TextField = (props) => (
         onKeyPress={props.onKeyPress ? props.onKeyPress : null}
         type={props.type ? props.type : "text"}
         className={`form-control ${props.className ? props.className : ''}` }
+        disabled={!!props.disabled}
         validate={
             {
                 required: { value: props.required ? true : false, errorMessage: messages.required },

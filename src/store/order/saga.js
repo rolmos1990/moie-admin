@@ -4,7 +4,7 @@ import {all, call, fork, put, takeEvery} from "redux-saga/effects"
 import {
     CANCELED_STATUS_ORDER,
     CONCILIATION_REQUEST,
-    CONFIRM_CONCILIATION_REQUEST,
+    CONFIRM_CONCILIATION_REQUEST, DOWNLOAD_PHOTO,
     GET_DELIVERY_METHODS,
     GET_DELIVERY_QUOTE,
     GET_HISTORIC_ORDER,
@@ -18,7 +18,7 @@ import {
     REGISTER_ORDER,
     RESUME_ORDER,
     SYNC_DELIVERY_ORDER,
-    UPDATE_ORDER
+    UPDATE_ORDER, UPDATE_ORDER_PRODUCTS
 } from "./actionTypes"
 
 import {
@@ -62,7 +62,7 @@ import {
     fetchDeliveryMethodsApi,
     fetchDeliveryQuoteApi,
     fetchOrderApi,
-    fetchOrdersApi,
+    fetchOrdersApi, increasePhotoCounterApi,
     nextStatusOrderApi,
     orderHistoric,
     printOrderApi,
@@ -70,7 +70,7 @@ import {
     registerOrderApi,
     resumeOrderApi,
     syncOrderDelivery,
-    updateOrderApi
+    updateOrderApi, updateOrderProductsApi
 } from "../../helpers/backend_helper"
 
 import Conditionals from "../../common/conditionals";
@@ -86,6 +86,7 @@ const ACTION_NAME_LIST_OFFICE = GET_ORDERS_OFFICE;
 const ACTION_NAME_GET = GET_ORDER;
 const ACTION_NAME_CREATE = REGISTER_ORDER;
 const ACTION_NAME_UPDATE = UPDATE_ORDER;
+const ACTION_ORDER_PRODUCTS_UPDATE = UPDATE_ORDER_PRODUCTS;
 
 const PRINT_ORDER_API = printOrderApi;
 const RESUME_ORDER_API = resumeOrderApi;
@@ -95,12 +96,14 @@ const CANCELED_STATUS_API_REQUEST = canceledStatusOrderApi;
 const GET_API_REQUEST = fetchOrderApi;
 const POST_API_REQUEST = registerOrderApi;
 const PUT_API_REQUEST = updateOrderApi;
+const PUT_ORDER_PRODUCTS_API_REQUEST = updateOrderProductsApi;
 const BATCH_REQUEST_API_REQUEST = batchPrintRequestApi;
 const CONCILIATION_REQUEST_API_REQUEST = conciliationRequestApi;
 const CONFIRM_CONCILIATION_REQUEST_API_REQUEST = confirmConciliationRequestApi;
 const ORDER_HISTORIC_API_REQUEST = orderHistoric;
 const ORDER_DELIVERY_SYNC_API_REQUEST = syncOrderDelivery;
 const ORDER_DELIVERY_REFRESH_API_REQUEST = refreshStatusDelivery;
+const INCREASE_PHOTO_COUNTER_API_REQUEST = increasePhotoCounterApi;
 
 //actions
 const CUSTOM_SUCCESS_ACTION = customOrderSuccess;
@@ -226,6 +229,17 @@ function* update({payload: {id, data, history}}) {
     }
 }
 
+function* updateOrderProducts({payload: {id, data, history}}) {
+    try {
+        const response = yield call(PUT_ORDER_PRODUCTS_API_REQUEST, id, data)
+        showResponseMessage(response, "Operación exitosa!");
+        yield put(UPDATE_SUCCESS_ACTION(response.order))
+        yield put(getOrder(id))
+    } catch (error) {
+        yield put(CREATE_FAILED_ACTION(getErrorMessage(error)))
+    }
+}
+
 function* fetchDeliveryMethods({conditional, limit, offset}) {
     try {
         const cond = Conditionals.getConditionalFormat(conditional);
@@ -250,9 +264,9 @@ function* batchRequest({conditionals}) {
         const cond = Conditionals.getConditionalFormat(conditionals);
         const query = Conditionals.buildHttpGetQuery(cond);
         const response = yield call(BATCH_REQUEST_API_REQUEST, query)
-        showResponseMessage(response, "Operación en curso!", response.error);
         yield put(PRINT_BATCH_REQUEST_SUCCESS_ACTION(response.batch, response.meta))
     } catch (error) {
+        showResponseMessage(error, "Operación falida!", getErrorMessage(error));
         yield put(PRINT_BATCH_REQUEST_FAILED_ACTION(getErrorMessage(error)))
     }
 }
@@ -281,6 +295,7 @@ function* confirmConciliation({orders}) {
     try {
         const response = yield call(CONFIRM_CONCILIATION_REQUEST_API_REQUEST, orders)
         showResponseMessage(response, "Operación exitosa!", response.error);
+        yield put(refreshOrders());
         yield put(CONFIRM_CONCILIATION_REQUEST_SUCCESS_ACTION())
     } catch (error) {
         showResponseMessage({status: 500}, "Ocurrió un error!", getErrorMessage(error));
@@ -310,11 +325,25 @@ function* orderDeliveryRefresh({id}) {
     }
 }
 
+function* increasePhotoCounter({payload: {id}}) {
+    try {
+        console.log(id);
+        const response = yield call(INCREASE_PHOTO_COUNTER_API_REQUEST, id)
+        if(response.status === 200){
+            yield put(refreshOrders());
+            showResponseMessage(response, "Operación exitosa!", response.error);
+        }
+    } catch (error) {
+        showResponseMessage({status: 500}, "Ocurrió un error!", getErrorMessage(error));
+    }
+}
+
 
 export function* watchOrder() {
     yield takeEvery(ACTION_NAME_CREATE, register);
     yield takeEvery(ACTION_NAME_UPDATE, update);
     yield takeEvery(ACTION_NAME_LIST, fetch);
+    yield takeEvery(ACTION_ORDER_PRODUCTS_UPDATE, updateOrderProducts);
     yield takeEvery(ACTION_NAME_LIST_OFFICE, fetchByOffice);
     yield takeEvery(ACTION_NAME_GET, get)
     yield takeEvery(GET_DELIVERY_METHODS, fetchDeliveryMethods)
@@ -329,6 +358,7 @@ export function* watchOrder() {
     yield takeEvery(GET_HISTORIC_ORDER, fetchHistoric);
     yield takeEvery(SYNC_DELIVERY_ORDER, orderDeliverySync);
     yield takeEvery(REFRESH_DELIVERY_ORDER, orderDeliveryRefresh);
+    yield takeEvery(DOWNLOAD_PHOTO, increasePhotoCounter);
 }
 
 function* orderSaga() {

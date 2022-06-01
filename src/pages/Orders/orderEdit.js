@@ -7,10 +7,30 @@ import PropTypes from "prop-types";
 import {copyToClipboard, formatDate, getImageByQuality, priceFormat, printPartOfPage, threeDots} from "../../common/utils";
 import NoDataIndication from "../../components/Common/NoDataIndication";
 
-import {canceledStatusOrder, getOrder, historicOrder, nextStatusOrder, printOrder, resumeOrder, updateCard, updateOrder} from "../../store/order/actions";
+import {
+    canceledStatusOrder,
+    getOrder,
+    historicOrder,
+    increasePhotoCounter,
+    nextStatusOrder,
+    printOrder,
+    resumeOrder,
+    updateCard,
+    updateOrder, updateOrderProducts
+} from "../../store/order/actions";
 import CustomModal from "../../components/Modal/CommosModal";
 import OrderDeliveryOptions from "./create/orderDeliveryOptions";
-import {COMMENT_ENTITIES, DELIVERY_METHODS_PAYMENT_TYPES, DELIVERY_TYPES, EVENT_STATUS, GROUPS, ORDER_STATUS, ORDERS_ENUM, PAYMENT_TYPES} from "../../common/constants";
+import {
+    COMMENT_ENTITIES,
+    DELIVERY_METHODS_IDS,
+    DELIVERY_METHODS_PAYMENT_TYPES,
+    DELIVERY_TYPES,
+    EVENT_STATUS,
+    GROUPS,
+    ORDER_STATUS,
+    ORDERS_ENUM,
+    PAYMENT_TYPES
+} from "../../common/constants";
 import {map} from "lodash";
 import Images from "../../components/Common/Image";
 import OrderCustomer from "./create/orderCustomer";
@@ -25,6 +45,7 @@ import Observations from "../../components/Common/Observations";
 import {isMobile} from "react-device-detect";
 import HasPermissions from "../../components/HasPermissions";
 import {PERMISSIONS} from "../../helpers/security_rol";
+import OrderTracking from "./create/orderTracking";
 
 // import {toPng, toJpeg, toBlob, toPixelData, toSvg} from 'html-to-image';
 
@@ -36,6 +57,8 @@ const OrderEdit = (props) => {
         onGetOrder,
         onUpdateCar,
         onUpdateOrder,
+        onUpdateInventary,
+        onDownloadPhoto,
         onCloseOverlay,
         onNextStatusOrder,
         onCanceledStatusOrder,
@@ -61,7 +84,9 @@ const OrderEdit = (props) => {
     const [openCustomerModal, setOpenCustomerModal] = useState(false);
     const [openDeliveryModal, setOpenDeliveryModal] = useState(false);
     const [openProductsModal, setOpenProductsModal] = useState(false);
+    const [openTrackingModal, setOpenTrackingModal] = useState(false);
     const [allowEdit, setAllowEdit] = useState(false);
+    const [allowUpdateTracking, setAllowUpdateTracking] = useState(false);
 
     const productSummaryRef = React.createRef();
 
@@ -93,6 +118,7 @@ const OrderEdit = (props) => {
                     tracking: orderDelivery.tracking || '',
                     deliveryLocality: orderDelivery.deliveryLocality.id || null
                 },
+                tracking: false,
                 products: [],
                 isEdit: true
             };
@@ -127,6 +153,7 @@ const OrderEdit = (props) => {
         }
 
         setAllowEdit(canEdit());
+        setAllowUpdateTracking(canUpdateTracking());
         //console.log(order);
     }, [order]);
 
@@ -193,6 +220,24 @@ const OrderEdit = (props) => {
         }
     }
 
+    const toggleTrackingModal = () => {
+        setOpenTrackingModal(!openTrackingModal);
+    }
+
+    const onCloseTrackingModal = () => {
+        toggleTrackingModal();
+    }
+
+    const onAcceptTrackingModal = (_tracking) => {
+        toggleTrackingModal();
+        if(_tracking) {
+            const order = {
+                tracking: _tracking
+            };
+            onUpdateOrder(orderData.id, order);
+        }
+    }
+
     const toggleProductsModal = () => {
         setOpenProductsModal(!openProductsModal);
     }
@@ -210,7 +255,7 @@ const OrderEdit = (props) => {
                     discountPercentage: prod.discountPercentage,
                 }))
             };
-            onUpdateOrder(orderData.id, order);
+            onUpdateInventary(orderData.id, order);
         }
     }
 
@@ -233,7 +278,8 @@ const OrderEdit = (props) => {
                 link.download = `${order.customer.name.replace(/\s+/g, '_')}_NRO_${order.id}.png`.toUpperCase();
                 link.href = dataUrl;
                 link.click();
-                onUpdateOrder(orderData.id, {photos: order.photos + 1});
+                onDownloadPhoto(orderData.id);
+                //onUpdateOrder(orderData.id, {photos: order.photos + 1});
             })
             .catch(function (error) {
                 console.error('oops, something went wrong!', error);
@@ -277,11 +323,23 @@ const OrderEdit = (props) => {
         }
     }
 
+    const canUpdateTracking = () => {
+        const isPrevPayment = order.orderDelivery && order.orderDelivery && ([1, 2].includes(order.orderDelivery.deliveryType));
+        if((order.deliveryMethod?.id === DELIVERY_METHODS_IDS.OTRO) && !isPrevPayment && order.status === 3){
+            return true;
+        }
+        if((order.deliveryMethod?.id === DELIVERY_METHODS_IDS.OTRO) && isPrevPayment && order.status === 3){
+            return true;
+        }
+        return false;
+    }
+
     //Permite imprimir la orden
     const canPrint = () => {
+        const isPrevPayment = order.orderDelivery && ([1, 2].includes(order.orderDelivery.deliveryType));
         if (order && order.status < ORDERS_ENUM.CONCILIED) {
             return true;
-        } else if (order && order.status === ORDERS_ENUM.CONCILIED && order.orderDelivery && order.orderDelivery.deliveryType === 1) {
+        } else if (order && order.status === ORDERS_ENUM.CONCILIED && isPrevPayment) {
             return true;
         } else {
             return false;
@@ -289,7 +347,9 @@ const OrderEdit = (props) => {
     }
 
     const isNextPrint = () => {
-        if (order.status === ORDERS_ENUM.CONFIRMED || (order && order.status === ORDERS_ENUM.CONCILIED && order.orderDelivery && order.orderDelivery.deliveryType === 1)) {
+        const isPrevPayment = order.orderDelivery && ([1, 2].includes(order.orderDelivery.deliveryType));
+
+        if (order.status === ORDERS_ENUM.CONFIRMED || (order && order.status === ORDERS_ENUM.CONCILIED && isPrevPayment)) {
             return true;
         } else {
             return false;
@@ -298,7 +358,6 @@ const OrderEdit = (props) => {
 
     const onConfirmPrintOrder = () => {
         setOpenPrintConfirmModal(false);
-        onUpdateOrder(orderData.id, {prints: order.prints + 1});
         onNextStatusOrder(order.id);
     }
 
@@ -316,6 +375,13 @@ const OrderEdit = (props) => {
     return orderData.id ? (
         <div className={showOrderOverlay ? 'orderDetail-overlay pt-2' : ''}>
             <Row className="mb-2">
+                {props.error && (
+                    <Col md={12} className="text-center">
+                        <div className="alert alert-danger">
+                            {props.error}
+                        </div>
+                    </Col>
+                )}
                 <Col md={12}>
                     <div className={"mb-3 float-md-start"}>
                         {showOrderOverlay && (
@@ -350,13 +416,13 @@ const OrderEdit = (props) => {
                                         </button>
                                     </Tooltip>
                                 )}
-                                {(order && order.status === 3) && (
+                                {/*{(order && order.status === 3) && (
                                     <Tooltip placement="bottom" title="Confirmar envio" aria-label="add">
                                         <button type="button" color="primary" className="btn-sm btn btn-outline-success waves-effect waves-light" onClick={() => onNextStatusOrder(order.id)}>
                                             <i className={"mdi mdi-check"}> </i>
                                         </button>
                                     </Tooltip>
-                                )}
+                                )}*/}
                                 {canPrint() && (
                                     <Tooltip placement="bottom" title="Imprimir" aria-label="add">
                                         <button type="button" color="primary" className="btn-sm btn btn-outline-info waves-effect waves-light" onClick={() => printOrder()}>
@@ -472,6 +538,18 @@ const OrderEdit = (props) => {
                                                 </Tooltip>
                                             )}
                                         </HasPermissions>
+                                        <HasPermissions permission={PERMISSIONS.ORDER_EDIT}>
+                                            {allowUpdateTracking && (
+                                                <Tooltip placement="bottom" title="Asignar numero de Guia" aria-label="add">
+                                                    <button type="button"
+                                                            size="small"
+                                                            className="btn btn-sm text-primary"
+                                                            onClick={toggleTrackingModal}>
+                                                        <i className="fa fa-motorcycle font-size-18"> </i>
+                                                    </button>
+                                                </Tooltip>
+                                            )}
+                                        </HasPermissions>
                                     </Col>
                                 </Row>
                                 <Row>
@@ -560,7 +638,7 @@ const OrderEdit = (props) => {
                                             )}
                                             <HasPermissions permission={PERMISSIONS.ORDER_EDIT}>
                                                 {allowEdit &&
-                                                    <Tooltip placement="bottom" title="Editar products" aria-label="add">
+                                                    <Tooltip placement="bottom" title="Editar productos" aria-label="add">
                                                         <button type="button"
                                                                 size="small"
                                                                 className="btn btn-sm text-primary"
@@ -840,6 +918,14 @@ const OrderEdit = (props) => {
                 />
             </CustomModal>
 
+            <CustomModal title={"Modificar número de guía"} size="lg" showFooter={false} isOpen={openTrackingModal} onClose={onCloseTrackingModal}>
+                <OrderTracking orderDelivery={orderData.orderDelivery}
+                                      showAsModal={true}
+                                      onCloseModal={onCloseTrackingModal}
+                                      onAcceptModal={onAcceptTrackingModal}
+                />
+            </CustomModal>
+
             <CustomModal title={"Modificar opciones de envio"} size="lg" showFooter={false} isOpen={openDeliveryModal} onClose={onCloseDeliveryModal}>
                 <OrderDeliveryOptions customer={orderData.customer}
                                       showAsModal={true}
@@ -864,7 +950,7 @@ const OrderEdit = (props) => {
                 <Row>
                     <Col md={12} className="text-right">
                         <button type="button" className="btn btn-light" onClick={onCloseProductsModal}>Cancelar</button>
-                        <Button color="primary" type="button" onClick={onAcceptProductsModal}>Guardar</Button>
+                        <Button color="primary" type="button" disabled={car.products.length <= 0} onClick={onAcceptProductsModal}>Guardar</Button>
                     </Col>
                 </Row>
             </CustomModal>
@@ -884,6 +970,8 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => ({
     onGetOrder: (id) => dispatch(getOrder(id)),
     onUpdateOrder: (id, payload) => dispatch(updateOrder(id, payload)),
+    onUpdateInventary: (id, payload) => dispatch(updateOrderProducts(id, payload)),
+    onDownloadPhoto: (id) => dispatch(increasePhotoCounter(id)),
     onUpdateCar: (data) => dispatch(updateCard(data)),
     onGetProducts: (ids = []) => dispatch(getProductsByIds(ids)),
     onNextStatusOrder: (id = []) => dispatch(nextStatusOrder({order: id})),

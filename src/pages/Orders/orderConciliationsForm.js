@@ -7,7 +7,7 @@ import {connect} from "react-redux";
 import PropTypes from "prop-types";
 import {FieldAsyncSelect, FieldSelect, FieldText} from "../../components/Fields";
 import ButtonSubmit from "../../components/Common/ButtonSubmit";
-import {ORDERS} from "../../helpers/url_helper";
+import {ORDERS, ORDERS_CHARGE_ON_DELIVERY} from "../../helpers/url_helper";
 import {getEmptyOptions} from "../../common/converters";
 import {confirmConciliation, confirmConciliationRestart, getOrder, restartOrder} from "../../store/order/actions";
 import Conditionals from "../../common/conditionals";
@@ -34,6 +34,7 @@ const OrderConciliationForm = ({
                                    onConfirmConciliate
                                }) => {
 
+    const [showNotValid, setShowNotValid] = useState(false);
     const [orderId, setOrderId] = useState(null);
     const [orders, setOrders] = useState([]);
     const [searchBy, setSearchBy] = useState(searchByOptions[0].value);
@@ -69,7 +70,7 @@ const OrderConciliationForm = ({
     const addLote = () => {
         lote.split(' ')
             .filter(l => l)
-            .filter(l => !orders.some(o => o.id == l))
+            .filter(l => !orders.some(o => o.id == l && o.orderDelivery && o.orderDelivery.deliveryType != 3))
             .forEach(id => {
                 onGetOrder(id);
             })
@@ -79,7 +80,7 @@ const OrderConciliationForm = ({
 
         const trackingList = lote.split(' ')
             .filter(tracking => tracking)
-            .filter(tracking => !orders.some(o => o.orderDelivery && o.orderDelivery.tracking === tracking))
+            .filter(tracking => !orders.some(o => o.orderDelivery && o.orderDelivery.tracking === tracking && o.orderDelivery.deliveryType != 3))
             .map(tracking => tracking);
 
         const list = [...orders];
@@ -190,7 +191,7 @@ const OrderConciliationForm = ({
                                         placeholder="Buscar por Pedido"
                                         defaultValue={defaultOption}
                                         conditionalOptions={{fieldName: 'id', operator: Conditionals.OPERATORS.EQUAL}}
-                                        defaultConditions={[{field: 'status', value: 4, operator: Conditionals.OPERATORS.EQUAL}]}
+                                        defaultConditions={[]}
                                         onChange={(c) => {
                                             setOrderId(c.value);
                                         }}
@@ -205,7 +206,8 @@ const OrderConciliationForm = ({
                                         urlStr={ORDERS}
                                         placeholder="Buscar por Guia"
                                         defaultValue={defaultOption}
-                                        conditionalOptions={{fieldName: 'orderDelivery.tracking', operator: Conditionals.OPERATORS.LIKE}}
+                                        defaultConditions={[]}
+                                        conditionalOptions={{fieldName: 'orderDelivery.tracking', operator: Conditionals.OPERATORS.EQUAL}}
                                         onChange={(c) => {
                                             setOrderId(c.value);
                                         }}
@@ -292,49 +294,6 @@ const OrderConciliationForm = ({
                                 <div><b>Total:</b> {priceFormat(orders.filter(o => o.status === 4).reduce((acc, item) => parseFloat(acc) + parseFloat(item.totalAmount), 0))}</div>
                             </Col>
                         </Row>
-                        {orders.some(o => o.status !== 4) && (
-                            <Row className="mt-5">
-                                <Col md={12}>
-                                    <h5>Pedidos con estados no validos</h5>
-                                    <table className="table table-condensed table-bordered">
-                                        <thead>
-                                        <tr>
-                                            <th>Pedido</th>
-                                            <th>Estado</th>
-                                            <th>Guia</th>
-                                            <th>Cliente</th>
-                                            <th>Monto</th>
-                                            <th></th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        {orders.filter(o => o.status !== 4).map(o => (
-                                            <tr>
-                                                <td>{o.id}</td>
-                                                <td>
-                                                    <StatusField color={ORDER_STATUS[o.status]?.color}>
-                                                        {ORDER_STATUS[o.status]?.name}
-                                                    </StatusField>
-                                                </td>
-                                                <td>{o.orderDelivery?.tracking}</td>
-                                                <td>{o.customer?.name}</td>
-                                                <td className="text-end">{priceFormat(o.totalAmount)}</td>
-                                                <td className="text-center">
-                                                    <a className="btn btn-sm text-danger" onClick={() => removeOrder(o.id)}>
-                                                        <i className="uil uil-trash-alt font-size-16"> </i>
-                                                    </a>
-                                                </td>
-                                            </tr>
-                                        ))}
-                                        </tbody>
-                                    </table>
-                                </Col>
-                                <Col>
-                                    <div><b>Cant pedidos:</b> {orders.filter(o => o.status !== 4).length}</div>
-                                    <div><b>Total:</b> {priceFormat(orders.filter(o => o.status !== 4).reduce((acc, item) => parseFloat(acc) + parseFloat(item.totalAmount), 0))}</div>
-                                </Col>
-                            </Row>
-                        )}
                         <Row>
                             <Col md={12} className="text-right">
                                 <ButtonSubmit loading={conciliationLoading} disabled={conciliationLoading || orders.filter(o => o.status === 4).length === 0}/>
@@ -343,6 +302,54 @@ const OrderConciliationForm = ({
                     </CardBody>
                 </Card>
             </AvForm>
+            <div>
+            <button className="btn btn-xs btn-primary m-2" onClick={() => setShowNotValid(!showNotValid)}> No validos  {showNotValid && <i className={"fa fa-minus"}></i>} {!showNotValid && <i className={"fa fa-plus"}></i>} </button>
+            {showNotValid &&
+            orders.some(o => o.status !== 4) && (
+                <Row className="mt-5">
+                    <Col md={12}>
+                        <h5>Pedidos con estados no validos</h5>
+                        <table className="table table-condensed table-bordered">
+                            <thead>
+                            <tr>
+                                <th>Pedido</th>
+                                <th>Estado</th>
+                                <th>Guia</th>
+                                <th>Cliente</th>
+                                <th>Monto</th>
+                                <th></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {orders.filter(o => o.status !== 4).map(o => (
+                                <tr>
+                                    <td>{o.id}</td>
+                                    <td>
+                                        <StatusField color={ORDER_STATUS[o.status]?.color}>
+                                            {ORDER_STATUS[o.status]?.name}
+                                        </StatusField>
+                                    </td>
+                                    <td>{o.orderDelivery?.tracking}</td>
+                                    <td>{o.customer?.name}</td>
+                                    <td className="text-end">{priceFormat(o.totalAmount)}</td>
+                                    <td className="text-center">
+                                        <a className="btn btn-sm text-danger" onClick={() => removeOrder(o.id)}>
+                                            <i className="uil uil-trash-alt font-size-16"> </i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            ))}
+                            </tbody>
+                        </table>
+                    </Col>
+                    <Col>
+                        <div><b>Cant pedidos:</b> {orders.filter(o => o.status !== 4).length}</div>
+                        <div><b>Total:</b> {priceFormat(orders.filter(o => o.status !== 4).reduce((acc, item) => parseFloat(acc) + parseFloat(item.totalAmount), 0))}</div>
+                    </Col>
+                </Row>
+            )
+            }
+            </div>
         </React.Fragment>
     )
 }

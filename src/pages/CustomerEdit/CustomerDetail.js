@@ -182,12 +182,6 @@ const CustomerDetail = (props) => {
                                             <Col md={6} className="mb-3">
                                                 <OrdersPieChart customerId={customerData.id}/>
                                             </Col>
-                                            {/*<Col md={6} className="mb-3">
-                                                <h4 className="card-title text-info">Productos</h4>
-                                                <div style={{background: '#f6f6f6'}}>
-                                                    <PieChart data={productChart}/>
-                                                </div>
-                                            </Col>*/}
                                             <Col md={6} className="mb-3">
                                                 <CategoriesPieChart customerId={customerData.id}/>
                                             </Col>

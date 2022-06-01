@@ -1,5 +1,5 @@
 import {
-    CANCELED_STATUS_ORDER,
+    CANCELED_STATUS_ORDER, CLEAN_ERROR_MESSAGE,
     CONCILIATION_FAILED,
     CONCILIATION_REQUEST,
     CONCILIATION_SUCCESS,
@@ -9,7 +9,7 @@ import {
     CONFIRM_CONCILIATION_SUCCESS,
     CUSTOM_ORDER_FAILED,
     CUSTOM_ORDER_SUCCESS,
-    DO_BATCH_REQUEST,
+    DO_BATCH_REQUEST, DOWNLOAD_PHOTO,
     GET_DELIVERY_METHODS,
     GET_DELIVERY_METHODS_FAILED,
     GET_DELIVERY_METHODS_SUCCESS,
@@ -50,7 +50,7 @@ import {
     SYNC_DELIVERY_ORDER_SUCCESS,
     UPDATE_CAR,
     UPDATE_ORDER,
-    UPDATE_ORDER_FAILED,
+    UPDATE_ORDER_FAILED, UPDATE_ORDER_PRODUCTS,
     UPDATE_ORDER_SUCCESS,
 } from "./actionTypes";
 
@@ -192,6 +192,20 @@ export const updateOrder = (id, data, history) => {
     return {
         type: UPDATE_ORDER,
         payload: { id, data, history },
+    }
+}
+
+export const updateOrderProducts = (id, data, history) => {
+    return {
+        type: UPDATE_ORDER_PRODUCTS,
+        payload: { id, data, history },
+    }
+}
+
+export const increasePhotoCounter = (id) => {
+    return {
+        type: DOWNLOAD_PHOTO,
+        payload: { id },
     }
 }
 
@@ -342,4 +356,7 @@ export const confirmConciliationFailed = (error) => ({
 })
 export const confirmConciliationRestart = () => ({
     type: CONFIRM_CONCILIATION_RESTART
+})
+export const cleanErrorMessage = () => ({
+    type: CLEAN_ERROR_MESSAGE
 })

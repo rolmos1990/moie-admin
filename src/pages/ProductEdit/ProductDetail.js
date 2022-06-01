@@ -14,6 +14,7 @@ import {map} from "lodash";
 import ProductsPendingList from "./ProductsPending";
 import {PERMISSIONS} from "../../helpers/security_rol";
 import HasPermissions from "../../components/HasPermissions";
+import ProductSize from "./ProductSize";
 
 const ProductDetail = (props) => {
 
@@ -126,7 +127,21 @@ const ProductDetail = (props) => {
                             </Col>
                         </Row>
                     </Card>
+
                     <ProductsPendingList product={productData}/>
+
+                    <Card className="p-3 mt-3 mb-3">
+                        <Row>
+                            <Col md={12}>
+                                <h4 className="card-title text-info">Inventario</h4>
+                            </Col>
+                        </Row>
+                        <Row>
+                            <Col md={12}>
+                            <ProductSize template={productData.size} product={productData} readonly={true}/>
+                            </Col>
+                        </Row>
+                    </Card>
                 </Container>
             </div>
         </React.Fragment>

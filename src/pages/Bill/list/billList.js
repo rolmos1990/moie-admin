@@ -19,6 +19,7 @@ import OrderList from "../../Orders/orderList";
 import BillGenerateReportForm from "../../Reports/BillsReportForm";
 import HasPermissions from "../../../components/HasPermissions";
 import {PERMISSIONS} from "../../../helpers/security_rol";
+import {CHARGE_ON_DELIVERY, DELIVERY_METHODS_IDS, ORDERS_ENUM} from "../../../common/constants";
 
 const BillList = props => {
     const {states, bills, meta, getStates, onGetBills, onResetBill, loading, refresh} = props; //onDeleteBill,
@@ -72,10 +73,11 @@ const BillList = props => {
 
     const addOrders = () => {
         const conditions = new Conditionals.Condition;
-        // conditions.add("status", 4, Conditionals.OPERATORS.EQUAL);//Enviada
         conditions.add('office', '', Conditionals.OPERATORS.NOT_NULL);
-        conditions.add('deliveryMethod', 1, Conditionals.OPERATORS.EQUAL);
-        conditions.add('orderDelivery.deliveryType', 3, Conditionals.OPERATORS.EQUAL);
+        conditions.add('deliveryMethod', DELIVERY_METHODS_IDS.INTERRAPIDISIMO, Conditionals.OPERATORS.EQUAL);
+        conditions.add('orderDelivery.deliveryType', CHARGE_ON_DELIVERY, Conditionals.OPERATORS.EQUAL);
+        conditions.add('status', [ORDERS_ENUM.PRINTED, ORDERS_ENUM.SENT], Conditionals.OPERATORS.IN);
+
         console.log('conditions', conditions);
         setOrderListConditions(conditions.condition);
         setOpenOrdersModal(true);
