@@ -1,17 +1,30 @@
 import {all, call, fork, put, takeEvery} from "redux-saga/effects"
 
-import {GENERATE_REPORT} from "./actionTypes"
+import {GENERATE_REPORT, GET_REPORT_DASHBOARD, GET_REPORT_DASHBOARD_SUCCESS} from "./actionTypes"
 import {b64toBlob} from "../../common/utils";
-import {generateReportFailed, generateReportSuccess} from "./actions";
-import {billReportApi, conciliationReportApi, officeReportApi, postSaleReportApi} from "../../helpers/backend_helper";
+import {
+    generateReportFailed,
+    generateReportSuccess,
+    getReportDashbordFailed,
+    getReportDashbordSuccess
+} from "./actions";
+import {
+    billReportApi,
+    conciliationReportApi,
+    officeReportApi,
+    postSaleReportApi,
+    statsDashboardApi
+} from "../../helpers/backend_helper";
 import {REPORT_TYPES} from "../../common/constants";
 import {showResponseMessage} from "../../helpers/service";
+import Conditionals from "../../common/conditionals";
 
 const apiMap = {}
 apiMap[REPORT_TYPES.BILLS] = billReportApi;
 apiMap[REPORT_TYPES.CONCILIATION] = conciliationReportApi;
 apiMap[REPORT_TYPES.POST_SALE] = postSaleReportApi;
 apiMap[REPORT_TYPES.OFFICE] = officeReportApi;
+const STAT_DASHBOARD = statsDashboardApi;
 
 
 function* generateReport({reportType, data}) {
@@ -39,8 +52,18 @@ function* generateReport({reportType, data}) {
     }
 }
 
+function* getStatDashboard() {
+    try {
+        const response = yield call(STAT_DASHBOARD)
+        yield put(getReportDashbordSuccess(response));
+    } catch (error) {
+        yield put(getReportDashbordFailed(error))
+    }
+}
+
 export function* watchReport() {
     yield takeEvery(GENERATE_REPORT, generateReport)
+    yield takeEvery(GET_REPORT_DASHBOARD, getStatDashboard)
 }
 
 function* reportSaga() {

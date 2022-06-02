@@ -20,18 +20,6 @@ import "./assets/scss/theme.scss"
 import "./assets/scss/custom/pages/_common.scss"
 import ContainerToast from "./components/MessageToast/ShowToastMessages";
 
-// import dotenv from  'dotenv'
-// const result = dotenv.config()
-// console.log('dotenv', result)
-
-//import fakeBackend from "./helpers/AuthType/fakeBackend"
-
-//TODO -- activar o desactivar FAKE
-
-
-// Activating fake backend
-//fakeBackend()
-
 const App = props => {
   function getLayout() {
     let layoutCls = VerticalLayout

@@ -72,6 +72,9 @@ export const GET_CART_DATA = "/cart"
 //CUSTOMERS
 export const GET_CUSTOMERS = "/customers"
 
+//DASHBOARD STATS
+export const STATS_DASHBOARD = "/stats"
+
 //SHOPS
 export const GET_SHOPS = "/shops"
 

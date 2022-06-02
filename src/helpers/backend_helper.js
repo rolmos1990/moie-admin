@@ -143,7 +143,7 @@ const officeReportApi = (data) => get(`${url.OFFICES}/gen/officeReport`, {header
 const officePdfApi = (id, data = {}) => get(`${url.OFFICES}/gen/officePdfReport/${id}`, {}, data);
 const fileOfficeTemplate = (filename, id) => file(filename, `${url.OFFICES}/${id}/getTemplate`, {header: 'content-type: application/vnd.ms-excel'});
 const statsApi = (path, data = {}) => get(`${path}`, {}, data);
-
+const statsDashboardApi = (id) => get(`${url.STATS_DASHBOARD}/estadistica/dashboard`, {});
 //templates
 const fetchTemplatesApi = data => get(url.TEMPLATES, {}, data);
 const fetchTemplateApi = (id) => get(`${url.TEMPLATES}/${id}`, {});
@@ -311,6 +311,7 @@ export {
     officeReportApi,
     officePdfApi,
     statsApi,
+    statsDashboardApi,
 
     fetchPaymentsApi,
     fetchPaymentApi,
