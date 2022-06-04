@@ -1,6 +1,6 @@
 {
   "name": "minible-react",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "private": true,
   "dependencies": {
     "@fullcalendar/bootstrap": "^5.4.0",
@@ -95,8 +95,16 @@
     "web-vitals": "^0.2.4"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "version": "echo $npm_package_version",
+    "start": "npm run start",
     "build": "react-scripts build",
+    "build:local": "REACT_APP_NODE_ENV=local;npm run build",
+    "build:production": "REACT_APP_NODE_ENV=production;npm run build",
+    "deploy:local": "npm version minor;",
+    "deploy-release:local": "REACT_APP_NODE_ENV=local;npm run build;docker build -t rolmos/moie-admin:$npm_package_version .;docker push rolmos/moie-admin:$npm_package_version",
+    "deploy-fix:local": "REACT_APP_NODE_ENV=local;npm run build;docker build -t rolmos/moie-admin:$npm_package_version .;docker push rolmos/moie-admin:$npm_package_version",
+    "deploy-release:production": "REACT_APP_NODE_ENV=production;npm run build;docker build -t rolmos/moie-admin:$npm_package_version .;docker push rolmos/moie-admin:$npm_package_version",
+    "deploy-fix:production": "REACT_APP_NODE_ENV=production;npm run build;docker build -t rolmos/moie-admin:$npm_package_version .;docker push rolmos/moie-admin:$npm_package_version",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },

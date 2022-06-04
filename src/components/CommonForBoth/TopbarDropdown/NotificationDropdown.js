@@ -31,10 +31,10 @@ const NotificationDropdown = props => {
           id="page-header-notifications-dropdown"
         >
           <i className="uil-bell"></i>
-          <span className="badge bg-danger rounded-pill">3</span>
+          {/*<span className="badge bg-danger rounded-pill">3</span>*/}
         </DropdownToggle>
 
-        <DropdownMenu className="dropdown-menu-lg dropdown-menu-end p-0">
+        {/*<DropdownMenu className="dropdown-menu-lg dropdown-menu-end p-0">
           <div className="p-3">
             <Row className="align-items-center">
               <Col>
@@ -149,7 +149,7 @@ const NotificationDropdown = props => {
               {props.t("View all")}{" "}
             </Link>
           </div>
-        </DropdownMenu>
+        </DropdownMenu>*/}
       </Dropdown>
 
       <PrintBatchRequest />
