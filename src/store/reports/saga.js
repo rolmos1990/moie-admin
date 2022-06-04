@@ -1,6 +1,6 @@
 import {all, call, fork, put, takeEvery} from "redux-saga/effects"
 
-import {GENERATE_REPORT, GET_REPORT_DASHBOARD, GET_REPORT_DASHBOARD_SUCCESS} from "./actionTypes"
+import {GENERATE_REPORT, GET_REPORT_DASHBOARD} from "./actionTypes"
 import {b64toBlob} from "../../common/utils";
 import {
     generateReportFailed,
@@ -17,7 +17,6 @@ import {
 } from "../../helpers/backend_helper";
 import {REPORT_TYPES} from "../../common/constants";
 import {showResponseMessage} from "../../helpers/service";
-import Conditionals from "../../common/conditionals";
 
 const apiMap = {}
 apiMap[REPORT_TYPES.BILLS] = billReportApi;
