@@ -43,9 +43,9 @@ jobs:
           env:
             REPO: rolmos/moie-admin
           run: |
-            docker build -t $DOCKER_REPOSITORY
-            docker tag ${{secrets.DOCKER_REPOSITORY}}:latest ${{secrets.DOCKER_USER}}/$DOCKER_REPOSITORY:latest
-            docker push ${{secrets.DOCKER_USER}}/$DOCKER_REPOSITORY
+            docker build -t $DOCKER_REPOSITORY .
+            docker tag $DOCKER_REPOSITORY:latest $DOCKER_USER/$DOCKER_REPOSITORY:latest
+            docker push $DOCKER_USER/$DOCKER_REPOSITORY
           
         - name: Run the image in a container
           uses: addnab/docker-run-action@v3
