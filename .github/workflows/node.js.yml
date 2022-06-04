@@ -36,15 +36,16 @@ jobs:
           env:
             DOCKER_USER: ${{secrets.DOCKER_USER}}
             DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}
+            DOCKER_REPOSITORY: ${{secrets.DOCKER_REPOSITORY}}
           run:
             docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
         - name: Docker Push
           env:
             REPO: rolmos/moie-admin
           run: |
-            docker build -t ${{secrets.DOCKER_REPOSITORY}}
-            docker tag ${{secrets.DOCKER_REPOSITORY}}:latest ${{secrets.DOCKER_USER}}/${{secrets.DOCKER_REPOSITORY}}:latest
-            docker push ${{secrets.DOCKER_USER}}/${{secrets.DOCKER_REPOSITORY}}
+            docker build -t $DOCKER_REPOSITORY
+            docker tag ${{secrets.DOCKER_REPOSITORY}}:latest ${{secrets.DOCKER_USER}}/$DOCKER_REPOSITORY:latest
+            docker push ${{secrets.DOCKER_USER}}/$DOCKER_REPOSITORY
           
         - name: Run the image in a container
           uses: addnab/docker-run-action@v3
