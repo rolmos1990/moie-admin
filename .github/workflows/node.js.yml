@@ -24,7 +24,7 @@ jobs:
         node-version: ${{ matrix.node-version }}
     - run: git config --global url."https://".insteadOf git://
     - run: npm install
-    - run: build:production --if-present
+    - run: build:production
     - uses: actions/checkout@v3
     
   deployment:
