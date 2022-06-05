@@ -21,10 +21,13 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
     - run: git config --global url."https://".insteadOf git://
-    - run: npm install
-    - run: npm version
-    - run: CI=false npm run build
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v2
+    - uses: borales/actions-yarn@v2.3.0
+      with:
+        cmd: install
+    - uses: borales/actions-yarn@v2.3.0
+      with:
+        cmd: build
     #Push Docker
     - uses: elgohr/Publish-Docker-Github-Action@master
       name: Publish to Github Packages Registry
