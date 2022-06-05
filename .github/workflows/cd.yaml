@@ -1,0 +1,56 @@
+
+name: Continuous Deployment
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [14.x]
+
+    env:
+      SOURCE_DIR: "build/"
+      AWS_REGION: "us-east-1"
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+    steps:
+      - uses: actions/checkout@v1
+      - name: Install dependencies
+        run: yarn
+
+      - name: Only dependencies https
+        run: git config --global url."https://".insteadOf git://
+
+      - name: Build
+        run: yarn build
+
+      - uses: elgohr/Publish-Docker-Github-Action@master
+        name: Publish to Github Packages Registry
+        with:
+          name: ${{ secrets.DOCKER_REPOSITORY }}
+          registry: docker.io
+          username: ${{ secrets.DOCKER_USER }}
+          password: ${{ secrets.DOCKER_ACCESS_TOKEN }}
+          dockerfile: Dockerfile
+          tags: latest
+
+      - uses: addnab/docker-run-action@v3
+        name: Deploy in cluster
+        with:
+          host: ${{ secrets.AWS_HOST }}
+          username: ec2-user
+          key: ${{ secrets.AWS_PRIVATE_KEY }}
+          envs: GITHUB_SHA
+          scripts: |
+            docker login
+            cd /home/ubuntu/apps/frontend
+            docker-compose pull
+            docker-compose stop
+            docker-compose rm moie-lucy-api
+            docker-compose up -d
