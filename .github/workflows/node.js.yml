@@ -43,7 +43,7 @@ jobs:
           env:
             REPO: rolmos/moie-admin
           run: |
-            docker build -t rolmos/moie-admin .
+            docker build -t rolmos/moie-admin -f ./Dockerfile .
             docker push rolmos/moie-admin
           
         - name: Run the image in a container
