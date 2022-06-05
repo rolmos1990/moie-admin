@@ -30,32 +30,16 @@ jobs:
   deployment:
       runs-on: ubuntu-latest
       needs: [build]
-
       steps:
-        - name: Docker Login
-          env:
-            DOCKER_USER: ${{secrets.DOCKER_USER}}
-            DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}
-            DOCKER_REPOSITORY: ${{secrets.DOCKER_REPOSITORY}}
-          run:
-            docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
         - name: Docker Push
-          env:
-            REPO: rolmos/moie-admin
-          run: |
-            docker build . --file Dockerfile --tag $REPO:latest
-            docker push $REPO:latest
-          
-        - name: Run the image in a container
-          uses: addnab/docker-run-action@v3
+          uses: satackey/push-prebuilt-action@v0.1
           with:
-            image: ${{ secrets.DOCKERHUB_USERNAME }}/moie-admin:latest
-            run: |
-              echo "runing the docker image"
-              echo "Testing the nodejs  app endpoints"
-              echo ${{ steps.docker_build.outputs.digest }}
-              
-        - name: Run the image in a container
+            push-branch: master
+            docker-registry: docker.io
+            docker-user: ${{secrets.DOCKER_USER}}
+            docker-token: ${{secrets.DOCKER_ACCESS_TOKEN}}
+            docker-repotag: rolmos/moie-admin:${{ github.sha }}
+        - name: Deploy in cluster
           uses: addnab/docker-run-action@v3
           with:
             host: ${{ secrets.AWS_HOST }}
