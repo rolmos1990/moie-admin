@@ -20,10 +20,10 @@ jobs:
       uses: actions/setup-node@v3
       with:
         node-version: ${{ matrix.node-version }}
-    - run: git config --global url."https://".insteadOf git://
     - uses: actions/checkout@v2
     - uses: borales/actions-yarn@v2.3.0
       with:
+        run: git config --global url."https://".insteadOf git://
         cmd: install
     - uses: borales/actions-yarn@v2.3.0
       with:
