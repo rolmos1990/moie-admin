@@ -40,7 +40,7 @@ jobs:
           dockerfile: Dockerfile
           tags: latest
 
-      - uses: addnab/docker-run-action@v3
+      - uses: appleboy/ssh-action@master
         name: Deploy in cluster
         with:
           host: ${{ secrets.AWS_HOST }}
@@ -49,8 +49,7 @@ jobs:
           envs: GITHUB_SHA
           scripts: |
             docker login
-            cd /home/ubuntu/apps/frontend
-            docker-compose pull
-            docker-compose stop
-            docker-compose rm moie-lucy-api
-            docker-compose up -d
+            docker pull ${{ secrets.DOCKER_REPOSITORY }}
+            docker stop moie-admin-v2
+            docker rm moie-admin-v2
+            docker run --detach --name moie-admin-v2 -p 80:8080 init0203/backend-repo
