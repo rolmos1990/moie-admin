@@ -20,20 +20,15 @@ jobs:
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
     steps:
-      - uses: actions/checkout@v1
-
-      - name: Only dependencies https
-        run: git config --global url."https://".insteadOf git://
-
-      - name: Install dependencies
-        run: yarn
-        with:
-          node-version: 14.x
-
+      - uses: actions/checkout@v3
       - name: Build
-        run: yarn build
+        uses: actions/setup-node@v3
         with:
-          node-version: 14.x
+          node-version: 16.x
+          cache: npm
+      - run: git config --global url."https://".insteadOf git://
+      - run: yarn
+      - run: yarn build
 
       - uses: elgohr/Publish-Docker-Github-Action@master
         name: Publish to Github Packages Registry
