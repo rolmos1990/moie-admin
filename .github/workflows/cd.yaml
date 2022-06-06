@@ -46,7 +46,7 @@ jobs:
           host: ${{ secrets.AWS_HOST }}
           username: ${{ secrets.AWS_USERNAME }}
           key: ${{ secrets.AWS_PRIVATE_KEY }}
-          password: ${{ secrets.AWS_PASSWORD }}
+          #password: ${{ secrets.AWS_PASSWORD }}
           envs: GITHUB_SHA
           scripts: |
             docker login
