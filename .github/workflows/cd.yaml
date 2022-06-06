@@ -44,7 +44,7 @@ jobs:
         name: Deploy in cluster
         with:
           host: ${{ secrets.AWS_HOST }}
-          username: ec2-user
+          username: ${{ secrets.AWS_USERNAME }}
           key: ${{ secrets.AWS_PRIVATE_KEY }}
           envs: GITHUB_SHA
           scripts: |
