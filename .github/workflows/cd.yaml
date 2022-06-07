@@ -60,12 +60,13 @@ jobs:
           DOCKER_REPOSITORY: ${{ secrets.DOCKER_REPOSITORY }}
           DOCKER_USERNAME: ${{ secrets.DOCKER_USER }}
           DOCKER_PASSWORD: ${{ secrets.DOCKER_ACCESS_TOKEN }}
-          DOCKER_TAG: ${{ steps.short-sha.outputs.sha }}
 
       #- name: Stop the server
       #  run: ssh staging 'echo "$DOCKER_PASSWORD" | docker login --username $DOCKER_USERNAME --password-stdin'
 
       - name: Deploy in Cluster
+        env:
+          DOCKER_TAG: ${{ steps.short-sha.outputs.sha }}
         run: |
             ssh staging "${{ secrets.DOCKER_COMPOSE_PATH }}/docker-compose stop"
             ssh staging "APP_VERSION=$DOCKER_TAG ${{ secrets.DOCKER_COMPOSE_PATH }}/docker-compose pull"
