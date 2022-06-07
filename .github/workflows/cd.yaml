@@ -68,5 +68,4 @@ jobs:
         env:
           DOCKER_TAG: ${{ steps.short-sha.outputs.sha }}
         run: |
-            ssh staging "cd /home"
-            ssh staging "sh deployment_front.sh $DOCKER_TAG"
+            ssh staging "sh /home/deployment_front.sh $DOCKER_TAG"
