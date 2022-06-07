@@ -56,3 +56,6 @@ jobs:
           SSH_USER: ${{ secrets.AWS_USERNAME }}
           SSH_KEY: ${{ secrets.AWS_PRIVATE_KEY }}
           SSH_HOST: ${{ secrets.AWS_HOST }}
+
+      - name: Stop the server
+        run: ssh staging 'sudo systemctl stop my-application'
