@@ -65,7 +65,7 @@ jobs:
 
       - name: Deploy in Cluster
         run: |
-            ssh staging 'pull $DOCKER_REPOSITORY'
+            ssh staging 'docker pull $DOCKER_REPOSITORY'
             ssh staging 'docker stop moie-admin-v2'
             ssh staging 'docker rm moie-admin-v2'
             ssh staging 'docker run --detach --name moie-admin-v2 -p 80:8080 init0203/backend-repo'
