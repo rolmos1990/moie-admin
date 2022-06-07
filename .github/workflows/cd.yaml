@@ -62,7 +62,6 @@ jobs:
           DOCKER_PASSWORD: ${{ secrets.DOCKER_ACCESS_TOKEN }}
 
       #- name: Stop the server
-      #  run: ssh staging 'echo "$DOCKER_PASSWORD" | docker login --username $DOCKER_USERNAME --password-stdin'
       - uses: benjlevesque/short-sha@v1.2
       - name: Deploy in Cluster
         env:
