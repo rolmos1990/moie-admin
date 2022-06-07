@@ -65,7 +65,7 @@ jobs:
 
       - name: Deploy in Cluster
         run: |
-            ssh staging 'cd ~/apps/frontend'
+            ssh staging 'cd /home/ubuntu/apps/frontend'
             ssh staging "docker-compose stop"
             ssh staging "APP_VERSION=1.0.1 docker-compose pull"
             ssh staging "APP_VERSION=1.0.1 docker-compose up"
