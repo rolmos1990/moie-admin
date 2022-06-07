@@ -71,4 +71,4 @@ jobs:
             ssh staging "cd /home/ubuntu/apps/frontend"
             ssh staging "docker-compose stop"
             ssh staging "APP_VERSION=0.1-$SHA docker-compose pull"
-            ssh staging "APP_VERSION=${1} docker-compose up -d"
+            ssh staging "APP_VERSION=0.1-$SHA docker-compose up -d"
