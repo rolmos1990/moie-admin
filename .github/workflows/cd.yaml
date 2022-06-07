@@ -66,7 +66,7 @@ jobs:
       - name: Deploy in Cluster
         run: |
             ssh staging 'docker pull rolmos/moie-admin'
-            ssh staging 'docker stop moie-admin'
-            ssh staging 'docker rm moie-admin'
+            ssh staging 'docker stop $(docker ps -q --filter ancestor=rolmos/moie-admin )'
+            ssh staging 'docker rm $(docker ps -q --filter ancestor=rolmos/moie-admin )'
             ssh staging 'docker build -t moie-admin .'
-            ssh staging 'docker run -d -p 8082:80 moie-admin'
+            ssh staging 'docker run -d -p 8082:80 rolmos/moie-admin'
