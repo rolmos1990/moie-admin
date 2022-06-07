@@ -39,7 +39,7 @@ jobs:
           username: ${{ secrets.DOCKER_USER }}
           password: ${{ secrets.DOCKER_ACCESS_TOKEN }}
           dockerfile: Dockerfile
-          tags: ${{ steps.short-sha.outputs.sha }}
+          tags: 0.1-${{ env.SHA }}
 
       - name: Configure SSH
         run: |
@@ -69,4 +69,4 @@ jobs:
           DOCKER_TAG: ${{ steps.short-sha.outputs.sha }}
         run: |
             echo ${{ steps.short-sha.outputs.sha }}
-            ssh staging "sh /home/deployment_front.sh $DOCKER_TAG"
+            ssh staging "sh /home/deployment_front.sh 0.1-$SHA"
