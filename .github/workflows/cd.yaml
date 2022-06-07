@@ -63,9 +63,10 @@ jobs:
 
       #- name: Stop the server
       #  run: ssh staging 'echo "$DOCKER_PASSWORD" | docker login --username $DOCKER_USERNAME --password-stdin'
-
+      - uses: benjlevesque/short-sha@v1.2
       - name: Deploy in Cluster
         env:
           DOCKER_TAG: ${{ steps.short-sha.outputs.sha }}
         run: |
+            echo ${{ steps.short-sha.outputs.sha }}
             ssh staging "sh /home/deployment_front.sh $DOCKER_TAG"
