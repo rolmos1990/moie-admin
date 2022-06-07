@@ -68,5 +68,7 @@ jobs:
         env:
           DOCKER_TAG: ${{ steps.short-sha.outputs.sha }}
         run: |
-            echo ${{ steps.short-sha.outputs.sha }}
-            ssh staging "sh /home/deployment_front.sh 0.1-$SHA"
+            ssh staging "cd /home/ubuntu/apps/frontend"
+            ssh staging "docker-compose stop"
+            ssh staging "APP_VERSION=0.1-$SHA docker-compose pull"
+            ssh staging "APP_VERSION=${1} docker-compose up -d"
