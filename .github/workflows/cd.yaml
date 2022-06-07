@@ -21,6 +21,7 @@ jobs:
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       CI: false
     steps:
+      - uses: benjlevesque/short-sha@v1.2
       - uses: actions/checkout@v3
       - name: Build
         uses: actions/setup-node@v3
@@ -38,7 +39,7 @@ jobs:
           username: ${{ secrets.DOCKER_USER }}
           password: ${{ secrets.DOCKER_ACCESS_TOKEN }}
           dockerfile: Dockerfile
-          tags: latest
+          tags: ${{ steps.short-sha.outputs.sha }}
 
       - name: Configure SSH
         run: |
@@ -59,13 +60,14 @@ jobs:
           DOCKER_REPOSITORY: ${{ secrets.DOCKER_REPOSITORY }}
           DOCKER_USERNAME: ${{ secrets.DOCKER_USER }}
           DOCKER_PASSWORD: ${{ secrets.DOCKER_ACCESS_TOKEN }}
+          DOCKER_TAG: ${{ steps.short-sha.outputs.sha }}
 
       #- name: Stop the server
       #  run: ssh staging 'echo "$DOCKER_PASSWORD" | docker login --username $DOCKER_USERNAME --password-stdin'
 
       - name: Deploy in Cluster
         run: |
-            ssh staging 'cd /home/ubuntu/apps/frontend'
+            ssh staging 'cd ${{ secrets.DOCKER_COMPOSE_PATH }}'
             ssh staging "docker-compose stop"
-            ssh staging "APP_VERSION=1.0.1 docker-compose pull"
-            ssh staging "APP_VERSION=1.0.1 docker-compose up"
+            ssh staging "APP_VERSION=$DOCKER_TAG docker-compose pull"
+            ssh staging "APP_VERSION=$DOCKER_TAG docker-compose up"
