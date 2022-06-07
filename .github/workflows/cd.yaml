@@ -68,6 +68,7 @@ jobs:
         env:
           DOCKER_TAG: ${{ steps.short-sha.outputs.sha }}
         run: |
-            ssh staging "${{ secrets.DOCKER_COMPOSE_PATH }}/docker-compose stop"
-            ssh staging "APP_VERSION=$DOCKER_TAG ${{ secrets.DOCKER_COMPOSE_PATH }}/docker-compose pull"
-            ssh staging "APP_VERSION=$DOCKER_TAG ${{ secrets.DOCKER_COMPOSE_PATH }}/docker-compose up"
+            ssh staging "cd /home/ubuntu/apps/frontend"
+            ssh staging "docker-compose stop"
+            ssh staging "APP_VERSION=$DOCKER_TAG docker-compose pull"
+            ssh staging "APP_VERSION=$DOCKER_TAG docker-compose up"
