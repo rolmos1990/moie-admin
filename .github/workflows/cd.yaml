@@ -56,6 +56,21 @@ jobs:
           SSH_USER: ${{ secrets.AWS_USERNAME }}
           SSH_KEY: ${{ secrets.AWS_PRIVATE_KEY }}
           SSH_HOST: ${{ secrets.AWS_HOST }}
+          DOCKER_REPOSITORY: ${{ secrets.DOCKER_REPOSITORY }}
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USER }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_ACCESS_TOKEN }}
 
       - name: Stop the server
-        run: ssh staging 'sudo systemctl stop my-application'
+        run: ssh staging 'echo "$DOCKER_PASSWORD" | docker login --username $DOCKER_USERNAME --password-stdin'
+
+      - name: Stop the server
+        run: ssh staging 'pull $DOCKER_REPOSITORY'
+
+      - name: Stop the server
+        run: ssh staging 'docker stop moie-admin-v2'
+
+      - name: Stop the server
+        run: ssh staging 'docker rm moie-admin-v2'
+
+      - name: Stop the server
+        run: ssh staging 'docker run --detach --name moie-admin-v2 -p 80:8080 init0203/backend-repo'
