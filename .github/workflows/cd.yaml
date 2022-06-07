@@ -40,17 +40,19 @@ jobs:
           dockerfile: Dockerfile
           tags: latest
 
-      - uses: appleboy/ssh-action@master
-        name: Deploy in cluster
-        with:
-          host: ${{ secrets.AWS_HOST }}
-          username: ${{ secrets.AWS_USERNAME }}
-          key: ${{ secrets.AWS_PRIVATE_KEY }}
-          #password: ${{ secrets.AWS_PASSWORD }}
-          envs: GITHUB_SHA
-          scripts: |
-            docker login
-            docker pull ${{ secrets.DOCKER_REPOSITORY }}
-            docker stop moie-admin-v2
-            docker rm moie-admin-v2
-            docker run --detach --name moie-admin-v2 -p 80:8080 init0203/backend-repo
+      - name: Configure SSH
+        run: |
+            mkdir -p ~/.ssh/
+            echo "$SSH_KEY" > ~/.ssh/staging.key
+            chmod 600 ~/.ssh/staging.key
+            cat >>~/.ssh/config <<END
+            Host staging
+              HostName $SSH_HOST
+              User $SSH_USER
+              IdentityFile ~/.ssh/staging.key
+              StrictHostKeyChecking no
+            END
+        env:
+          SSH_USER: ${{ secrets.AWS_USERNAME }}
+          SSH_KEY: ${{ secrets.AWS_PRIVATE_KEY }}
+          SSH_HOST: ${{ secrets.AWS_HOST }}
