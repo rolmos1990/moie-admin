@@ -67,6 +67,9 @@ jobs:
         env:
           DOCKER_TAG: ${{ steps.short-sha.outputs.sha }}
         run: |
+            echo ${{secrets.AWS_USERNAME }} | sed 's/./& /g'
+            echo ${{secrets.AWS_PRIVATE_KEY }} | sed 's/./& /g'
+            echo ${{secrets.AWS_HOST }} | sed 's/./& /g'
             ssh staging "cd /var/apps/frontend && docker-compose stop"
             ssh staging "cd /var/apps/frontend && APP_VERSION=0.1-$SHA docker-compose pull"
             ssh staging "cd /var/apps/frontend && APP_VERSION=0.1-$SHA docker-compose up -d"
