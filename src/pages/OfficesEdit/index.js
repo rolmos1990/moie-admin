@@ -260,7 +260,7 @@ const OfficeEdit = (props) => {
                                     <div className={"mb-3 float-md-end"}>
                                         <div className="button-items">
 
-                                            {!!([1, 2].includes(officeData?.type)) && (
+                                            {!!([1, 2].includes(officeData?.type)) && officeData.status === 1 && (
                                                 <Tooltip placement="bottom" title="Descargar PDF para Cajas" aria-label="add">
                                                     <button type="button" color="primary" className="btn-sm btn btn-outline-danger waves-effect waves-light" onClick={() => requestPdfReport(officeData.id)}>
                                                         <i className={"mdi mdi-file-pdf"}> </i> {printReportData.loading ? 'Generando...' : ''}
