@@ -301,7 +301,7 @@ const OrderEdit = (props) => {
 
     //Permite confirmar la orden
     const canConfirm = () => {
-        if (order && order.status === ORDERS_ENUM.PENDING && order.orderDelivery && ![1, 2].includes(order.orderDelivery.deliveryType)) {
+        if (order && order.status === ORDERS_ENUM.PENDING && order.orderDelivery && ![1].includes(order.orderDelivery.deliveryType)) {
             return true;
         } else {
             return false;
