@@ -187,129 +187,137 @@ const OrderList = props => {
                 onSubmit={onFilterAction.bind(this)}/>
 
             <Col lg={filter && filterable ? "8" : "12"}>
+
                 <Card>
-                    <CardBody>
-                        <PaginationProvider pagination={paginationFactory(pageOptions)}>
-                            {({paginationProps, paginationTableProps}) => (
-                                <ToolkitProvider
-                                    keyField="id"
-                                    data={statesList || []}
-                                    columns={normalizeColumnsList(columns)}
-                                    bootstrap4
-                                    search
-                                >
-                                    {toolkitProps => (
-                                        <React.Fragment>
-                                            <Row className="row mb-2">
-                                                <Col md={4}>
-                                                    <div className="form-inline mb-3">
-                                                        <div className="search-box ms-2">
-                                                            <h4 className="text-info">
-                                                                <i className="uil-shopping-cart-alt me-2"></i>
-                                                                {conciliationView ? `Conciliar pedidos (${ordersSelected.length})` : 'Pedidos'}
-                                                            </h4>
+                    {statesList && statesList.length > 0 ? (    <CardBody>
+                            <PaginationProvider pagination={paginationFactory(pageOptions)}>
+                                {({paginationProps, paginationTableProps}) => (
+                                    <ToolkitProvider
+                                        keyField="id"
+                                        data={statesList || []}
+                                        columns={normalizeColumnsList(columns)}
+                                        bootstrap4
+                                        search
+                                    >
+                                        {toolkitProps => (
+                                            <React.Fragment>
+                                                <Row className="row mb-2">
+                                                    <Col md={4}>
+                                                        <div className="form-inline mb-3">
+                                                            <div className="search-box ms-2">
+                                                                <h4 className="text-info">
+                                                                    <i className="uil-shopping-cart-alt me-2"></i>
+                                                                    {conciliationView ? `Conciliar pedidos (${ordersSelected.length})` : 'Pedidos'}
+                                                                </h4>
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                </Col>
-                                                {customActions ? <Col md={8}>
-                                                    <div className="mb-3 float-md-end">
-                                                        <Tooltip placement="bottom" title="Aceptar" aria-label="add">
-                                                            <Button onClick={() => onPressAction()} color="success" disabled={(ordersSelected.length === 0 && !selectAll) && (!conditional || conditional.length === 0)}>
-                                                                <i className={"mdi mdi-check"}> </i> &nbsp; Aceptar
-                                                            </Button>
-                                                        </Tooltip>
-                                                    </div>
-                                                </Col> : (
-                                                    <Col md={8}>
+                                                    </Col>
+                                                    {customActions ? <Col md={8}>
                                                         <div className="mb-3 float-md-end">
-                                                            {columns.some(s => s.filter) && (
-                                                                <Tooltip placement="bottom" title="Filtros Avanzados" aria-label="add">
-                                                                    <Button onClick={() => setFilter(!filter)}>
-                                                                        <i className={"mdi mdi-filter"}> </i>
-                                                                    </Button>
-                                                                </Tooltip>
-                                                            )}
-                                                            {!conciliationView && (
-                                                                <>
-                                                                    <Tooltip placement="bottom" title="Impresión multiple" aria-label="add">
-                                                                        <Button color="primary" onClick={() => printOrders()}
-                                                                                disabled={(ordersSelected.length === 0 && !selectAll) && (!conditional || conditional.length === 0)}>
-                                                                            <i className="mdi mdi-printer"> </i>
+                                                            <Tooltip placement="bottom" title="Aceptar" aria-label="add">
+                                                                <Button onClick={() => onPressAction()} color="success" disabled={(ordersSelected.length === 0 && !selectAll) && (!conditional || conditional.length === 0)}>
+                                                                    <i className={"mdi mdi-check"}> </i> &nbsp; Aceptar
+                                                                </Button>
+                                                            </Tooltip>
+                                                        </div>
+                                                    </Col> : (
+                                                        <Col md={8}>
+                                                            <div className="mb-3 float-md-end">
+                                                                {columns.some(s => s.filter) && (
+                                                                    <Tooltip placement="bottom" title="Filtros Avanzados" aria-label="add">
+                                                                        <Button onClick={() => setFilter(!filter)}>
+                                                                            <i className={"mdi mdi-filter"}> </i>
                                                                         </Button>
                                                                     </Tooltip>
-                                                                  {/*  <Tooltip placement="bottom" title="Conciliar pedidos" aria-label="add">
+                                                                )}
+                                                                {!conciliationView && (
+                                                                    <>
+                                                                        <Tooltip placement="bottom" title="Impresión multiple" aria-label="add">
+                                                                            <Button color="primary" onClick={() => printOrders()}
+                                                                                    disabled={(ordersSelected.length === 0 && !selectAll) && (!conditional || conditional.length === 0)}>
+                                                                                <i className="mdi mdi-printer"> </i>
+                                                                            </Button>
+                                                                        </Tooltip>
+                                                                        {/*  <Tooltip placement="bottom" title="Conciliar pedidos" aria-label="add">
                                                                         <Button color="primary" onClick={() => showConciliationView()}>
                                                                             <i className="mdi mdi-list-status"> </i>
                                                                         </Button>
                                                                     </Tooltip>*/}
-                                                                    <Tooltip placement="bottom" title="Confirmar Conciliados" aria-label="add">
-                                                                        <Button color="primary" onClick={() => setOpenConfirmConciliationModal(true)}>
-                                                                            <i className="mdi mdi-check"> </i>
-                                                                        </Button>
-                                                                    </Tooltip>
-                                                                    <Tooltip placement="bottom" title="Generar reporte conciliados" aria-label="add">
-                                                                        <Button onClick={() => setOpenReportConciliationModal(true)}>
-                                                                            <i className={"mdi mdi-file"}> </i>
-                                                                        </Button>
-                                                                    </Tooltip>
-                                                                    <HasPermissions permission={PERMISSIONS.ORDER_CREATE}>
-                                                                        <Link to={"/orders/create"} className="btn btn-primary waves-effect waves-light text-light">
-                                                                            <i className="mdi mdi-plus"> </i> Crear pedido
-                                                                        </Link>
-                                                                    </HasPermissions>
-                                                                </>
-                                                            )}
+                                                                        <Tooltip placement="bottom" title="Confirmar Conciliados" aria-label="add">
+                                                                            <Button color="primary" onClick={() => setOpenConfirmConciliationModal(true)}>
+                                                                                <i className="mdi mdi-check"> </i>
+                                                                            </Button>
+                                                                        </Tooltip>
+                                                                        <Tooltip placement="bottom" title="Generar reporte conciliados" aria-label="add">
+                                                                            <Button onClick={() => setOpenReportConciliationModal(true)}>
+                                                                                <i className={"mdi mdi-file"}> </i>
+                                                                            </Button>
+                                                                        </Tooltip>
+                                                                        <HasPermissions permission={PERMISSIONS.ORDER_CREATE}>
+                                                                            <Link to={"/orders/create"} className="btn btn-primary waves-effect waves-light text-light">
+                                                                                <i className="mdi mdi-plus"> </i> Crear pedido
+                                                                            </Link>
+                                                                        </HasPermissions>
+                                                                    </>
+                                                                )}
 
-                                                            {conciliationView && (
-                                                                <>
-                                                                    <Tooltip placement="bottom" title="Aceptar" aria-label="add">
-                                                                        <Button color="primary" onClick={() => sendToConciliation()} disabled={ordersSelected.length === 0}>
-                                                                            {!conciliation.loading && <i className="mdi mdi-check"> </i>}
-                                                                            {conciliation.loading && <i className="fa fa-spinner fa-spin"> </i>}
-                                                                            Aceptar
-                                                                        </Button>
-                                                                    </Tooltip>
-                                                                    <Tooltip placement="bottom" title="Cancelar" aria-label="add">
-                                                                        <Button color="default" onClick={() => hideConciliationView(false)}>
-                                                                            Cancelar
-                                                                        </Button>
-                                                                    </Tooltip>
-                                                                </>
-                                                            )}
+                                                                {conciliationView && (
+                                                                    <>
+                                                                        <Tooltip placement="bottom" title="Aceptar" aria-label="add">
+                                                                            <Button color="primary" onClick={() => sendToConciliation()} disabled={ordersSelected.length === 0}>
+                                                                                {!conciliation.loading && <i className="mdi mdi-check"> </i>}
+                                                                                {conciliation.loading && <i className="fa fa-spinner fa-spin"> </i>}
+                                                                                Aceptar
+                                                                            </Button>
+                                                                        </Tooltip>
+                                                                        <Tooltip placement="bottom" title="Cancelar" aria-label="add">
+                                                                            <Button color="default" onClick={() => hideConciliationView(false)}>
+                                                                                Cancelar
+                                                                            </Button>
+                                                                        </Tooltip>
+                                                                    </>
+                                                                )}
+                                                            </div>
+                                                        </Col>
+                                                    )}
+                                                </Row>
+                                                <Row>
+                                                    <Col xl="12">
+                                                        <div className="table-responsive mb-4">
+                                                            <BootstrapTable
+                                                                selectRow={selectRowProp}
+                                                                remote
+                                                                responsive
+                                                                loading={true}
+                                                                bordered={false}
+                                                                striped={true}
+                                                                classes={
+                                                                    "table table-centered table-nowrap mb-0"
+                                                                }
+                                                                noDataIndication={() => <NoDataIndication/>}
+                                                                {...toolkitProps.baseProps}
+                                                                onTableChange={handleTableChange}
+                                                                {...paginationTableProps}
+                                                            />
                                                         </div>
                                                     </Col>
-                                                )}
-                                            </Row>
-                                            <Row>
-                                                <Col xl="12">
-                                                    <div className="table-responsive mb-4">
-                                                        <BootstrapTable
-                                                            selectRow={selectRowProp}
-                                                            remote
-                                                            responsive
-                                                            loading={true}
-                                                            bordered={false}
-                                                            striped={true}
-                                                            classes={
-                                                                "table table-centered table-nowrap mb-0"
-                                                            }
-                                                            noDataIndication={() => <NoDataIndication/>}
-                                                            {...toolkitProps.baseProps}
-                                                            onTableChange={handleTableChange}
-                                                            {...paginationTableProps}
-                                                        />
-                                                    </div>
-                                                </Col>
-                                            </Row>
-                                            <div className="float-sm-start">
-                                                <PaginationListStandalone {...paginationProps} />
-                                            </div>
-                                        </React.Fragment>
-                                    )}
-                                </ToolkitProvider>
-                            )}
-                        </PaginationProvider>
-                    </CardBody>
+                                                </Row>
+                                                <div className="float-sm-start">
+                                                    <PaginationListStandalone {...paginationProps} />
+                                                </div>
+                                            </React.Fragment>
+                                        )}
+                                    </ToolkitProvider>
+                                )}
+                            </PaginationProvider>
+                        </CardBody>
+                    ): (
+                        <div className="container">
+                            <div style={{"margin": "10px"}}>
+                            <p><i className="uil-shopping-cart-alt me-2"></i>No se han encontrado pedidos asociados</p>
+                            </div>
+                        </div>
+                    )}
                 </Card>
             </Col>
             {orderSelected && (<OrderEdit orderId={orderSelected} showOrderOverlay={true} onCloseOverlay={() => setOrderSelected(null)}/>)}
