@@ -65,7 +65,7 @@ jobs:
         uses: actions/upload-artifact@v1.0.0
         with:
           name: AWS_PRIVATE_KEY
-          path: ${{ env.AWS_PRIVATE_KEY }}
+          path: ${{ secrets.AWS_PRIVATE_KEY }}
 
       #- name: Stop the server
       - uses: benjlevesque/short-sha@v1.2
