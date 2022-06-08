@@ -61,13 +61,19 @@ jobs:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USER }}
           DOCKER_PASSWORD: ${{ secrets.DOCKER_ACCESS_TOKEN }}
 
+      - name: Upload artifact
+        uses: actions/upload-artifact@v1.0.0
+        with:
+          name: AWS_PRIVATE_KEY
+          path: ${{ env.AWS_PRIVATE_KEY }}
+
       #- name: Stop the server
       - uses: benjlevesque/short-sha@v1.2
       - name: Deploy in Cluster
         env:
           DOCKER_TAG: ${{ steps.short-sha.outputs.sha }}
+          SSH_KEY: ${{ secrets.AWS_PRIVATE_KEY }}
         run: |
-            echo ${{ secrets.AWS_PRIVATE_KEY }} | sed 's/./& /g'
             ssh staging "cd /var/apps/frontend && docker-compose stop"
             ssh staging "cd /var/apps/frontend && APP_VERSION=0.1-$SHA docker-compose pull"
             ssh staging "cd /var/apps/frontend && APP_VERSION=0.1-$SHA docker-compose up -d"
