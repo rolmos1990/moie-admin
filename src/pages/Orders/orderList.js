@@ -313,8 +313,8 @@ const OrderList = props => {
                         </CardBody>
                     ): (
                         <div className="container">
-                            <div style={{"margin": "10px"}}>
-                            <p><i className="uil-shopping-cart-alt me-2"></i>No se han encontrado pedidos asociados</p>
+                            <div style={{"margin": "50px 30px"}}>
+                            <h6><i className="text-info uil-shopping-cart-alt me-2"></i>No se han encontrado pedidos asociados</h6>
                             </div>
                         </div>
                     )}
