@@ -96,7 +96,7 @@
   },
   "scripts": {
     "version": "echo $npm_package_version",
-    "start": "npm run start",
+    "start": "react-scripts start",
     "build": "react-scripts build",
     "build:local": "REACT_APP_NODE_ENV=local;npm run build",
     "build:production": "REACT_APP_NODE_ENV=production;npm run build",

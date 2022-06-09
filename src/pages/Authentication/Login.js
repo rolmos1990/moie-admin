@@ -131,9 +131,6 @@ const Login = (props) => {
                       </div>
 
                       <div className="mb-3">
-                      <div className="float-end">
-                          <Link to="/forgot-password" className="text-muted">Olvidaste contraseña?</Link>
-                        </div>
                         <AvField
                           name="password"
                           label="Contraseña"
@@ -142,20 +139,6 @@ const Login = (props) => {
                           required
                           placeholder="*********"
                         />
-                      </div>
-
-                      <div className="form-check">
-                        <input
-                          type="checkbox"
-                          className="form-check-input"
-                          id="customControlInline"
-                        />
-                        <label
-                          className="form-check-label"
-                          htmlFor="customControlInline"
-                        >
-                          Recuerdame
-                        </label>
                       </div>
 
                       <div className="mt-3">
@@ -175,7 +158,7 @@ const Login = (props) => {
               </Card>
               <div className="mt-5 text-center">
                 <p>© {new Date().getFullYear()} Lucy Modas <i
-                  className="mdi mdi-heart text-danger"></i> Moie V2.0.1
+                  className="mdi mdi-heart text-danger"></i> Moie V{process.env.REACT_APP_VERSION}
                         </p>
               </div>
             </Col>

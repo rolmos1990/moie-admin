@@ -18,9 +18,11 @@ function* loginUser({ payload: { user, history } }) {
         username: user.username,
         password: user.password,
       });
-      localStorage.setItem("authUser", JSON.stringify(response));
+      yield localStorage.setItem("authUser", JSON.stringify(response));
       yield put(loginSuccess(response));
-    history.push("/dashboard")
+      setTimeout(() => {
+        window.location = "/dashboard";
+      }, 1000);
   } catch (error) {
     const message = getErrorMessage(error);
     console.log(message);
