@@ -302,7 +302,7 @@ const ProductEdit = (props) => {
                                                                     console.log("SIZE SELECTED", sizes.find(s => s.id === e.value));
                                                                     setSizeSelected(sizes.find(s => s.id === e.value));
                                                                 }}
-                                                                disabled={hasOrders}
+                                                                disabled={hasOrders || product.id}
                                                                 isSearchable
                                                             />
                                                         </div>
