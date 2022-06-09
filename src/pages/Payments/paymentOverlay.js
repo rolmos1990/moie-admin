@@ -31,7 +31,7 @@ const PaymentOverlay = (props) => {
 
         const conditions = new Conditionals.Condition;
         conditions.add("payment", null, Conditionals.OPERATORS.NULL);
-        conditions.add("orderDelivery.deliveryType", [1,2], Conditionals.OPERATORS.IN);
+        conditions.add("orderDelivery.deliveryType", [1,2].join("::"), Conditionals.OPERATORS.IN);
         conditions.add('status', 1);
         onGetOrders(conditions);
         setFindOrderBy("NO_PAYMENT");
