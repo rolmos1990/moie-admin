@@ -7,7 +7,7 @@ import {connect} from "react-redux";
 import PropTypes from "prop-types";
 import {FieldAsyncSelect, FieldSelect, FieldText} from "../../components/Fields";
 import ButtonSubmit from "../../components/Common/ButtonSubmit";
-import {ORDERS, ORDERS_CHARGE_ON_DELIVERY} from "../../helpers/url_helper";
+import {ORDERS, ORDERS_CHARGE_ON_DELIVERY, ORDERS_FOR_CONCILIATE} from "../../helpers/url_helper";
 import {getEmptyOptions} from "../../common/converters";
 import {confirmConciliation, confirmConciliationRestart, getOrder, restartOrder} from "../../store/order/actions";
 import Conditionals from "../../common/conditionals";
@@ -187,7 +187,7 @@ const OrderConciliationForm = ({
                                     <Label htmlFor="product">Pedido # </Label>
                                     <FieldAsyncSelect
                                         name={"order"}
-                                        urlStr={ORDERS}
+                                        urlStr={ORDERS_FOR_CONCILIATE}
                                         placeholder="Buscar por Pedido"
                                         defaultValue={defaultOption}
                                         conditionalOptions={{fieldName: 'id', operator: Conditionals.OPERATORS.EQUAL}}
@@ -203,7 +203,7 @@ const OrderConciliationForm = ({
                                     <Label htmlFor="customer">Guia</Label>
                                     <FieldAsyncSelect
                                         name={"tracking"}
-                                        urlStr={ORDERS}
+                                        urlStr={ORDERS_FOR_CONCILIATE}
                                         placeholder="Buscar por Guia"
                                         defaultValue={defaultOption}
                                         defaultConditions={[]}
