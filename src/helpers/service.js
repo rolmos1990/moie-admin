@@ -78,7 +78,7 @@ export const countMayoristas = () => {
 
 export const countUsersOrders = () => {
     const conditions = new Conditionals.Condition;
-    conditions.add('status', '1::5', Conditionals.OPERATORS.BETWEEN);
+    conditions.add('status', [2,3,4,5,7].join("::"), Conditionals.OPERATORS.IN);
     conditions.add('createdAt', formatDateToServer(getMoment().startOf('day')), Conditionals.OPERATORS.GREATER_THAN_OR_EQUAL)
 
     const query = {};

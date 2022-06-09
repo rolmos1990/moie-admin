@@ -65,6 +65,7 @@ export const PAYMENTS = "/payment"
 export const ORDERS = "/order"
 export const ORDERS_CHARGE_ON_DELIVERY = "/order/onlyBy/chargeOnDelivery"
 export const DELIVERY_METHODS = "/deliveryMethod"
+export const ORDERS_FOR_CONCILIATE = "/order/filterby/conciliations"
 
 //CART DATA
 export const GET_CART_DATA = "/cart"

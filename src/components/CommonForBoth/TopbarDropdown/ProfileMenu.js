@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react"
 import PropTypes from 'prop-types'
-import {Dropdown, DropdownMenu, DropdownToggle,} from "reactstrap"
+import {Button, Dropdown, DropdownMenu, DropdownToggle,} from "reactstrap"
 
 //i18n
 import {withTranslation} from "react-i18next"
@@ -30,7 +30,16 @@ const ProfileMenu = props => {
         setusername(obj.username)
       }
     }
-  }, [props.success])
+  }, [props.success]);
+
+  const logOut = () => {
+    try {
+      localStorage.removeItem("authUser");
+      props.history.push("/login");
+    }catch(e){
+
+    }
+  }
 
   return (
     <React.Fragment>
@@ -58,10 +67,10 @@ const ProfileMenu = props => {
             <span>{props.t("Mi perfil")}</span>
           </Link>
           <div className="dropdown-divider" />
-          <Link to="/login" className="dropdown-item">
+          <Button onClick={() => logOut()} className="dropdown-item">
             <i className="uil uil-sign-out-alt font-size-18 align-middle me-1 text-muted"></i>
-            <span>{props.t("Logout")}</span>
-          </Link>
+            <span className="text-muted">{props.t("Logout")}</span>
+          </Button>
         </DropdownMenu>
       </Dropdown>
     </React.Fragment>
@@ -80,5 +89,5 @@ const mapStatetoProps = state => {
 }
 
 export default withRouter(
-  connect(mapStatetoProps, {})(withTranslation()(ProfileMenu))
+  connect(mapStatetoProps, {})(withTranslation()(withRouter(ProfileMenu)))
 )

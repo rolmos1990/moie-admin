@@ -118,7 +118,7 @@ export const getImageByQuality = (imgData, quality) => {
     } catch (e) {
         console.error('Error: ' + imgData.thumbs, e);
     }
-    return `${path}${result}`;
+    return `${path}${result}?${getMoment().unix()}`;
 }
 export const getImagePath = (photoPath) => {
     if (!photoPath) return userImage;

@@ -138,9 +138,7 @@ const Navbar = props => {
 
                                 <HasPermissions permissions={[PERMISSIONS.OFFICE_SHOW, PERMISSIONS.BILL_SHOW, PERMISSIONS.POSTSALE_SHOW, PERMISSIONS.PAYMENT_SHOW]} renderNoAccess={() => renderMenuNoAccess("Servicios", "#", "uil-cog me-2")}>
                                     <li className="nav-item dropdown">
-                                        <Link className="nav-link dropdown-toggle arrow-none" to="#" onClick={e => {
-                                            e.preventDefault()
-                                        }}>
+                                        <Link className="nav-link dropdown-toggle arrow-none" to="#" onClick={e => {e.preventDefault()}}>
                                             <i className="uil-cog me-2"></i>{props.t("Servicios")}
                                             <div className="arrow-down"></div>
                                         </Link>

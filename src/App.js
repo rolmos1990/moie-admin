@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types'
 import React from "react"
 
-import {BrowserRouter as Router, Switch} from "react-router-dom"
+import {BrowserRouter as Router, Redirect, Switch} from "react-router-dom"
 import {connect} from "react-redux"
 
 // Import Routes all
@@ -61,6 +61,7 @@ const App = props => {
               exact
             />
           ))}
+          <Redirect to={{pathname: "/dashboard", state: {from: props.location}}} />
         </Switch>
 
       </Router>

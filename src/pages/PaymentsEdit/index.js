@@ -74,18 +74,6 @@ const PaymentEdit = (props) => {
                                 <Col xl="12">
                                     <Card>
                                         <CardBody>
-                                            {/*<div className={"mt-1 mb-5"} style={{position: "relative"}}>
-                                            <div className={"float-end"}>
-                                                <Row>
-                                                    <Col>
-                                                        ¿Activo?
-                                                    </Col>
-                                                    <Col>
-                                                        <FieldSwitch defaultValue={paymentData._status} name={"_status"} />
-                                                    </Col>
-                                                </Row>
-                                            </div>
-                                        </div>*/}
                                             <Row>
                                                 <Col md="6">
                                                     <div className="mb-3">
@@ -102,11 +90,11 @@ const PaymentEdit = (props) => {
                                                 </Col>
                                                 <Col md="6">
                                                     <div className="mb-3">
-                                                        <Label htmlFor="field_name">Correo <span className="text-danger">*</span></Label>
+                                                        <Label htmlFor="field_name">Correo</Label>
                                                         <FieldEmail
                                                             name={"email"}
                                                             value={paymentData.email}
-                                                            required/>
+                                                        />
                                                     </div>
                                                 </Col>
                                                 <Col md="6">

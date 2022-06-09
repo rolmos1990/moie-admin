@@ -84,7 +84,7 @@ const FooterUsers = ({data, user}) => {
         findData();
         let newTimeout = setTimeout(() => {
             getData();
-        }, 45000);
+        }, 120000);
 
         if (currentTimeout) clearTimeout(currentTimeout);
         setCurrentTimeout(newTimeout);

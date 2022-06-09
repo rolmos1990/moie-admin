@@ -51,7 +51,7 @@ const OrderDeliveryOptions = (props) => {
             setOriginOrder(null);
             setDeliveryType(null);
             setPaymentType(null);
-            setDeliveryCost(null);
+            setDeliveryCost(0);
             setPieceToChange(null);
             setShowPaymentType(false);
             setProductQty(0);
@@ -80,7 +80,7 @@ const OrderDeliveryOptions = (props) => {
     useEffect(() => {
         if (deliveryMethod) {
             setShowPaymentType(DELIVERY_METHODS_PAYMENT_TYPES.includes(deliveryMethod));
-            getQuote();
+            //getQuote();
             onChangeDeliveryOptions();
         }
     }, [deliveryMethod]);
@@ -107,7 +107,7 @@ const OrderDeliveryOptions = (props) => {
     }, [deliveryCost, paymentType, pieceToChange, tracking, deliveryLocality, otherMethod]);
 
     useEffect(() => {
-        getQuote();
+        //getQuote();
     }, [car.products]);
 
     useEffect(() => {
