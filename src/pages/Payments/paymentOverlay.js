@@ -134,7 +134,7 @@ const PaymentOverlay = (props) => {
                                         <th style={{width: '10%'}}># Pedido</th>
                                         <th style={{width: '35%'}}>Cliente</th>
                                         <th style={{width: '15%'}}>Fecha</th>
-                                        <th style={{width: '15%'}}>Monto</th>
+                                        <th style={{width: '15%'}}>Total con descuento</th>
                                         <th style={{width: '10%'}}>Envio</th>
                                         <th style={{width: '15%'}}>Total</th>
                                         <HasPermissions permissions={[PERMISSIONS.PAYMENT_EDIT]}>
@@ -156,9 +156,9 @@ const PaymentOverlay = (props) => {
                                             <td>{order.id}</td>
                                             <td>{order.customer.name}</td>
                                             <td>{formatDate(order.createdAt)}</td>
-                                            <td className="text-end">{priceFormat(order.subTotalAmount, "", true)}</td>
-                                            <td className="text-end">{priceFormat(parseFloat(order.totalAmount || 0) - parseFloat(order.subTotalAmount || 0), "", true)}</td>
-                                            <td className="text-end">{priceFormat(order.totalAmount, "", true)}</td>
+                                            <td className="text-end">{priceFormat(parseFloat(order.totalAmount) - parseFloat(order.orderDelivery.deliveryCost || 0))}</td>
+                                            <td className="text-end">{priceFormat(order.orderDelivery.deliveryCost)}</td>
+                                            <td className="text-end">{priceFormat(order.totalAmount)}</td>
                                             <HasPermissions permissions={[PERMISSIONS.PAYMENT_EDIT]}>
                                                 <td>
                                                     <Tooltip placement="bottom" title="Asociar pedido" aria-label="add">
