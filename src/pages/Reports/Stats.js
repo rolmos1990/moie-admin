@@ -396,6 +396,7 @@ const initialState = {
 const Stats = ({users, onGetUsers}) => {
 
     const [stats, setStats] = useState(initialState);
+    const [userList, setUserList] = useState([]);
     const [ventasOrigenReload, setVentasOrigenReload] = useState(false);
 
     useEffect(() => {
@@ -480,6 +481,7 @@ const Stats = ({users, onGetUsers}) => {
         if (users) {
             const options = users.map((user) => ({label: user.name, value: user.id}))
             setStats({...stats, usuarios: [getEmptyOptions(), ...options]});
+            setUserList(users.map(user => ({label: user.username, value: user.id})));
             console.log('users', users)
         }
     }, [users]);
@@ -914,7 +916,7 @@ const Stats = ({users, onGetUsers}) => {
                                     <Label>Usuarios</Label>
                                     <FieldSelect
                                         name="ventas_users"
-                                        options={stats.usuarios}
+                                        options={userList}
                                         defaultValue={stats.usuarios.length > 0 ? stats.usuarios[0] : null}
                                         onChange={(data) => onChangeUser(data, "ventas")}
                                     />
