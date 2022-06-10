@@ -49,19 +49,6 @@ const FooterUsers = ({data, user}) => {
 
                 const limit = 6;
 
-                //TO TEST
-                /*u = [];
-                Array.from({length: limit}, () => Math.floor(Math.random() * 20)).forEach((item, i) => {
-                    u.push({
-                        id: i+1,
-                        name: "User " + i+1,
-                        sales: item,
-                        amount: priceFormat(Math.floor(Math.random() * 20)),
-                        image: "https://picsum.photos/200/300?random=" + (i+1)
-                    });
-                });*/
-                //TO TEST
-
                 u = u.sort((a, b) => a.sales === b.sales ? 0 : (a.sales > b.sales) ? 1 : -1);
 
                 if (u.length > limit) {
@@ -84,7 +71,7 @@ const FooterUsers = ({data, user}) => {
         findData();
         let newTimeout = setTimeout(() => {
             getData();
-        }, 120000);
+        }, 45000);
 
         if (currentTimeout) clearTimeout(currentTimeout);
         setCurrentTimeout(newTimeout);
@@ -99,8 +86,6 @@ const FooterUsers = ({data, user}) => {
             />
         ))
     }
-
-    console.log("users", users)
 
     return (
         <React.Fragment>

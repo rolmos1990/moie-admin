@@ -33,7 +33,6 @@ const OfficeReportForm = ({onCloseModal, loading, error, success, onGenerateRepo
             type: values.type.value,
             date: formatDateToServer(values.reportDate[0])
         };
-        console.log(payload);
         onGenerateReport(payload);
     }
 

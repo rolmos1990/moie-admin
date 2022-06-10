@@ -28,7 +28,6 @@ const UserProfile = props => {
     }, [success])
 
     const changeProfilePicture = () => {
-        console.log('changeProfilePicture', photo)
         onChangeProfilePicture({photo: photo}, props.history)
     }
 

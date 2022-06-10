@@ -155,7 +155,6 @@ const Dashboard = (props) => {
     useEffect(() => {
 
         if(dashboard && dashboard.products) {
-            console.log("DASHBOARD PRODUCTS" , dashboard.products);
 
             //Productos
             const products = {

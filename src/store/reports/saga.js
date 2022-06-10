@@ -32,7 +32,6 @@ function* generateReport({reportType, data}) {
             showResponseMessage({status: 500}, "Reporte no valido");
         }
         const blob = yield call(apiMap[reportType], new URLSearchParams(data));
-        console.log('generateReport', blob)
         const _url = window.URL.createObjectURL(b64toBlob(blob.data));
         const a = document.createElement('a');
         a.style.display = 'none';
@@ -45,7 +44,6 @@ function* generateReport({reportType, data}) {
         yield put(generateReportSuccess());
         showResponseMessage({status: 200}, "Reporte generado!");
     } catch (e) {
-        console.log("DEBUG -- error ", e.message);
         yield put(generateReportFailed(e.message))
         showResponseMessage({status: 500}, "No se logró general el reporte");
     }

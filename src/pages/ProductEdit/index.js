@@ -99,7 +99,6 @@ const ProductEdit = (props) => {
                 }
             }
         }
-        //console.log('Product', product)
     }, [product]);
 
     useEffect(() => {
@@ -299,7 +298,6 @@ const ProductEdit = (props) => {
                                                                 options={sizesList}
                                                                 defaultValue={sizeDefault}
                                                                 onChange={(e) => {
-                                                                    console.log("SIZE SELECTED", sizes.find(s => s.id === e.value));
                                                                     setSizeSelected(sizes.find(s => s.id === e.value));
                                                                 }}
                                                                 disabled={hasOrders || product.id}

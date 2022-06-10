@@ -136,7 +136,6 @@ const CategoryList = props => {
                     window.open(_url, "_blank").focus(); // window.open + focus
                 }).catch((err) => {
                 showMessage.error("Preparando fichero, espere un momento");
-                console.log(err);
             });
     }
 

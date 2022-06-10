@@ -172,7 +172,6 @@ export async function downloadFile(fileB64, name) {
         const blob = b64toBlob(fileB64);
         saveAs(blob, name + ".pdf");
     }catch(e){
-        console.log("DEBUG -- error ", e.message);
     }
 }
 

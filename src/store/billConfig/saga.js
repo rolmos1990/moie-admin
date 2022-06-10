@@ -83,7 +83,6 @@ function* queryData({params ={}, node='bills'}) {
 
 function* register({payload: {data, history}}) {
     try {
-        console.log('factura', data)
         const response = yield call(POST_API_REQUEST, data);
         showResponseMessage(response, "Resolución creada!", response.error);
         //yield put(CREATE_SUCCESS_ACTION(response));
@@ -114,7 +113,6 @@ function* billDelete({ payload: { id, history } }) {
         history.push("/bills")
 
     } catch (error) {
-        console.log("error", error);
         yield put(deleteBillConfigFailed(error))
     }
 }

@@ -97,7 +97,6 @@ function* customerUpdate({ payload: { id, customer, history } }) {
         yield put(updateCustomerSuccess(response))
         //history.push("/customers")
     } catch (error) {
-        console.log("error", error);
         yield put(updateCustomerFail(error))
     }
 }
@@ -110,7 +109,6 @@ function* customerDelete({ payload: { id, history } }) {
         history.push("/customers")
 
     } catch (error) {
-        console.log("error", error);
         yield put(deleteCustomerFailed(error))
     }
 }

@@ -25,6 +25,7 @@ import {fileOfficeTemplate, officePdfApi} from "../../helpers/backend_helper";
 import {PERMISSIONS} from "../../helpers/security_rol";
 import NoAccess from "../../components/Common/NoAccess";
 import HasPermissions from "../../components/HasPermissions";
+import {showMessage} from "../../components/MessageToast/ShowToastMessages";
 
 const OfficeEdit = (props) => {
     const {getOffice, office, deliveryMethods, orders, printReportData, refresh, refreshOrders, deleteOrderOffice} = props;
@@ -95,7 +96,6 @@ const OfficeEdit = (props) => {
     }, [refreshOrders, refresh])
 
     useEffect(() => {
-        console.log('deliveryMethods', deliveryMethods)
         if (deliveryMethods) {
 
             const list = deliveryMethods || [];
@@ -199,7 +199,6 @@ const OfficeEdit = (props) => {
         conditions.add("deliveryMethod.id", office.deliveryMethod.id, Conditionals.OPERATORS.EQUAL);
         conditions.add("orderDelivery.deliveryType", office.type, Conditionals.OPERATORS.EQUAL);
         conditions.add('office', '', Conditionals.OPERATORS.NULL);
-        console.log('conditions', conditions);
         setOrderListConditions(conditions.condition);
         setOpenOrdersModal(true);
     };
@@ -233,10 +232,8 @@ const OfficeEdit = (props) => {
                 printPartOfPage(response.html);
             }
         } catch (e) {
-            console.log("se ha producido un error", e);
+            showMessage.error("No se ha podido generar el reporte PDF");
         }
-        //setReportBody(null);
-        //props.printPart(id);
     }
 
     return (

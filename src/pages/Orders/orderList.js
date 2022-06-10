@@ -70,7 +70,6 @@ const OrderList = props => {
 
     useEffect(() => {
         setStatesList(orders)
-        console.log('orders', orders)
     }, [orders])
 
     // eslint-disable-next-line no-unused-vars

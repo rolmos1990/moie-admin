@@ -220,7 +220,6 @@ export const deleteOrderOfficeFailed = data => {
     }
 }
 
-console.log('importFile')
 export const importFileReset = () => ({
     type: IMPORT_FILE_RESET
 })

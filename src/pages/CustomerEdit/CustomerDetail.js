@@ -44,7 +44,6 @@ const CustomerDetail = (props) => {
     const getStats = (customerId) => {
         /*customerProductStats(customerId, moment()).then(resp => {
             const chartData = {series: [], labels:[]};
-            console.log('customerProductStats', resp)
             if(resp){
                 resp.forEach(pc => {
                     chartData.series.push(pc.qty);

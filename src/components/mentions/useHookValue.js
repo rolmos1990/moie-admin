@@ -7,7 +7,6 @@ function useHookValue(initialValue) {
         setValue(newValue)
     }, [setValue])
     const onAdd = useCallback((...args) => {
-        /*console.log(...args)*/
     }, [])
 
     return [value, onChange, onAdd, setValue];

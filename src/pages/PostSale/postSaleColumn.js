@@ -118,7 +118,6 @@ const postSaleColumns = () => {
             formatter: (cellContent, item) => {
                 return <div>{formatDate(item.createdAt)}</div>
                 /*if(item.orderDelivery.deliveryDate){
-                    console.log(item.orderDelivery.deliveryDate)
                  return <div>{formatDate(item.orderDelivery.deliveryDate)}</div>;
                 }
                 return '';*/

@@ -48,7 +48,6 @@ const PostSaleReportForm = ({onCloseModal, deliveryMethods, onGetDeliveryMethods
             dateFrom: formatDateToServer(values.reportDate[0]),
             dateTo: formatDateToServer(values.reportDate[1])
         };
-        console.log(payload);
         onGenerateReport(payload);
     }
 

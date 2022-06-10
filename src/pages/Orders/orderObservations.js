@@ -32,11 +32,9 @@ const OrderObservations = (props) => {
     }, [fieldOptions])
 
     const onDeleteObservation = (observation) => {
-        console.log('onDeleteObservation', observation);
     }
 
     const onAddObservation = (observation) => {
-        console.log('onAddObservation', observation);
     }
 
     return (

@@ -76,13 +76,11 @@ const BatchQueriesForm = (props) => {
                 return `${p.reference}\n${ll.join("\n")}`
             })
 
-            console.log('YG listToCopy', listToCopy)
             setTextToCopy(listToCopy.join("\n"));
             setProductList(list);
         } else {
             setProductList([]);
         }
-        console.log('YG values', products);
     }, [products])
 
     const emptyOptions = (label) => {
@@ -94,7 +92,6 @@ const BatchQueriesForm = (props) => {
             return;
         }
         const refs = productRefs.split(" ");
-        console.log('YG values', refs);
 
         const conditions = new Conditionals.Condition;
         if (productRefs.length > 0) conditions.add("reference", refs.join("::"), Conditionals.OPERATORS.IN);
@@ -103,7 +100,6 @@ const BatchQueriesForm = (props) => {
     }
 
     const onSearch = () => {
-        console.log('YG onSearch', categorySelected, sizeSelected);
         const conditions = new Conditionals.Condition;
         if (sizeSelected && sizeSelected.value && sizeSelected.value > 0) {
             conditions.add("size.id", sizeSelected.value, Conditionals.OPERATORS.EQUAL);
@@ -124,7 +120,6 @@ const BatchQueriesForm = (props) => {
         setDefaultValue(-1)
         if (form) form.reset();
     }
-    console.log('YG listToCopy', props)
 
 
     return (

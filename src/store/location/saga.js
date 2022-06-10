@@ -80,7 +80,6 @@ function* stateUpdate({payload: {id, data, history}}) {
         history.push("/states")
 
     } catch (error) {
-        console.log("error", error);
         yield put(updateStateFail(error))
     }
 }
@@ -93,7 +92,6 @@ function* stateDelete({payload: {id, history}}) {
         history.push("/states")
 
     } catch (error) {
-        console.log("error", error);
         yield put(deleteStateFailed(error))
     }
 }
@@ -139,7 +137,6 @@ function* municipalityUpdate({payload: {id, data, history}}) {
         history.push("/municipalities")
 
     } catch (error) {
-        console.log("error", error);
         yield put(updateMunicipalityFail(error))
     }
 }
@@ -152,7 +149,6 @@ function* municipalityDelete({payload: {id, history}}) {
         history.push("/municipalities")
 
     } catch (error) {
-        console.log("error", error);
         yield put(deleteMunicipalityFailed(error))
     }
 }

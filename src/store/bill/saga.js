@@ -100,7 +100,6 @@ function* queryData({params ={}, node='bills'}) {
 
 function* register({payload: {data}}) {
     try {
-        console.log('factura', data)
         const response = yield call(POST_API_REQUEST, data);
         showResponseMessage(response, "Factura creada!", response.error);
         yield put(CREATE_SUCCESS_ACTION(response));
@@ -130,7 +129,6 @@ function* billDelete({ payload: { id, history } }) {
         history.push("/bills")
 
     } catch (error) {
-        console.log("error", error);
         yield put(deleteBillFailed(error))
     }
 }
@@ -143,7 +141,6 @@ function* billConfirm({ payload: { id, history } }) {
         history.push("/bills")
 
     } catch (error) {
-        console.log("error", error);
         yield put(deleteBillFailed(error))
     }
 }
@@ -158,14 +155,12 @@ function* billOrderAdd({ payload: { id, data, conditional, history } }) {
         history.push("/bill/" + id)
 
     } catch (error) {
-        console.log("error", error);
         yield put(deleteBillFailed(error))
     }
 }
 
 function* createCreditNote({id}) {
     try {
-        console.log('createCreditNote', id)
         const response = yield call(CREDIT_NOTE_API_REQUEST, id, {type: BILL_MEMO_TYPES.CREDIT});
         showResponseMessage(response, "Nota de credito creada!", response.error);
         yield put(CREDIT_NOTE_SUCCESS_ACTION(response));
@@ -178,7 +173,6 @@ function* createCreditNote({id}) {
 
 function* generateReport({data}) {
     try {
-        console.log('generateReport', data)
         const response = yield call(GENERATE_REPORT_API_REQUEST, data);
         showResponseMessage(response, "Reporte creado!", response.error);
         yield put(GENERATE_REPORT_SUCCESS_ACTION(response));

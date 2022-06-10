@@ -40,7 +40,6 @@ const CreateOrder = (props) => {
             //se agrega valicacion para no permitir clientes contrapagos que esten inactivos
             const validCustomerType = (car.customer && car.customer.status === true) || (car.customer && car.customer.status === false && car.deliveryOptions && car.deliveryOptions.type !== CHARGE_ON_DELIVERY);
 
-            console.log('YG valid card', validCost, isValidDeliveryOptions);
             setIsValidOrder(isValidCustomer && isValidProducts && isValidDeliveryOptions && validCustomerType);
         }
     }, [car]);
@@ -69,7 +68,6 @@ const CreateOrder = (props) => {
     }
 
     const onCreateOrder = () => {
-        //console.log('Car', car);
         const order = {
             customer: car.customer.id,
             deliveryMethod: car.deliveryOptions.method,
