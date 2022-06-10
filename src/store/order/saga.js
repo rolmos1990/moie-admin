@@ -327,7 +327,6 @@ function* orderDeliveryRefresh({id}) {
 
 function* increasePhotoCounter({payload: {id}}) {
     try {
-        console.log(id);
         const response = yield call(INCREASE_PHOTO_COUNTER_API_REQUEST, id)
         if(response.status === 200){
             yield put(refreshOrders());

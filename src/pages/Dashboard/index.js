@@ -155,14 +155,13 @@ const Dashboard = (props) => {
     useEffect(() => {
 
         if(dashboard && dashboard.products) {
-            console.log("DASHBOARD PRODUCTS" , dashboard.products);
 
             //Productos
             const products = {
                 id: 1,
                 icon: "mdi mdi-clock-five-time",
                 title: "Productos",
-                value: dashboard.products.qty,
+                value: parseInt(dashboard.products.reserved || 0) + parseInt(dashboard.products.available || 0),
                 prefix: "",
                 suffix: "",
                 decimal: 0,
@@ -194,7 +193,7 @@ const Dashboard = (props) => {
                 title: "Ventas diarias",
                 value: dashboard.orders.statDailyFirst,
                 decimal: 2,
-                charttype: "radialBar",
+                charttype: "text",
                 chartheight: 45,
                 chartwidth: 45,
                 prefix: "$",
@@ -202,7 +201,7 @@ const Dashboard = (props) => {
                 badgeValue: rate.toFixed(2) + "%",
                 color: rate >= 0 ? "success" : "danger",
                 desc: "desde ayer",
-                series: series2,
+                series: dashboard.orders.statDailyQtyFirst,
                 options: options2,
             };
 
@@ -220,7 +219,7 @@ const Dashboard = (props) => {
                 title: "Ventas semana",
                 value: dashboard.orders.statWeeklyFirst,
                 decimal: 2,
-                charttype: "radialBar",
+                charttype: "text",
                 chartheight: 45,
                 chartwidth: 45,
                 prefix: "$",
@@ -228,7 +227,7 @@ const Dashboard = (props) => {
                 badgeValue: rateWeek.toFixed(2) + "%",
                 color: rateWeek >= 0 ? "success" : "danger",
                 desc: "semana pasada",
-                series: series2,
+                series: dashboard.orders.statWeeklyQtyFirst,
                 options: options2,
             };
 

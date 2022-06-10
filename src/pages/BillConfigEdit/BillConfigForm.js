@@ -30,7 +30,6 @@ const BillConfigForm = (props) => {
     }, [billConfig]);
 
     const handleValidSubmit = (event, values) => {
-        console.log("VALUES", values);
         const data = filteredValues(values);
 
         if (!billConfig.id) {

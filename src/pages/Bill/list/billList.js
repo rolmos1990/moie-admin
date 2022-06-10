@@ -73,12 +73,12 @@ const BillList = props => {
 
     const addOrders = () => {
         const conditions = new Conditionals.Condition;
+        conditions.add('bill.id', '', Conditionals.OPERATORS.NULL);
         conditions.add('office', '', Conditionals.OPERATORS.NOT_NULL);
         conditions.add('deliveryMethod', DELIVERY_METHODS_IDS.INTERRAPIDISIMO, Conditionals.OPERATORS.EQUAL);
         conditions.add('orderDelivery.deliveryType', CHARGE_ON_DELIVERY, Conditionals.OPERATORS.EQUAL);
         conditions.add('status', [ORDERS_ENUM.PRINTED, ORDERS_ENUM.SENT].join("::"), Conditionals.OPERATORS.IN);
 
-        console.log('conditions', conditions);
         setOrderListConditions(conditions.condition);
         setOpenOrdersModal(true);
     };
@@ -87,7 +87,6 @@ const BillList = props => {
         setOpenOrdersModal(false);
     };
     const onAcceptModal = (conditionals) => {
-        console.log('conditionals', conditionals)
         if (conditionals && conditionals.length > 0) {
             const value = conditionals[0].value;
             const ids = value.split ? value.split('::') : [value];

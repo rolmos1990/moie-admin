@@ -8,9 +8,6 @@ const token = authHeader().Authorization || accessToken;
 
 export const baseImagePath = process.env.REACT_APP_BASE_PATH_IMAGE;
 export const baseImagePathNew = process.env.REACT_APP_BASE_PATH_IMAGE_NEW;
-// export const baseImagePathNew = "http://54.226.170.69:18210/";
-
-console.log('process.env', process.env)
 
 const axiosApi = axios.create({
   baseURL: process.env.REACT_APP_BASE_SERVICE,
@@ -37,7 +34,6 @@ export async function file(filename, url, config, params) {
     a.click();
     window.URL.revokeObjectURL(_url);
   }catch(e){
-    console.log("DEBUG -- error ", e.message);
   }
 }
 

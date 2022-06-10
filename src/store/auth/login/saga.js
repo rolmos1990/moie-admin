@@ -25,7 +25,6 @@ function* loginUser({ payload: { user, history } }) {
       }, 1000);
   } catch (error) {
     const message = getErrorMessage(error);
-    console.log(message);
     yield put(apiError(message));
   }
 }

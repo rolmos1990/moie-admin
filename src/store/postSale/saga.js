@@ -132,7 +132,6 @@ function* update({payload: {id, data, history}}) {
 
 function* generateReport({data}) {
     try {
-        console.log('generateReport', data)
         const response = yield call(GENERATE_REPORT_API_REQUEST, data);
         showResponseMessage(response, "Reporte creado!", response.error);
         yield put(GENERATE_REPORT_SUCCESS_ACTION(response));

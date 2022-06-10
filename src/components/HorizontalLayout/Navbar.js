@@ -23,6 +23,7 @@ const Navbar = props => {
     const [chart, setchart] = useState(false)
     const [icon, seticon] = useState(false)
     const [map, setmap] = useState(false)
+    const [system, setsystem] = useState(false)
     const [extra, setextra] = useState(false)
     const [invoice, setinvoice] = useState(false)
     const [auth, setauth] = useState(false)
@@ -136,9 +137,12 @@ const Navbar = props => {
                                     </li>
                                 </HasPermissions>
 
-                                <HasPermissions permissions={[PERMISSIONS.OFFICE_SHOW, PERMISSIONS.BILL_SHOW, PERMISSIONS.POSTSALE_SHOW, PERMISSIONS.PAYMENT_SHOW]} renderNoAccess={() => renderMenuNoAccess("Servicios", "#", "uil-cog me-2")}>
+                                <HasPermissions permissions={[PERMISSIONS.OFFICE_SHOW, PERMISSIONS.BILL_SHOW, PERMISSIONS.POSTSALE_SHOW, PERMISSIONS.PAYMENT_SHOW]} renderNoAccess={() => renderMenuNoAccess("Servicios", "/extra", "uil-cog me-2")}>
                                     <li className="nav-item dropdown">
-                                        <Link className="nav-link dropdown-toggle arrow-none" to="#" onClick={e => {e.preventDefault()}}>
+                                        <Link className="nav-link dropdown-toggle arrow-none" to="extra" onClick={e => {
+                                            e.preventDefault()
+                                            setextra(!extra);
+                                        }}>
                                             <i className="uil-cog me-2"></i>{props.t("Servicios")}
                                             <div className="arrow-down"></div>
                                         </Link>
@@ -188,19 +192,20 @@ const Navbar = props => {
                                     </li>
                                 </HasPermissions>
 
-                                <HasPermissions permissions={[PERMISSIONS.SECURITY_SHOW, PERMISSIONS.USER_SHOW, PERMISSIONS.LOCALITY_SHOW, PERMISSIONS.TEMPLATE_SHOW, PERMISSIONS.RESOLUTION_SHOW, PERMISSIONS.CONFIG_SHOW]} renderNoAccess={() => renderMenuNoAccess("Sistema", "#", "uil-cog me-2")}>
+                                <HasPermissions permissions={[PERMISSIONS.SECURITY_SHOW, PERMISSIONS.USER_SHOW, PERMISSIONS.LOCALITY_SHOW, PERMISSIONS.TEMPLATE_SHOW, PERMISSIONS.RESOLUTION_SHOW, PERMISSIONS.CONFIG_SHOW]} renderNoAccess={() => renderMenuNoAccess("Sistema", "/system", "uil-cog me-2")}>
                                     <li className="nav-item dropdown">
-                                        <Link className="nav-link dropdown-toggle arrow-none" to="#" onClick={e => {
+                                        <Link className="nav-link dropdown-toggle arrow-none" to="system" onClick={e => {
                                             e.preventDefault()
+                                            setsystem(!system);
                                         }}>
                                             <i className="uil-cog me-2"></i>
                                             {props.t("Sistema")}
                                             <div className="arrow-down"></div>
                                         </Link>
-                                        <div className={classname("dropdown-menu", {show: extra})}>
+                                        <div className={classname("dropdown-menu", {show: system})}>
                                             <HasPermissions permissions={[PERMISSIONS.SECURITY_SHOW, PERMISSIONS.USER_SHOW]}>
                                                 <div className="dropdown">
-                                                    <Link to="/#" className="dropdown-item dropdown-toggle arrow-none" onClick={e => {
+                                                    <Link to="/auth" className="dropdown-item dropdown-toggle arrow-none" onClick={e => {
                                                         e.preventDefault();
                                                         setauth(!auth);
                                                     }}>
@@ -223,7 +228,7 @@ const Navbar = props => {
                                             </HasPermissions>
                                             <HasPermissions permission={PERMISSIONS.LOCALITY_SHOW}>
                                                 <div className="dropdown">
-                                                    <Link className="dropdown-item dropdown-toggle arrow-none" to="#" onClick={e => {
+                                                    <Link className="dropdown-item dropdown-toggle arrow-none" to="/utility" onClick={e => {
                                                         e.preventDefault();
                                                         setutility(!utility)
                                                     }}>

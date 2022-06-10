@@ -30,7 +30,6 @@ const OrderCardList = (props) => {
         if (orders && orders.length > 0) {
             setOrdersList(orders);
         }
-        //console.log('orders', orders)
     }, [orders]);
 
     const getDeliveryType = (delivery) => {

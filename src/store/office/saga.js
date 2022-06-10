@@ -142,7 +142,6 @@ function* officeDelete({payload: {id, history}}) {
         history.push("/offices")
 
     } catch (error) {
-        console.log("error", error);
         yield put(deleteOfficeFailed(error))
     }
 }
@@ -170,7 +169,6 @@ function* officeOrderAdd({payload: {id, data, conditional, history}}) {
         //history.push("/office/" + id)
 
     } catch (error) {
-        console.log("error", error);
         yield put(addOrderOfficeFailed(error))
     }
 }
@@ -185,27 +183,23 @@ function* officeOrderDelete({payload: {id, data, conditional, history}}) {
         history.push("/office/" + id)
 
     } catch (error) {
-        console.log("error", error);
         yield put(deleteOfficeFailed(error))
     }
 }
 
 function* importFile({payload: {data}}) {
     try {
-        console.log('importFile')
         const response = yield call(IMPORT_FILE_API_REQUEST, data)
         let message = "Cantidad de registros importados: " + (response.status === 200 ? response.data.registers.length : 0);
         showResponseMessage(response, message);
         yield put(IMPORT_FILE_SUCCESS_ACTION(response))
     } catch (error) {
-        console.log("error", error);
         yield put(IMPORT_FILE_FAILED_ACTION(error.message))
     }
 }
 
 function* printOfficeReport({payload: {id}}) {
     try {
-        console.log('printOfficeReport', id)
         const response = yield call(printOfficeReportApi, id)
         if (response.status !== 200) {
             yield put(printOfficeReportFailed(response.error))
@@ -214,7 +208,6 @@ function* printOfficeReport({payload: {id}}) {
             yield put(printOfficeReportSuccess(response))
         }
     } catch (error) {
-        console.log("error", error);
         yield put(printOfficeReportFailed(error.message))
     }
 }

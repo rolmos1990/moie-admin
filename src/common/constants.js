@@ -119,6 +119,7 @@ export const OFFICE_STATUS = {
     3: {name: 'Cancelado', color: 'danger', colorCss: "#2196f3"}
 };
 
+export const ORDER_STATUS_LIST_POST_SALE = Object.keys(ORDER_STATUS).filter(s => [3,4,6,7].includes(parseInt(s)) ).map(s => ({label: ORDER_STATUS[s].name, value: s}))
 export const ORDER_STATUS_LIST = Object.keys(ORDER_STATUS).map(s => ({label: ORDER_STATUS[s].name, value: s}))
 export const OFFICE_STATUS_LIST = Object.keys(OFFICE_STATUS).map(s => ({label: OFFICE_STATUS[s].name, value: s}))
 

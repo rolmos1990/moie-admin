@@ -94,7 +94,6 @@ const OrderDeliveryOptions = (props) => {
 
     useEffect(() => {
         if (deliveryMethod && deliveryQuote) {
-            console.log('YG deliveryQuote', car.deliveryOptions, props)
             if (!car.isEdit) {
                 setDeliveryCost(parseFloat(deliveryQuote.amount));
             }
@@ -113,7 +112,6 @@ const OrderDeliveryOptions = (props) => {
     useEffect(() => {
         if (car.isEdit && car.deliveryOptions && car.deliveryOptions.origin && initComponent) {
             setInitComponent(false);
-            console.log('YG ', car.deliveryOptions, props)
             setDeliveryMethod(car.deliveryOptions.method);
             setOriginOrder(car.deliveryOptions.origin);
             setDeliveryType(car.deliveryOptions.type);
@@ -166,7 +164,6 @@ const OrderDeliveryOptions = (props) => {
     }
 
     const showGuia = () => car.deliveryOptions.tracking
-    // console.log('yg deliveryCost', deliveryCost)
     return (
         <React.Fragment>
             <AvForm className="needs-validation" autoComplete="off" onValidSubmit={(e, v) => acceptModal(e, v)}>

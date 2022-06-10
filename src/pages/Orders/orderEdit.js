@@ -154,7 +154,6 @@ const OrderEdit = (props) => {
 
         setAllowEdit(canEdit());
         setAllowUpdateTracking(canUpdateTracking());
-        //console.log(order);
     }, [order]);
 
     useEffect(() => {

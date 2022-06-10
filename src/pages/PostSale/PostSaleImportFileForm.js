@@ -49,7 +49,6 @@ const PostSaleImportFileForm = ({onCloseModal, deliveryMethods, loading, error, 
             deliveryMethod: values.deliveryMethod.value,
             deliveryDate: values.deliveryDate[0] ? formatDate(values.deliveryDate[0], DATE_FORMAT.ONLY_DATE) : null
         };
-        console.log(payload);
         onImportFile(payload);
     }
 

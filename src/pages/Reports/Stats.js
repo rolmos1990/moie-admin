@@ -482,7 +482,6 @@ const Stats = ({users, onGetUsers}) => {
             const options = users.map((user) => ({label: user.name, value: user.id}))
             setStats({...stats, usuarios: [getEmptyOptions(), ...options]});
             setUserList(users.map(user => ({label: user.username, value: user.id})));
-            console.log('users', users)
         }
     }, [users]);
 

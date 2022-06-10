@@ -109,7 +109,6 @@ const OrderConciliationForm = ({
     }
 
     /*const addLoteGuia = () => {
-        console.log('addOrder', lote);
 
         const trackingList = lote.split(' ')
             .filter(tracking=> tracking)
@@ -122,7 +121,6 @@ const OrderConciliationForm = ({
         const query = Conditionals.buildHttpGetQuery(cond, 1, 0);
 
         fetchOrdersApi(query).then(o => {
-            console.log('YG OOO ', o)
             if(o && o.data && o.data.length > 0){
                 const list = [...orders];
                 o.data.forEach((_order) => {
@@ -146,14 +144,12 @@ const OrderConciliationForm = ({
             addLote();
             return;
         }
-        console.log('addOrder', orderId);
         onGetOrder(orderId);
         setDefaultOption(getEmptyOptions());
         setOrderId(null);
     }
 
     const removeOrder = (orderId) => {
-        console.log('removeOrder', orderId);
         const list = [...orders];
         const orderToRemove = list.find(o => o.id === orderId);
         list.splice(list.indexOf(orderToRemove), 1);
