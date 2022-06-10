@@ -22,6 +22,7 @@ import {resetProduct} from "../../../store/product/actions";
 import authHeader from "../../../helpers/jwt-token-access/auth-token-header";
 import {PERMISSIONS} from "../../../helpers/security_rol";
 import HasPermissions from "../../../components/HasPermissions";
+import {showMessage} from "../../../components/MessageToast/ShowToastMessages";
 
 const CategoryList = props => {
     const {categories, onGetCategories, onResetCategories, onDeleteState, getCatalogBatchRequest, onCatalogPrintBatchRequest, refresh} = props;
@@ -129,11 +130,12 @@ const CategoryList = props => {
             // Change this to use your HTTP client
             const headers = authHeader();
             fetch(process.env.REACT_APP_BASE_SERVICE + catalog.body.url, {headers: headers}) // FETCH BLOB FROM IT
-                .then((response) => response.blob())
+                .then((response) => response.status == 200 && response.blob())
                 .then((blob) => { // RETRIEVE THE BLOB AND CREATE LOCAL URL
                     var _url = window.URL.createObjectURL(blob);
                     window.open(_url, "_blank").focus(); // window.open + focus
                 }).catch((err) => {
+                showMessage.error("Preparando fichero, espere un momento");
                 console.log(err);
             });
     }
