@@ -25,6 +25,7 @@ const productColumns = (onDelete = false) => {
             filterType: "text",
             filterCondition: Conditionals.OPERATORS.EQUAL,
             formatter: (cellContent, item) => (
+                <HasPermissions permission={PERMISSIONS.PRODUCT_SHOW} renderNoAccess={() => <span className="text-info">{item.reference} </span>}>
                 <HtmlTooltip
                     title={
                         <React.Fragment>
@@ -34,12 +35,11 @@ const productColumns = (onDelete = false) => {
                                     className="img-fluid mx-auto d-block tab-img rounded"/>
                         </React.Fragment>
                     }>
-                    <HasPermissions permission={PERMISSIONS.PRODUCT_SHOW} renderNoAccess={() => item.id}>
                         <Link to={`/product/detail/${item.id}`} className="text-body">
                             <span className="text-info">{item.reference} </span>
                         </Link>
-                    </HasPermissions>
                 </HtmlTooltip>
+                </HasPermissions>
             ),
         },
         {

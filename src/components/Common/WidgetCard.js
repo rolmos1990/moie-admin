@@ -13,14 +13,17 @@ const WidgetCard = props => {
             {report.charttype && (
                 <CardBody>
                     <div className="float-end mt-2">
-
-                        <ReactApexChart
-                            options={report.options}
-                            series={report.series}
-                            type={report.charttype}
-                            height={report.chartheight}
-                            width={report.chartwidth}
-                        />
+                        {report.charttype == "text" ? (
+                            <h4 class="text-info">{report.series}</h4>
+                        ) : (
+                            <ReactApexChart
+                                options={report.options}
+                                series={report.series}
+                                type={report.charttype}
+                                height={report.chartheight}
+                                width={report.chartwidth}
+                            />
+                        )}
 
                     </div>
                     <div>

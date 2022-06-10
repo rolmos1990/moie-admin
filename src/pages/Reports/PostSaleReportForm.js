@@ -9,7 +9,7 @@ import {FieldDate, FieldSelect} from "../../components/Fields";
 import {DATE_MODES} from "../../components/Fields/InputDate";
 import ButtonSubmit from "../../components/Common/ButtonSubmit";
 import {formatDateToServer} from "../../common/utils";
-import {DELIVERY_METHODS, ORDER_STATUS_LIST, REPORT_TYPES} from "../../common/constants";
+import {DELIVERY_METHODS, ORDER_STATUS_LIST, ORDER_STATUS_LIST_POST_SALE, REPORT_TYPES} from "../../common/constants";
 import {getEmptyOptions} from "../../common/converters";
 import {getDeliveryMethods} from "../../store/order/actions";
 import {generateReport, generateReportRestart} from "../../store/reports/actions";
@@ -75,8 +75,8 @@ const PostSaleReportForm = ({onCloseModal, deliveryMethods, onGetDeliveryMethods
                                     <FieldSelect
                                         id={"_status"}
                                         name={"_status"}
-                                        options={ORDER_STATUS_LIST}
-                                        defaultValue={ORDER_STATUS_LIST[0]}
+                                        options={ORDER_STATUS_LIST_POST_SALE}
+                                        defaultValue={ORDER_STATUS_LIST_POST_SALE[0]}
                                         required
                                     />
                                 </div>

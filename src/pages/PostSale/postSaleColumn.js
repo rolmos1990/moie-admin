@@ -2,14 +2,19 @@ import React from "react"
 import {Link} from "react-router-dom"
 import {StatusField} from "../../components/StatusField";
 import {buildOptions} from "../../common/converters";
-import {DELIVERY_METHODS_LIST, ORDER_STATUS, ORDER_STATUS_LIST} from "../../common/constants";
+import {
+    DELIVERY_METHODS_LIST,
+    ORDER_STATUS,
+    ORDER_STATUS_LIST,
+    ORDER_STATUS_LIST_POST_SALE
+} from "../../common/constants";
 import Conditionals from "../../common/conditionals";
 import {formatDate} from "../../common/utils";
 import {Tooltip} from "@material-ui/core";
 import {CUSTOMER} from "../../helpers/url_helper";
 
 const postSaleColumns = () => {
-    const statusOptions = buildOptions(ORDER_STATUS_LIST);
+    const statusOptions = buildOptions(ORDER_STATUS_LIST_POST_SALE);
     const deliveryMethodsOptions = buildOptions(DELIVERY_METHODS_LIST);
 
     return [
