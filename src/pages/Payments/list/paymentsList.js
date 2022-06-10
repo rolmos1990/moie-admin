@@ -17,6 +17,7 @@ import NoDataIndication from "../../../components/Common/NoDataIndication";
 import PaymentOverlay from "../paymentOverlay";
 import {PERMISSIONS} from "../../../helpers/security_rol";
 import HasPermissions from "../../../components/HasPermissions";
+import OutsideClickHandler from "../../../components/OutsideClickHandler";
 
 
 const PaymentsList = props => {
@@ -136,7 +137,15 @@ const PaymentsList = props => {
                     </Card>
                 </Col>
             </Row>
+            <OutsideClickHandler
+                onOutsideClick={() => {
+                    if(paymentSelected){
+                        setPaymentSelected(null)
+                    }
+                }}
+            >
             {paymentSelected && (<PaymentOverlay paymentSelected={paymentSelected} showOverlay={true} onCloseOverlay={() => setPaymentSelected(null)}/>)}
+            </OutsideClickHandler>
         </>
     )
 }

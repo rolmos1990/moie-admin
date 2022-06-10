@@ -14,6 +14,7 @@ import {findFieldOptionByGroup} from "../../helpers/service";
 import order from "../../store/order/reducer";
 import {doPrintBatchRequest, nextStatusOrder, printBatchRequest, resetBatchRequest} from "../../store/order/actions";
 import CustomModal from "../../components/Modal/CommosModal";
+import {changePreloader} from "../../store/layout/actions";
 
 const PrintBatchRequest = (props) => {
 
@@ -42,8 +43,9 @@ const PrintBatchRequest = (props) => {
     }, [batch]);
 
     const printOrder = (text) => {
+        setOpenPrintConfirmModal(true)
         printPartOfPage(text);
-        setTimeout(() => setOpenPrintConfirmModal(true), 3000);
+        props.onChangePreloader(false);
     }
 
     const onConfirmPrintOrder = () => {
@@ -83,6 +85,7 @@ const mapStateToProps = state => {
 }
 
 const mapDispatchToProps = dispatch => ({
+    onChangePreloader: (preloader) => dispatch(changePreloader(preloader)),
     onPrintBatchRequest: (conditional) => dispatch(printBatchRequest(conditional)),
     onNextStatusOrder: (id = []) => dispatch(nextStatusOrder({batch: id})),
     onResetBatchRequest: (id = []) => dispatch(resetBatchRequest()),

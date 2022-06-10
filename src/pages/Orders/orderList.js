@@ -21,9 +21,11 @@ import OrderConciliationForm from "./orderConciliationsForm";
 import ConciliationReportForm from "../Reports/ConciliationReportForm";
 import {PERMISSIONS} from "../../helpers/security_rol";
 import HasPermissions from "../../components/HasPermissions";
+import OutsideClickHandler from "../../components/OutsideClickHandler";
+import {changePreloader} from "../../store/layout/actions";
 
 const OrderList = props => {
-    const {orders, meta, onGetOrders, onResetOrders, refresh, customActions, conditionals, showAsModal, conciliation} = props;
+    const {orders, meta, onGetOrders, onResetOrders, refresh, customActions, conditionals, showAsModal, conciliation, onChangePreloader} = props;
     const [statesList, setStatesList] = useState([])
     const [filter, setFilter] = useState(false);
     const [conditional, setConditional] = useState(null);
@@ -87,6 +89,7 @@ const OrderList = props => {
     }
 
     const printOrders = () => {
+        onChangePreloader(true);
         let conditionals = conditional || [];
 
         if (ordersSelected && ordersSelected.length === 1) {
@@ -319,7 +322,15 @@ const OrderList = props => {
                     )}
                 </Card>
             </Col>
+            <OutsideClickHandler
+                onOutsideClick={() => {
+                    if(orderSelected){
+                        setOrderSelected(null)
+                    }
+                }}
+            >
             {orderSelected && (<OrderEdit orderId={orderSelected} showOrderOverlay={true} onCloseOverlay={() => setOrderSelected(null)}/>)}
+            </OutsideClickHandler>
         </Row>
     )
 }
@@ -332,12 +343,14 @@ OrderList.propTypes = {
 
 const mapStateToProps = state => {
     const {orders, loading, meta, refresh, conciliation} = state.Order
+    const {isPreloader} = state.Layout;
     return {
         orders,
         loading,
         meta,
         refresh,
-        conciliation
+        conciliation,
+        isPreloader
     }
 }
 
@@ -345,6 +358,7 @@ const mapDispatchToProps = dispatch => ({
     onResetOrders: () => {
         dispatch(resetOrder());
     },
+    onChangePreloader: (preloader) => dispatch(changePreloader(preloader)),
     onGetOrders: (conditional = null, limit = DEFAULT_PAGE_LIMIT, page) => dispatch(getOrders(conditional, limit, page)),
     onPrintBatchRequest: (conditional) => dispatch(doPrintBatchRequest(conditional)),
     onConciliation: (ordersSelected) => dispatch(doConciliation(ordersSelected)),

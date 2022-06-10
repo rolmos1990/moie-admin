@@ -19,6 +19,8 @@ import NonAuthLayout from "./components/NonAuthLayout"
 import "./assets/scss/theme.scss"
 import "./assets/scss/custom/pages/_common.scss"
 import ContainerToast from "./components/MessageToast/ShowToastMessages";
+import {Spinner} from "reactstrap";
+import Loader from "react-spinner-loader";
 
 const App = props => {
   function getLayout() {
@@ -39,7 +41,6 @@ const App = props => {
   return (
     <React.Fragment>
       <Router>
-
         <Switch>
         {authRoutes.map((route, idx) => (
             <Authmiddleware
@@ -63,9 +64,9 @@ const App = props => {
           ))}
           <Redirect to={{pathname: "/dashboard", state: {from: props.location}}} />
         </Switch>
-
       </Router>
       <ContainerToast/>
+      <Loader show={props.layout.isPreloader} type="body" message="Cargando..."></Loader>
     </React.Fragment>
   )
 }

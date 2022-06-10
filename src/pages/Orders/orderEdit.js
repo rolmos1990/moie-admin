@@ -46,6 +46,7 @@ import {isMobile} from "react-device-detect";
 import HasPermissions from "../../components/HasPermissions";
 import {PERMISSIONS} from "../../helpers/security_rol";
 import OrderTracking from "./create/orderTracking";
+import {changePreloader} from "../../store/layout/actions";
 
 // import {toPng, toJpeg, toBlob, toPixelData, toSvg} from 'html-to-image';
 
@@ -71,7 +72,8 @@ const OrderEdit = (props) => {
         refresh,
         showOrderOverlay = false,
         onGetHistoric,
-        historic
+        historic,
+        onChangePreloader
     } = props;
     const [orderData, setOrderData] = useState({});
     const [orderResume, setOrderResume] = useState('');
@@ -173,8 +175,10 @@ const OrderEdit = (props) => {
     }
 
     const printOrder = () => {
+        onChangePreloader(true);
         printPartOfPage(orderPrint);
-        setTimeout(() => setOpenPrintConfirmModal(true), 1000);
+        setOpenPrintConfirmModal(true);
+        onChangePreloader(false);
     }
 
     const toggleModal = () => {
@@ -967,6 +971,7 @@ const mapStateToProps = state => {
 }
 
 const mapDispatchToProps = dispatch => ({
+    onChangePreloader: (preloader) => dispatch(changePreloader(preloader)),
     onGetOrder: (id) => dispatch(getOrder(id)),
     onUpdateOrder: (id, payload) => dispatch(updateOrder(id, payload)),
     onUpdateInventary: (id, payload) => dispatch(updateOrderProducts(id, payload)),

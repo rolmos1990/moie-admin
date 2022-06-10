@@ -84,6 +84,7 @@
     "react-scripts": "4.0.1",
     "react-select": "^3.2.0",
     "react-sparklines": "^1.7.0",
+    "react-spinner-loader": "^1.1.1",
     "react-super-responsive-table": "^5.2.0",
     "react-switch": "^6.0.0",
     "react-toastr": "^3.0.0",
