@@ -367,7 +367,7 @@ const OfficeEdit = (props) => {
                                                 <Row>
                                                     <Col md="12">
                                                         <div className="mb-3">
-                                                            <Label htmlFor="field_name">Descripción <span className="text-danger">*</span></Label>
+                                                            <Label htmlFor="field_name">Descripción</Label>
                                                             <FieldText
                                                                 type={"textarea"}
                                                                 id={"description"}
@@ -375,7 +375,6 @@ const OfficeEdit = (props) => {
                                                                 value={officeData.description}
                                                                 minLength={3}
                                                                 maxLength={255}
-                                                                required
                                                             />
                                                         </div>
                                                     </Col>
