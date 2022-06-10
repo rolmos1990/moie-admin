@@ -157,7 +157,7 @@ const Login = (props) => {
                 </CardBody>
               </Card>
               <div className="mt-5 text-center">
-                <p>© {new Date().getFullYear()} Lucy Modas <i
+                <p>© {new Date().getFullYear()} Lucy Modas Web <i
                   className="mdi mdi-heart text-danger"></i> Moie V{process.env.REACT_APP_VERSION}
                         </p>
               </div>
