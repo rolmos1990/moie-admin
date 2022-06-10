@@ -73,6 +73,7 @@ const BillList = props => {
 
     const addOrders = () => {
         const conditions = new Conditionals.Condition;
+        conditions.add('bill.id', '', Conditionals.OPERATORS.NULL);
         conditions.add('office', '', Conditionals.OPERATORS.NOT_NULL);
         conditions.add('deliveryMethod', DELIVERY_METHODS_IDS.INTERRAPIDISIMO, Conditionals.OPERATORS.EQUAL);
         conditions.add('orderDelivery.deliveryType', CHARGE_ON_DELIVERY, Conditionals.OPERATORS.EQUAL);
