@@ -1,4 +1,4 @@
-import React, {useEffect} from "react"
+import React, {useEffect, useState} from "react"
 import {Col, Container, Row} from "reactstrap"
 import {Card, Tooltip} from "@material-ui/core";
 import {withRouter} from "react-router-dom"
@@ -17,6 +17,9 @@ import HasPermissions from "../../components/HasPermissions";
 const BillDetail = (props) => {
 
     const {onGetBill, refresh, bill} = props;
+
+    const [activeTab, setActiveTab] = useState(1);
+
 
     useEffect(() => {
         if (props.match.params.id) {
@@ -58,7 +61,7 @@ const BillDetail = (props) => {
                                 </div>
                                 <div className={"mb-3 float-md-end"}>
                                     <div className="button-items">
-                                        {!!(bill.status === BILL_STATUS.SENT && !bill.creditNote) && (
+                                        {(!!(bill.status === BILL_STATUS.SENT && !bill.creditNote)) || (bill?.creditNote?.id && bill?.creditNote?.status != 1)  && (
                                             <Tooltip placement="bottom" title="Generar nota de crédito" aria-label="add">
                                                 <button type="button" color="primary" className="btn-sm btn btn-outline-info waves-effect waves-light" onClick={() => createCreditNote()}>
                                                     <i className={`uil-bill text-danger`}> </i>
@@ -112,15 +115,44 @@ const BillDetail = (props) => {
                                             <span className="p-1">{bill.order.customer.email}</span>
                                         </Col>
                                     </Row>
+                                    <Row>
+                                        <Col md={6}>
+                                            {bill?.creditNote?.id && bill?.creditNote?.status != 1 ? <div><label>Nota de Credito: </label>&nbsp;<span className="badge rounded-pill p-2 bg-soft-danger">Error Dian</span></div> : ""}
+                                        </Col>
+                                    </Row>
                                 </Col>
                             </Row>
                         </Card>
                         <Card id={'log'} className="mb-3 p-3">
                             <Row>
                                 <Col md={12}>
-                                    <h4 className="card-title text-info">Bitacora Dian</h4>
-                                    <hr/>
-                                    <div dangerouslySetInnerHTML={{__html: formatLog(bill.dianLog)}}/>
+
+                                    <ul className="nav nav-tabs nav-tabs-custom nav-justified" role="tablist">
+                                        <li className="nav-item">
+                                            <a className={`nav-link ${activeTab === 1 ? 'active' : ''}`} data-bs-toggle="tab" href="#tab1" role="tab" aria-selected="false" onClick={() => setActiveTab(1)}>
+                                                <span className="d-block d-sm-none"><i className="fas fa-home"> </i></span>
+                                                <span className="d-none d-sm-block">Bicacora Factura Dian</span>
+                                            </a>
+                                        </li>
+                                        <li className="nav-item">
+                                            <a className={`nav-link ${activeTab === 2 ? 'active' : ''}`} data-bs-toggle="tab" href="#tab2" role="tab" aria-selected="false" onClick={() => setActiveTab(2)}>
+                                                <span className="d-block d-sm-none"><i className="far fa-user"> </i></span>
+                                                <span className="d-none d-sm-block">Bitacora Nota de Credito</span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                    <div className="tab-content p-3 text-muted">
+                                        <div className={`tab-pane ${activeTab === 1 ? 'active' : ''}`} id="tab2" role="tabpanel">
+                                            <h4 className="card-title text-info">Bitacora Dian</h4>
+                                            <hr/>
+                                            <div dangerouslySetInnerHTML={{__html: formatLog(bill.dianLog)}}/>
+                                        </div>
+                                        <div className={`tab-pane ${activeTab === 2 ? 'active' : ''}`} id="tab2" role="tabpanel">
+                                            <h4 className="card-title text-info">Bitacora Nota de Credito</h4>
+                                            <hr/>
+                                            <div dangerouslySetInnerHTML={{__html: formatLog(bill.dianCreditMemoLog)}}/>
+                                        </div>
+                                    </div>
                                 </Col>
                             </Row>
                         </Card>

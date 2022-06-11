@@ -62,7 +62,6 @@ const municipalityColumns = (onDelete = false) => [
         filterType: "number"
     },
     {
-        /** TODO -- hacer que filtre por nota de Credito */
         text: "Nota de Crédito",
         dataField: "creditMemo",
         sort: true,
@@ -75,6 +74,7 @@ const municipalityColumns = (onDelete = false) => [
         formatter: (cellContent, item) => (
             <>
                 {item?.creditNote?.id ? "Si" : "No"}
+                {item?.creditNote?.id && item?.creditNote?.status != 1 ? <small>&nbsp;<span className="badge rounded-pill p-2 bg-soft-danger">Error Dian</span></small> : ""}
             </>
         ),
     },

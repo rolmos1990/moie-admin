@@ -481,9 +481,20 @@ const Stats = ({users, onGetUsers}) => {
         if (users) {
             const options = users.map((user) => ({label: user.name, value: user.id}))
             setStats({...stats, usuarios: [getEmptyOptions(), ...options]});
-            setUserList(users.map(user => ({label: user.username, value: user.id})));
+            const addedUsers = users.map(user => ({label: user.username, value: user.id}));
+            addedUsers.unshift({value: null, label: "Todos"});
+            setUserList(addedUsers);
         }
     }, [users]);
+
+    const getStatsLabel = (stats, node) => {
+        if(parserClientDate(stats[node].fecha.inicial) == parserClientDate(stats[node].fecha.final)){
+            return parserClientDate(stats[node].fecha.inicial);
+        }
+        else {
+            return parserClientDate(stats[node].fecha.inicial) + ' a ' + parserClientDate(stats[node].fecha.final)
+        }
+    }
 
     const cargarVentas = () => {
         if (valida(stats.ventas.fecha)) {
@@ -511,7 +522,7 @@ const Stats = ({users, onGetUsers}) => {
                     datosPiezas[i] = parseFloat(data.piezas);
                 }
                 const newStats = {...stats};
-                newStats.ventas.data.subtitle.text = parserClientDate(stats.ventas.fecha.inicial) + ' a ' + parserClientDate(stats.ventas.fecha.final)
+                newStats.ventas.data.subtitle.text = getStatsLabel(newStats,'ventas');
                 newStats.ventas.data.xAxis.categories = fechas;
                 newStats.ventas.data.series[0].data = datosVentas;
                 newStats.ventas.data.series[1].data = datosGanancias;
@@ -519,13 +530,6 @@ const Stats = ({users, onGetUsers}) => {
                 newStats.cargando = '';
                 setStats(newStats);
             })
-            /*.error(function(data,status){
-            if(status===403){
-                estadisticas.logout();
-            }
-            console.error(data.error);
-            estadisticas.cargando = '';
-        });*/
         }
     }
 
@@ -534,9 +538,12 @@ const Stats = ({users, onGetUsers}) => {
             stats.cargando = 'Cargando estadisticas de ventas...';
             //definir la url para la consulta a la API
             var url = '/stats/estadistica_ventas_estado';
+
             url += '/' + parserServerDate(stats.ventasEstado.fecha.inicial);
             url += '/' + parserServerDate(stats.ventasEstado.fecha.final);
+
             //leer estadisticas de ventas
+
             statsApi(url).then(function (resp) {
                 var estados = [];
                 var datosVentas = [];
@@ -547,19 +554,12 @@ const Stats = ({users, onGetUsers}) => {
                     datosVentas[i] = parseFloat(data.monto);
                 }
                 const newStats = {...stats};
-                newStats.ventasEstado.data.subtitle.text = parserClientDate(stats.ventasEstado.fecha.inicial) + ' a ' + parserClientDate(stats.ventasEstado.fecha.final)
+                newStats.ventasEstado.data.subtitle.text = getStatsLabel(newStats,'ventasEstado');
                 newStats.ventasEstado.data.xAxis.categories = estados;
                 newStats.ventasEstado.data.series[0].data = datosVentas;
                 newStats.cargando = '';
                 setStats(newStats);
             })
-            /*.error(function(data,status){
-            if(status===403){
-                estadisticas.logout();
-            }
-            swal("Error", data.error, "error");
-            estadisticas.cargando = '';
-        });*/
         }
     }
 
@@ -575,13 +575,6 @@ const Stats = ({users, onGetUsers}) => {
             statsApi(url).then(function (resp) {
                 var fechas = [];
                 var series = [];
-                var datosWeb = [];
-                var datosWebMovil = [];
-                var datosFacebook = [];
-                var datosApp = [];
-                var datosWhatsapp = [];
-                var datosBlackberry = [];
-                var datosOtros = [];
 
                 var seriesList = [];
                 for (var i = 0; i < resp.length; i++) {
@@ -609,14 +602,6 @@ const Stats = ({users, onGetUsers}) => {
                             seriesMap[serieName].data.push(parseFloat(data[serieName]));
                         }
                     })
-
-                    /* datosWeb[i] = parseFloat(data.web);
-                    datosWebMovil[i] = parseFloat(data.webMovil);
-                    datosFacebook[i] = parseFloat(data.facebook);
-                    datosApp[i] = parseFloat(data.app);
-                    datosWhatsapp[i] = parseFloat(data.whatsapp);
-                    datosBlackberry[i] = parseFloat(data.blackberry);
-                    datosOtros[i] = parseFloat(data.otros);*/
                 }
                 Object.keys(seriesMap).filter(k => k !== 'fecha').forEach(k => {
                     series.push(seriesMap[k]);
@@ -627,27 +612,13 @@ const Stats = ({users, onGetUsers}) => {
                 }
 
                 const newStats = {...stats};
-                newStats.ventasOrigen.data.subtitle.text = parserClientDate(stats.ventasOrigen.fecha.inicial) + ' a ' + parserClientDate(stats.ventasOrigen.fecha.final)
+                newStats.ventasOrigen.data.subtitle.text = getStatsLabel(newStats,'ventasOrigen');
                 newStats.ventasOrigen.data.xAxis.categories = fechas;
                 newStats.ventasOrigen.data.series = series;
-                /*newStats.ventasOrigen.data.series[0].data = datosWeb;
-                newStats.ventasOrigen.data.series[1].data = datosWebMovil;
-                newStats.ventasOrigen.data.series[2].data = datosFacebook;
-                newStats.ventasOrigen.data.series[3].data = datosApp;
-                newStats.ventasOrigen.data.series[4].data = datosWhatsapp;
-                newStats.ventasOrigen.data.series[5].data = datosBlackberry;
-                newStats.ventasOrigen.data.series[6].data = datosOtros;*/
                 newStats.cargando = '';
                 setStats(newStats);
                 setVentasOrigenReload(true);
             })
-            /*.error(function(data,status){
-            if(status===403){
-                estadisticas.logout();
-            }
-            swal("Error", data.error, "error");
-            estadisticas.cargando = '';
-        });*/
         }
     }
 
@@ -665,20 +636,13 @@ const Stats = ({users, onGetUsers}) => {
                 var datosReincidentes = data.reincidentes;
 
                 const newStats = {...stats};
-                newStats.reincidencias.data.subtitle.text = parserClientDate(stats.reincidencias.fecha.inicial) + ' a ' + parserClientDate(stats.reincidencias.fecha.final)
+                newStats.reincidencias.data.subtitle.text = getStatsLabel(newStats,'reincidencias');
                 newStats.reincidencias.data.xAxis.categories = ['Total'];
                 newStats.reincidencias.data.series[0].data = datosClientes;
                 newStats.reincidencias.data.series[1].data = datosReincidentes;
                 newStats.cargando = '';
                 setStats(newStats);
             })
-            /*.error(function(data,status){
-            if(status===403){
-                estadisticas.logout();
-            }
-            swal("Error", data.error, "error");
-            estadisticas.cargando = '';
-        });*/
         }
     }
 
@@ -700,19 +664,12 @@ const Stats = ({users, onGetUsers}) => {
                     datosVentas[i] = parseFloat(data.monto);
                 }
                 const newStats = {...stats};
-                newStats.ventasWhatsapp.data.subtitle.text = parserClientDate(stats.ventasWhatsapp.fecha.inicial) + ' a ' + parserClientDate(stats.ventasWhatsapp.fecha.final)
+                newStats.ventasWhatsapp.data.subtitle.text = getStatsLabel(newStats,'ventasWhatsapp');
                 newStats.ventasWhatsapp.data.xAxis.categories = whatsapp;
                 newStats.ventasWhatsapp.data.series[0].data = datosVentas;
                 newStats.cargando = '';
                 setStats(newStats);
             })
-            /*.error(function(data,status){
-            if(status===403){
-                estadisticas.logout();
-            }
-            swal("Error", data.error, "error");
-            estadisticas.cargando = '';
-        });*/
         }
     }
 
@@ -741,7 +698,7 @@ const Stats = ({users, onGetUsers}) => {
                     montoContraEntrega[i] = parseFloat(data.montoContraEntrega);
                 }
                 const newStats = {...stats};
-                newStats.ventasTipo.data.subtitle.text = parserClientDate(stats.ventasTipo.fecha.inicial) + ' a ' + parserClientDate(stats.ventasTipo.fecha.final)
+                newStats.ventasTipo.data.subtitle.text = getStatsLabel(newStats,'ventasTipo');
                 newStats.ventasTipo.data.xAxis.categories = fechas;
                 newStats.ventasTipo.data.series[0].data = montoPrevioPago;
                 newStats.ventasTipo.data.series[1].data = montoContraEntrega;
@@ -750,13 +707,6 @@ const Stats = ({users, onGetUsers}) => {
                 newStats.cargando = '';
                 setStats(newStats);
             })
-            /*.error(function(data,status){
-            if(status===403){
-                estadisticas.logout();
-            }
-            swal("Error", data.error, "error");
-            estadisticas.cargando = '';
-        });*/
         }
     }
 
@@ -780,20 +730,13 @@ const Stats = ({users, onGetUsers}) => {
                     existencia[i] = parseFloat(data.existencia);
                 }
                 const newStats = {...stats};
-                newStats.masVendidos.data.subtitle.text = parserClientDate(stats.masVendidos.fecha.inicial) + ' a ' + parserClientDate(stats.masVendidos.fecha.final)
+                newStats.masVendidos.data.subtitle.text = getStatsLabel(newStats,'masVendidos');
                 newStats.masVendidos.data.xAxis.categories = ids;
                 newStats.masVendidos.data.series[0].data = cantidad;
                 newStats.masVendidos.data.series[1].data = existencia;
                 newStats.cargando = '';
                 setStats(newStats);
             })
-            /*.error(function(data,status){
-            if(status===403){
-                estadisticas.logout();
-            }
-            swal("Error", data.error, "error");
-            estadisticas.cargando = '';
-        });*/
         }
     }
 
@@ -817,20 +760,13 @@ const Stats = ({users, onGetUsers}) => {
                     monto[i] = parseFloat(data.monto);
                 }
                 const newStats = {...stats};
-                newStats.horas.data.subtitle.text = parserClientDate(stats.horas.fecha.inicial) + ' a ' + parserClientDate(stats.horas.fecha.final)
+                newStats.horas.data.subtitle.text = getStatsLabel(newStats,'horas');
                 newStats.horas.data.xAxis.categories = horas;
                 newStats.horas.data.series[0].data = monto;
                 newStats.horas.data.series[1].data = cantidad;
                 newStats.cargando = '';
                 setStats(newStats);
             })
-            /*.error(function(data,status){
-            if(status===403){
-                estadisticas.logout();
-            }
-            swal("Error", data.error, "error");
-            estadisticas.cargando = '';
-        });*/
         }
     }
 
@@ -854,8 +790,8 @@ const Stats = ({users, onGetUsers}) => {
     const onChangeDate = (dates, node) => {
         if (dates.length > 0) {
             const s = {...stats}
-            if (dates.length === 1) {
-                s[node] = {...stats[node], fecha: {...stats[node].fecha, inicial: dates[0]}}
+            if ((dates.length === 1) || (dates[0].toString() == dates[1].toString())) {
+                s[node] = {...stats[node], fecha: {...stats[node].fecha, inicial: dates[0], final: dates[0]}}
             } else {
                 s[node] = {...stats[node], fecha: {...stats[node].fecha, inicial: dates[0], final: dates[1]}}
             }
@@ -864,11 +800,9 @@ const Stats = ({users, onGetUsers}) => {
     }
 
     const onChangeUser = (user, node) => {
-        if (user && user.value) {
-            const s = {...stats}
-            s[node] = {...stats[node], opciones: {...stats[node].opciones, usuario: user.value}}
-            setStats(s);
-        }
+        const s = {...stats}
+        s[node] = {...stats[node], opciones: {...stats[node].opciones, usuario: user.value || null}}
+        setStats(s);
     }
 
     const onChangeGrupo = (grupo, node) => {

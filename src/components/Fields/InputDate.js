@@ -1,6 +1,5 @@
 import React, {useEffect, useState} from "react";
 import PropTypes from "prop-types";
-import Select from "react-select";
 import {AvBaseInput} from "availity-reactstrap-validation";
 import messages from "./messages";
 import {FormText, FormGroup} from "reactstrap";
@@ -21,14 +20,6 @@ const InputDateField = (props) => {
     const {defaultValue, options} = props;
 
     useEffect(() => {
-        /*if(options && options.length > 0) {
-            if(defaultValue) {
-                const selected = options.filter(item => item.value === defaultValue)[0];
-                setSelected(selected);
-            } else {
-                setSelected(null);
-            }
-        }*/
         setSelected(defaultValue ? defaultValue: null);
     }, [options, defaultValue]);
 
@@ -85,7 +76,7 @@ class AvSearchInput extends AvBaseInput {
                             dateFormat: "Y-m-d",
                             locale: 'es'
                         }}
-                        onChange={onChange}
+                        onClose={onChange}
                     />
                 </div>
                 {feedback}
