@@ -156,7 +156,7 @@ const PaymentOverlay = (props) => {
                                             <td>{order.id}</td>
                                             <td>{order.customer.name}</td>
                                             <td>{formatDate(order.createdAt)}</td>
-                                            <td className="text-end">{priceFormat(parseFloat(order.totalAmount) - parseFloat(order.orderDelivery.deliveryCost || 0))}</td>
+                                            <td className="text-end">{priceFormat(order.totalWithDiscount)}</td>
                                             <td className="text-end">{priceFormat(order.orderDelivery.deliveryCost)}</td>
                                             <td className="text-end">{priceFormat(order.totalAmount)}</td>
                                             <HasPermissions permissions={[PERMISSIONS.PAYMENT_EDIT]}>

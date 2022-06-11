@@ -798,7 +798,7 @@ const OrderEdit = (props) => {
                                                     </tr>
                                                     <tr>
                                                         <td>Total con descuento:</td>
-                                                        <td className="text-end">{priceFormat(parseFloat(orderData.subTotalAmount) - parseFloat(orderData.totalDiscount))}</td>
+                                                        <td className="text-end">{priceFormat(orderData.totalWithDiscount)}</td>
                                                     </tr>
                                                     <tr>
                                                         <td>Envio:</td>
