@@ -10,24 +10,14 @@ import {withTranslation} from "react-i18next"
 import {connect} from "react-redux"
 import {PERMISSIONS} from "../../helpers/security_rol";
 import HasPermissions from "../HasPermissions";
+import OutsideClickHandler from "../OutsideClickHandler";
 
 const Navbar = props => {
-    const [ui, setui] = useState(false)
-    const [app, setapp] = useState(false)
-    const [email, setemail] = useState(false)
-    const [ecommerce, setecommerce] = useState(false)
-    const [contact, setcontact] = useState(false)
-    const [component, setcomponent] = useState(false)
-    const [form, setform] = useState(false)
-    const [table, settable] = useState(false)
-    const [chart, setchart] = useState(false)
-    const [icon, seticon] = useState(false)
-    const [map, setmap] = useState(false)
     const [system, setsystem] = useState(false)
     const [extra, setextra] = useState(false)
-    const [invoice, setinvoice] = useState(false)
     const [auth, setauth] = useState(false)
     const [utility, setutility] = useState(false)
+    const [isOpen, setIsOpen] = useState(false);
 
     useEffect(() => {
         var matchingMenuItem = null
@@ -42,7 +32,11 @@ const Navbar = props => {
         if (matchingMenuItem) {
             activateParentDropdown(matchingMenuItem)
         }
-    })
+    });
+
+    useEffect(() => {
+        setIsOpen(props.leftMenu);
+    }, [props.leftMenu]);
 
     function renderMenuNoAccess(name, to, className){
         return <li className="nav-item">
@@ -88,8 +82,13 @@ const Navbar = props => {
                         className="navbar navbar-light navbar-expand-lg topnav-menu"
                         id="navigation"
                     >
+                        <OutsideClickHandler
+                            onOutsideClick={() => {
+                                setIsOpen(false);
+                            }}
+                        >
                         <Collapse
-                            isOpen={props.leftMenu}
+                            isOpen={isOpen}
                             className="navbar-collapse"
                             id="topnav-menu-content"
                         >
@@ -272,6 +271,7 @@ const Navbar = props => {
 
                             </ul>
                         </Collapse>
+                        </OutsideClickHandler>
                     </nav>
                 </div>
             </div>

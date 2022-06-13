@@ -14,6 +14,7 @@ import Navbar from "./Navbar"
 import Header from "./Header"
 import Footer from "./Footer"
 import Rightbar from "../CommonForBoth/Rightbar"
+import OutsideClickHandler from "../OutsideClickHandler";
 
 class Layout extends Component {
   constructor(props) {
@@ -57,11 +58,12 @@ class Layout extends Component {
   }
 
   /**
-   * Opens the menu - mobile
+   * toggleMenu the menu - mobile
    */
-  openMenu = () => {
+  toggleMenu = () => {
     this.setState({ isMenuOpened: !this.state.isMenuOpened })
   }
+
   render() {
     return (
       <React.Fragment>
@@ -72,13 +74,12 @@ class Layout extends Component {
                 </div>
             </div>
         </div>
-
         <div id="layout-wrapper">
           <header id="page-topbar">
             <Header
               theme={this.props.topbarTheme}
               isMenuOpened={this.state.isMenuOpened}
-              openLeftMenuCallBack={this.openMenu}
+              openLeftMenuCallBack={this.toggleMenu}
             >
             </Header>
             <Navbar menuOpen={this.state.isMenuOpened} />
