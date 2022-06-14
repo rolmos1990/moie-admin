@@ -6,7 +6,7 @@ import {connect} from "react-redux";
 import PropTypes from "prop-types";
 import {getProduct, registerProduct, updateProduct} from "../../store/product/actions";
 import {getFieldOptionByGroups, registerFieldOption} from "../../store/fieldOptions/actions";
-import {resetProductImages} from "../../store/productImages/actions";
+import {deleteProductImage, resetProductImages} from "../../store/productImages/actions";
 import {resetProductSize} from "../../store/productSize/actions";
 import {AvForm} from "availity-reactstrap-validation";
 import {FieldNumber, FieldSelect, FieldSwitch, FieldText} from '../../components/Fields';
@@ -43,7 +43,7 @@ const ProductEdit = (props) => {
         product, categories, sizes, fieldOptions, refreshProduct,
         onGetProduct, onCreateProduct, onUpdateProduct,
         onGetCategories, onGetSizes, onResetProductSize, onResetProductImages,
-        onGetFieldOptions, onCreateFieldOption, refreshFieldOptions
+        onGetFieldOptions, onCreateFieldOption, refreshFieldOptions, onDeleteProductImage
     } = props;
 
     const [productData, setProductData] = useState({_status: STATUS.ACTIVE, sizeModelList: []});
@@ -182,6 +182,11 @@ const ProductEdit = (props) => {
         if (!providerList.some(op => op.name === data.provider)) {
             onCreateFieldOption({groups: GROUPS.PROVIDERS, name: data.provider, value: data.provider}, props.history);
         }
+    }
+
+    const handleDeleteProductImage = (product, number) => {
+        console.log("BORRANDO ::: " , product,number);
+        onDeleteProductImage(product, number)
     }
 
     return (
@@ -479,7 +484,7 @@ const ProductEdit = (props) => {
                                         </div>
                                     </Link>
                                     <Collapse isOpen={isOpenDropImages}>
-                                        <ProductImage product={product}/>
+                                        <ProductImage product={product} onDeleteProductImage={handleDeleteProductImage}/>
                                     </Collapse>
                                 </Card>
                             </Col>
@@ -541,6 +546,7 @@ const mapDispatchToProps = dispatch => ({
     onCreateFieldOption: (data, history) => dispatch(registerFieldOption(data, history)),
     onResetProductSize: () => dispatch(resetProductSize()),
     onResetProductImages: () => dispatch(resetProductImages()),
+    onDeleteProductImage: (product,number) => dispatch(deleteProductImage(product,number)),
 })
 
 export default withRouter(

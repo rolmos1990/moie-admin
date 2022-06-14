@@ -63,6 +63,7 @@ const fetchProductImagesApi = data => get(url.PRODUCT_IMAGES, {}, data);
 const fetchProductImageApi = (productId) => get(`${url.PRODUCT_IMAGES}/${productId}`,{});
 const registerProductImageApi = data => post(url.PRODUCT_IMAGES, data);
 const updateProductImageApi = (productId, data) => put(`${url.PRODUCT_IMAGES}/${productId}`, data);
+const deleteProductImageApi = (productId, number) => del(`${url.PRODUCT_IMAGES}/deleteImage/${productId}/${number}`);
 
 //FieldOptions
 const fetchFieldOptionsApi = data => get(url.FIELD_OPTIONS, {}, data);
@@ -236,6 +237,7 @@ export {
     fetchProductImageApi,
     registerProductImageApi,
     updateProductImageApi,
+    deleteProductImageApi,
 
     fetchDeliveryLocalitiesApi,
     fetchDeliveryLocalityApi,

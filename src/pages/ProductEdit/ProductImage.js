@@ -80,6 +80,12 @@ const ProductImage = props => {
         }
     }
 
+    const onDeletePhoto = (fileNumber) => {
+        if(props.onDeleteProductImage){
+            props.onDeleteProductImage(product.id, fileNumber);
+        }
+    }
+
     return (
         <React.Fragment>
             <AvForm ref={form} className="needs-validation" autoComplete="off" onValidSubmit={(e, v) => handleValidSubmit(e, v)}>
@@ -89,6 +95,12 @@ const ProductImage = props => {
                             <Card className="mt-1 mb-0 shadow-none border dz-processing dz-image-preview dz-success dz-complete">
                                 <div className="p-2">
                                     <Row className="align-items-center" style={{borderBottom: '1px solid #f5f6f8'}}>
+                                        <div>
+                                            <button className="btn btn-danger m-2" onClick={() => onDeletePhoto(i)}>
+                                            <i className="fa fa-trash"></i>
+                                            </button>
+                                        </div>
+
                                         <Col md={12} className="text-center p-2" style={{height: '400px'}}>
                                             <DropZoneIcon
                                                 maxFiles={1}

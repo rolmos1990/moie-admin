@@ -1,7 +1,13 @@
 import {all, call, fork, put, takeEvery} from "redux-saga/effects"
 
 //Account Redux states
-import {GET_PRODUCT_IMAGE, GET_PRODUCT_IMAGES, REGISTER_PRODUCT_IMAGE, UPDATE_PRODUCT_IMAGE} from "./actionTypes"
+import {
+    DELETE_PRODUCT_IMAGE,
+    GET_PRODUCT_IMAGE,
+    GET_PRODUCT_IMAGES,
+    REGISTER_PRODUCT_IMAGE,
+    UPDATE_PRODUCT_IMAGE
+} from "./actionTypes"
 
 import {
     getProductImageFailed,
@@ -14,7 +20,13 @@ import {
     updateProductImageSuccess
 } from "./actions"
 
-import {fetchProductImageApi, fetchProductImagesApi, registerProductImageApi, updateProductImageApi} from "../../helpers/backend_helper"
+import {
+    deleteProductImageApi,
+    fetchProductImageApi,
+    fetchProductImagesApi,
+    registerProductImageApi,
+    updateProductImageApi
+} from "../../helpers/backend_helper"
 
 import Conditionals from "../../common/conditionals";
 import {showResponseMessage} from "../../helpers/service";
@@ -27,11 +39,13 @@ const ACTION_NAME_LIST      =   GET_PRODUCT_IMAGES;
 const ACTION_NAME_GET       =   GET_PRODUCT_IMAGE;
 const ACTION_NAME_CREATE    =   REGISTER_PRODUCT_IMAGE;
 const ACTION_NAME_UPDATE    =   UPDATE_PRODUCT_IMAGE;
+const ACTION_IMAGE_NAME_DELETE = DELETE_PRODUCT_IMAGE;
 
-const LIST_API_REQUEST      =   fetchProductImagesApi;
-const GET_API_REQUEST       =   fetchProductImageApi;
-const POST_API_REQUEST      =   registerProductImageApi;
-const PUT_API_REQUEST       =   updateProductImageApi;
+const LIST_API_REQUEST               =   fetchProductImagesApi;
+const GET_API_REQUEST                =   fetchProductImageApi;
+const POST_API_REQUEST               =   registerProductImageApi;
+const PUT_API_REQUEST                =   updateProductImageApi;
+const DELETE_API_IMAGE_REQUEST       =   deleteProductImageApi;
 
 //actions
 const LIST_SUCCESS_ACTION   =   getProductImagesSuccess;
@@ -45,6 +59,15 @@ const UPDATE_FAILED_ACTION  =   updateProductImageFail;
 
 
 const LIST_URL = "/productImages";
+
+function* deleteImage({ product,number }) {
+    try {
+        const response = yield call(DELETE_API_IMAGE_REQUEST,  product, number );
+        //yield put(GET_SUCCESS_ACTION(response))
+    } catch (error) {
+        //yield put(GET_FAILED_ACTION(error))
+    }
+}
 
 function* get({ id }) {
     try {
@@ -93,6 +116,7 @@ function* update({ payload: { id, data, history } }) {
 }
 
 export function* watchProductImage() {
+    yield takeEvery(ACTION_IMAGE_NAME_DELETE, deleteImage);
     yield takeEvery(ACTION_NAME_CREATE, register);
     yield takeEvery(ACTION_NAME_UPDATE, update);
     yield takeEvery(ACTION_NAME_LIST, fetch);
