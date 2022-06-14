@@ -4,7 +4,7 @@ import {all, call, fork, put, takeEvery} from "redux-saga/effects"
 import {
     DELETE_PRODUCT_IMAGE,
     GET_PRODUCT_IMAGE,
-    GET_PRODUCT_IMAGES,
+    GET_PRODUCT_IMAGES, REFRESH_PRODUCT,
     REGISTER_PRODUCT_IMAGE,
     UPDATE_PRODUCT_IMAGE
 } from "./actionTypes"
@@ -13,7 +13,7 @@ import {
     getProductImageFailed,
     getProductImagesFailed,
     getProductImagesSuccess,
-    getProductImageSuccess,
+    getProductImageSuccess, refreshProduct,
     registerProductImageFailed,
     registerProductImageSuccess,
     updateProductImageFail,
@@ -30,6 +30,7 @@ import {
 
 import Conditionals from "../../common/conditionals";
 import {showResponseMessage} from "../../helpers/service";
+import {showMessage} from "../../components/MessageToast/ShowToastMessages";
 
 /**
  * *  Configuración de CRUD Saga (Realizar configuración para cada uno de las replicas)
@@ -62,9 +63,10 @@ const LIST_URL = "/productImages";
 
 function* deleteImage({ product,number }) {
     try {
-        const response = yield call(DELETE_API_IMAGE_REQUEST,  product, number );
-        //yield put(GET_SUCCESS_ACTION(response))
+        yield call(DELETE_API_IMAGE_REQUEST,  product, number );
+        yield put(refreshProduct())
     } catch (error) {
+        showMessage.error("No se pudo eliminar imagen");
         //yield put(GET_FAILED_ACTION(error))
     }
 }

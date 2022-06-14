@@ -11,7 +11,8 @@ import {
     RESET_PRODUCT_IMAGES,
     UPDATE_PRODUCT_IMAGE,
     UPDATE_PRODUCT_IMAGE_FAILED,
-    UPDATE_PRODUCT_IMAGE_SUCCESS
+    UPDATE_PRODUCT_IMAGE_SUCCESS,
+    REFRESH_PRODUCT
 } from "./actionTypes";
 
 const initialState = {
@@ -104,6 +105,11 @@ const productImages = (state = initialState, action) => {
                 loading: false,
             }
             break
+        case REFRESH_PRODUCT:
+            state = {
+                ...state,
+                refresh: !state.refresh
+            }
         default:
             state = { ...state }
             break
