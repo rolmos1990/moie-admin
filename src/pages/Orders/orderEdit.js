@@ -4,7 +4,15 @@ import {Button, Card, Tooltip} from "@material-ui/core";
 import {withRouter} from "react-router-dom"
 import {connect} from "react-redux";
 import PropTypes from "prop-types";
-import {copyToClipboard, formatDate, getImageByQuality, priceFormat, printPartOfPage, threeDots} from "../../common/utils";
+import {
+    copyToClipboard,
+    DATE_FORMAT,
+    formatDate,
+    getImageByQuality,
+    priceFormat,
+    printPartOfPage,
+    threeDots
+} from "../../common/utils";
 import NoDataIndication from "../../components/Common/NoDataIndication";
 
 import {
@@ -116,7 +124,7 @@ const OrderEdit = (props) => {
                     method: order.deliveryMethod.name,
                     cost: parseFloat(orderDelivery.deliveryCost) || null,
                     paymentType: order.paymentMode,
-                    pieces: order.piecesForChanges || 0,
+                    piecesForChanges: order.piecesForChanges || 0,
                     tracking: orderDelivery.tracking || '',
                     deliveryLocality: orderDelivery.deliveryLocality.id || null
                 },
@@ -216,7 +224,7 @@ const OrderEdit = (props) => {
             };
 
             if (DELIVERY_METHODS_PAYMENT_TYPES.includes(deliveryData.deliveryMethod)) {
-                deliveryData.piecesForChanges = parseInt(car.deliveryOptions.pieces);
+                deliveryData.piecesForChanges = parseInt(car.deliveryOptions.piecesForChanges);
                 deliveryData.paymentMode = car.deliveryOptions.paymentType === PAYMENT_TYPES.CASH ? 1 : 2;
             }
             onUpdateOrder(orderData.id, deliveryData);
@@ -401,6 +409,10 @@ const OrderEdit = (props) => {
                             {ORDER_STATUS[order.status].name}
                         </StatusField>
                         <small className="badge rounded-pill bg-soft-info font-size-14 mr-5 p-2">Operador: {order.user?.name}</small>
+                        {(order?.dateOfSale != null) &&
+                        <small className="badge rounded-pill bg-soft-success font-size-14 mr-5 p-2">
+                            F. Venta: {formatDate(order?.dateOfSale, DATE_FORMAT.ONLY_DATE)}
+                        </small>}
                     </div>
                     <div className={"mb-3 float-md-end"}>
                         <HasPermissions permission={PERMISSIONS.ORDER_EDIT}>

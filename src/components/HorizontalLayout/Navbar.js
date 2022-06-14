@@ -17,7 +17,7 @@ const Navbar = props => {
     const [extra, setextra] = useState(false)
     const [auth, setauth] = useState(false)
     const [utility, setutility] = useState(false)
-    const [isOpen, setIsOpen] = useState(false);
+    const [isOpen, setIsOpen] = useState(props.leftMenu);
 
     useEffect(() => {
         var matchingMenuItem = null
@@ -35,7 +35,9 @@ const Navbar = props => {
     });
 
     useEffect(() => {
-        setIsOpen(props.leftMenu);
+        if(props.leftMenu) {
+            setIsOpen(props.leftMenu);
+        }
     }, [props.leftMenu]);
 
     function renderMenuNoAccess(name, to, className){

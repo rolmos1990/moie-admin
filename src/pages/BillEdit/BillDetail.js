@@ -47,6 +47,12 @@ const BillDetail = (props) => {
         }
     }
 
+    const canCancel = () => {
+        const isSent = (bill.status == BILL_STATUS.SENT && bill.creditNote == null);
+        const isFailedCreditNote = (bill?.creditNote != null && bill?.creditNote?.status != 1);
+        return isSent || isFailedCreditNote;
+    }
+
     return (bill && bill.id) ? (
         <React.Fragment>
             <div className="page-content">
@@ -61,7 +67,7 @@ const BillDetail = (props) => {
                                 </div>
                                 <div className={"mb-3 float-md-end"}>
                                     <div className="button-items">
-                                        {(!!(bill.status === BILL_STATUS.SENT && !bill.creditNote)) || (bill?.creditNote?.id && bill?.creditNote?.status != 1)  && (
+                                        {canCancel() && (
                                             <Tooltip placement="bottom" title="Generar nota de crédito" aria-label="add">
                                                 <button type="button" color="primary" className="btn-sm btn btn-outline-info waves-effect waves-light" onClick={() => createCreditNote()}>
                                                     <i className={`uil-bill text-danger`}> </i>
