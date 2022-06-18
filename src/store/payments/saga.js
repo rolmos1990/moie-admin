@@ -1,11 +1,11 @@
 import {all, call, fork, put, takeEvery} from "redux-saga/effects"
 
 //Account Redux states
-import {APPLY_PAYMENT, GET_PAYMENT, GET_PAYMENTS, REGISTER_PAYMENT, UPDATE_PAYMENT} from "./actionTypes"
+import {APPLY_PAYMENT, DELETE_PAYMENT, GET_PAYMENT, GET_PAYMENTS, REGISTER_PAYMENT, UPDATE_PAYMENT} from "./actionTypes"
 
 import {
     applyPaymentFail,
-    applyPaymentSuccess,
+    applyPaymentSuccess, deletePaymentFailed, deletePaymentSuccess,
     getPaymentFailed,
     getPaymentsFailed,
     getPaymentsSuccess,
@@ -16,7 +16,14 @@ import {
     updatePaymentSuccess
 } from "./actions"
 
-import {applyPaymentPaymentApi, fetchPaymentApi, fetchPaymentsApi, registerPaymentApi, updatePaymentApi} from "../../helpers/backend_helper"
+import {
+    applyPaymentPaymentApi,
+    deletePaymentApi,
+    fetchPaymentApi,
+    fetchPaymentsApi,
+    registerPaymentApi,
+    updatePaymentApi
+} from "../../helpers/backend_helper"
 
 import Conditionals from "../../common/conditionals";
 import {showResponseMessage} from "../../helpers/service";
@@ -27,6 +34,7 @@ import {showResponseMessage} from "../../helpers/service";
 
 const ACTION_NAME_LIST = GET_PAYMENTS;
 const ACTION_NAME_GET = GET_PAYMENT;
+const ACTION_NAME_DELETE = DELETE_PAYMENT;
 const ACTION_NAME_CREATE = REGISTER_PAYMENT;
 const ACTION_NAME_UPDATE = UPDATE_PAYMENT;
 const ACTION_NAME_APPLY_PAYMENT = APPLY_PAYMENT;
@@ -36,6 +44,7 @@ const GET_API_REQUEST = fetchPaymentApi;
 const POST_API_REQUEST = registerPaymentApi;
 const PUT_API_REQUEST = updatePaymentApi;
 const POST_API_REQUEST_APPLY_PAYMENT = applyPaymentPaymentApi;
+const DELETE_API_REQUEST = deletePaymentApi;
 
 //actions
 const LIST_SUCCESS_ACTION = getPaymentsSuccess;
@@ -46,6 +55,8 @@ const CREATE_SUCCESS_ACTION = registerPaymentSuccess;
 const CREATE_FAILED_ACTION = registerPaymentFailed;
 const UPDATE_SUCCESS_ACTION = updatePaymentSuccess;
 const UPDATE_FAILED_ACTION = updatePaymentFail;
+const DELETE_SUCCESS_ACTION = deletePaymentSuccess;
+const DELETE_FAILED_ACTION = deletePaymentFailed;
 
 
 const APPLY_PAYMENT_FAILED_ACTION = applyPaymentSuccess;
@@ -60,6 +71,15 @@ function* get({id}) {
         yield put(GET_SUCCESS_ACTION(response))
     } catch (error) {
         yield put(GET_FAILED_ACTION(error))
+    }
+}
+
+function* remove({id}) {
+    try {
+        const response = yield call(DELETE_API_REQUEST, id);
+        yield put(DELETE_SUCCESS_ACTION(response))
+    } catch (error) {
+        yield put(DELETE_FAILED_ACTION(error))
     }
 }
 
@@ -117,8 +137,9 @@ export function* watchPayment() {
     yield takeEvery(ACTION_NAME_CREATE, register);
     yield takeEvery(ACTION_NAME_UPDATE, update);
     yield takeEvery(ACTION_NAME_LIST, fetch);
-    yield takeEvery(ACTION_NAME_GET, get)
-    yield takeEvery(ACTION_NAME_APPLY_PAYMENT, applyPayment)
+    yield takeEvery(ACTION_NAME_GET, get);
+    yield takeEvery(ACTION_NAME_APPLY_PAYMENT, applyPayment);
+    yield takeEvery(ACTION_NAME_DELETE, remove);
 }
 
 function* paymentSaga() {

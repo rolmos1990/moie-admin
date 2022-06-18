@@ -119,6 +119,22 @@ export const CustomerFilter = (props) => {
                                 </Col>
                                 <Col md="12">
                                     <div className="mb-3">
+                                        <Label htmlFor="name">Telefono Celular</Label>
+                                        <FieldText
+                                            name={"cellphone"}
+                                        />
+                                    </div>
+                                </Col>
+                                <Col md="12">
+                                    <div className="mb-3">
+                                        <Label htmlFor="name">Telefono Residencial</Label>
+                                        <FieldText
+                                            name={"phone"}
+                                        />
+                                    </div>
+                                </Col>
+                                <Col md="12">
+                                    <div className="mb-3">
                                         <Label htmlFor="name">Fecha de Creación</Label>
                                         <FieldDate
                                             name={"createdAt"}

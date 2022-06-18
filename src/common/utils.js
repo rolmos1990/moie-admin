@@ -79,6 +79,25 @@ export const formatDate =(date, type = DATE_FORMAT.FULL_DATE) =>{
     }
     return moment(date, moment.ISO_8601).format('DD-MM-YYYY HH:mm:ss');
 }
+
+export const formatDateToServerEndOfDay =(date) => {
+    try {
+        return moment(date).endOf('day').format("YYYY-MM-DD[T]HH:mm:ss");
+    }catch (e){
+        console.log(e)
+    }
+    return "";
+}
+
+export const formatDateToServerStartOfDay =(date) => {
+    try {
+        return moment(date).startOf('day').format("YYYY-MM-DD[T]HH:mm:ss");
+    }catch (e){
+        console.log(e)
+    }
+    return "";
+}
+
 export const formatDateToServer =(date) =>{
     try {
         return moment(date).format("YYYY-MM-DD[T]HH:mm:ss");

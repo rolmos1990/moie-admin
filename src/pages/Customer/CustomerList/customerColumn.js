@@ -55,12 +55,29 @@ const customerListColumns = (onDelete = false) => {
             text: "Télefonos",
             dataField: "phone",
             sort: false,
+            filter: true,
             formatter: (cellContent, item) => (
                 <>
                     <div>Cel.: {item.cellphone && item.cellphone.length > 3 ? item.cellphone : ''}</div>
                     <div>Res.: {item.phone && item.phone.length > 3 ? item.phone : ''}</div>
                 </>
             ),
+        },
+        {
+            text: "Télefono Celular",
+            dataField: "cellphone",
+            filterType: "text",
+            sort: false,
+            filter: true,
+            hidden: true,
+        },
+        {
+            text: "Télefono Residencial",
+            dataField: "phone",
+            filterType: "text",
+            sort: false,
+            filter: true,
+            hidden: true,
         },
         {
             text: "Fecha creación",

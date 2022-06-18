@@ -115,17 +115,13 @@ const postSaleColumns = () => {
         },
         {
             text: "Fecha de envío",
-            // dataField: "orderDelivery.deliveryDate",//TODO cambiar cuando se agregue
-            dataField: "createdAt",
+            dataField: "orderDelivery.deliveryDate",//TODO cambiar cuando se agregue
+            //dataField: "createdAt",
             sort: true,
             filter: true,
             filterType: "dateRange",
             formatter: (cellContent, item) => {
                 return <div>{formatDate(item.createdAt)}</div>
-                /*if(item.orderDelivery.deliveryDate){
-                 return <div>{formatDate(item.orderDelivery.deliveryDate)}</div>;
-                }
-                return '';*/
             },
         },
     ];

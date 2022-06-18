@@ -88,7 +88,8 @@ export const EVENT_STATUS = {
 
 export const PAYMENT_STATUS = {
     0: {name: 'Pendiente', color:'danger', colorCss: "#f44336"},
-    1: {name: 'Conciliado', color:'success', colorCss: "#4caf50"}
+    1: {name: 'Conciliado', color:'success', colorCss: "#4caf50"},
+    2: {name: 'Anulado', color:'secondary', colorCss: "#74788d"}
 };
 
 export const ORDER_STATUS = {

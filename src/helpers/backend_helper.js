@@ -157,6 +157,7 @@ const fetchPaymentApi = (id) => get(`${url.PAYMENTS}/${id}`, {});
 const registerPaymentApi = data => post(url.PAYMENTS, data);
 const updatePaymentApi = (id, data) => put(`${url.PAYMENTS}/${id}`, data);
 const applyPaymentPaymentApi = (paymentId, data) => post(`${url.PAYMENTS}/applyPayment/${paymentId}`, data);
+const deletePaymentApi = (id) => del(`${url.PAYMENTS}/${id}/delete`);
 
 
 const fetchDeliveryMethodsApi = () => get(`${url.DELIVERY_METHODS}`, {});
@@ -320,6 +321,7 @@ export {
     registerPaymentApi,
     applyPaymentPaymentApi,
     updatePaymentApi,
+    deletePaymentApi,
 
     fetchBillConfigsApi,
     fetchBillConfigApi,

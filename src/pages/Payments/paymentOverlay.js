@@ -11,13 +11,13 @@ import {formatDate, priceFormat} from "../../common/utils";
 import {ConfirmationModalAction} from "../../components/Modal/ConfirmationModal";
 import {StatusField} from "../../components/StatusField";
 import {ORDER_STATUS, PAYMENT_STATUS} from "../../common/constants";
-import {applyPayment, getPayment} from "../../store/payments/actions";
+import {applyPayment, deletePayment, getPayment} from "../../store/payments/actions";
 import {PERMISSIONS} from "../../helpers/security_rol";
 import HasPermissions from "../../components/HasPermissions";
 
 const PaymentOverlay = (props) => {
 
-    const {paymentSelected, payment, onRelateOrder, onCloseOverlay, onGetOrders, orders, onGetPayment, refresh} = props;
+    const {paymentSelected, payment, onRelateOrder, onCloseOverlay, onGetOrders, orders, onGetPayment, refresh, onCancelPayment} = props;
     const [findOrderBy, setFindOrderBy] = useState(null);
 
     useEffect(() => {
@@ -41,9 +41,21 @@ const PaymentOverlay = (props) => {
         ConfirmationModalAction({
             title: 'Confirmación',
             description: `Usted está asociando el pago# ${paymentSelected.id} con el pedido# ${order.id}, ¿Desea continuar?`,
-            id: '_clienteModal',
+            id: '_cancelPaymentModal',
             onConfirm: () => {
                 onRelateOrder(paymentSelected.id, {orderId: order.id});
+                onReload();
+            }
+        });
+    }
+
+    const cancelPayment = () => {
+        ConfirmationModalAction({
+            title: 'Confirmación',
+            description: `Usted está anulando el pago# ${paymentSelected.id}, ¿Desea continuar?`,
+            id: '_clienteModal',
+            onConfirm: () => {
+                onCancelPayment(paymentSelected.id);
                 onReload();
             }
         });
@@ -62,7 +74,13 @@ const PaymentOverlay = (props) => {
                         <small className="badge rounded-pill bg-info font-size-14 mr-5 p-2">Pago# {payment.id}</small>
                     </div>
                     <div className={"mb-3 float-md-end"}>
-
+                        {payment.status === 0 && (
+                            <Tooltip placement="bottom" title="Anular pago" aria-label="add">
+                                <button className="btn btn-sm text-danger mr-5" onClick={() => cancelPayment()}>
+                                    <i className="uil uil-trash-alt font-size-18"> </i>
+                                </button>
+                            </Tooltip>
+                        )}
                     </div>
                 </Col>
             </Row>
@@ -122,7 +140,7 @@ const PaymentOverlay = (props) => {
                     </Card>
                 </Col>
                 <Col md={12} className="p-3">
-                    {!payment.order && (
+                    {!payment.order && payment.status == 0 && (
                         <Card id={'orders'} className="p-3">
                             <Col xs={10}>
                                 <h4 className="card-title text-info"><i className="uil uil-truck"> </i> Seleccionar venta</h4>
@@ -242,6 +260,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => ({
     onGetPayment: (id) => dispatch(getPayment(id)),
     onGetOrders: (conditions) => dispatch(getOrders(conditions.all(), 500, 0)),
+    onCancelPayment: (id) => dispatch(deletePayment(id)),
     onRelateOrder: (paymentId, payload) => dispatch(applyPayment(paymentId, payload))
 })
 

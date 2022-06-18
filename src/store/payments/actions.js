@@ -1,7 +1,7 @@
 import {
     APPLY_PAYMENT,
     APPLY_PAYMENT_FAILED,
-    APPLY_PAYMENT_SUCCESS,
+    APPLY_PAYMENT_SUCCESS, DELETE_PAYMENT, DELETE_PAYMENT_FAILED, DELETE_PAYMENT_SUCCESS,
     GET_PAYMENT,
     GET_PAYMENT_FAILED,
     GET_PAYMENT_SUCCESS,
@@ -46,6 +46,21 @@ export const getPaymentSuccess = data => ({
 
 export const getPaymentFailed = error => ({
     type: GET_PAYMENT_FAILED,
+    payload: error,
+})
+
+export const deletePayment = id => ({
+    type: DELETE_PAYMENT,
+    id
+})
+
+export const deletePaymentSuccess = data => ({
+    type: DELETE_PAYMENT_SUCCESS,
+    payload: data,
+})
+
+export const deletePaymentFailed = error => ({
+    type: DELETE_PAYMENT_FAILED,
     payload: error,
 })
 

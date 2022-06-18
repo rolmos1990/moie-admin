@@ -5,7 +5,13 @@ import PropTypes from "prop-types";
 import {Button as ButtonMaterial} from "@material-ui/core";
 import Conditionals from "../../common/conditionals";
 import {FieldAsyncSelect, FieldDate, FieldNumber, FieldSelect, FieldText} from "../Fields";
-import {formatDateToServer, isValidObject, isValidOption} from "../../common/utils";
+import {
+    formatDateToServer,
+    formatDateToServerEndOfDay,
+    formatDateToServerStartOfDay,
+    isValidObject,
+    isValidOption
+} from "../../common/utils";
 import moment from "moment";
 import {DATE_MODES} from "../Fields/InputDate";
 
@@ -116,10 +122,10 @@ export const TableFilter = (props) => {
             }
             if (filter.filterType === "dateRange" && value && value.length > 0) {
                 if(moment(value[0]).isSame(moment(value[1]))){
-                    conditions.add(fieldName,formatDateToServer(value[0]),Conditionals.OPERATORS.LESS_THAN_OR_EQUAL);
+                    conditions.add(fieldName,formatDateToServerStartOfDay(value[0]), Conditionals.OPERATORS.BETWEEN,[formatDateToServerEndOfDay(value[0])]);
                 }
                 else {
-                    conditions.add(fieldName,formatDateToServer(value[0]), Conditionals.OPERATORS.BETWEEN,[formatDateToServer(value[1])]);
+                    conditions.add(fieldName,formatDateToServerStartOfDay(value[0]), Conditionals.OPERATORS.BETWEEN,[formatDateToServerEndOfDay(value[1])]);
                 }
             }
         }
