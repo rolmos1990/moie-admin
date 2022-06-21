@@ -315,17 +315,17 @@ const OrderList = props => {
                         </CardBody>
                     ): (
                         <div className="container">
-                            {!conciliationView && (
-                                <Col md={8}>
-                                    <HasPermissions permission={PERMISSIONS.ORDER_CREATE}>
-                                        <Link to={"/orders/create"} className="btn btn-primary waves-effect waves-light text-light">
-                                            <i className="mdi mdi-plus"> </i> Crear pedido
-                                        </Link>
-                                    </HasPermissions>
-                                </Col>
-                            )}
                             <div style={{"margin": "50px 30px"}}>
                             <h6><i className="text-info uil-shopping-cart-alt me-2"></i>No se han encontrado pedidos asociados</h6>
+                                {!conciliationView && (
+                                    <div className="text-center mt-2 mb-2">
+                                        <HasPermissions permission={PERMISSIONS.ORDER_CREATE}>
+                                            <Link to={"/orders/create"} className="btn btn-primary waves-effect waves-light text-light">
+                                                <i className="mdi mdi-plus"> </i> Crear pedido
+                                            </Link>
+                                        </HasPermissions>
+                                    </div>
+                                )}
                             </div>
                         </div>
                     )}
