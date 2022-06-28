@@ -180,7 +180,7 @@ const ProductList = props => {
 
         const product = {
             id: id,
-            status: _status
+            published: _status
         };
 
         onUpdateProduct(id, product);

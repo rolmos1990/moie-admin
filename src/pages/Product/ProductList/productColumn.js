@@ -195,14 +195,14 @@ const productColumns = (onDelete = false, onToogleActivate = false) => {
                     </li>
                     <li className="list-inline-item">
                         <HasPermissions permission={PERMISSIONS.PRODUCT_EDIT}>
-                            {item.status == 0 ? (
-                                <Tooltip placement="bottom" title="Activar" aria-label="add">
+                            {item.published == 0 ? (
+                                <Tooltip placement="bottom" title="Publicar" aria-label="add">
                                     <Button color="default" className="text-success" onClick={() => onToogleActivate(item.id, 1)}>
                                         <i className="uil uil-check font-size-18"> </i>
                                     </Button>
                                 </Tooltip>
                             ) : (
-                                <Tooltip placement="bottom" title="Desactivar" aria-label="add">
+                                <Tooltip placement="bottom" title="Despublicar" aria-label="add">
                                     <Button color="default" className="text-muted" onClick={() => onToogleActivate(item.id, 0)}>
                                         <i className="uil uil-trash font-size-18"> </i>
                                     </Button>
