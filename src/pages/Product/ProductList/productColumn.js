@@ -7,7 +7,7 @@ import {STATUS} from "../../../common/constants";
 import Conditionals from "../../../common/conditionals";
 import {getImageByQuality, priceFormat, STATUS_OPTIONS, YES_NO_OPTIONS} from "../../../common/utils";
 import {CATEGORY, SIZE} from "../../../helpers/url_helper";
-import {Tooltip} from "@material-ui/core";
+import {Button, Tooltip} from "@material-ui/core";
 import Images from "../../../components/Common/Image";
 import HasPermissions from "../../../components/HasPermissions";
 import {PERMISSIONS} from "../../../helpers/security_rol";
@@ -15,7 +15,7 @@ import HasPermissionsFunc from "../../../components/HasPermissionsFunc";
 
 const badgeStyles = {minWidth: '30px', margin: '2px'}
 
-const productColumns = (onDelete = false) => {
+const productColumns = (onDelete = false, onToogleActivate = false) => {
     let columns = [
         {
             text: "Código",
@@ -191,6 +191,23 @@ const productColumns = (onDelete = false) => {
                             <Link to={`/product/${item.id}`} className="px-2 text-primary">
                                 <i className="uil uil-pen font-size-18"> </i>
                             </Link>
+                        </HasPermissions>
+                    </li>
+                    <li className="list-inline-item">
+                        <HasPermissions permission={PERMISSIONS.PRODUCT_EDIT}>
+                            {item.status == 0 ? (
+                                <Tooltip placement="bottom" title="Activar" aria-label="add">
+                                    <Button color="default" className="text-success" onClick={() => onToogleActivate(item.id, 1)}>
+                                        <i className="uil uil-check font-size-18"> </i>
+                                    </Button>
+                                </Tooltip>
+                            ) : (
+                                <Tooltip placement="bottom" title="Desactivar" aria-label="add">
+                                    <Button color="default" className="text-muted" onClick={() => onToogleActivate(item.id, 0)}>
+                                        <i className="uil uil-trash font-size-18"> </i>
+                                    </Button>
+                                </Tooltip>
+                            )}
                         </HasPermissions>
                     </li>
                     {/*<li className="list-inline-item">

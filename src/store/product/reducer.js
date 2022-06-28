@@ -130,7 +130,7 @@ const product = (state = initialState, action) => {
         case UPDATE_PRODUCT_SUCCESS:
             state = {
                 ...state,
-                refresh: true,
+                refresh: !state.refresh,
                 loading: false,
             }
             break

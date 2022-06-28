@@ -73,7 +73,7 @@ const BatchQueriesForm = (props) => {
                 const ll = p.productSize.filter((s) => s.quantity > 0).map(s => {
                     return `TALLA ${s.name}: ${s.label}`
                 })
-                return `${p.reference}\n${ll.join("\n")}`
+                return `${p.reference}\n${ll.join("\n")}\n`
             })
 
             setTextToCopy(listToCopy.join("\n"));

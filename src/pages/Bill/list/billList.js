@@ -77,7 +77,7 @@ const BillList = props => {
         conditions.add('office', '', Conditionals.OPERATORS.NOT_NULL);
         conditions.add('deliveryMethod', DELIVERY_METHODS_IDS.INTERRAPIDISIMO, Conditionals.OPERATORS.EQUAL);
         conditions.add('orderDelivery.deliveryType', CHARGE_ON_DELIVERY, Conditionals.OPERATORS.EQUAL);
-        conditions.add('status', [ORDERS_ENUM.PRINTED, ORDERS_ENUM.SENT].join("::"), Conditionals.OPERATORS.IN);
+        conditions.add('status', [ORDERS_ENUM.PRINTED, ORDERS_ENUM.SENT, ORDERS_ENUM.CONCILIED, ORDERS_ENUM.FINISHED].join("::"), Conditionals.OPERATORS.IN);
 
         setOrderListConditions(conditions.condition);
         setOpenOrdersModal(true);

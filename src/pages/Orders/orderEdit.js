@@ -112,7 +112,7 @@ const OrderEdit = (props) => {
             onResumeOrder(order.id);
             onPrintOrder(order.id);
 
-            const orderDelivery = order.orderDelivery;
+            const orderDelivery = order?.orderDelivery;
 
             let newCar = {
                 ...car,
@@ -154,7 +154,6 @@ const OrderEdit = (props) => {
                     });
                 })
             }
-            // onGetProducts(newCar.products.map(prod => prod.origin.id))
             onUpdateCar(newCar)
             setOrderData(order);
 
@@ -259,7 +258,7 @@ const OrderEdit = (props) => {
         toggleProductsModal();
         if (car.products) {
             const order = {
-                products: car.products.map(prod => ({
+                products: car && car.products && car.products.map(prod => ({
                     id: prod.origin.id,
                     productSize: prod.sizeId,
                     quantity: prod.quantity,
@@ -300,7 +299,7 @@ const OrderEdit = (props) => {
 
     //Permite cancelar la orden
     const canCancel = () => {
-        const isPrevPayment = order.orderDelivery && ([1, 2].includes(order.orderDelivery.deliveryType));
+        const isPrevPayment = order?.orderDelivery && ([1, 2].includes(order?.orderDelivery.deliveryType));
         const canCancelPreviewPayment = [ORDERS_ENUM.PENDING].includes(parseInt(order.status)) && isPrevPayment;
         const canCancelChargeOnDelivery = [ORDERS_ENUM.PENDING, ORDERS_ENUM.CONFIRMED, ORDERS_ENUM.PRINTED, ORDERS_ENUM.SENT].includes(parseInt(order.status)) && !isPrevPayment;
         if (order && (canCancelPreviewPayment || canCancelChargeOnDelivery)) {
@@ -312,7 +311,7 @@ const OrderEdit = (props) => {
 
     //Permite confirmar la orden
     const canConfirm = () => {
-        if (order && order.status === ORDERS_ENUM.PENDING && order.orderDelivery && ![1].includes(order.orderDelivery.deliveryType)) {
+        if (order && order.status === ORDERS_ENUM.PENDING && order?.orderDelivery && ![1].includes(order?.orderDelivery.deliveryType)) {
             return true;
         } else {
             return false;
@@ -321,7 +320,7 @@ const OrderEdit = (props) => {
 
     const canEdit = () => {
         if (order) {
-            const isPrevPayment = order.orderDelivery && ([1, 2].includes(order.orderDelivery.deliveryType));
+            const isPrevPayment = order?.orderDelivery && ([1, 2].includes(order?.orderDelivery.deliveryType));
             const canEditPreviewPayment = [ORDERS_ENUM.PENDING, ORDERS_ENUM.CONCILIED, ORDERS_ENUM.PRINTED].includes(parseInt(order.status)) && isPrevPayment;
             const canEditChargeOnDelivery = [ORDERS_ENUM.PENDING, ORDERS_ENUM.CONFIRMED, ORDERS_ENUM.PRINTED].includes(parseInt(order.status)) && !isPrevPayment;
             if (order && (canEditPreviewPayment || canEditChargeOnDelivery)) {
@@ -335,7 +334,7 @@ const OrderEdit = (props) => {
     }
 
     const canUpdateTracking = () => {
-        const isPrevPayment = order.orderDelivery && order.orderDelivery && ([1, 2].includes(order.orderDelivery.deliveryType));
+        const isPrevPayment = order?.orderDelivery && order?.orderDelivery && ([1, 2].includes(order?.orderDelivery.deliveryType));
         if((order.deliveryMethod?.id === DELIVERY_METHODS_IDS.OTRO) && !isPrevPayment && order.status === 3){
             return true;
         }
@@ -347,7 +346,7 @@ const OrderEdit = (props) => {
 
     //Permite imprimir la orden
     const canPrint = () => {
-        const isPrevPayment = order.orderDelivery && ([1, 2].includes(order.orderDelivery.deliveryType));
+        const isPrevPayment = order?.orderDelivery && ([1, 2].includes(order?.orderDelivery.deliveryType));
         if (order && order.status < ORDERS_ENUM.CONCILIED) {
             return true;
         } else if (order && order.status === ORDERS_ENUM.CONCILIED && isPrevPayment) {
@@ -358,7 +357,7 @@ const OrderEdit = (props) => {
     }
 
     const isNextPrint = () => {
-        const isPrevPayment = order.orderDelivery && ([1, 2].includes(order.orderDelivery.deliveryType));
+        const isPrevPayment = order?.orderDelivery && ([1, 2].includes(order?.orderDelivery.deliveryType));
 
         if (order.status === ORDERS_ENUM.CONFIRMED || (order && order.status === ORDERS_ENUM.CONCILIED && isPrevPayment)) {
             return true;
@@ -669,7 +668,7 @@ const OrderEdit = (props) => {
                                     </Row>
                                     {!showAsTable && (
                                         <Row>
-                                            {map(orderData.orderDetails, (product, k) => (
+                                            {orderData.orderDetails && map(orderData.orderDetails, (product, k) => (
                                                 <div key={k} className="col-md-6 mb-2">
                                                     <div className="prod-box">
                                                         <Row>
@@ -749,7 +748,7 @@ const OrderEdit = (props) => {
                                                     </tr>
                                                     </thead>
                                                     <tbody>
-                                                    {map(orderData.orderDetails, (product, key) => (
+                                                    {orderData && orderData.orderDetails && map(orderData.orderDetails, (product, key) => (
                                                         <tr key={key}>
                                                             <td style={{width: '10%'}}>
                                                                 <HtmlTooltip
@@ -768,7 +767,7 @@ const OrderEdit = (props) => {
                                                             <td style={{width: '15%'}} className="text-center">{product.size}</td>
                                                             <td style={{width: '10%'}} className="text-center">{product.quantity}</td>
                                                             <td style={{width: '10%'}} className="text-end">{priceFormat(product.price)}</td>
-                                                            <td style={{width: '10%'}} className="text-center">{product.discountPercentage || 0}%</td>
+                                                            <td style={{width: '10%'}} className="text-center">{product.discountPercent || 0}%</td>
                                                             <td style={{width: '10%'}} className="text-end">{priceFormat(product.discount)}</td>
                                                             <td style={{width: '15%'}} className="text-end">{priceFormat(product.total)}</td>
                                                         </tr>

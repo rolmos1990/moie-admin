@@ -170,22 +170,22 @@ const ProductEdit = (props) => {
         }
 
         if (!isEdit) {
-            data.status = 1;
+            data.status = 0;
             onCreateProduct(data, props.history)
         } else {
             onUpdateProduct(props.match.params.id, data, props.history)
         }
 
-        if (!materialsList.some(op => op.name === data.material)) {
-            onCreateFieldOption({groups: GROUPS.MATERIALS, name: data.material, value: data.material}, props.history);
-        }
+        //if (!materialsList.some(op => op.name === data.material)) {
+            //onCreateFieldOption({groups: GROUPS.MATERIALS, name: data.material, value: data.material}, props.history);
+        //}
+
         if (!providerList.some(op => op.name === data.provider)) {
             onCreateFieldOption({groups: GROUPS.PROVIDERS, name: data.provider, value: data.provider}, props.history);
         }
     }
 
     const handleDeleteProductImage = (product, number) => {
-        console.log("BORRANDO ::: " , product,number);
         onDeleteProductImage(product, number)
     }
 
@@ -303,7 +303,9 @@ const ProductEdit = (props) => {
                                                                 options={sizesList}
                                                                 defaultValue={sizeDefault}
                                                                 onChange={(e) => {
-                                                                    setSizeSelected(sizes.find(s => s.id === e.value));
+                                                                    if(sizes) {
+                                                                        setSizeSelected(sizes.find(s => s.id === e.value));
+                                                                    }
                                                                 }}
                                                                 disabled={hasOrders || product.id}
                                                                 isSearchable

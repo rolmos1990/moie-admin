@@ -27,8 +27,8 @@ const UserEdit = (props) => {
 
     //carga inicial
     useEffect(() => {
+        getRoles();
         if (isEdit && getUser) {
-            getRoles();
             getUser(props.match.params.id);
         }
     }, [getUser]);

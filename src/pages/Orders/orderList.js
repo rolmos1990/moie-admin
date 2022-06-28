@@ -25,7 +25,7 @@ import OutsideClickHandler from "../../components/OutsideClickHandler";
 import {changePreloader} from "../../store/layout/actions";
 
 const OrderList = props => {
-    const {orders, meta, onGetOrders, onResetOrders, refresh, customActions, conditionals, showAsModal, conciliation, onChangePreloader} = props;
+    const {orders, meta, onGetOrders, onResetOrders, refresh, customActions, conditionals, showAsModal, conciliation, onChangePreloader, externalView} = props;
     const [statesList, setStatesList] = useState([])
     const [filter, setFilter] = useState(false);
     const [conditional, setConditional] = useState(null);
@@ -209,7 +209,9 @@ const OrderList = props => {
                                                             <div className="search-box ms-2">
                                                                 <h4 className="text-info">
                                                                     <i className="uil-shopping-cart-alt me-2"></i>
-                                                                    {conciliationView ? `Conciliar pedidos (${ordersSelected.length})` : 'Pedidos'}
+                                                                    {externalView ? 'Seleccionar un Pedido' : (
+                                                                        conciliationView ? `Conciliar pedidos (${ordersSelected.length})` : 'Pedidos'
+                                                                    )}
                                                                 </h4>
                                                             </div>
                                                         </div>
@@ -232,7 +234,7 @@ const OrderList = props => {
                                                                         </Button>
                                                                     </Tooltip>
                                                                 )}
-                                                                {!conciliationView && (
+                                                                {!conciliationView && !externalView && (
                                                                     <>
                                                                         <Tooltip placement="bottom" title="Impresión multiple" aria-label="add">
                                                                             <Button color="primary" onClick={() => printOrders()}
@@ -240,11 +242,6 @@ const OrderList = props => {
                                                                                 <i className="mdi mdi-printer"> </i>
                                                                             </Button>
                                                                         </Tooltip>
-                                                                        {/*  <Tooltip placement="bottom" title="Conciliar pedidos" aria-label="add">
-                                                                        <Button color="primary" onClick={() => showConciliationView()}>
-                                                                            <i className="mdi mdi-list-status"> </i>
-                                                                        </Button>
-                                                                    </Tooltip>*/}
                                                                         <Tooltip placement="bottom" title="Confirmar Conciliados" aria-label="add">
                                                                             <Button color="primary" onClick={() => setOpenConfirmConciliationModal(true)}>
                                                                                 <i className="mdi mdi-check"> </i>
@@ -317,7 +314,7 @@ const OrderList = props => {
                         <div className="container">
                             <div style={{"margin": "50px 30px"}}>
                             <h6><i className="text-info uil-shopping-cart-alt me-2"></i>No se han encontrado pedidos asociados</h6>
-                                {!conciliationView && (
+                                {!conciliationView && !externalView && (
                                     <div className="text-center mt-2 mb-2">
                                         <HasPermissions permission={PERMISSIONS.ORDER_CREATE}>
                                             <Link to={"/orders/create"} className="btn btn-primary waves-effect waves-light text-light">

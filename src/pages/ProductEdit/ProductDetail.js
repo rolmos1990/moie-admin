@@ -116,7 +116,9 @@ const ProductDetail = (props) => {
                                     </Col>
                                     <Col md={12}>
                                         <ul style={{listStyle: 'none'}}>
-                                            <li><b>Tipo:</b> {productData.size?.name}</li>
+                                            {productData.size && (
+                                                <li><b>Tipo:</b> {productData.size?.name}</li>
+                                            )}
                                             <li><b>Categoria:</b> {productData.category?.name}</li>
                                             <li><b>Material:</b> {productData.material}</li>
                                             <li><b>Peso (g):</b> {productData.weight}</li>

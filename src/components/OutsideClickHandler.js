@@ -20,7 +20,22 @@ class OutsideClickHandler extends React.Component {
             this.wrapperRef.current &&
             !this.wrapperRef.current.contains(event.target)
         ) {
-            this.props.onOutsideClick();
+            //Parametros de configuracion
+            const _mainClassForClose = "main-content";
+            let _parent = event.target;
+            let _decrement = 10;
+            let _open = true;
+
+            //search and close process
+            while((_parent.parentElement && _decrement > 0) && _open){
+                const _className = _parent.className;
+                if(_className == _mainClassForClose){
+                    this.props.onOutsideClick();
+                    _open = false;
+                }
+                _parent = _parent.parentElement;
+                _decrement --;
+            }
         }
     };
 

@@ -69,7 +69,11 @@ export const PERMISSIONS = {
     OFFICE_DOWNLOAD: 'office.download',
     BILL_DOWNLOAD: 'bill.download',
     POSTSALE_DOWNLOAD: 'postsale.download',
-    CATEGORY_DOWNLOAD: 'category.download'
+    CATEGORY_DOWNLOAD: 'category.download',
+    DELIVERY_LOCALITY_CREATE: 'deliverylocality.create',
+    DELIVERY_LOCALITY_EDIT: 'deliverylocality.edit',
+    DELIVERY_LOCALITY_SHOW: 'deliverylocality.show',
+    DELIVERY_LOCALITY_LIST: 'deliverylocality.list',
 };
 export const hasPermissionAccess = (roles, permission) => {
     return true;

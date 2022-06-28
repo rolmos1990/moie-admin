@@ -239,7 +239,7 @@ const OfficeEdit = (props) => {
     return (
         <React.Fragment>
             <CustomModal title={"Agregar pedidos"} size="lg" showFooter={false} isOpen={openOrdersModal} onClose={onCloseModal}>
-                <OrderList customActions={onAcceptModal} showAsModal={true} conditionals={orderListConditions}/>
+                <OrderList customActions={onAcceptModal} showAsModal={true} conditionals={orderListConditions} externalView/>
             </CustomModal>
             <div className="page-content">
                 <Container fluid>

@@ -83,7 +83,9 @@ const ProductSize = props => {
             let mapElement = map[key];
             if (!mapElement) {
                 mapElement = {color: ps.color, sizes: {}};
-                template.sizes.forEach(size => mapElement.sizes[size] = 0)
+                if(template && template.sizes) {
+                    template.sizes.forEach(size => mapElement.sizes[size] = 0)
+                }
             }
             mapElement.sizes[ps.name] = ps.quantity;
             map[key] = mapElement;
@@ -124,11 +126,13 @@ const ProductSize = props => {
     const calculateTotals = () => {
         const totals = {total: 0};
         productSizesList.forEach((model) => {
-            template.sizes.forEach((size) => {
-                if (!totals[size]) totals[size] = 0;
-                totals[size] += parseInt(model.sizes[size]);
-                totals.total += parseInt(model.sizes[size]);
-            })
+            if(template && template.sizes) {
+                template.sizes.forEach((size) => {
+                    if (!totals[size]) totals[size] = 0;
+                    totals[size] += parseInt(model.sizes[size]);
+                    totals.total += parseInt(model.sizes[size]);
+                })
+            }
         })
         setSizeTotals(totals);
     }
@@ -158,7 +162,7 @@ const ProductSize = props => {
                                 </tr>
                                 </thead>
                                 <tbody>
-                                {map(productSizesList, (model, k1) => (
+                                {productSizesList && map(productSizesList, (model, k1) => (
                                     <tr key={'tr_' + k1}>
                                         <td>
                                             <FieldText
@@ -166,7 +170,7 @@ const ProductSize = props => {
                                                 name={"color_" + k1}
                                                 placeholder={'Ingrese el color'}
                                                 minLength={3}
-                                                maxLength={20}
+                                                maxLength={40}
                                                 value={model.color}
                                                 defaultValue={model.color}
                                                 onBlur={(e) => handleChangeColors(k1, e.target.value)}
@@ -174,7 +178,7 @@ const ProductSize = props => {
                                                 disabled={readonly}
                                                 required/>
                                         </td>
-                                        {map(template.sizes, (size, k2) => (
+                                        {template && template.sizes && map(template.sizes, (size, k2) => (
                                             <td key={'td_' + k1 + '_' + k2} style={{minWidth: '30px'}} className="text-center">
                                                 <select
                                                     id={"select_" + k1 + '_' + k2}
@@ -202,11 +206,12 @@ const ProductSize = props => {
                                 ))}
                                 <tr>
                                     <th>Totales</th>
-                                    {map(template.sizes, (size, k) => (
+                                    {template && template.sizes && map(template.sizes, (size, k) => (
                                         <th key={'td_' + k} style={{minWidth: '30px'}} className="text-center">
-                                            {sizeTotals[size]}
+                                    {sizeTotals[size]}
                                         </th>
-                                    ))}
+                                        ))
+                                    }
                                     <th>{sizeTotals.total}</th>
                                 </tr>
                                 </tbody>
