@@ -26,8 +26,8 @@ const SortableItem = SortableElement(({value, index}) => (
                     styles={{height: '250px', width: '303px', borderRadius: '8px', 'marginLeft': '4px'}}
             />
             <div style={{ position:"absolute", bottom:"20px" }}>
-                <span className={"badge rounded-pill p-2  bg-soft-primary m-2"}>{value.reference}</span>
-                <span className={"badge rounded-pill p-2  bg-soft-secondary"}>{priceFormat(value.price)}</span>
+                <span style={{"fontWeight": "bold", "fontSize": "15px"}} className={"text-danger border badge rounded-pill p-2  bg-soft-danger m-2"}>{value.reference}</span>
+                <span style={{"fontWeight": "bold"}} className={"border text-white badge rounded-pill p-2  bg-soft-secondary"}>{priceFormat(value.price)}</span>
             </div>
         </div>
     </Col>
@@ -35,7 +35,7 @@ const SortableItem = SortableElement(({value, index}) => (
 
 const SortableList = SortableContainer(({items}) => {
     return (
-            <div style={{margin: "80px 30px"}}>
+            <div style={{margin: "80px 30px",minWidth: "920px"}}>
             <Row>
             {items && items.map((value, index) => (
                 <SortableItem key={`item-${value.id}`} index={index} value={value} />
