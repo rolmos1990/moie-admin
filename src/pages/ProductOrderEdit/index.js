@@ -20,7 +20,7 @@ const SortableItem = SortableElement(({value, index}) => (
     <Col xs={2} className="text-center" style={{padding: '20px', position:"relative"}}>
         <div className={`border-1`} id={`product-${index}`} role="tabpanel">
             <Images src={`${getImageByQuality(value.productImage[0], 'medium')}`}
-                    alt={""}
+                    alt={"image"}
                     height={250}
                     className="img-fluid d-block"
                     styles={{height: '250px', width: '303px', borderRadius: '8px', 'marginLeft': '4px'}}
