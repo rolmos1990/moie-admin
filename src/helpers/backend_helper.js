@@ -19,6 +19,8 @@ const fetchProductsApi = params => get(url.PRODUCT, {}, params);
 const fetchProductApi = data => get((data && data.id) ? `${url.PRODUCT}/${data.id}` : url.PRODUCT, data);
 const registerProductApi = data => post(url.PRODUCT, data);
 const updateProductApi = (id, data) => put(`${url.PRODUCT}/${id}`, data);
+const reorderProductApi = (id, data) => post(`${url.PRODUCT}/${id}/reorder`, data);
+
 //const deleteProductApi = (id) => del(`${url.DELETE_PRODUCT}/${id}`);
 const updateProductSizeListApi = (productId, data) => post(`${url.PRODUCT}/${productId}/changeSize`, data);
 const getProductsPendingApi = (productId) => get(`${url.PRODUCT}/${productId}/productPendings`, {}, {});
@@ -206,6 +208,7 @@ export {
     fetchProductApi,
     registerProductApi,
     updateProductApi,
+    reorderProductApi,
 
     fetchCategoriesApi,
     fetchCategoryApi,

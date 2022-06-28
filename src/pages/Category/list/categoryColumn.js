@@ -68,6 +68,13 @@ const categoryColumns = (onDelete = false) => {
                             </Link>
                         </HasPermissions>
                     </li>
+                    <li className="list-inline-item">
+                        <HasPermissions permission={PERMISSIONS.PRODUCT_ORDER}>
+                            <Link to={`/productOrderEdit/${item.id}`} className="px-2 text-primary">
+                                <i className="uil uil-sort font-size-18"> </i>
+                            </Link>
+                        </HasPermissions>
+                    </li>
                 </ul>
             ),
         },);

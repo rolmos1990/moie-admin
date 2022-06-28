@@ -4,7 +4,7 @@ import {
     GET_PRODUCT_SUCCESS,
     GET_PRODUCTS,
     GET_PRODUCTS_FAILED,
-    GET_PRODUCTS_SUCCESS,
+    GET_PRODUCTS_SUCCESS, ORDER_PRODUCT, ORDER_PRODUCT_FAILED, ORDER_PRODUCT_SUCCESS,
     QUERY_PENDING_PRODUCTS,
     QUERY_PRODUCTS,
     QUERY_PRODUCTS_FAILED,
@@ -138,3 +138,25 @@ export const queryProductsSuccess = (data, meta, node) => ({
     payload: data,
     node: node,
 })
+
+export const reorderProduct = (id, data, history) => {
+    return {
+        type: ORDER_PRODUCT,
+        payload: { id, data, history },
+    }
+}
+
+export const reorderProductSuccess = data => {
+    return {
+        type: ORDER_PRODUCT_SUCCESS,
+        payload: data,
+    }
+}
+
+
+export const reorderProductFail = error => {
+    return {
+        type: ORDER_PRODUCT_FAILED,
+        payload: error,
+    }
+}

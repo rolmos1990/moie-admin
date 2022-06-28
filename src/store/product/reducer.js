@@ -14,7 +14,8 @@ import {
     RESET_PRODUCT,
     UPDATE_PRODUCT,
     UPDATE_PRODUCT_FAILED,
-    UPDATE_PRODUCT_SUCCESS
+    UPDATE_PRODUCT_SUCCESS,
+    ORDER_PRODUCT, ORDER_PRODUCT_SUCCESS, ORDER_PRODUCT_FAILED,
 } from "./actionTypes";
 
 const initialState = {
@@ -135,6 +136,25 @@ const product = (state = initialState, action) => {
             }
             break
         case UPDATE_PRODUCT_FAILED:
+            state = {
+                ...state,
+                loading: false,
+            }
+            break
+        case ORDER_PRODUCT:
+            state = {
+                ...state,
+                loading: true,
+            }
+            break
+        case ORDER_PRODUCT_SUCCESS:
+            state = {
+                ...state,
+                refresh: !state.refresh,
+                loading: false,
+            }
+            break
+        case ORDER_PRODUCT_FAILED:
             state = {
                 ...state,
                 loading: false,

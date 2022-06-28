@@ -5,6 +5,7 @@ export const PERMISSIONS = {
     PRODUCT_EDIT: 'product.edit',
     PRODUCT_SHOW: 'product.show',
     PRODUCT_LIST: 'product.list',
+    PRODUCT_ORDER: 'product.order',
     CATEGORY_CREATE: 'category.create',
     CATEGORY_EDIT: 'category.edit',
     CATEGORY_SHOW: 'category.show',

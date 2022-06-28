@@ -1,7 +1,15 @@
 import {all, call, fork, put, takeEvery} from "redux-saga/effects"
 
 //Account Redux states
-import {GET_PRODUCT, GET_PRODUCTS, QUERY_PENDING_PRODUCTS, QUERY_PRODUCTS, REGISTER_PRODUCT, UPDATE_PRODUCT} from "./actionTypes"
+import {
+    GET_PRODUCT,
+    GET_PRODUCTS,
+    ORDER_PRODUCT,
+    QUERY_PENDING_PRODUCTS,
+    QUERY_PRODUCTS,
+    REGISTER_PRODUCT,
+    UPDATE_PRODUCT
+} from "./actionTypes"
 
 import {
     getProductFailed,
@@ -11,12 +19,19 @@ import {
     queryProductsFailed,
     queryProductsSuccess,
     registerProductFailed,
-    registerProductSuccess,
+    registerProductSuccess, reorderProductFail, reorderProductSuccess,
     updateProductFail,
     updateProductSuccess
 } from "./actions"
 
-import {fetchProductApi, fetchProductsApi, getProductsPendingApi, registerProductApi, updateProductApi} from "../../helpers/backend_helper"
+import {
+    fetchProductApi,
+    fetchProductsApi,
+    getProductsPendingApi,
+    registerProductApi,
+    reorderProductApi,
+    updateProductApi
+} from "../../helpers/backend_helper"
 
 import Conditionals from "../../common/conditionals";
 import {showResponseMessage} from "../../helpers/service";
@@ -31,12 +46,14 @@ const ACTION_NAME_LIST      =   GET_PRODUCTS;
 const ACTION_NAME_GET       =   GET_PRODUCT;
 const ACTION_NAME_CREATE    =   REGISTER_PRODUCT;
 const ACTION_NAME_UPDATE    =   UPDATE_PRODUCT;
+const ACTION_NAME_REORDER    =  ORDER_PRODUCT;
 
 const PENDING_PRODUCTS_API_REQUEST   =   getProductsPendingApi;
 const LIST_API_REQUEST      =   fetchProductsApi;
 const GET_API_REQUEST       =   fetchProductApi;
 const POST_API_REQUEST      =   registerProductApi;
 const PUT_API_REQUEST       =   updateProductApi;
+const REORDER_API_REQUEST       =   reorderProductApi;
 
 //actions
 const QUERY_SUCCESS_ACTION  =   queryProductsSuccess;
@@ -49,6 +66,8 @@ const CREATE_SUCCESS_ACTION =   registerProductSuccess;
 const CREATE_FAILED_ACTION  =   registerProductFailed;
 const UPDATE_SUCCESS_ACTION =   updateProductSuccess;
 const UPDATE_FAILED_ACTION  =   updateProductFail;
+const REORDER_SUCCESS_ACTION =   reorderProductSuccess;
+const REORDER_FAILED_ACTION  =   reorderProductFail;
 
 
 function* get({ id }) {
@@ -112,6 +131,16 @@ function* update({ payload: { id, data, history } }) {
     }
 }
 
+function* reorder({ payload: { id, data, history } }) {
+    try {
+        const response = yield call(REORDER_API_REQUEST, id, data)
+        showResponseMessage(response, "Productos actualizados!")
+        yield put(REORDER_SUCCESS_ACTION(response))
+    } catch (error) {
+        yield put(REORDER_FAILED_ACTION(error))
+    }
+}
+
 export function* watchProduct() {
     yield takeEvery(ACTION_NAME_CREATE, register);
     yield takeEvery(ACTION_NAME_UPDATE, update);
@@ -119,6 +148,7 @@ export function* watchProduct() {
     yield takeEvery(ACTION_NAME_GET, get)
     yield takeEvery(ACTION_NAME_QUERY, queryData)
     yield takeEvery(ACTION_NAME_QUERY_PENDING_PRODUCTS, getPendingProducts)
+    yield takeEvery(ACTION_NAME_REORDER, reorder)
 }
 
 function* productSaga() {
