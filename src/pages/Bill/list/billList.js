@@ -98,7 +98,7 @@ const BillList = props => {
     return (
         <>
             <CustomModal title={"Agregar pedidos"} size="lg" showFooter={false} isOpen={openOrdersModal} onClose={onCloseModal}>
-                <OrderList customActions={onAcceptModal} showAsModal={true} conditionals={orderListConditions}/>
+                <OrderList customActions={onAcceptModal} showAsModal={true} conditionals={orderListConditions} externalView/>
             </CustomModal>
             <CustomModal title={"Generar Reporte"} showFooter={false} isOpen={openReportModal} onClose={() => setOpenReportModal(false)}>
                 <BillGenerateReportForm onCloseModal={(reload) => setOpenReportModal(false)}/>
