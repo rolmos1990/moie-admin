@@ -7,7 +7,7 @@ import PropTypes from "prop-types";
 import Breadcrumb from "../../components/Common/Breadcrumb";
 import {formatDate} from "../../common/utils";
 import NoDataIndication from "../../components/Common/NoDataIndication";
-import {createCreditNote, getBill} from "../../store/bill/actions";
+import {createCreditNote, getBill, sendInvoice} from "../../store/bill/actions";
 import {ConfirmationModalAction} from "../../components/Modal/ConfirmationModal";
 import {BILL_STATUS} from "../../common/constants";
 import {PERMISSIONS} from "../../helpers/security_rol";
@@ -36,6 +36,15 @@ const BillDetail = (props) => {
         });
     }
 
+    const createInvoice = () => {
+        ConfirmationModalAction({
+            title: `¿Está seguro de reenviar esta factura # ${bill.id}?`,
+            description: 'Esta acción no puede revertirse.',
+            id: '_creditInvoiceModal',
+            onConfirm: () => props.onCreateInvoice(bill.id)
+        });
+    }
+
     const formatLog = (_log) => {
         if (_log) {
             const replaceRegex = /Paso+/g;
@@ -53,6 +62,11 @@ const BillDetail = (props) => {
         return isSent || isFailedCreditNote;
     }
 
+    const canRetry = () => {
+        const isNotSent = bill.status !== BILL_STATUS.SENT;
+        return isNotSent;
+    }
+
     return (bill && bill.id) ? (
         <React.Fragment>
             <div className="page-content">
@@ -67,6 +81,13 @@ const BillDetail = (props) => {
                                 </div>
                                 <div className={"mb-3 float-md-end"}>
                                     <div className="button-items">
+                                        {canRetry() && (
+                                            <Tooltip placement="bottom" title="Reenviar Factura" aria-label="add">
+                                                <button type="button" color="primary" className="btn-sm btn btn-outline-info waves-effect waves-light" onClick={() => createInvoice()}>
+                                                    <i className={`uil-repeat text-primary`}> </i>
+                                                </button>
+                                            </Tooltip>
+                                        )}
                                         {canCancel() && (
                                             <Tooltip placement="bottom" title="Generar nota de crédito" aria-label="add">
                                                 <button type="button" color="primary" className="btn-sm btn btn-outline-info waves-effect waves-light" onClick={() => createCreditNote()}>
@@ -177,6 +198,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => ({
     onGetBill: (id) => dispatch(getBill(id)),
     onCreateCreditNote: (id) => dispatch(createCreditNote(id)),
+    onCreateInvoice: (id) => dispatch(sendInvoice(id)),
 })
 
 export default withRouter(

@@ -13,6 +13,7 @@ const fetchCustomersApi = data => get(url.CUSTOMER, {}, data);
 const fetchCustomer = data => get((data && data.id) ? `${url.CUSTOMER}/${data.id}` : url.CUSTOMER, data);
 const deleteCustomerApi = (id) => del(`${url.CUSTOMER}/${id}`);
 const fetchCustomerRegisteredsApi = () => get(`${url.CUSTOMER}/stats/registereds`, {});
+const fetchCustomerOrderFinishedApi = (data) => post(`${url.CUSTOMER}/get/salesFinished`, data);
 
 //products
 const fetchProductsApi = params => get(url.PRODUCT, {}, params);
@@ -130,6 +131,7 @@ const confirmBillApi = (id) => post(`${url.BILLS}/${id}/confirm`);
 const addOrderBillApi = (id, data, params) => post(`${url.BILLS}/${id}/addOrder`, data, {params: params});
 const createCreditNoteApi = (id, data) => post(`${url.BILLS}/CreditMemo/${id}`, data, {});
 const generateReportApi = (data) => post(`${url.BILLS}/generateReport`, data, {});
+const sendInvoiceApi = (id, data) => post(`${url.BILLS}/sendInvoice/${id}`, data, {});
 
 //bills Config
 const fetchBillConfigsApi = params => get(url.BILL_CONFIGS, {}, params);
@@ -191,6 +193,7 @@ export {
     fetchCustomersApi,
     deleteCustomerApi,
     fetchCustomerRegisteredsApi,
+    fetchCustomerOrderFinishedApi,
     fetchProductsApi,
 
     fetchStatesApi,
@@ -307,6 +310,7 @@ export {
     confirmBillApi,
     addOrderBillApi,
     createCreditNoteApi,
+    sendInvoiceApi,
     generateReportApi,
 
     fileOfficeTemplate,

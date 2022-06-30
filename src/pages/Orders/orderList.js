@@ -23,6 +23,7 @@ import {PERMISSIONS} from "../../helpers/security_rol";
 import HasPermissions from "../../components/HasPermissions";
 import OutsideClickHandler from "../../components/OutsideClickHandler";
 import {changePreloader} from "../../store/layout/actions";
+import {fetchCustomerOrderFinishedApi} from "../../helpers/backend_helper";
 
 const OrderList = props => {
     const {orders, meta, onGetOrders, onResetOrders, refresh, customActions, conditionals, showAsModal, conciliation, onChangePreloader, externalView} = props;
@@ -38,6 +39,7 @@ const OrderList = props => {
     const [openReportConciliationModal, setOpenReportConciliationModal] = useState(false);
     const [columns, setColumns] = useState(orderColumns(setOrderSelected, showAsModal, false));
     const [selectAll, setSelectAll] = useState(false);
+    const [orderFinished, setOrderFinished] = useState([]);
 
     const pageOptions = {
         sizePerPage: DEFAULT_PAGE_LIMIT,
@@ -53,8 +55,8 @@ const OrderList = props => {
         if (null !== conciliationView) {
             onFilterAction(conditional);
         }
-        setColumns(orderColumns(setOrderSelected, showAsModal, conciliationView));
-    }, [conciliationView])
+        setColumns(orderColumns(setOrderSelected, showAsModal, conciliationView, orderFinished));
+    }, [conciliationView, orderFinished])
 
     useEffect(() => {
         if (conciliationView && !conciliation.loading && conciliation.success) {
@@ -71,7 +73,16 @@ const OrderList = props => {
     }, [onGetOrders])
 
     useEffect(() => {
-        setStatesList(orders)
+        setStatesList(orders);
+
+        const customers = [6,7];
+        fetchCustomerOrderFinishedApi({customers: customers}).then(resp => {
+            if(resp){
+                // resp -> [{id,name,qty}]
+                setOrderFinished(resp);
+            }
+        });
+
     }, [orders])
 
     // eslint-disable-next-line no-unused-vars

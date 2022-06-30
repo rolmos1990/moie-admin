@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react"
-import {Card, CardBody, Col, Container, Row} from "reactstrap"
+import {Card, CardBody, Col, Container, Row, Spinner} from "reactstrap"
 import {withRouter} from "react-router-dom"
 import {connect} from "react-redux";
 import PropTypes from "prop-types";
@@ -13,15 +13,17 @@ import {DEFAULT_PAGE_LIMIT} from "../../common/pagination";
 import {arrayMove, SortableContainer, SortableElement} from 'react-sortable-hoc';
 import Images from "../../components/Common/Image";
 import {getImageByQuality, priceFormat} from "../../common/utils";
+import {getCategory} from "../../store/category/actions";
 
 
 
 const SortableItem = SortableElement(({value, index}) => (
-    <Col xs={2} className="text-center" style={{padding: '20px', position:"relative"}}>
+    <Col xs={3} className={`text-center ${!value.published || (value.productAvailable && value.productAvailable.available <= 0) ? 'opacity-50' : ''}`} style={{padding: '20px', position:"relative"}}>
+        {value.quantity}
         <div className={`border-1`} id={`product-${index}`} role="tabpanel">
             <Images src={`${getImageByQuality(value.productImage[0], 'medium')}`}
                     alt={"image"}
-                    height={250}
+                    height={350}
                     className="img-fluid d-block"
                     styles={{height: '250px', width: '303px', borderRadius: '8px', 'marginLeft': '4px'}}
             />
@@ -47,26 +49,32 @@ const SortableList = SortableContainer(({items}) => {
 
 
 const ProductOrderEdit = (props) => {
-    const {onGetProducts, products, onReorderProduct} = props;
-    const [category, setCategory] = useState(false);
+    const {onGetProducts, products, onReorderProduct, onGetCategory, category} = props;
+    const [categoryData, setCategoryData] = useState(null);
     const [productsList, setProductsList] = useState([]);
 
-    //carga inicial
     useEffect(() => {
-        if (onGetProducts) {
+        if(onGetCategory){
             const _category = props.match.params.id;
-            setCategory(_category);
+            onGetCategory(_category);
+        }
+    }, [onGetCategory]);
+
+    useEffect(() => {
+        if(category && onGetProducts){
+            setCategoryData(category);
             const conditions = new Conditionals.Condition;
-            conditions.add('category', _category);
+            conditions.add('category', category.id);
             onGetProducts(conditions.condition, 300, 0);
         }
-    }, [onGetProducts]);
+    }, [category]);
 
     useEffect(() => {
         if (products) {
             products.sort(function(a,b) {
                 return a.orden - b.orden;
             })
+            console.log("productos: ", products);
             setProductsList(products);
         }
     }, [products]);
@@ -77,7 +85,7 @@ const ProductOrderEdit = (props) => {
 
             const dataToMove = {
                 orden: (newIndex + 1),
-                category: category
+                category: categoryData.id
             };
 
             onReorderProduct(productToMove.id, dataToMove, props.history);
@@ -89,15 +97,20 @@ const ProductOrderEdit = (props) => {
         <React.Fragment>
             <div className="page-content">
                 <Container fluid>
-                    <Breadcrumb hasBack path="/categories" title={category} item={"Orden de Producto"}/>
+                    <Breadcrumb hasBack path="/categories" title={category.name} item={"Orden de Producto"}/>
 
                     <HasPermissions permissions={[PERMISSIONS.PRODUCT_ORDER]} renderNoAccess={() => <NoAccess/>}>
+
                         <div>
                             <Card>
                                 <CardBody>
+                                    {categoryData == null ? (
+                                        <Spinner size="lg" className="m-5" color="primary"/>
+                                    ) : <div></div>}
 
-                                    <SortableList items={productsList} onSortEnd={onSortEnd} lockOffset={false} axis={"xy"} />
-
+                                    {productsList.length > 0 && (
+                                        <SortableList items={productsList} onSortEnd={onSortEnd} lockOffset={false} axis={"xy"} />
+                                    )}
                                 </CardBody>
                             </Card>
                         </div>
@@ -114,11 +127,13 @@ const mapDispatchToProps = dispatch => ({
     },
     onGetProducts: (conditional = null, limit = DEFAULT_PAGE_LIMIT, page) => dispatch(getProducts(conditional, limit, page)),
     onReorderProduct: (data, history) => dispatch(reorderProduct(data, history)),
+    onGetCategory: (id) => dispatch(getCategory(id))
 })
 
 const mapStateToProps = state => {
     const {products, loading, meta, refresh} = state.Product
-    return {products, loading, meta, refresh}
+    const {category} = state.Category
+    return {products, loading, meta, refresh, category}
 }
 
 export default withRouter(

@@ -75,6 +75,7 @@ const ProductEdit = (props) => {
     }, [onGetProduct]);
 
     useEffect(() => {
+        console.log("reiniciando");
         if (product.id) {
             onGetProduct(product.id);
         }
@@ -170,7 +171,7 @@ const ProductEdit = (props) => {
         }
 
         if (!isEdit) {
-            data.status = 0;
+            data.status = 1;
             onCreateProduct(data, props.history)
         } else {
             onUpdateProduct(props.match.params.id, data, props.history)

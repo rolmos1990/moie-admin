@@ -28,7 +28,7 @@ import {
     REGISTER_BILL,
     REGISTER_BILL_FAILED,
     REGISTER_BILL_SUCCESS,
-    RESET_BILL,
+    RESET_BILL, SEND_INVOICE, SEND_INVOICE_FAILED, SEND_INVOICE_SUCCESS,
     UPDATE_BILL,
     UPDATE_BILL_FAILED,
     UPDATE_BILL_SUCCESS
@@ -210,6 +210,22 @@ export const createCreditNoteSuccess = () => {
 export const createCreditNoteFailed = () => {
     return {
         type: GENERATE_CREDIT_NOTE_FAILED
+    }
+}
+
+
+export const sendInvoice = id => ({
+    type: SEND_INVOICE,
+    id
+})
+export const sendInvoiceSuccess = () => {
+    return {
+        type: SEND_INVOICE_SUCCESS
+    }
+}
+export const sendInvoiceFailed = () => {
+    return {
+        type: SEND_INVOICE_FAILED
     }
 }
 

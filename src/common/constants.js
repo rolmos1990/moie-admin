@@ -1,3 +1,4 @@
+import {getEmptyOptions} from "./converters";
 
 export const BOOLEAN_STRING = {
     YES: 'Si',
@@ -204,3 +205,7 @@ export const OFFICE_REPORT_TYPES = {
     MENSAJERO: 'MENSAJERO',
 };
 export const OFFICE_REPORT_TYPE_LIST = Object.keys(OFFICE_REPORT_TYPES).map(s => ({label: OFFICE_REPORT_TYPES[s], value: OFFICE_REPORT_TYPES[s]}))
+
+//filtros para reportes
+export const showByList = [getEmptyOptions(), ...['Dia', 'Semana', 'Mes', 'Año'].map((g) => ({label: g, value: g}))]
+

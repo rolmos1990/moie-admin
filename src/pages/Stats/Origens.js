@@ -5,7 +5,7 @@ import {withRouter} from "react-router-dom"
 import {connect} from "react-redux";
 import PropTypes from "prop-types";
 import {DATE_FORMAT, formatDate} from "../../common/utils";
-import {REPORT_TYPES} from "../../common/constants";
+import {REPORT_TYPES, showByList} from "../../common/constants";
 import {generateReport} from "../../store/reports/actions";
 import {statsApi} from "../../helpers/backend_helper";
 
@@ -18,7 +18,6 @@ import {getEmptyOptions} from "../../common/converters";
 import HighChartsWrapper from "../../components/Common/HishChartsWrapper";
 import {AvForm} from "availity-reactstrap-validation";
 
-const showByList = [getEmptyOptions(), ...['dia', 'Semana', 'Mes', 'Año'].map((g) => ({label: g, value: g}))]
 const hoy = new Date();
 const defaultDates = [new Date(hoy.getTime() - 518400000), new Date()];
 const initialState = {

@@ -1,7 +1,19 @@
 import {all, call, fork, put, takeEvery} from "redux-saga/effects"
 
 //Account Redux states
-import {ADD_ORDER_BILL, CONFIRM_BILL, DELETE_BILL, GENERATE_CREDIT_NOTE, GENERATE_REPORT_REQUEST, GET_BILL, GET_BILLS, QUERY_BILLS, REGISTER_BILL, UPDATE_BILL} from "./actionTypes"
+import {
+    ADD_ORDER_BILL,
+    CONFIRM_BILL,
+    DELETE_BILL,
+    GENERATE_CREDIT_NOTE,
+    GENERATE_REPORT_REQUEST,
+    GET_BILL,
+    GET_BILLS,
+    QUERY_BILLS,
+    REGISTER_BILL,
+    SEND_INVOICE,
+    UPDATE_BILL
+} from "./actionTypes"
 
 import {
     confirmBillSuccess,
@@ -19,12 +31,23 @@ import {
     queryBillsSuccess,
     refreshList,
     registerBillFailed,
-    registerBillSuccess,
+    registerBillSuccess, sendInvoiceFailed, sendInvoiceSuccess,
     updateBillFail,
     updateBillSuccess
 } from "./actions"
 
-import {addOrderBillApi, confirmBillApi, createCreditNoteApi, deleteBillApi, fetchBillApi, fetchBillsApi, generateReportApi, registerBillApi, updateBillApi} from "../../helpers/backend_helper"
+import {
+    addOrderBillApi,
+    confirmBillApi,
+    createCreditNoteApi,
+    deleteBillApi,
+    fetchBillApi,
+    fetchBillsApi,
+    generateReportApi,
+    registerBillApi,
+    sendInvoiceApi,
+    updateBillApi
+} from "../../helpers/backend_helper"
 
 import Conditionals from "../../common/conditionals";
 import {showResponseMessage} from "../../helpers/service";
@@ -44,6 +67,7 @@ const ACTION_NAME_CONFIRM   =    CONFIRM_BILL;
 const ACTION_NAME_ADD_CHILD = ADD_ORDER_BILL;
 const ACTION_NAME_CREDIT_NOTE = GENERATE_CREDIT_NOTE;
 const ACTION_NAME_GEN_REPORT = GENERATE_REPORT_REQUEST;
+const ACTION_NAME_SEND_INVOICE = SEND_INVOICE;
 
 const LIST_API_REQUEST      =   fetchBillsApi;
 const GET_API_REQUEST       =   fetchBillApi;
@@ -51,6 +75,7 @@ const POST_API_REQUEST      =   registerBillApi;
 const PUT_API_REQUEST = updateBillApi;
 const CREDIT_NOTE_API_REQUEST = createCreditNoteApi;
 const GENERATE_REPORT_API_REQUEST = generateReportApi;
+const SEND_INVOICE_API_REQUEST = sendInvoiceApi;
 
 //actions
 const QUERY_SUCCESS_ACTION = queryBillsSuccess;
@@ -65,6 +90,8 @@ const UPDATE_SUCCESS_ACTION = updateBillSuccess;
 const UPDATE_FAILED_ACTION = updateBillFail;
 const CREDIT_NOTE_SUCCESS_ACTION = createCreditNoteSuccess;
 const CREDIT_NOTE_FAILED_ACTION = createCreditNoteFailed;
+const SEND_INVOICE_SUCCESS_ACTION = sendInvoiceSuccess;
+const SEND_INVOICE_FAILED_ACTION = sendInvoiceFailed;
 const GENERATE_REPORT_SUCCESS_ACTION = generateReportSuccess;
 const GENERATE_REPORT_FAILED_ACTION = generateReportFailed;
 
@@ -171,6 +198,18 @@ function* createCreditNote({id}) {
     }
 }
 
+function* sendInvoice({id, data}) {
+    try {
+        const response = yield call(SEND_INVOICE_API_REQUEST, id, {type: BILL_MEMO_TYPES.INVOICE});
+        showResponseMessage(response, "Factura ha sido enviada!", response.error);
+        yield put(SEND_INVOICE_SUCCESS_ACTION(response));
+        yield put(refreshList())
+    } catch (error) {
+        yield put(SEND_INVOICE_FAILED_ACTION(error.message || error.response.data.error))
+        showResponseMessage({status: 500}, "", error.message || error.response.data.error);
+    }
+}
+
 function* generateReport({data}) {
     try {
         const response = yield call(GENERATE_REPORT_API_REQUEST, data);
@@ -193,6 +232,7 @@ export function* watchBill() {
     yield takeEvery(ACTION_NAME_ADD_CHILD, billOrderAdd);
     yield takeEvery(ACTION_NAME_CREDIT_NOTE, createCreditNote);
     yield takeEvery(ACTION_NAME_GEN_REPORT, generateReport);
+    yield takeEvery(ACTION_NAME_SEND_INVOICE, sendInvoice);
 }
 
 function* billSaga() {

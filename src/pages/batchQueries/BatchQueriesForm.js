@@ -69,17 +69,26 @@ const BatchQueriesForm = (props) => {
                     }
                 });
 
-            const listToCopy = list.map(p => {
+            let tmpProductList = list;
+            if(productList.length > 0) {
+                const _productList = productList.concat(list);
+                setProductList(_productList);
+
+                tmpProductList = _productList;
+            } else {
+                setProductList(list);
+            }
+
+            const listToCopy = tmpProductList.map(p => {
                 const ll = p.productSize.filter((s) => s.quantity > 0).map(s => {
                     return `TALLA ${s.name}: ${s.label}`
                 })
                 return `${p.reference}\n${ll.join("\n")}\n`
-            })
-
+            });
             setTextToCopy(listToCopy.join("\n"));
-            setProductList(list);
-        } else {
-            setProductList([]);
+
+
+
         }
     }, [products])
 
@@ -87,7 +96,7 @@ const BatchQueriesForm = (props) => {
         return {label: label ? label : '-', value: -1};
     }
 
-    const onSearchRefs = () => {
+    const onSearchRefs = (e) => {
         if (productRefs.length === 0) {
             return;
         }
@@ -96,10 +105,12 @@ const BatchQueriesForm = (props) => {
         const conditions = new Conditionals.Condition;
         if (productRefs.length > 0) conditions.add("reference", refs.join("::"), Conditionals.OPERATORS.IN);
         onGetProducts(conditions.all(), refs.length);
-        setProductList([]);
+        form.reset();
+        //setProductList([]);
     }
 
     const onSearch = () => {
+        console.log("hago una busqueda...");
         const conditions = new Conditionals.Condition;
         if (sizeSelected && sizeSelected.value && sizeSelected.value > 0) {
             conditions.add("size.id", sizeSelected.value, Conditionals.OPERATORS.EQUAL);
@@ -108,7 +119,7 @@ const BatchQueriesForm = (props) => {
             conditions.add("category.id", categorySelected.value, Conditionals.OPERATORS.EQUAL);
         }
         onGetProducts(conditions.all());
-        setProductList([]);
+        //setProductList([]);
     }
 
     const clearFilters = () => {
@@ -150,7 +161,8 @@ const BatchQueriesForm = (props) => {
                                     name={"products"}
                                     onKeyPress={e => {
                                         if (e.key === "Enter") {
-                                            onSearchRefs();
+                                            e.preventDefault();
+                                            onSearchRefs(e);
                                         }
                                     }}
                                     onChange={(e) => {

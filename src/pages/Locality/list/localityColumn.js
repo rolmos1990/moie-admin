@@ -42,19 +42,19 @@ const localityColumns = (onDelete = false) => {
             filterType: "text"
         },
         {
-            text: "Primer Kilo",
+            text: "Flete",
             dataField: "priceFirstKilo",
             sort: true,
             filter: true,
             filterType: "text"
         },
-        {
+/*        {
             text: "Kilo Adicional",
             dataField: "priceAdditionalKilo",
             sort: true,
             filter: true,
             filterType: "text"
-        },
+        },*/
     ]
 
     return cols;

@@ -14,7 +14,16 @@ const statusOptions = buildOptions(ORDER_STATUS_LIST);
 const deliveryMethodsOptions = buildOptions(DELIVERY_METHODS_LIST);
 const deliveryTypeOptions = buildOptions(DELIVERY_TYPES_LIST);
 
-const orderColumns = (onSelectedOrder, showAsModal, conciliationView) => {
+function getOrderFinished (orderFinished, customerId) {
+    try {
+        const _order = orderFinished.filter(item => item.id === customerId);
+        return _order[0].qty;
+    }catch(e){
+        return 0;
+    }
+}
+
+const orderColumns = (onSelectedOrder, showAsModal, conciliationView, orderFinished) => {
     let columns = [
         {
             text: "Pedido #",
@@ -49,12 +58,23 @@ const orderColumns = (onSelectedOrder, showAsModal, conciliationView) => {
             formatter: (cellContent, item) => (
                 !showAsModal ? (
                         <Link to={`/customer/detail/${item.customer.id}`} className="text-body">
-                            {item.customer.name}
+                            <div>
                             {item.customer.isMayorist === true && (
                                 <Tooltip placement="bottom" title="Cliente mayorista" aria-label="add">
                                     <i className={"mdi mdi-crown font-size-18 mr-1 text-warning"}> </i>
                                 </Tooltip>
                             )}
+
+                                {item.customer.name}
+                                <span>
+                                {getOrderFinished(orderFinished, item.customer.id) > 0 ? (
+                                    <span className="badge rounded-pill bg-secondary m-1">{ getOrderFinished(orderFinished, item.customer.id) }</span>
+
+                                ) : (
+                                    <span className="badge rounded-pill bg-secondary m-1"> - </span>
+                                )}
+                                </span>
+                            </div>
                             <div>
                             <small className="bg-grey badge badge-soft-secondary"><i className="fa fa-user"></i> { item.user.name }</small>
                         </div>

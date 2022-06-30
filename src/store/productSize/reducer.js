@@ -28,7 +28,7 @@ const productSizes = (state = initialState, action) => {
             state = {
                 ...state,
                 loading: false,
-                refresh: true
+                refresh: !state.refresh
             }
             break
         case UPDATE_PRODUCT_SIZE_LIST_FAILED:

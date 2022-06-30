@@ -11,7 +11,7 @@ import {AvForm} from "availity-reactstrap-validation";
 import ButtonSubmit from "../../components/Common/ButtonSubmit";
 
 const ProductSize = props => {
-    const {product, template, onGetProductSizes, productSizes, refresh, readonly} = props
+    const {product, template, productSizes, refresh, readonly} = props
     const [productSizesList, setProductSizesList] = useState([]);
     const [selectValues, setSelectValues] = useState([]);
     const [sizeTotals, setSizeTotals] = useState({});
@@ -70,7 +70,7 @@ const ProductSize = props => {
                 let qty = parseFloat(ps.sizes[sizeName]);
 
                 if (qty > 0) {
-                    dataList.push({name: sizeName, qty: qty, color: ps.color});
+                    dataList.push({name: sizeName, qty: qty, color: ps.color, id: ps.id});
                 }
             });
         });
@@ -82,7 +82,7 @@ const ProductSize = props => {
             const key = ps.color.replace(/\s/g, '');
             let mapElement = map[key];
             if (!mapElement) {
-                mapElement = {color: ps.color, sizes: {}};
+                mapElement = {color: ps.color, sizes: {}, id: ps.id};
                 if(template && template.sizes) {
                     template.sizes.forEach(size => mapElement.sizes[size] = 0)
                 }
@@ -195,7 +195,7 @@ const ProductSize = props => {
                                                 </select>
                                             </td>
                                         ))}
-                                        {!readonly && (
+                                        {!readonly && (template && template.sizes > 1) && (
                                             <th>
                                                 <button size="small" className="btn btn-sm text-danger" onClick={() => removeColor(k1)}>
                                                     <i className="uil uil-trash-alt font-size-18"> </i>
@@ -245,7 +245,6 @@ const ProductSize = props => {
 ProductSize.propTypes = {
     product: PropTypes.object,
     productSizes: PropTypes.array,
-    onGetProductSizes: PropTypes.func,
     readonly: PropTypes.bool
 }
 
@@ -255,13 +254,6 @@ const mapStateToProps = state => {
 }
 
 const mapDispatchToProps = dispatch => ({
-    onGetProductSizes: (productId) => {
-        const conditions = new Conditionals.Condition;
-        if (productId) {
-            conditions.add('product', productId, Conditionals.OPERATORS.EQUAL);
-        }
-        //dispatch(getProductSizes(conditions.all(), null, 0))
-    },
     onUpdateProductSizeList: (id, data, history) => dispatch(updateProductSizeList(id, data, history))
 })
 
