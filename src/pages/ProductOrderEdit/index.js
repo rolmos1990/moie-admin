@@ -12,10 +12,8 @@ import {getProducts, reorderProduct, resetProduct} from "../../store/product/act
 import {DEFAULT_PAGE_LIMIT} from "../../common/pagination";
 import {arrayMove, SortableContainer, SortableElement} from 'react-sortable-hoc';
 import Images from "../../components/Common/Image";
-import {getImageByQuality, priceFormat} from "../../common/utils";
+import {getImageByQuality, productPriceWithDiscount} from "../../common/utils";
 import {getCategory} from "../../store/category/actions";
-
-
 
 const SortableItem = SortableElement(({value, index}) => (
     <Col xs={3} className={`text-center ${!value.published || (value.productAvailable && value.productAvailable.available <= 0) ? 'opacity-50' : ''}`} style={{padding: '20px', position:"relative"}}>
@@ -29,7 +27,7 @@ const SortableItem = SortableElement(({value, index}) => (
             />
             <div style={{ position:"absolute", bottom:"20px" }}>
                 <span style={{"fontWeight": "bold", "fontSize": "15px"}} className={"text-danger border badge rounded-pill p-2  bg-soft-danger m-2"}>{value.reference}</span>
-                <span style={{"fontWeight": "bold"}} className={"border text-white badge rounded-pill p-2  bg-soft-secondary"}>{priceFormat(value.price)}</span>
+                <span style={{"fontWeight": "bold"}} className={"border text-white badge rounded-pill p-2  bg-soft-secondary"}>{productPriceWithDiscount(value)}</span>
             </div>
         </div>
     </Col>

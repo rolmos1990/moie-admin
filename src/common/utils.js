@@ -253,3 +253,18 @@ export const b64toBlob = (b64Data, contentType='', sliceSize=512) => {
 export const sortList = (data, fieldName) => {
     return (data || []).sort((a, b) => a[fieldName] === b[fieldName] ? 0 : (a[fieldName] > b[fieldName]) ? 1 : -1)
 };
+
+
+export const productPriceWithDiscount = (product) => {
+    let discount = 0;
+    if(product) {
+        if (product.discount > 0) {
+            discount = (product.price * product.discount) / 100;
+        } else if (product.category && product.category.discountPercent > 0) {
+            discount = (product.price * product.category.discountPercent) / 100;
+        }
+        return priceFormat(product.price - discount);
+    } else {
+        return 0;
+    }
+}
