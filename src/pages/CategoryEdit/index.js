@@ -44,6 +44,8 @@ const CategoryEdit = (props) => {
                     content: null
                 };
 
+                console.log("file loaded: ", file.preview);
+
                 setFile(file);
                 setCategory({...category, _status:category.status});
             }
