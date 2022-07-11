@@ -37,7 +37,7 @@ const CategoryEdit = (props) => {
     useEffect(() => {
 
         if (category.id && isEdit) {
-            if(category.filename){
+            if(!!category.filename){
                 const file = {
                     preview: getBaseCategoryPath(category.filename),
                     name: category.id,
