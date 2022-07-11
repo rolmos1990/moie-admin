@@ -16,7 +16,7 @@ import {PERMISSIONS} from "../../helpers/security_rol";
 import NoAccess from "../../components/Common/NoAccess";
 import DropZoneIcon from "../../components/Common/DropZoneIcon";
 import Images from "../../components/Common/Image";
-import {getImageByQuality} from "../../common/utils";
+import {getBaseCategoryPath} from "../../common/utils";
 
 const CategoryEdit = (props) => {
     const {getCategory, category} = props;
@@ -40,7 +40,7 @@ const CategoryEdit = (props) => {
 
             if(category.file){
                 const file = {
-                    preview: category.file,
+                    preview: getBaseCategoryPath(category.file),
                     name: category.id,
                     content: null
                 };

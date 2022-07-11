@@ -144,6 +144,10 @@ export const getImagePath = (photoPath) => {
     const basePath = photoPath.includes('uploads') ? baseImagePathNew : baseImagePath;
     return `${basePath}${photoPath}`;
 }
+export const getBaseCategoryPath = (photoPath) => {
+    const basePath = baseImagePath + "/categories/";
+    return `${basePath}${photoPath}`;
+}
 
 export const getErrorMessage = (error) => {
     if (!error) {
