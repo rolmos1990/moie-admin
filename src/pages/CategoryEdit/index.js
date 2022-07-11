@@ -29,6 +29,7 @@ const CategoryEdit = (props) => {
     //carga inicial
     useEffect(() => {
         if (isEdit && getCategory) {
+            setFile(null);
             getCategory(props.match.params.id);
         }
     }, [getCategory]);
@@ -43,8 +44,6 @@ const CategoryEdit = (props) => {
                     name: category.id,
                     content: null
                 };
-
-                console.log("file loaded: ", file.preview);
 
                 setFile(file);
             }
