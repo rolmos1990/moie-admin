@@ -14,11 +14,17 @@ import ButtonSubmit from "../../components/Common/ButtonSubmit";
 import HasPermissions from "../../components/HasPermissions";
 import {PERMISSIONS} from "../../helpers/security_rol";
 import NoAccess from "../../components/Common/NoAccess";
+import DropZoneIcon from "../../components/Common/DropZoneIcon";
+import Images from "../../components/Common/Image";
+import {getImageByQuality} from "../../common/utils";
 
 const CategoryEdit = (props) => {
     const {getCategory, category} = props;
     const [categoryData, setCategory] = useState({_status: STATUS.ACTIVE});
     const isEdit = props.match.params.id;
+
+    const [file, setFile] = useState(null);
+
 
     //carga inicial
     useEffect(() => {
@@ -31,18 +37,47 @@ const CategoryEdit = (props) => {
     useEffect(() => {
         if (category.id && isEdit) {
             setCategory({...category, _status:category.status});
+
+            if(category.file){
+                const file = {
+                    preview: category.file,
+                    name: category.id,
+                    content: null
+                };
+                setFile(file);
+            }
+
         }
     }, [category]);
 
+
     const handleValidSubmit = (event, values) => {
         const data = {...values, status:values._status};
+
+        if(file && file.content){
+            data.file = file.content;
+        }
+
         delete data._status;
+
         if (!isEdit) {
             props.registerCategory(data, props.history)
         } else {
             props.updateCategory(props.match.params.id, data, props.history)
         }
     }
+
+    function handleAcceptedFiles(file) {
+
+        var file = {
+            preview: file.base64,
+            name: category.id,
+            content: file.base64
+        };
+
+        setFile(file);
+    }
+
     return (
         <React.Fragment>
             <div className="page-content">
@@ -91,6 +126,22 @@ const CategoryEdit = (props) => {
                                                     </div>
                                                 </Col>
                                             </Row>
+                                            <Col md={12} className="text-center p-2" style={{height: '400px'}}>
+                                                <Label htmlFor="field_discount">Foto de Portada</Label>
+                                                <DropZoneIcon
+                                                    maxFiles={1}
+                                                    mode="block"
+                                                    hasImage={file && file.preview}
+                                                    onDrop={(files) => {
+                                                        handleAcceptedFiles(files);
+                                                    }}>
+                                                    <Images className="img-fluid mx-auto d-block tab-img rounded"
+                                                            height={370}
+                                                            alt={file && file.name}
+                                                            src={file && file.preview}
+                                                    />
+                                                </DropZoneIcon>
+                                            </Col>
                                             <Row>
                                                 <Col md={12} className="text-right">
                                                     <ButtonSubmit loading={props.loading}/>
