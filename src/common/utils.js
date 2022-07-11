@@ -145,7 +145,7 @@ export const getImagePath = (photoPath) => {
     return `${basePath}${photoPath}`;
 }
 export const getBaseCategoryPath = (photoPath) => {
-    const basePath = baseImagePath + "/categories/";
+    const basePath = baseImagePathNew + "/categories/";
     return `${basePath}${photoPath}`;
 }
 
