@@ -21,7 +21,7 @@ import {getBaseCategoryPath} from "../../common/utils";
 const CategoryEdit = (props) => {
     const {getCategory, category} = props;
     const [categoryData, setCategory] = useState({_status: STATUS.ACTIVE});
-    const isEdit = props.match.params.id;
+    const isEdit = !!props.match.params.id;
 
     const [file, setFile] = useState(null);
 
@@ -35,16 +35,17 @@ const CategoryEdit = (props) => {
 
     //cargar la información del cliente
     useEffect(() => {
-        if (category.id && isEdit) {
-            setCategory({...category, _status:category.status});
 
-            if(category.file){
+        if (category.id && isEdit) {
+            if(category.filename){
                 const file = {
-                    preview: getBaseCategoryPath(category.file),
+                    preview: getBaseCategoryPath(category.filename),
                     name: category.id,
                     content: null
                 };
+
                 setFile(file);
+                setCategory({...category, _status:category.status});
             }
 
         }
