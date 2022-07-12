@@ -24,12 +24,14 @@ const CategoryEdit = (props) => {
     const isEdit = !!props.match.params.id;
 
     const [file, setFile] = useState(null);
+    const [fileBanner, setFileBanner] = useState(null);
 
 
     //carga inicial
     useEffect(() => {
         if (isEdit && getCategory) {
             setFile(null);
+            setFileBanner(null);
             getCategory(props.match.params.id);
         }
     }, [getCategory]);
@@ -38,6 +40,7 @@ const CategoryEdit = (props) => {
     useEffect(() => {
 
         if (category.id && isEdit) {
+            //foto portada
             if(!!category.filename){
                 const file = {
                     preview: getBaseCategoryPath(category.filename),
@@ -46,6 +49,16 @@ const CategoryEdit = (props) => {
                 };
 
                 setFile(file);
+            }
+            //banner
+            if(!!category.filenameBanner){
+                const fileBanner = {
+                    preview: getBaseCategoryPath(category.filenameBanner),
+                    name: category.id,
+                    content: null
+                };
+
+                setFileBanner(fileBanner);
             }
 
             setCategory({...category, _status:category.status});
@@ -60,6 +73,9 @@ const CategoryEdit = (props) => {
         if(file && file.content){
             data.file = file.content;
         }
+        if(fileBanner && fileBanner.content){
+            data.fileBanner = fileBanner.content;
+        }
 
         delete data._status;
 
@@ -70,15 +86,19 @@ const CategoryEdit = (props) => {
         }
     }
 
-    function handleAcceptedFiles(file) {
+    function handleAcceptedFiles(_file, _type) {
 
-        var file = {
-            preview: file.base64,
+        const file = {
+            preview: _file.base64,
             name: category.id,
-            content: file.base64
+            content: _file.base64
         };
 
-        setFile(file);
+        if(_type == "banner"){
+            setFileBanner(file);
+        } else {
+            setFile(file);
+        }
     }
 
     return (
@@ -129,6 +149,8 @@ const CategoryEdit = (props) => {
                                                     </div>
                                                 </Col>
                                             </Row>
+                                            <br />
+                                            <hr />
                                             <Col md={12} className="text-center p-2" style={{height: '400px'}}>
                                                 <Label htmlFor="field_discount">Foto de Portada</Label>
                                                 <DropZoneIcon
@@ -136,12 +158,30 @@ const CategoryEdit = (props) => {
                                                     mode="block"
                                                     hasImage={file && file.preview}
                                                     onDrop={(files) => {
-                                                        handleAcceptedFiles(files);
+                                                        handleAcceptedFiles(files, 'portada');
                                                     }}>
                                                     <Images className="img-fluid mx-auto d-block tab-img rounded"
                                                             height={370}
                                                             alt={file && file.name}
                                                             src={file && file.preview}
+                                                    />
+                                                </DropZoneIcon>
+                                            </Col>
+                                            <br />
+                                            <hr />
+                                            <Col md={12} className="text-center p-2" style={{height: '400px'}}>
+                                                <Label htmlFor="field_discount">Foto de Banner</Label>
+                                                <DropZoneIcon
+                                                    maxFiles={1}
+                                                    mode="block"
+                                                    hasImage={fileBanner && fileBanner.preview}
+                                                    onDrop={(files) => {
+                                                        handleAcceptedFiles(files, 'banner');
+                                                    }}>
+                                                    <Images className="img-fluid mx-auto d-block tab-img rounded"
+                                                            height={370}
+                                                            alt={fileBanner && fileBanner.name}
+                                                            src={fileBanner && fileBanner.preview}
                                                     />
                                                 </DropZoneIcon>
                                             </Col>
