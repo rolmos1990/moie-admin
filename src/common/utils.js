@@ -115,6 +115,16 @@ export const getMoment =() =>{
     return "";
 }
 
+export const getImageByGroup = (productImage, group) => {
+    try{
+        const _image = productImage.filter(item => item.group === group);
+        return _image[0];
+    }
+    catch(e){
+        return null;
+    }
+}
+
 export const getImageByQuality = (imgData, quality) => {
     if(!imgData) return null;
 

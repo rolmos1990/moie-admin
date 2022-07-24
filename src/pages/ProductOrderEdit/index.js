@@ -12,14 +12,14 @@ import {getProducts, reorderProduct, resetProduct} from "../../store/product/act
 import {DEFAULT_PAGE_LIMIT} from "../../common/pagination";
 import {arrayMove, SortableContainer, SortableElement} from 'react-sortable-hoc';
 import Images from "../../components/Common/Image";
-import {getImageByQuality, productPriceWithDiscount} from "../../common/utils";
+import {getImageByGroup, getImageByQuality, productPriceWithDiscount} from "../../common/utils";
 import {getCategory} from "../../store/category/actions";
 
 const SortableItem = SortableElement(({value, index}) => (
     <Col xs={3} className={`text-center ${!value.published || (value.productAvailable && value.productAvailable.available <= 0) ? 'opacity-50' : ''}`} style={{padding: '20px', position:"relative"}}>
         {value.quantity}
         <div className={`border-1`} id={`product-${index}`} role="tabpanel">
-            <Images src={`${getImageByQuality(value.productImage[0], 'medium')}`}
+            <Images src={`${getImageByQuality(getImageByGroup(value.productImage, 1), 'medium')}`}
                     alt={"image"}
                     height={350}
                     className="img-fluid d-block"
@@ -72,7 +72,6 @@ const ProductOrderEdit = (props) => {
             products.sort(function(a,b) {
                 return a.orden - b.orden;
             })
-            console.log("productos: ", products);
             setProductsList(products);
         }
     }, [products]);
