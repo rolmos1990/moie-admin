@@ -25,18 +25,15 @@ const ProductImage = props => {
     const form = React.createRef();
 
     useEffect(() => {
-        //onGetProductImage(product.id);
         const files = groups.map(g => ({...g, file: {name: '', preview: ''}}));
         if (product.productImage && product.productImage.length > 0) {
             files.forEach((f, i) => {
-                if (product.productImage.length > i) {
-                    const imgData = product.productImage[i];
+                    const imgData = (product.productImage.filter(_pi => _pi.group === f.groupId))[0];
                     if (imgData) {
                         // f.groupId = imgData.group;
                         f.file.preview = `${getImageByQuality(imgData, 'high')}`
                         f.file.name = imgData.filename;
                     }
-                }
             })
         }
 
