@@ -67,11 +67,10 @@ const ProductSize = props => {
         const dataList = [];
         productSizesList.map((ps) => {
             Object.keys(ps.sizes).forEach(sizeName => {
+                const productSize = (product.productSize.filter(psf => psf.name == sizeName && psf.color ==  ps.color))[0];
+                const _id = (productSize) ? productSize.id : null;
                 let qty = parseFloat(ps.sizes[sizeName]);
-
-                if (qty > 0) {
-                    dataList.push({name: sizeName, qty: qty, color: ps.color, id: ps.id});
-                }
+                    dataList.push({name: sizeName, qty: qty, color: ps.color, id: _id});
             });
         });
         return dataList;

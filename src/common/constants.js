@@ -59,12 +59,16 @@ export const DELIVERY_METHODS_IDS = {
     INTERRAPIDISIMO: 1,
     MENSAJERO: 2,
     OTRO: 3,
+    SERVIENTREGA: 4,
+    PAYU: 5
 };
 
 export const DELIVERY_METHODS = {
     INTERRAPIDISIMO: 'INTERRAPIDISIMO',
     MENSAJERO: 'MENSAJERO',
     OTRO: 'OTRO',
+    SERVIENTREGA: 'SERVIENTREGA',
+    PAYU: 'PAYU'
 };
 export const DELIVERY_METHODS_LIST = Object.keys(DELIVERY_METHODS).map((k,i) => ({label: DELIVERY_METHODS[k], value: i+1}));
 

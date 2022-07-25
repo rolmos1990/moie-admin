@@ -77,8 +77,9 @@ const ProductOrderEdit = (props) => {
     }, [products]);
 
     const onSortEnd = ({oldIndex, newIndex}) => {
+
         if(category && (oldIndex !== newIndex)) {
-            const productToMove = (products.filter(item => item.orden === (oldIndex + 1)))[0];
+            const productToMove = products[oldIndex];
 
             const dataToMove = {
                 orden: (newIndex + 1),
