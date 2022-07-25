@@ -249,8 +249,8 @@ const OfficeEdit = (props) => {
                             <Row className="mb-2">
                                 <Col md={12}>
                                     <div className={"mb-3 float-md-start"}>
-                                        <StatusField color={OFFICE_STATUS[officeData.status].color} className={"font-size-14 mr-5"}>
-                                            {OFFICE_STATUS[officeData.status].name}
+                                        <StatusField color={OFFICE_STATUS[officeData.status]?.color} className={"font-size-14 mr-5"}>
+                                            {OFFICE_STATUS[officeData.status]?.name}
                                         </StatusField>
                                         <small className="badge rounded-pill bg-soft-info font-size-14 mr-5 p-2">Operador: {officeData?.user?.name}</small>
                                     </div>

@@ -74,14 +74,15 @@ const OrderList = props => {
 
     useEffect(() => {
         setStatesList(orders);
-
-        const customers = [6,7];
-        fetchCustomerOrderFinishedApi({customers: customers}).then(resp => {
-            if(resp){
-                // resp -> [{id,name,qty}]
-                setOrderFinished(resp);
-            }
-        });
+        const customers = orders.map(order => order.customer.id);
+        if(customers.length > 0) {
+            fetchCustomerOrderFinishedApi({customers: customers}).then(resp => {
+                if (resp) {
+                    // resp -> [{id,name,qty}]
+                    setOrderFinished(resp);
+                }
+            });
+        }
 
     }, [orders])
 
@@ -212,6 +213,7 @@ const OrderList = props => {
                                         bootstrap4
                                         search
                                     >
+
                                         {toolkitProps => (
                                             <React.Fragment>
                                                 <Row className="row mb-2">

@@ -404,8 +404,8 @@ const OrderEdit = (props) => {
                                 <small className="badge rounded-pill bg-info font-size-14 mr-5 p-2">Pedido# {order.id}</small>
                             </>
                         )}
-                        <StatusField color={ORDER_STATUS[order.status].color} className={"font-size-14 mr-5"}>
-                            {ORDER_STATUS[order.status].name}
+                        <StatusField color={ORDER_STATUS[order.status]?.color} className={"font-size-14 mr-5"}>
+                            {ORDER_STATUS[order.status]?.name}
                         </StatusField>
                         <small className="badge rounded-pill bg-soft-info font-size-14 mr-5 p-2">Operador: {order.user?.name}</small>
                         {(order?.dateOfSale != null) &&
@@ -699,8 +699,8 @@ const OrderEdit = (props) => {
                                                                         </HtmlTooltip>
                                                                     </Col>
                                                                     <Col md={12}>
-                                                                        <Tooltip placement="bottom" title={product.color} aria-label="add">
-                                                                            <small> {threeDots(product.color, 22)}</small>
+                                                                        <Tooltip placement="bottom" title={product?.color} aria-label="add">
+                                                                            <small> {threeDots(product?.color, 22)}</small>
                                                                         </Tooltip>
                                                                     </Col>
                                                                     <Col md={12}>
@@ -763,13 +763,13 @@ const OrderEdit = (props) => {
                                                                     <div className="text-info">{product.product.reference}</div>
                                                                 </HtmlTooltip>
                                                             </td>
-                                                            <td style={{width: '25%'}} className="text-start">{product.color}</td>
-                                                            <td style={{width: '15%'}} className="text-center">{product.size}</td>
-                                                            <td style={{width: '10%'}} className="text-center">{product.quantity}</td>
-                                                            <td style={{width: '10%'}} className="text-end">{priceFormat(product.price)}</td>
-                                                            <td style={{width: '10%'}} className="text-center">{product.discountPercent || 0}%</td>
-                                                            <td style={{width: '10%'}} className="text-end">{priceFormat(product.discount)}</td>
-                                                            <td style={{width: '15%'}} className="text-end">{priceFormat(product.total)}</td>
+                                                            <td style={{width: '25%'}} className="text-start">{product?.color}</td>
+                                                            <td style={{width: '15%'}} className="text-center">{product?.size}</td>
+                                                            <td style={{width: '10%'}} className="text-center">{product?.quantity}</td>
+                                                            <td style={{width: '10%'}} className="text-end">{priceFormat(product?.price)}</td>
+                                                            <td style={{width: '10%'}} className="text-center">{product?.discountPercent || 0}%</td>
+                                                            <td style={{width: '10%'}} className="text-end">{priceFormat(product?.discount)}</td>
+                                                            <td style={{width: '15%'}} className="text-end">{priceFormat(product?.total)}</td>
                                                         </tr>
                                                     ))}
                                                     </tbody>
@@ -876,8 +876,8 @@ const OrderEdit = (props) => {
                                                         {item.user.name}
                                                     </td>
                                                     <td>
-                                                        <StatusField color={EVENT_STATUS[item.status].color} className={"font-size-14 mr-5"}>
-                                                            {EVENT_STATUS[item.status].name}
+                                                        <StatusField color={EVENT_STATUS[item.status]?.color} className={"font-size-14 mr-5"}>
+                                                            {EVENT_STATUS[item.status]?.name}
                                                         </StatusField>
                                                     </td>
                                                 </tr>)
