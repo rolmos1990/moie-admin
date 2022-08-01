@@ -144,7 +144,7 @@ const OrderEdit = (props) => {
                     newCar.products.push({
                         id: prod.id,
                         origin: {...prod.product, id: prod.id, price: prod.price},
-                        color: prod.color,
+                        color: prod?.color,
                         size: prod.size,
                         sizeId: prod.productSize?.id || 0,
                         quantity: prod.quantity,
