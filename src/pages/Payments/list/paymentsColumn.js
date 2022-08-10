@@ -85,7 +85,7 @@ const paymentsColumns = (onSelected) => [
         filter: true,
         filterType: "text",
         formatter: (cellContent, item) => (
-            <StatusField color={PAYMENT_STATUS[item.status].color}>
+            <StatusField color={PAYMENT_STATUS[item.status]?.color}>
                 {PAYMENT_STATUS[item.status].name}
             </StatusField>
         ),

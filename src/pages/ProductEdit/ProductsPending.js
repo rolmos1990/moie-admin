@@ -51,7 +51,7 @@ const ProductsPendingList = ({onGetProductsPending, product, pendingProducts}) =
                                    <td className="text-center">{prod.quantity}</td>
                                    <td className="text-center">{prod.customer.name}</td>
                                    <td className="text-center">
-                                       <StatusField color={ORDER_STATUS[prod.order.status].color} className={"font-size-16"}>
+                                       <StatusField color={ORDER_STATUS[prod.order.status]?.color} className={"font-size-16"}>
                                            {ORDER_STATUS[prod.order.status].name}
                                        </StatusField>
                                    </td>

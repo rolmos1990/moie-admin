@@ -113,7 +113,7 @@ const municipalityColumns = (onDelete = false) => [
         filterOptions: statusOptions,
         filterDefaultOption: statusOptions[0],
         formatter: (cellContent, item) => (
-            <StatusField color={ORDER_STATUS[item.order.status].color}>
+            <StatusField color={ORDER_STATUS[item.order.status]?.color}>
                 {ORDER_STATUS[item.order.status].name}
             </StatusField>
         ),

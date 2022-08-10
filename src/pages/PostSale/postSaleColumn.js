@@ -52,7 +52,7 @@ const postSaleColumns = () => {
             filterOptions: statusOptions,
             filterDefaultOption: statusOptions[0],
             formatter: (cellContent, item) => (
-                <StatusField color={ORDER_STATUS[item.status].color}>
+                <StatusField color={ORDER_STATUS[item.status]?.color}>
                     {ORDER_STATUS[item.status].name}
                 </StatusField>
             ),

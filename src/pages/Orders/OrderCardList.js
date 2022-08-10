@@ -65,7 +65,7 @@ const OrderCardList = (props) => {
                                     <div>
                                         <span className="m-2 mb-4">
                                             <Tooltip placement="bottom" title="Estado" aria-label="add">
-                                                <StatusField color={ORDER_STATUS[order.status].color}>{ORDER_STATUS[order.status].name}</StatusField>
+                                                <StatusField color={ORDER_STATUS[order.status]?.color}>{ORDER_STATUS[order.status]?.name}</StatusField>
                                             </Tooltip>
                                         </span>
                                         <span className="m-2 mb-4">

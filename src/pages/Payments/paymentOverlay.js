@@ -92,7 +92,7 @@ const PaymentOverlay = (props) => {
                                 <h4 className="card-title text-info"><i className="uil uil-truck"> </i> Datos del pago</h4>
                             </Col>
                             <Col xs={2}>
-                                <StatusField color={PAYMENT_STATUS[payment.status].color}>
+                                <StatusField color={PAYMENT_STATUS[payment.status]?.color}>
                                     {PAYMENT_STATUS[payment.status].name}
                                 </StatusField>
                             </Col>
@@ -206,7 +206,7 @@ const PaymentOverlay = (props) => {
                                 <Col md={6}>
                                     <label>Estado: </label>
                                     <span className="p-1">
-                                         <StatusField color={ORDER_STATUS[payment.order.status].color} className={"font-size-10 mr-5"}>
+                                         <StatusField color={ORDER_STATUS[payment.order.status]?.color} className={"font-size-10 mr-5"}>
                                             {ORDER_STATUS[payment.order.status].name}
                                         </StatusField>
                                     </span>

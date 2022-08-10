@@ -59,7 +59,7 @@ const LatestTransaction = (props) => {
                                         {priceFormat(order.totalAmount)}
                                     </td>
                                     <td>
-                                        <StatusField color={ORDER_STATUS[order.status].color}>
+                                        <StatusField color={ORDER_STATUS[order.status]?.color}>
                                             {ORDER_STATUS[order.status].name}
                                         </StatusField>
                                     </td>
