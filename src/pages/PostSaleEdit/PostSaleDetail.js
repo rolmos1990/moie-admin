@@ -93,7 +93,7 @@ const PostSaleDetail = (props) => {
                                         <Col md={6}>
                                             <label>Estado del pedido: &nbsp;</label>
                                             <StatusField color={ORDER_STATUS[order.status]?.color}>
-                                                {ORDER_STATUS[order.status].name}
+                                                {ORDER_STATUS[order.status]?.name}
                                             </StatusField>
                                         </Col>
                                     </Row>

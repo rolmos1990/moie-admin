@@ -93,7 +93,7 @@ const PaymentOverlay = (props) => {
                             </Col>
                             <Col xs={2}>
                                 <StatusField color={PAYMENT_STATUS[payment.status]?.color}>
-                                    {PAYMENT_STATUS[payment.status].name}
+                                    {PAYMENT_STATUS[payment.status]?.name}
                                 </StatusField>
                             </Col>
                         </Row>

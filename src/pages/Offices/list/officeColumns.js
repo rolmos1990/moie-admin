@@ -106,7 +106,7 @@ const officeColumns = (onDelete = false) => {
             filterDefaultOption: statusOptions[0],
             formatter: (cellContent, item) => (
                 <StatusField color={OFFICE_STATUS[item.status]?.color}>
-                    {OFFICE_STATUS[item.status].name}
+                    {OFFICE_STATUS[item.status]?.name}
                 </StatusField>
             ),
         }
