@@ -6,8 +6,14 @@ services:
       - '80:80'
     restart: always
     logging:
+      driver: "json-file"
       options:
-        max-size: 1g
+        max-file: 5
+        max-size: 10m
     image: 'rolmos/moie-admin:${APP_VERSION}'
     deploy:
-      replicas: 1
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s
