@@ -59,10 +59,11 @@ const postSaleColumns = () => {
         },
         {
             text: "Cliente",
-            dataField: "customer.name",
-            sort: true,
+            dataField: "customer__name",
+            sort: false,
             filter: true,
             filterType: "text",
+            filterCondition: Conditionals.OPERATORS.LIKE,
             formatter: (cellContent, item) => (
                 <Link to={`/customer/detail/${item.customer.id}`} className="text-body">
                     {item.customer.name}

@@ -49,11 +49,11 @@ const orderColumns = (onSelectedOrder, showAsModal, conciliationView, orderFinis
         },
         {
             text: "Cliente",
-            dataField: "customer.name",
-            sort: true,
+            dataField: "customer__name",
+            sort: false,
             filter: true,
             filterType: "text",
-            conditionalOptions: {fieldName: 'customer.name', operator: Conditionals.OPERATORS.LIKE},
+            filterCondition: Conditionals.OPERATORS.LIKE,
             formatter: (cellContent, item) => (
                 !showAsModal ? (
                         <Link to={`/customer/detail/${item.customer.id}`} className="text-body">
