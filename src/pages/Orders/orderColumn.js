@@ -53,6 +53,7 @@ const orderColumns = (onSelectedOrder, showAsModal, conciliationView, orderFinis
             sort: true,
             filter: true,
             filterType: "text",
+            conditionalOptions: {fieldName: 'customer.name', operator: Conditionals.OPERATORS.LIKE},
             formatter: (cellContent, item) => (
                 !showAsModal ? (
                         <Link to={`/customer/detail/${item.customer.id}`} className="text-body">
