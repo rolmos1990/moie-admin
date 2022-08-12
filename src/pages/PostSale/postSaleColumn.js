@@ -59,11 +59,10 @@ const postSaleColumns = () => {
         },
         {
             text: "Cliente",
-            dataField: "customer",
+            dataField: "customer.name",
             sort: true,
             filter: true,
-            filterType: "asyncSelect",
-            urlStr: CUSTOMER,
+            filterType: "text",
             formatter: (cellContent, item) => (
                 <Link to={`/customer/detail/${item.customer.id}`} className="text-body">
                     {item.customer.name}
