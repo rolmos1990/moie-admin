@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react"
 import PropTypes from "prop-types"
 import {connect} from "react-redux"
-import {Card, CardBody, Col, Row} from "reactstrap"
+import {Card, CardBody, Col, Row, Spinner} from "reactstrap"
 import paginationFactory, {PaginationListStandalone, PaginationProvider,} from "react-bootstrap-table2-paginator"
 import ToolkitProvider from "react-bootstrap-table2-toolkit"
 import BootstrapTable from "react-bootstrap-table-next"
@@ -18,6 +18,7 @@ import CustomModal from "../../components/Modal/CommosModal";
 import PostSaleImportFileForm from "./PostSaleImportFileForm";
 import PostSaleReportForm from "../Reports/PostSaleReportForm";
 import {refreshAllStatusDelivery} from "../../helpers/backend_helper";
+import {showMessage} from "../../components/MessageToast/ShowToastMessages";
 
 const PostSaleList = props => {
     const {orders, meta, onGetOrders, loading, refresh, customActions} = props;
@@ -28,6 +29,7 @@ const PostSaleList = props => {
     const [currentPage, setCurrentPage] = useState(null);
     const [filterable, setFilterable] = useState(true);
     const [openReportModal, setOpenReportModal] = useState(false);
+    const [syncing, setSyncing] = useState(false)
 
     const pageOptions = {
         sizePerPage: DEFAULT_PAGE_LIMIT,
@@ -67,8 +69,13 @@ const PostSaleList = props => {
     }
 
     const syncAllDeliveries = async () => {
-        await refreshAllStatusDelivery();
-        onGetOrders(conditional, DEFAULT_PAGE_LIMIT, currentPage * DEFAULT_PAGE_LIMIT);
+        if(!syncing) {
+            setSyncing(true);
+            const response = await refreshAllStatusDelivery();
+            showMessage.success('Se verificaron un total de ' + response.updates + ' pedidos');
+            setSyncing(false);
+            onGetOrders(conditional, DEFAULT_PAGE_LIMIT, currentPage * DEFAULT_PAGE_LIMIT);
+        }
     }
 
     const columns = postSaleColumns();
@@ -124,6 +131,7 @@ const PostSaleList = props => {
                                                         </Tooltip>
                                                         <Tooltip placement="bottom" title="Sincronizar todas" aria-label="add">
                                                             <Button onClick={() => syncAllDeliveries()}>
+                                                                {syncing && <Spinner size="sm" className="m-1" color="primary"/>}
                                                                 <i className={"mdi mdi-refresh"}> </i>
                                                             </Button>
                                                         </Tooltip>
