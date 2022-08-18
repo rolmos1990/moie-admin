@@ -186,7 +186,8 @@ const mapDispatchToProps = dispatch => ({
         if(!conditional) conditional = [];
         conditional.push({field:'orderDelivery.tracking', value:'', operator: Conditionals.OPERATORS.NOT_NULL});
         //conditional.push({field:'orderDelivery.deliveryMethod', value: [1,3,4,5].join("::"), operator: Conditionals.OPERATORS.IN})
-        dispatch(getOrders(conditional, limit, page))
+        const orderFields = {field:'id',type: 'DESC'};
+        dispatch(getOrders(conditional, limit, page, orderFields));
     },
     onPrintBatchRequest: (conditional) => dispatch(doPrintBatchRequest(conditional)),
 })
