@@ -67,7 +67,7 @@ const PostSaleList = props => {
         setOpenImportFileModal(false);
         if(reload) onGetOrders(conditional, DEFAULT_PAGE_LIMIT, currentPage * DEFAULT_PAGE_LIMIT);
     }
-
+//
     const syncAllDeliveries = async () => {
         if(!syncing) {
             setSyncing(true);
