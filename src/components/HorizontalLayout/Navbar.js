@@ -188,6 +188,14 @@ const Navbar = props => {
                                                     </Link>
                                                 </li>
                                             </HasPermissions>
+                                            <HasPermissions permission={PERMISSIONS.DELIVERY_LOCALITY_LIST}>
+                                                <li className="nav-item">
+                                                    <Link className="nav-link" to="/wallets">
+                                                        <i className="uil-graph-bar me-2"></i>
+                                                        {" "}{props.t("Billetera")}
+                                                    </Link>
+                                                </li>
+                                            </HasPermissions>
                                         </div>
                                     </li>
                                 </HasPermissions>

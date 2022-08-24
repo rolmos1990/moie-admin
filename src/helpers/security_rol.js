@@ -75,6 +75,10 @@ export const PERMISSIONS = {
     DELIVERY_LOCALITY_EDIT: 'deliverylocality.edit',
     DELIVERY_LOCALITY_SHOW: 'deliverylocality.show',
     DELIVERY_LOCALITY_LIST: 'deliverylocality.list',
+    WALLET_CREATE: 'wallet.create',
+    WALLET_EDIT: 'wallet.edit',
+    WALLET_SHOW: 'wallet.show',
+    WALLET_LIST: 'wallet.list',
 };
 export const hasPermissionAccess = (roles, permission) => {
     return true;

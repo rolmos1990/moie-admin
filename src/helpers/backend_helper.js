@@ -149,11 +149,20 @@ const officePdfApi = (id, data = {}) => get(`${url.OFFICES}/gen/officePdfReport/
 const fileOfficeTemplate = (filename, id) => file(filename, `${url.OFFICES}/${id}/getTemplate`, {header: 'content-type: application/vnd.ms-excel'});
 const statsApi = (path, data = {}) => get(`${path}`, {}, data);
 const statsDashboardApi = (id) => get(`${url.STATS_DASHBOARD}/estadistica/dashboard`, {});
+
 //templates
 const fetchTemplatesApi = data => get(url.TEMPLATES, {}, data);
 const fetchTemplateApi = (id) => get(`${url.TEMPLATES}/${id}`, {});
 const registerTemplateApi = data => post(url.TEMPLATES, data);
 const updateTemplateApi = (id, data) => put(`${url.TEMPLATES}/${id}`, data);
+
+//wallet
+const fetchWalletsApi = data => get(url.WALLETS, {}, data);
+const fetchWalletApi = (id) => get(`${url.WALLETS}/${id}`, {});
+const registerWalletApi = data => post(url.WALLETS, data);
+const updateWalletApi = (id, data) => put(`${url.WALLETS}/${id}`, data);
+const addAttachmentWalletApi = (id, data) => post(`${url.WALLETS}/${id}/addAttachment`, data);
+const walletStatsApi = () => get(`${url.WALLETS}/reports/stats`);
 
 //payments
 const fetchPaymentsApi = data => get(url.PAYMENTS, {}, data);
@@ -269,6 +278,13 @@ export {
     fetchTemplateApi,
     registerTemplateApi,
     updateTemplateApi,
+
+    fetchWalletsApi,
+    fetchWalletApi,
+    registerWalletApi,
+    updateWalletApi,
+    addAttachmentWalletApi,
+    walletStatsApi,
 
     fetchDeliveryMethodsApi,
     fetchDeliveryQuoteApi,

@@ -29,6 +29,7 @@ import PostSale from "./postSale/reducer"
 import Report from "./reports/reducer"
 import Payments from "./payments/reducer"
 import BillConfig from "./billConfig/reducer"
+import Wallet from "./wallet/reducer"
 
 const rootReducer = combineReducers({
   // public
@@ -55,7 +56,8 @@ const rootReducer = combineReducers({
   PostSale,
   Report,
   Payments,
-  BillConfig
+  BillConfig,
+  Wallet
 })
 
 export default rootReducer

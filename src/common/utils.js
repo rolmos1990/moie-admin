@@ -51,7 +51,11 @@ export const priceFormat = (amount = 0, currency = "", decimalWithCommas = true)
     let amountRender = (parseFloat(amount).toFixed(2));
     if (decimalWithCommas) {
         amountRender = numberWithCommas(amountRender);
-        amountRender = `${currency} ${amountRender}`;
+        if(currency && currency != ""){
+            amountRender = `${currency} ${amountRender}`;
+        } else {
+            amountRender = `${amountRender}`;
+        }
     }
     return amountRender;
 }
