@@ -371,7 +371,7 @@ export const generateLinkPayment = (id) => {
 export const generateLinkPaymentSuccess = (url) => {
     return {
         type: GET_LINK_PAYMENT_SUCCESS,
-        payload: { url },
+        data: url,
     }
 }
 export const generateLinkPaymentFailed = (id) => {

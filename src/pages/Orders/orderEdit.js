@@ -179,7 +179,9 @@ const OrderEdit = (props) => {
     }, [print]);
 
     useEffect(() => {
-        copyToClipboard(linkPayment);
+        if(linkPayment) {
+            copyToClipboard(linkPayment);
+        }
     }, [linkPayment]);
 
     const copyResume = () => {
@@ -355,6 +357,15 @@ const OrderEdit = (props) => {
         return false;
     }
 
+    //Permite generar enlaces Payu
+    const canGeneratePayu = () => {
+        const isPrevPayment = order?.orderDelivery && ([1, 2].includes(order?.orderDelivery.deliveryType));
+        if (isPrevPayment && order && order.status == ORDERS_ENUM.PENDING) {
+            return true;
+        }
+        return false;
+    }
+
     //Permite imprimir la orden
     const canPrint = () => {
         const isPrevPayment = order?.orderDelivery && ([1, 2].includes(order?.orderDelivery.deliveryType));
@@ -459,11 +470,12 @@ const OrderEdit = (props) => {
                                     </Tooltip>
 
                                 )}
+                                {canGeneratePayu() && (
                                 <Tooltip placement="bottom" title="Generar link de Pago" aria-label="add">
                                     <button type="button" color="primary" className="btn-sm btn btn-outline-info waves-effect waves-light" onClick={() => payuGenerate()}>
                                         <i className={"mdi mdi-link"}> </i>
                                     </button>
-                                </Tooltip>
+                                </Tooltip>)}
                                 <Tooltip placement="bottom" title="Copiar resumen" aria-label="add">
                                     <button type="button" color="primary" className="btn-sm btn btn-outline-info waves-effect waves-light" onClick={() => copyResume()}>
                                         <i className={"mdi mdi-content-copy"}> </i>

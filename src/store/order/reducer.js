@@ -497,14 +497,17 @@ const order = (state = initialState, action) => {
             }
         case GET_LINK_PAYMENT:
             return {
+                ...state,
                 linkPayment: false
             }
         case GET_LINK_PAYMENT_SUCCESS:
             return {
-                linkPayment: state.url
+                ...state,
+                linkPayment: action.data
             }
         case GET_LINK_PAYMENT_FAILED:
             return {
+                ...state,
                 linkPayment: false
             }
         default:
