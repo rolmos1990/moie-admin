@@ -17,7 +17,7 @@ import {
     GET_DELIVERY_QUOTE_SUCCESS,
     GET_HISTORIC_ORDER,
     GET_HISTORIC_ORDER_FAILED,
-    GET_HISTORIC_ORDER_SUCCESS,
+    GET_HISTORIC_ORDER_SUCCESS, GET_LINK_PAYMENT, GET_LINK_PAYMENT_FAILED, GET_LINK_PAYMENT_SUCCESS,
     GET_ORDER,
     GET_ORDER_FAILED,
     GET_ORDER_RESTART,
@@ -58,6 +58,7 @@ const initialState = {
     meta: {},
     orders: [],
     ordersByOffice: [],
+    linkPayment: false,
     order: {},
     historic: [],
     refresh: null,
@@ -493,6 +494,18 @@ const order = (state = initialState, action) => {
             return {
                 ...state,
                 error: null
+            }
+        case GET_LINK_PAYMENT:
+            return {
+                linkPayment: false
+            }
+        case GET_LINK_PAYMENT_SUCCESS:
+            return {
+                linkPayment: state.url
+            }
+        case GET_LINK_PAYMENT_FAILED:
+            return {
+                linkPayment: false
             }
         default:
             state = {...state, error: null}

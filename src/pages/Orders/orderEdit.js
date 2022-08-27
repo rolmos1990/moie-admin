@@ -16,7 +16,7 @@ import {
 import NoDataIndication from "../../components/Common/NoDataIndication";
 
 import {
-    canceledStatusOrder,
+    canceledStatusOrder, generateLinkPayment,
     getOrder,
     historicOrder,
     increasePhotoCounter,
@@ -81,7 +81,8 @@ const OrderEdit = (props) => {
         showOrderOverlay = false,
         onGetHistoric,
         historic,
-        onChangePreloader
+        onChangePreloader,
+        linkPayment
     } = props;
     const [orderData, setOrderData] = useState({});
     const [orderResume, setOrderResume] = useState('');
@@ -177,8 +178,18 @@ const OrderEdit = (props) => {
         }
     }, [print]);
 
+    useEffect(() => {
+        copyToClipboard(linkPayment);
+    }, [linkPayment]);
+
     const copyResume = () => {
         copyToClipboard(resume);
+    }
+
+    const payuGenerate = () => {
+        if(order.id) {
+            props.onGenerateLinkPayment(order.id);
+        }
     }
 
     const printOrder = () => {
@@ -448,6 +459,11 @@ const OrderEdit = (props) => {
                                     </Tooltip>
 
                                 )}
+                                <Tooltip placement="bottom" title="Generar link de Pago" aria-label="add">
+                                    <button type="button" color="primary" className="btn-sm btn btn-outline-info waves-effect waves-light" onClick={() => payuGenerate()}>
+                                        <i className={"mdi mdi-link"}> </i>
+                                    </button>
+                                </Tooltip>
                                 <Tooltip placement="bottom" title="Copiar resumen" aria-label="add">
                                     <button type="button" color="primary" className="btn-sm btn btn-outline-info waves-effect waves-light" onClick={() => copyResume()}>
                                         <i className={"mdi mdi-content-copy"}> </i>
@@ -975,10 +991,10 @@ const OrderEdit = (props) => {
 
 const mapStateToProps = state => {
     const {products} = state.Product;
-    const {error, car, order, loading, custom, refresh, historic} = state.Order;
+    const {error, car, order, loading, custom, refresh, historic, linkPayment} = state.Order;
     const print = custom.data && custom.data.print ? custom.data.print : null;
     const resume = custom.data && custom.data.resume ? custom.data.resume : null;
-    return {error, car, order, products, print, resume, loading, refresh, historic}
+    return {error, car, order, products, print, resume, loading, refresh, historic, linkPayment}
 }
 
 const mapDispatchToProps = dispatch => ({
@@ -994,6 +1010,7 @@ const mapDispatchToProps = dispatch => ({
     onResumeOrder: (id = []) => dispatch(resumeOrder(id)),
     onPrintOrder: (id = []) => dispatch(printOrder(id)),
     onGetHistoric: (id) => dispatch(historicOrder(id)),
+    onGenerateLinkPayment: (id = []) => dispatch(generateLinkPayment(id)),
 })
 
 export default withRouter(

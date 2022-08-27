@@ -18,7 +18,7 @@ import {
     GET_DELIVERY_QUOTE_SUCCESS,
     GET_HISTORIC_ORDER,
     GET_HISTORIC_ORDER_FAILED,
-    GET_HISTORIC_ORDER_SUCCESS,
+    GET_HISTORIC_ORDER_SUCCESS, GET_LINK_PAYMENT, GET_LINK_PAYMENT_FAILED, GET_LINK_PAYMENT_SUCCESS,
     GET_ORDER,
     GET_ORDER_FAILED,
     GET_ORDER_RESTART,
@@ -361,3 +361,22 @@ export const confirmConciliationRestart = () => ({
 export const cleanErrorMessage = () => ({
     type: CLEAN_ERROR_MESSAGE
 })
+
+export const generateLinkPayment = (id) => {
+    return {
+        type: GET_LINK_PAYMENT,
+        payload: { id },
+    }
+}
+export const generateLinkPaymentSuccess = (url) => {
+    return {
+        type: GET_LINK_PAYMENT_SUCCESS,
+        payload: { url },
+    }
+}
+export const generateLinkPaymentFailed = (id) => {
+    return {
+        type: GET_LINK_PAYMENT_FAILED,
+        payload: { id },
+    }
+}

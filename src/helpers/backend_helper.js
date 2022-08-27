@@ -171,6 +171,8 @@ const registerPaymentApi = data => post(url.PAYMENTS, data);
 const updatePaymentApi = (id, data) => put(`${url.PAYMENTS}/${id}`, data);
 const applyPaymentPaymentApi = (paymentId, data) => post(`${url.PAYMENTS}/applyPayment/${paymentId}`, data);
 const deletePaymentApi = (id) => del(`${url.PAYMENTS}/${id}/delete`);
+const generateLinkPaymentApi = (orderId) => get(`${url.PAYMENTS}/gateway/generate/payu/${orderId}`, {});
+
 
 
 const fetchDeliveryMethodsApi = () => get(`${url.DELIVERY_METHODS}`, {});
@@ -345,6 +347,7 @@ export {
     applyPaymentPaymentApi,
     updatePaymentApi,
     deletePaymentApi,
+    generateLinkPaymentApi,
 
     fetchBillConfigsApi,
     fetchBillConfigApi,

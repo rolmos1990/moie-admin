@@ -7,7 +7,7 @@ import {
     CONFIRM_CONCILIATION_REQUEST, DOWNLOAD_PHOTO,
     GET_DELIVERY_METHODS,
     GET_DELIVERY_QUOTE,
-    GET_HISTORIC_ORDER,
+    GET_HISTORIC_ORDER, GET_LINK_PAYMENT,
     GET_ORDER,
     GET_ORDERS,
     GET_ORDERS_OFFICE,
@@ -51,7 +51,8 @@ import {
     syncOrderFail,
     syncOrderSuccess,
     updateOrderFail,
-    updateOrderSuccess
+    updateOrderSuccess,
+    generateLinkPaymentSuccess
 } from "./actions"
 
 import {
@@ -62,7 +63,7 @@ import {
     fetchDeliveryMethodsApi,
     fetchDeliveryQuoteApi,
     fetchOrderApi,
-    fetchOrdersApi, increasePhotoCounterApi,
+    fetchOrdersApi, generateLinkPaymentApi, increasePhotoCounterApi,
     nextStatusOrderApi,
     orderHistoric,
     printOrderApi,
@@ -87,6 +88,7 @@ const ACTION_NAME_GET = GET_ORDER;
 const ACTION_NAME_CREATE = REGISTER_ORDER;
 const ACTION_NAME_UPDATE = UPDATE_ORDER;
 const ACTION_ORDER_PRODUCTS_UPDATE = UPDATE_ORDER_PRODUCTS;
+const ACTION_GENERATE_LINK = GET_LINK_PAYMENT;
 
 const PRINT_ORDER_API = printOrderApi;
 const RESUME_ORDER_API = resumeOrderApi;
@@ -104,6 +106,7 @@ const ORDER_HISTORIC_API_REQUEST = orderHistoric;
 const ORDER_DELIVERY_SYNC_API_REQUEST = syncOrderDelivery;
 const ORDER_DELIVERY_REFRESH_API_REQUEST = refreshStatusDelivery;
 const INCREASE_PHOTO_COUNTER_API_REQUEST = increasePhotoCounterApi;
+const GENERATE_LINK_PAYMENT = generateLinkPaymentApi;
 
 //actions
 const CUSTOM_SUCCESS_ACTION = customOrderSuccess;
@@ -337,6 +340,18 @@ function* increasePhotoCounter({payload: {id}}) {
     }
 }
 
+function* generateLinkPayment({payload: {id}}) {
+    try {
+        const response = yield call(GENERATE_LINK_PAYMENT, id);
+        if(response.status === 200){
+            yield put(generateLinkPaymentSuccess(response.url));
+            showResponseMessage(response, "Se ha generado el link de pago!");
+        }
+    } catch (error) {
+        showResponseMessage({status: 500}, "Ocurrió un error!", getErrorMessage(error));
+    }
+}
+
 
 export function* watchOrder() {
     yield takeEvery(ACTION_NAME_CREATE, register);
@@ -358,6 +373,7 @@ export function* watchOrder() {
     yield takeEvery(SYNC_DELIVERY_ORDER, orderDeliverySync);
     yield takeEvery(REFRESH_DELIVERY_ORDER, orderDeliveryRefresh);
     yield takeEvery(DOWNLOAD_PHOTO, increasePhotoCounter);
+    yield takeEvery(ACTION_GENERATE_LINK, generateLinkPayment);
 }
 
 function* orderSaga() {
