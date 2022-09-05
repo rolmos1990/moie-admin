@@ -5,7 +5,7 @@ import PropTypes from "prop-types";
 const BarChart = props => {
     const colors = ['#0096FF', '#5F9EA0', '#0047AB', '#6495ED', '#00FFFF', '#00008B', '#6F8FAF', '#1434A4', '#00A36C', '#3F00FF', '#5D3FD3'];
     const barData = {
-        series: [{
+        series: props.data.fullseries ? props.data.fullseries : [{
             data: props.data.series
         }],
         options: {
@@ -54,6 +54,10 @@ const BarChart = props => {
 
     if (props.data.colors) {
         barData.options.colors = props.data.colors;
+    }
+
+    if(props.tooltip){
+        barData.options.tooltip = props.data.tooltip;
     }
 
     return (

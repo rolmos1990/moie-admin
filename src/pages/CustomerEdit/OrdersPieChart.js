@@ -13,11 +13,34 @@ const OrdersPieChart = ({customerId}) => {
     useEffect(() => {
         if (customerId) {
             customerOrdersStats(customerId, moment()).then(resp => {
-                const chartData = {series: [], labels:[], colors: []};
+                const chartData = {
+                    series: [],
+                    labels:[],
+                    colors: [],
+                    fullseries: [],
+                    tooltip: {
+                        z: {
+                            formatter: function(val) {
+                                return val
+                            },
+                            title: 'Cantidad'
+                        },
+                        y: {
+                            formatter: function(val) {
+                                return val + ' COP'
+                            },
+                            title: 'Monto'
+                        },
+                    }
+                };
                 if(resp){
                     //CONCILIADAS Y ANULADAS
+
+                    chartData.fullseries[0] = {data: [], name: 'Monto'};
+
                     resp.filter(pc => pc.status >= ORDERS_ENUM.CONFIRMED).forEach(pc => {
-                        chartData.series.push(pc.sumPrices);
+
+                        chartData.fullseries[0].data.push({x: ORDER_STATUS[pc.status].name, y: pc.sumPrices, z: pc.qty});
                         chartData.labels.push(ORDER_STATUS[pc.status].name);
                         chartData.colors.push(ORDER_STATUS[pc.status].colorCss);
                     })
@@ -31,7 +54,7 @@ const OrdersPieChart = ({customerId}) => {
         <>
             <h4 className="card-title text-info">Pedidos</h4>
             <div style={{background: '#f6f6f6', height: '100%'}}>
-                <BarChart data={orderChart} colors={orderChart.colors}/>
+                <BarChart data={orderChart} colors={orderChart.colors} tooltip={orderChart.tooltip} />
             </div>
         </>
     );

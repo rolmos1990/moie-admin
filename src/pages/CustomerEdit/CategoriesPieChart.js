@@ -13,13 +13,45 @@ const CategoriesPieChart = ({customerId}) => {
     useEffect(() => {
         if (customerId) {
             customerCategoryStats(customerId, moment()).then(resp => {
-                const chartData = {series: [], labels:[]};
+
+                const chartData = {
+                    series: [],
+                    labels:[],
+                    fullseries: [],
+                    tooltip: {
+                        z: {
+                            formatter: function(val) {
+                                return val
+                            },
+                            title: 'Cantidad'
+                        },
+                        y: {
+                            formatter: function(val) {
+                                return val + ' COP'
+                            },
+                            title: 'Monto'
+                        },
+                    }
+                };
+
+                //const chartData = {series: [], labels:[]};
                 if(resp){
+
+                    chartData.fullseries[0] = {data: [], name: 'Monto'};
+
                     resp.forEach(pc => {
-                        chartData.series.push(pc.qty);
-                        chartData.labels.push(pc.name);
+
+                        let name = pc.name !== null ? pc.name : "SIN CATEGORIA";
+                        name = pc.name !== "" ? name : "SIN NOMBRE";
+
+                        chartData.fullseries[0].data.push({x: name, y: pc.sumPrices, z: parseInt(pc.qty)});
+                        chartData.labels.push(name);
+                        //chartData.colors.push(ORDER_STATUS[pc.status].colorCss);
                     })
                 }
+
+                console.log('chartData: ', chartData);
+
                 setCategoryChart(chartData);
             });
         }
@@ -29,7 +61,7 @@ const CategoriesPieChart = ({customerId}) => {
         <>
             <h4 className="card-title text-info">Categorias</h4>
             <div style={{background: '#f6f6f6', height: '100%'}}>
-                <BarChart data={categoryChart}/>
+                <BarChart data={categoryChart}  tooltip={categoryChart.tooltip}/>
             </div>
         </>
     );
