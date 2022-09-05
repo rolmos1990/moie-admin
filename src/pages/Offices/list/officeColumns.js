@@ -97,6 +97,18 @@ const officeColumns = (onDelete = false) => {
             filterType: "text"
         },
         {
+            text: "Pedidos",
+            dataField: "officeOrders",
+            sort: false,
+            filter: false,
+            filterType: "text",
+            formatter: (cellContent, item) => (
+                <>
+                    <div>{(item.viewOrders && item.viewOrders.quantity > 0) ? item.viewOrders.quantity : 0 }</div>
+                </>
+            ),
+        },
+        {
             text: "Estado",
             dataField: "status",
             sort: true,
