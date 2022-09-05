@@ -50,8 +50,6 @@ const CategoriesPieChart = ({customerId}) => {
                     })
                 }
 
-                console.log('chartData: ', chartData);
-
                 setCategoryChart(chartData);
             });
         }
