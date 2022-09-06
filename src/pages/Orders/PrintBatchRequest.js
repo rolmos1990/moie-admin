@@ -1,24 +1,17 @@
 import React, {useEffect, useState} from "react"
-import {AvForm} from "availity-reactstrap-validation"
 import {Col, Row} from "reactstrap"
-import {Button, Card, Tooltip} from "@material-ui/core";
+import {Button} from "@material-ui/core";
 import {withRouter} from "react-router-dom"
 import {connect} from "react-redux";
 import PropTypes from "prop-types";
-import CustomizedTimeline from "../CustomerEdit/TimeLine";
-import ButtonSubmit from "../../components/Common/ButtonSubmit";
-import {ConfirmationModalAction} from "../../components/Modal/ConfirmationModal";
-import {printPartOfPage, threeDots} from "../../common/utils";
-import {deleteComment, getCommentsByEntity, registerComment} from "../../store/comment/actions";
-import {findFieldOptionByGroup} from "../../helpers/service";
-import order from "../../store/order/reducer";
-import {doPrintBatchRequest, nextStatusOrder, printBatchRequest, resetBatchRequest} from "../../store/order/actions";
+import {printPartOfPage} from "../../common/utils";
+import {nextStatusOrder, printBatchRequest, resetBatchRequest} from "../../store/order/actions";
 import CustomModal from "../../components/Modal/CommosModal";
 import {changePreloader} from "../../store/layout/actions";
 
 const PrintBatchRequest = (props) => {
 
-    const {batch, conditionals, doRequest} = props;
+    const {batch, conditionals, doRequest, refresh} = props;
     const [openPrintConfirmModal, setOpenPrintConfirmModal] = useState(false);
 
     useEffect(() => {
@@ -26,6 +19,10 @@ const PrintBatchRequest = (props) => {
             props.onPrintBatchRequest(conditionals);
         }
     }, [conditionals, doRequest]);
+
+    useEffect(() => {
+        props.onResetBatchRequest();
+    }, [refresh]);
 
     useEffect(() => {
         if (batch && batch.body) {
@@ -50,7 +47,6 @@ const PrintBatchRequest = (props) => {
 
     const onConfirmPrintOrder = () => {
         setOpenPrintConfirmModal(false);
-        props.onResetBatchRequest();
         props.onNextStatusOrder(batch.id);
     }
 
@@ -80,9 +76,9 @@ const PrintBatchRequest = (props) => {
 }
 
 const mapStateToProps = state => {
-    const {batchRequest} = state.Order
+    const {batchRequest, refresh} = state.Order
     const {batch, error, meta, conditionals, doRequest, loading} = batchRequest
-    return {batch, error, meta, conditionals, doRequest, loading}
+    return {batch, error, meta, conditionals, doRequest, loading, refresh}
 }
 
 const mapDispatchToProps = dispatch => ({

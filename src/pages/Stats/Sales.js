@@ -84,7 +84,7 @@ const Sales = ({users, onGetUsers, className}) => {
 
     useEffect(() => {
         if (onGetUsers) {
-            onGetUsers();
+            onGetUsers(null, 250);
         }
     }, [onGetUsers]);
 

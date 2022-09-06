@@ -192,9 +192,9 @@ const mapDispatchToProps = dispatch => ({
     onImportFile: (data) => dispatch(importFile(data)),
     onGetOrders: (conditional = null, limit = DEFAULT_PAGE_LIMIT, page) => {
         if(!conditional) conditional = [];
-        conditional.push({field:'orderDelivery.tracking', value:'', operator: Conditionals.OPERATORS.NOT_NULL});
+        conditional.push({field:'postSaleDate', value:'', operator: Conditionals.OPERATORS.NOT_NULL});
         //conditional.push({field:'orderDelivery.deliveryMethod', value: [1,3,4,5].join("::"), operator: Conditionals.OPERATORS.IN})
-        const orderFields = {field:'id',type: 'DESC'};
+        const orderFields = {field:'postSaleDate',type: 'DESC'};
         dispatch(getOrders(conditional, limit, page, orderFields));
     },
     onPrintBatchRequest: (conditional) => dispatch(doPrintBatchRequest(conditional)),

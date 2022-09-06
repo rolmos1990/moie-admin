@@ -90,6 +90,7 @@ const Whatsapp = ({className}) => {
                     whatsapp[i] = data.origen;
                     datosVentas[i] = parseFloat(data.monto);
                 }
+
                 const newStats = {...stats};
                 newStats.ventasWhatsapp.data.subtitle.text = getStatsLabel(newStats,'ventasWhatsapp');
                 newStats.ventasWhatsapp.data.xAxis.categories = whatsapp;
@@ -153,9 +154,11 @@ const Whatsapp = ({className}) => {
                                 />
                             </div>
                         </Col>
+                        <Row>
                         <Col md={12}>
                             <HighChartsWrapper options={stats.ventasWhatsapp.data}/>
                         </Col>
+                        </Row>
                     </Row>
                 </CardBody>
             </Card>

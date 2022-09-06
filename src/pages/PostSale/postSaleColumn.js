@@ -34,13 +34,23 @@ const postSaleColumns = () => {
             filterCondition: Conditionals.OPERATORS.EQUAL,
         },
         {
-            text: "Fecha del pedido",
-            dataField: "createdAt",
+            text: "Fecha de importación / (Sync)",
+            dataField: "postSaleDate",
             sort: true,
             filter: true,
             filterType: "dateRange",
             formatter: (cellContent, item) => (
-                <div>{formatDate(item.createdAt)}</div>
+                <div>{formatDate(item.postSaleDate)}</div>
+            ),
+        },
+        {
+            text: "Fecha de Sync.",
+            dataField: "postSaleDate",
+            sort: true,
+            filter: true,
+            filterType: "dateRange",
+            formatter: (cellContent, item) => (
+                <div>{item.orderDelivery.syncDate ? formatDate(item.orderDelivery.syncDate) : ''}</div>
             ),
         },
         {

@@ -48,7 +48,9 @@ const OrderList = props => {
     }
 
     useEffect(() => {
-        if (null !== refresh) onGetOrders(getConditionals(), DEFAULT_PAGE_LIMIT, currentPage * DEFAULT_PAGE_LIMIT);
+        if (null !== refresh) {
+            onGetOrders(getConditionals(), DEFAULT_PAGE_LIMIT, currentPage * DEFAULT_PAGE_LIMIT);
+        }
     }, [refresh])
 
     useEffect(() => {
@@ -102,7 +104,7 @@ const OrderList = props => {
 
     const printOrders = () => {
         onChangePreloader(true);
-        let conditionals = conditional || [];
+        let conditionals = [...conditional] || [];
 
         if (ordersSelected && ordersSelected.length === 1) {
             conditionals.push({field: 'id', value: ordersSelected[0], operator: Conditionals.OPERATORS.EQUAL});

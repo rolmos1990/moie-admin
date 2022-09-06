@@ -9,7 +9,7 @@ import NoAccess from "../../components/Common/NoAccess";
 const Reports = () => {
     return (
         <React.Fragment>
-            <div className="page-content">
+            <div className="page-content Stats">
                 <Container fluid>
                     <Breadcrumb path="/reports" title={null} item="Reportes"/>
                     <HasPermissions permissions={[PERMISSIONS.REPORT_LIST]} renderNoAccess={() => <NoAccess/>}>
