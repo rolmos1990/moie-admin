@@ -17,6 +17,7 @@ import {ButtonCopy} from "../../components/Common/ButtonCopy";
 
 const BatchQueriesForm = (props) => {
     const {onGetProducts, products, onResetProduct, loading, categories, sizes, onGetSizes, onGetCategories} = props;
+    const [canclear, setCanclear] = useState(true);
     const [productRefs, setProductRefs] = useState([]);
     const [productList, setProductList] = useState([]);
     const [categoriesList, setCategoriesList] = useState([]);
@@ -28,28 +29,32 @@ const BatchQueriesForm = (props) => {
     const [defaultValue, setDefaultValue] = useState(null);
 
     useEffect(() => {
-        onResetProduct();
+        console.log('productos', )
         onGetCategories();
         onGetSizes();
-    }, [onResetProduct])
+        onResetProduct();
+    }, [])
 
     useEffect(() => {
+
+        //categories
         if (categories && categories.length > 0) {
             const list = [emptyOptions('Todos'), ...arrayToOptions(categories)]
             setCategoriesList(list);
         } else {
             setCategoriesList([emptyOptions('Todos')]);
         }
-    }, [categories])
 
-    useEffect(() => {
+        //sizes
         if (sizes && sizes.length > 0) {
             const list = [emptyOptions('Todos'), ...arrayToOptions(sizes)]
             setSizesList(list);
         } else {
             setSizesList([emptyOptions('Todos')]);
         }
-    }, [sizes])
+
+
+    }, [categories, sizes])
 
     useEffect(() => {
         if (products && products.length > 0) {
@@ -89,6 +94,9 @@ const BatchQueriesForm = (props) => {
 
 
 
+        } else if(canclear){
+            setProductList([]);
+            setCanclear(false);
         }
     }, [products])
 
@@ -97,6 +105,9 @@ const BatchQueriesForm = (props) => {
     }
 
     const onSearchRefs = (e) => {
+
+        console.log('cargo referencia: ...');
+
         if (productRefs.length === 0) {
             return;
         }
@@ -118,11 +129,14 @@ const BatchQueriesForm = (props) => {
         if (categorySelected && categorySelected.value && categorySelected.value > 0) {
             conditions.add("category.id", categorySelected.value, Conditionals.OPERATORS.EQUAL);
         }
+
+
         onGetProducts(conditions.all());
         //setProductList([]);
     }
 
     const clearFilters = () => {
+        console.log("hago una busqueda...");
         setProductList([]);
         setTextToCopy([]);
         setCategorySelected(null)
@@ -166,7 +180,9 @@ const BatchQueriesForm = (props) => {
                                         }
                                     }}
                                     onChange={(e) => {
-                                        setProductRefs(e.target.value);
+                                        if(e.target.value) {
+                                            setProductRefs(e.target.value);
+                                        }
                                     }}
                                 />
                             </Col>

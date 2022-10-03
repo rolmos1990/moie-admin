@@ -36,7 +36,8 @@ const product = (state = initialState, action) => {
     switch (action.type) {
         case RESET_PRODUCT:
             return {
-                ...initialState
+                ...initialState,
+                products: []
             }
         case GET_PRODUCTS:
             return {
