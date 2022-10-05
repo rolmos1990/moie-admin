@@ -37,12 +37,17 @@ function* generateReport({reportType, data}) {
         a.style.display = 'none';
         a.href = _url;
         // the filename you want
-        a.download = blob.name;
-        document.body.appendChild(a);
-        a.click();
-        window.URL.revokeObjectURL(_url);
-        yield put(generateReportSuccess());
-        showResponseMessage({status: 200}, "Reporte generado!");
+
+        if(!blob.name){
+            showResponseMessage({status: 200}, "No se encontraron registros para este periodo");
+        } else {
+            a.download = blob.name;
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(_url);
+            yield put(generateReportSuccess());
+            showResponseMessage({status: 200}, "Reporte generado!");
+        }
     } catch (e) {
         yield put(generateReportFailed(e.message))
         showResponseMessage({status: 500}, "No se logró general el reporte");
