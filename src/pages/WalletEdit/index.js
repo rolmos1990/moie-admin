@@ -7,7 +7,7 @@ import {connect} from "react-redux";
 import {apiError} from "../../store/auth/login/actions";
 import PropTypes from "prop-types";
 import {addAttachmentWallet, getWallet, registersWallet, updateWallet} from "../../store/wallet/actions";
-import {FieldDate, FieldDecimalNumber, FieldText} from "../../components/Fields";
+import {FieldDate, FieldDecimalNumber, FieldSelect, FieldText} from "../../components/Fields";
 import Breadcrumb from "../../components/Common/Breadcrumb";
 import {STATUS} from "../../common/constants";
 import ButtonSubmit from "../../components/Common/ButtonSubmit";
@@ -19,6 +19,7 @@ import {DATE_FORMAT, formatDate} from "../../common/utils";
 import HasPermissionsFunc from "../../components/HasPermissionsFunc";
 import DropZoneIcon from "../../components/Common/DropZoneIcon";
 import Images from "../../components/Common/Image";
+import moment from "moment";
 
 const WalletEdit = (props) => {
     const {getWallet, wallet, refresh, loading} = props;
@@ -42,37 +43,50 @@ const WalletEdit = (props) => {
     }, [wallet]);
 
     const handleValidSubmit = (event, values) => {
-        const data = Object.assign({},values, {status:values._status});
-        delete data._status;
+        if(canEdit) {
+            const data = Object.assign({}, values, {status: values._status});
+            delete data._status;
 
-        if (!isEdit) {
-            props.registersWallet(data, props.history)
-        } else {
-            props.updateWallet(props.match.params.id, data, props.history)
+            if(data.type){
+                data.amount = data.type == 1 ? Math.abs(data.amount) : Math.abs(data.amount) * -1;
+            }
+
+            if (!isEdit) {
+                props.registersWallet(data, props.history)
+            } else {
+                props.updateWallet(props.match.params.id, data, props.history)
+            }
         }
     }
 
     const handleAcceptedFiles = (files) => {
-        const payload = {
-            description: 'test',
-            file: files.base64,
-            filename: files.f.name
-        };
-        setWalletAttachment(payload);
+        if(canEdit) {
+            const payload = {
+                description: 'test',
+                file: files.base64,
+                filename: files.f.name
+            };
+            setWalletAttachment(payload);
+        }
     }
 
     const handleConfirmFiles = (event, values) => {
-        if(!loading) {
+        if(!loading && canEdit) {
             walletAttachment.description = values.description;
             props.addAttachmentWallet(wallet.id, walletAttachment);
         }
     }
 
     const handleCancelFiles = () => {
-        setWalletAttachment(false);
+        if(canEdit) {
+            setWalletAttachment(false);
+        }
     }
 
-    const canEdit = ((HasPermissionsFunc([PERMISSIONS.WALLET_EDIT])) && isEdit || !isEdit);
+    const addDays = moment(walletData.date, "YYYY-MM-DD").add(4, 'days');
+    const isNotExpired = moment().isSameOrBefore(addDays);
+
+    const canEdit = ((HasPermissionsFunc([PERMISSIONS.WALLET_EDIT])) && isEdit && isNotExpired || !isEdit);
 
     //only show mode
     const renderShowMode = <HasPermissions permissions={[PERMISSIONS.WALLET_CREATE, PERMISSIONS.WALLET_EDIT]} renderNoAccess={() => <NoAccess/>}>
@@ -83,7 +97,22 @@ const WalletEdit = (props) => {
                     <Card>
                         <CardBody>
                             <Row>
-                                <Col md="12">
+                                <Col md="6">
+                                    <div className="mb-3">
+                                        <Label htmlFor="field_type">Tipo <span className="text-danger">*</span></Label>
+                                        <FieldSelect
+                                            id={"field_type"}
+                                            name={"type"}
+                                            options={[
+                                                {value: 1, label: 'INGRESO'},
+                                                {value: 2, label: 'EGRESO'}
+                                            ]}
+                                            defaultValue={1}
+                                            required
+                                        />
+                                    </div>
+                                </Col>
+                                <Col md="6">
                                     <div className="mb-3">
                                         <Label htmlFor="field_date">Fecha <span className="text-danger">*</span></Label>
                                         <FieldText
@@ -170,7 +199,24 @@ const WalletEdit = (props) => {
                 <Container fluid>
                     <Breadcrumb hasBack path="/wallets" title={walletData.name} item={"Billeteras"}/>
                     {!canEdit ? (
-                        renderShowMode
+                        <div>
+                            <div>{ renderShowMode }</div>
+                                <div>
+                                    <hr />
+                                    <Row>
+                                        <Col xl="8">
+                                            <Card>
+                                                <hr />
+                                                <div style={{"padding": "20px"}}>
+                                                    <Row>
+                                                        {renderAttachments}
+                                                    </Row>
+                                                </div>
+                                            </Card>
+                                        </Col>
+                                    </Row>
+                                </div>
+                        </div>
                     ) : (
                         <HasPermissions permissions={[PERMISSIONS.WALLET_CREATE, PERMISSIONS.WALLET_EDIT]} renderNoAccess={() => <NoAccess/>}>
                             <AvForm className="needs-validation" autoComplete="off"
@@ -182,7 +228,22 @@ const WalletEdit = (props) => {
                                         <Card>
                                             <CardBody>
                                                 <Row>
-                                                    <Col md="12">
+                                                    <Col md="6">
+                                                        <div className="mb-3">
+                                                            <Label htmlFor="field_type">Tipo <span className="text-danger">*</span></Label>
+                                                            <FieldSelect
+                                                                id={"field_type"}
+                                                                name={"type"}
+                                                                options={[
+                                                                    {value: 1, label: 'INGRESO'},
+                                                                    {value: 2, label: 'EGRESO'}
+                                                                ]}
+                                                                defaultValue={1}
+                                                                required
+                                                            />
+                                                        </div>
+                                                    </Col>
+                                                    <Col md="6">
                                                         <div className="mb-3">
                                                             <Label htmlFor="field_date">Fecha <span className="text-danger">*</span></Label>
                                                             <FieldDate

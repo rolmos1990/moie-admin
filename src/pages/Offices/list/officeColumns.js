@@ -90,13 +90,6 @@ const officeColumns = (onDelete = false) => {
             ),
         },
         {
-            text: "Descripción",
-            dataField: "description",
-            sort: true,
-            filter: true,
-            filterType: "text"
-        },
-        {
             text: "Pedidos",
             dataField: "officeOrders",
             sort: false,

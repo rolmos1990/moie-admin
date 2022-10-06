@@ -5,6 +5,7 @@ import moment from "moment";
 import {ORDER_COLORS, ORDER_STATUS, ORDERS_ENUM} from "../../common/constants";
 import PieChart from "../../components/Common/PieChart";
 import BarChart from "../../components/Common/BarChart";
+import {priceFormat} from "../../common/utils";
 
 const OrdersPieChart = ({customerId}) => {
 
@@ -27,7 +28,7 @@ const OrdersPieChart = ({customerId}) => {
                         },
                         y: {
                             formatter: function(val) {
-                                return val + ' COP'
+                                return priceFormat(val) + ' COP'
                             },
                             title: 'Monto'
                         },

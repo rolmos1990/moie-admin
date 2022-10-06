@@ -75,7 +75,7 @@ const WalletList = props => {
                         <Card>
                             <CardBody>
                                 <div className="float-end mt-2">
-                                    <Tooltip placement="bottom" title="Clientes mayoristas" aria-label="add">
+                                    <Tooltip placement="bottom" title="Saldo inicio de mes" aria-label="add">
                                         <i className="mdi mdi-scale-balance font-size-24 mr-1 text-primary p-3"> </i>
                                     </Tooltip>
                                 </div>

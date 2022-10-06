@@ -63,7 +63,7 @@ const ProductOrderEdit = (props) => {
             setCategoryData(category);
             const conditions = new Conditionals.Condition;
             conditions.add('category', category.id);
-            onGetProducts(conditions.condition, 300, 0);
+            onGetProducts(conditions.condition, 10000, 0);
         }
     }, [category]);
 

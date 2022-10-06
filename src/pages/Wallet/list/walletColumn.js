@@ -34,7 +34,11 @@ const walletColumns = (onDelete = false) => {
             sort: true,
             filter: true,
             filterType: "text",
-            formatter: (cellContent, item) => priceFormat(cellContent),
+            formatter: (cellContent, item) => (
+                <p className={ cellContent > 0 ? "text-success" : "text-danger" } >
+                    {priceFormat(cellContent)}
+                </p>
+            ),
         }
     ]
 
