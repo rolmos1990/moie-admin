@@ -9,7 +9,7 @@ import {
     ORDER_STATUS_LIST_POST_SALE
 } from "../../common/constants";
 import Conditionals from "../../common/conditionals";
-import {formatDate} from "../../common/utils";
+import {DATE_FORMAT, formatDate} from "../../common/utils";
 import {Tooltip} from "@material-ui/core";
 import {CUSTOMER} from "../../helpers/url_helper";
 
@@ -40,7 +40,7 @@ const postSaleColumns = () => {
             filter: true,
             filterType: "dateRange",
             formatter: (cellContent, item) => (
-                <div>{formatDate(item.postSaleDate)}</div>
+                <div>{formatDate(item.postSaleDate, DATE_FORMAT.ONLY_DATE)}</div>
             ),
         },
         {
