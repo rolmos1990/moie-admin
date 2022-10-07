@@ -40,7 +40,7 @@ const postSaleColumns = () => {
             filter: true,
             filterType: "dateRange",
             formatter: (cellContent, item) => (
-                <div>{formatDate(item.postSaleDate, DATE_FORMAT.ONLY_DATE)}</div>
+                <div>{formatDate(item.postSaleDate, DATE_FORMAT.ONLY_DATE)} / {item.orderDelivery.syncDate ? formatDate(item.orderDelivery.syncDate) : ''}</div>
             ),
         },
         {
@@ -49,9 +49,7 @@ const postSaleColumns = () => {
             sort: true,
             filter: true,
             filterType: "dateRange",
-            formatter: (cellContent, item) => (
-                <div>{item.orderDelivery.syncDate ? formatDate(item.orderDelivery.syncDate) : ''}</div>
-            ),
+            hidden: true,
         },
         {
             text: "Estado del Pedido",
