@@ -15,7 +15,7 @@ import {PERMISSIONS} from "../../helpers/security_rol";
 import NoAccess from "../../components/Common/NoAccess";
 import HasPermissions from "../../components/HasPermissions";
 import {DATE_MODES} from "../../components/Fields/InputDate";
-import {DATE_FORMAT, formatDate} from "../../common/utils";
+import {DATE_FORMAT, formatDate, priceFormat} from "../../common/utils";
 import HasPermissionsFunc from "../../components/HasPermissionsFunc";
 import DropZoneIcon from "../../components/Common/DropZoneIcon";
 import Images from "../../components/Common/Image";
@@ -48,7 +48,7 @@ const WalletEdit = (props) => {
             delete data._status;
 
             if(data.type){
-                data.amount = data.type == 1 ? Math.abs(data.amount) : Math.abs(data.amount) * -1;
+                data.amount = (data.type && data.type.value == 1) ? priceFormat(Math.abs(data.amount)) : priceFormat(Math.abs(data.amount) * -1);
             }
 
             if (!isEdit) {
