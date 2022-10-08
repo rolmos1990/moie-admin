@@ -39,6 +39,9 @@ const InputDateField = (props) => {
                     props.onChange(date);
                 }
             }}
+
+            minDate={props.minDate}
+            maxDate={props.maxDate}
             mode={props.mode}
             classNamePrefix="select2-selection"
         />
@@ -50,16 +53,32 @@ InputDateField.propTypes = {
     onChange: PropTypes.func,
     options: PropTypes.array,
     defaultValue: PropTypes.any,
-    mode: PropTypes.string
+    mode: PropTypes.string,
+    minDate: PropTypes.object,
+    maxDate: PropTypes.object
 };
 
 class AvSearchInput extends AvBaseInput {
     render() {
-        const { name, value, onChange, validate, placeholder, helpMessage,mode } = this.props;
+        const { name, value, onChange, validate, placeholder, helpMessage,mode,minDate,maxDate } = this.props;
         const validation = this.context.FormCtrl.getInputState(this.props.name);
         const feedback = validation.errorMessage ? (<div className="invalid-feedback" style={{display: "block"}}>{validation.errorMessage}</div>) : null;
         const help = helpMessage ? (<FormText>{helpMessage}</FormText>) : null;
         const isInvalid = validation.errorMessage ? "select-is-invalid" : "";
+
+        let options = {
+            mode: mode || DATE_MODES.SINGLE,
+            dateFormat: "Y-m-d",
+            locale: 'es'
+        };
+
+        if(minDate){
+            options = {...options, minDate: minDate};
+        }
+
+        if(maxDate){
+            options = {...options, maxDate: maxDate};
+        }
 
         return (
             <FormGroup className={isInvalid}>
@@ -71,11 +90,7 @@ class AvSearchInput extends AvBaseInput {
                         value={value}
                         name={name}
                         placeholder={placeholder}
-                        options={{
-                            mode: mode || DATE_MODES.SINGLE,
-                            dateFormat: "Y-m-d",
-                            locale: 'es'
-                        }}
+                        options={options}
                         onClose={onChange}
                     />
                 </div>

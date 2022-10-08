@@ -60,7 +60,7 @@ const WalletEdit = (props) => {
     }
 
     const handleAcceptedFiles = (files) => {
-        if(canEdit) {
+        if(canAttach) {
             const payload = {
                 description: 'test',
                 file: files.base64,
@@ -71,14 +71,14 @@ const WalletEdit = (props) => {
     }
 
     const handleConfirmFiles = (event, values) => {
-        if(!loading && canEdit) {
+        if(!loading && canAttach) {
             walletAttachment.description = values.description;
             props.addAttachmentWallet(wallet.id, walletAttachment);
         }
     }
 
     const handleCancelFiles = () => {
-        if(canEdit) {
+        if(canAttach) {
             setWalletAttachment(false);
         }
     }
@@ -87,6 +87,7 @@ const WalletEdit = (props) => {
     const isNotExpired = moment().isSameOrBefore(addDays);
 
     const canEdit = ((HasPermissionsFunc([PERMISSIONS.WALLET_EDIT])) && isEdit && isNotExpired || !isEdit);
+    const canAttach = ((HasPermissionsFunc([PERMISSIONS.WALLET_EDIT])) && isEdit);
 
     //only show mode
     const renderShowMode = <HasPermissions permissions={[PERMISSIONS.WALLET_CREATE, PERMISSIONS.WALLET_EDIT]} renderNoAccess={() => <NoAccess/>}>
@@ -193,136 +194,25 @@ const WalletEdit = (props) => {
         }}
     />
 
-    return (
-        <React.Fragment>
-            <div className="page-content">
-                <Container fluid>
-                    <Breadcrumb hasBack path="/wallets" title={walletData.name} item={"Billeteras"}/>
-                    {!canEdit ? (
+    //bloque de adjuntos
+    const renderAddAttachment = <Row>
+            <Col xl="8">
+                <Card>
+                    {canAttach && (
                         <div>
-                            <div>{ renderShowMode }</div>
-                                <div>
-                                    <hr />
-                                    <Row>
-                                        <Col xl="8">
-                                            <Card>
-                                                <hr />
-                                                <div style={{"padding": "20px"}}>
-                                                    <Row>
-                                                        {renderAttachments}
-                                                    </Row>
-                                                </div>
-                                            </Card>
-                                        </Col>
-                                    </Row>
-                                </div>
-                        </div>
-                    ) : (
-                        <HasPermissions permissions={[PERMISSIONS.WALLET_CREATE, PERMISSIONS.WALLET_EDIT]} renderNoAccess={() => <NoAccess/>}>
-                            <AvForm className="needs-validation" autoComplete="off"
-                                    onValidSubmit={(e, v) => {
-                                        handleValidSubmit(e, v)
-                                    }}>
-                                <Row>
-                                    <Col xl="8">
-                                        <Card>
-                                            <CardBody>
-                                                <Row>
-                                                    <Col md="6">
-                                                        <div className="mb-3">
-                                                            <Label htmlFor="field_type">Tipo <span className="text-danger">*</span></Label>
-                                                            <FieldSelect
-                                                                id={"field_type"}
-                                                                name={"type"}
-                                                                options={[
-                                                                    {value: 1, label: 'INGRESO'},
-                                                                    {value: 2, label: 'EGRESO'}
-                                                                ]}
-                                                                defaultValue={1}
-                                                                required
-                                                            />
-                                                        </div>
-                                                    </Col>
-                                                    <Col md="6">
-                                                        <div className="mb-3">
-                                                            <Label htmlFor="field_date">Fecha <span className="text-danger">*</span></Label>
-                                                            <FieldDate
-                                                                id={"field_date"}
-                                                                name={"date"}
-                                                                mode={DATE_MODES.SINGLE}
-                                                                defaultValue={walletData.date}
-                                                            />
-                                                        </div>
-                                                    </Col>
-                                                </Row>
-                                                <Row>
-                                                    <Col md="6">
-                                                        <div className="mb-3">
-                                                            <Label htmlFor="field_amount">Monto <span className="text-danger">*</span></Label>
-                                                            <FieldDecimalNumber
-                                                                id={"field_amount"}
-                                                                name={"amount"}
-                                                                value={walletData.amount ? walletData.amount.toFixed(2) : "0.00"}
-                                                                required/>
-                                                        </div>
-                                                    </Col>
-                                                    <Col md="6">
-                                                        <div className="mb-3">
-                                                            <Label htmlFor="field_name">Descripción <span className="text-danger">*</span></Label>
-                                                            <FieldText
-                                                                id={"field_description"}
-                                                                name={"description"}
-                                                                value={walletData.description}
-                                                                minLength={3}
-                                                                maxLength={100}
-                                                                required
-                                                            />
-                                                        </div>
-                                                    </Col>
-                                                </Row>
-                                                <Row>
-                                                    <Col md="12">
-                                                        <div className="mb-3">
-                                                            <Label htmlFor="field_comment">Comentario <span className="text-danger">*</span></Label>
-                                                            <FieldText
-                                                                id={"field_comment"}
-                                                                name={"comment"}
-                                                                type={"textarea"}
-                                                                value={walletData.comment}
-                                                                minLength={2}
-                                                                maxLength={255}
-                                                                required
-                                                            />
-                                                        </div>
-                                                    </Col>
-                                                </Row>
-                                                <Row>
-                                                    <Col md={12} className="text-right">
-                                                        <ButtonSubmit loading={props.loading}/>
-                                                    </Col>
-                                                </Row>
-                                            </CardBody>
-                                        </Card>
-                                    </Col>
-                                </Row>
-                            </AvForm>
-                            <hr />
-                            <Row>
-                                <Col xl="8">
-                                    <Card>
-                                        <div style={{padding: "40px"}}>
-                                            <h2>Nuevo Adjunto</h2>
+                            <div style={{padding: "40px"}}>
+                                <h2>Nuevo Adjunto</h2>
 
-                                        {walletAttachment && walletAttachment.file ? (
-                                                <AvForm className="needs-validation" autoComplete="off"
-                                                        onValidSubmit={(e, v) => {
-                                                            handleConfirmFiles(e, v)
-                                                        }}>
-                                            <div className="text-center">
-                                                <Images src={walletAttachment.file}
-                                                        alt={walletAttachment.file}
-                                                        className="img-fluid mx-auto d-block tab-img rounded"/>
-                                                        <div style={{"margin": "20px"}}>
+                                {walletAttachment && walletAttachment.file ? (
+                                    <AvForm className="needs-validation" autoComplete="off"
+                                            onValidSubmit={(e, v) => {
+                                                handleConfirmFiles(e, v)
+                                            }}>
+                                        <div className="text-center">
+                                            <Images src={walletAttachment.file}
+                                                    alt={walletAttachment.file}
+                                                    className="img-fluid mx-auto d-block tab-img rounded"/>
+                                            <div style={{"margin": "20px"}}>
                                                 <FieldText
                                                     id={"field_description_image"}
                                                     name={"description"}
@@ -332,32 +222,138 @@ const WalletEdit = (props) => {
                                                     maxWidth="200"
                                                     placeholder={"Description de imagen"}
                                                 />
-                                                        </div>
-                                                <>
-                                                    <Tooltip placement="bottom" title="Aceptar" aria-label="add">
-                                                        <ButtonSubmit loading={props.loading}/>
-                                                    </Tooltip>
-                                                    <Tooltip placement="bottom" title="Cancelar" aria-label="add">
-                                                        <Button color="default" onClick={() => handleCancelFiles()}>
-                                                            Cancelar
-                                                        </Button>
-                                                    </Tooltip>
-                                                </>
                                             </div>
-                                           </AvForm>
-                                        ) : addAttachment}
+                                            <>
+                                                <Tooltip placement="bottom" title="Aceptar" aria-label="add">
+                                                    <ButtonSubmit loading={props.loading}/>
+                                                </Tooltip>
+                                                <Tooltip placement="bottom" title="Cancelar" aria-label="add">
+                                                    <Button color="default" onClick={() => handleCancelFiles()}>
+                                                        Cancelar
+                                                    </Button>
+                                                </Tooltip>
+                                            </>
                                         </div>
-                                        <hr />
-                                        <div style={{"padding": "20px"}}>
-                                        <Row>
-                                            {renderAttachments}
-                                        </Row>
-                                        </div>
-                                    </Card>
+                                    </AvForm>
+                                ) : addAttachment}
+                            </div>
+                            <hr />
+                        </div>
+                    )}
+                    <div style={{"padding": "20px"}}>
+                        <Row>
+                            {renderAttachments}
+                        </Row>
+                    </div>
+                </Card>
+            </Col>
+        </Row>
+
+    //formulario principal
+    const renderForm  = (
+        <AvForm className="needs-validation" autoComplete="off"
+                onValidSubmit={(e, v) => {
+                    handleValidSubmit(e, v)
+                }}>
+            <Row>
+                <Col xl="8">
+                    <Card>
+                        <CardBody>
+                            <Row>
+                                <Col md="6">
+                                    <div className="mb-3">
+                                        <Label htmlFor="field_type">Tipo <span className="text-danger">*</span></Label>
+                                        <FieldSelect
+                                            id={"field_type"}
+                                            name={"type"}
+                                            options={[
+                                                {value: 1, label: 'INGRESO'},
+                                                {value: 2, label: 'EGRESO'}
+                                            ]}
+                                            defaultValue={1}
+                                            required
+                                        />
+                                    </div>
+                                </Col>
+                                <Col md="6">
+                                    <div className="mb-3">
+                                        <Label htmlFor="field_date">Fecha <span className="text-danger">*</span></Label>
+                                        <FieldDate
+                                            id={"field_date"}
+                                            name={"date"}
+                                            mode={DATE_MODES.SINGLE}
+                                            defaultValue={walletData.date}
+                                            maxDate={formatDate(moment(), DATE_FORMAT.ONLY_DATE)}
+                                            minDate={formatDate(moment().subtract(4,'d'), DATE_FORMAT.ONLY_DATE)}
+                                        />
+                                    </div>
                                 </Col>
                             </Row>
-                        </HasPermissions>
-                    )}
+                            <Row>
+                                <Col md="6">
+                                    <div className="mb-3">
+                                        <Label htmlFor="field_amount">Monto <span className="text-danger">*</span></Label>
+                                        <FieldDecimalNumber
+                                            id={"field_amount"}
+                                            name={"amount"}
+                                            value={walletData.amount ? walletData.amount.toFixed(2) : "0.00"}
+                                            required/>
+                                    </div>
+                                </Col>
+                                <Col md="6">
+                                    <div className="mb-3">
+                                        <Label htmlFor="field_name">Descripción <span className="text-danger">*</span></Label>
+                                        <FieldText
+                                            id={"field_description"}
+                                            name={"description"}
+                                            value={walletData.description}
+                                            minLength={3}
+                                            maxLength={100}
+                                            required
+                                        />
+                                    </div>
+                                </Col>
+                            </Row>
+                            <Row>
+                                <Col md="12">
+                                    <div className="mb-3">
+                                        <Label htmlFor="field_comment">Comentario <span className="text-danger">*</span></Label>
+                                        <FieldText
+                                            id={"field_comment"}
+                                            name={"comment"}
+                                            type={"textarea"}
+                                            value={walletData.comment}
+                                            minLength={2}
+                                            maxLength={255}
+                                            required
+                                        />
+                                    </div>
+                                </Col>
+                            </Row>
+                            <Row>
+                                <Col md={12} className="text-right">
+                                    <ButtonSubmit loading={props.loading}/>
+                                </Col>
+                            </Row>
+                        </CardBody>
+                    </Card>
+                </Col>
+            </Row>
+        </AvForm>
+    );
+
+    return (
+        <React.Fragment>
+            <div className="page-content">
+                <Container fluid>
+                    <Breadcrumb hasBack path="/wallets" title={walletData.name} item={"Billeteras"}/>
+                    <HasPermissions permissions={[PERMISSIONS.WALLET_CREATE, PERMISSIONS.WALLET_EDIT, PERMISSIONS.WALLET_SHOW]} renderNoAccess={() => <NoAccess/>}>
+                        <div>
+                        {canEdit ? renderForm : renderShowMode}
+                        </div>
+                        <hr />
+                        {renderAddAttachment}
+                    </HasPermissions>
                 </Container>
             </div>
         </React.Fragment>
