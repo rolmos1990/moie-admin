@@ -28,7 +28,7 @@ import {PERMISSIONS} from "../../helpers/security_rol";
 import HasPermissions from "../../components/HasPermissions";
 import OutsideClickHandler from "../../components/OutsideClickHandler";
 import {changePreloader} from "../../store/layout/actions";
-import {fetchCustomerOrderFinishedApi} from "../../helpers/backend_helper";
+import {showMessage} from "../../components/MessageToast/ShowToastMessages";
 
 const OrderList = props => {
     const {orders, meta, onGetOrders, onResetOrders, refresh, customActions, conditionals, showAsModal, conciliation, onChangePreloader, externalView} = props;
@@ -44,7 +44,6 @@ const OrderList = props => {
     const [openReportConciliationModal, setOpenReportConciliationModal] = useState(false);
     const [columns, setColumns] = useState(orderColumns(setOrderSelected, showAsModal, false));
     const [selectAll, setSelectAll] = useState(false);
-    const [orderFinished, setOrderFinished] = useState([]);
 
     const pageOptions = {
         sizePerPage: DEFAULT_PAGE_LIMIT,
@@ -102,17 +101,30 @@ const OrderList = props => {
     }
 
     const printOrders = () => {
-        onChangePreloader(true);
         let conditionals = [...conditional] || [];
+        const totalPrintsAvailables = 1000;
 
-        if (ordersSelected && ordersSelected.length === 1) {
-            conditionals.push({field: 'id', value: ordersSelected[0], operator: Conditionals.OPERATORS.EQUAL});
-        }
-        if (ordersSelected && ordersSelected.length > 1) {
-            conditionals.push({field: 'id', value: ordersSelected.join('::'), operator: Conditionals.OPERATORS.IN});
-        }
+        if(conditionals.length >= 0 && (meta?.totalRegisters <= totalPrintsAvailables)) {
 
-        props.onPrintBatchRequest(conditionals);
+            onChangePreloader(true);
+
+            if (ordersSelected && ordersSelected.length === 1) {
+                conditionals.push({field: 'id', value: ordersSelected[0], operator: Conditionals.OPERATORS.EQUAL});
+            }
+            if (ordersSelected && ordersSelected.length > 1) {
+                conditionals.push({field: 'id', value: ordersSelected.join('::'), operator: Conditionals.OPERATORS.IN});
+            }
+
+            props.onPrintBatchRequest(conditionals);
+
+        } else if(meta?.totalRegisters > totalPrintsAvailables){
+            showMessage.error('Total de impresiones excede la capacidad a imprimir de '+totalPrintsAvailables +' elementos');
+
+        }
+        else{
+            showMessage.error('Debe realizar algun filtro para poder realizar una impresión');
+
+        }
     }
 
     const handleConciliateStatus = (conditionals) => {
