@@ -14,16 +14,7 @@ const statusOptions = buildOptions(ORDER_STATUS_LIST);
 const deliveryMethodsOptions = buildOptions(DELIVERY_METHODS_LIST);
 const deliveryTypeOptions = buildOptions(DELIVERY_TYPES_LIST);
 
-function getOrderFinished (orderFinished, customerId) {
-    try {
-        const _order = orderFinished.filter(item => item.id === customerId);
-        return _order[0].qty;
-    }catch(e){
-        return 0;
-    }
-}
-
-const orderColumns = (onSelectedOrder, showAsModal, conciliationView, orderFinished) => {
+const orderColumns = (onSelectedOrder, showAsModal, conciliationView) => {
     let columns = [
         {
             text: "Pedido #",
@@ -66,12 +57,7 @@ const orderColumns = (onSelectedOrder, showAsModal, conciliationView, orderFinis
 
                                 {item.customer.name}
                                 <span>
-                                {getOrderFinished(orderFinished, item.customer.id) > 0 ? (
-                                    <span className="badge rounded-pill bg-secondary m-1">{ getOrderFinished(orderFinished, item.customer.id) }</span>
-
-                                ) : (
-                                    <span className="badge rounded-pill bg-secondary m-1"> - </span>
-                                )}
+                                    <span className="badge rounded-pill bg-secondary m-1">{ item.ordersFinished }</span>
                                 </span>
                             </div>
                             <div>

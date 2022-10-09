@@ -58,12 +58,13 @@ export const resetOrder = () => ({
     type: RESET_ORDER,
 })
 
-export const getOrders = (conditional, limit, offset, order) => ({
+export const getOrders = (conditional, limit, offset, order, ordersFinished = false) => ({
     type: GET_ORDERS,
     conditional: conditional,
     limit: limit,
     offset: offset,
-    order: order
+    order: order,
+    ordersFinished: ordersFinished
 })
 
 export const getOrdersSuccess = (data, meta) => ({

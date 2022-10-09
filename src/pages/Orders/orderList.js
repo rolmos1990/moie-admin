@@ -13,7 +13,12 @@ import {normalizeColumnsList} from "../../common/converters";
 import NoDataIndication from "../../components/Common/NoDataIndication";
 import orderColumns from "./orderColumn";
 import {Button, Tooltip} from "@material-ui/core";
-import {doConciliation, doPrintBatchRequest, getOrders, resetOrder} from "../../store/order/actions";
+import {
+    doConciliation,
+    doPrintBatchRequest,
+    getOrders,
+    resetOrder
+} from "../../store/order/actions";
 import OrderEdit from "./orderEdit";
 import Conditionals from "../../common/conditionals";
 import CustomModal from "../../components/Modal/CommosModal";
@@ -57,8 +62,8 @@ const OrderList = props => {
         if (null !== conciliationView) {
             onFilterAction(conditional);
         }
-        setColumns(orderColumns(setOrderSelected, showAsModal, conciliationView, orderFinished));
-    }, [conciliationView, orderFinished])
+        setColumns(orderColumns(setOrderSelected, showAsModal, conciliationView));
+    }, [conciliationView]);
 
     useEffect(() => {
         if (conciliationView && !conciliation.loading && conciliation.success) {
@@ -75,17 +80,11 @@ const OrderList = props => {
     }, [onGetOrders])
 
     useEffect(() => {
-        setStatesList(orders);
-        const customers = orders.map(order => order.customer.id);
-        if(customers.length > 0) {
-            fetchCustomerOrderFinishedApi({customers: customers}).then(resp => {
-                if (resp) {
-                    // resp -> [{id,name,qty}]
-                    setOrderFinished(resp);
-                }
-            });
-        }
+        setColumns(orderColumns(setOrderSelected, showAsModal, conciliationView));
+    }, [statesList]);
 
+    useEffect(() => {
+        setStatesList(orders);
     }, [orders])
 
     // eslint-disable-next-line no-unused-vars
@@ -380,7 +379,7 @@ const mapDispatchToProps = dispatch => ({
         dispatch(resetOrder());
     },
     onChangePreloader: (preloader) => dispatch(changePreloader(preloader)),
-    onGetOrders: (conditional = null, limit = DEFAULT_PAGE_LIMIT, page) => dispatch(getOrders(conditional, limit, page)),
+    onGetOrders: (conditional = null, limit = DEFAULT_PAGE_LIMIT, page) => dispatch(getOrders(conditional, limit, page, false, true)),
     onPrintBatchRequest: (conditional) => dispatch(doPrintBatchRequest(conditional)),
     onConciliation: (ordersSelected) => dispatch(doConciliation(ordersSelected)),
 })

@@ -59,7 +59,7 @@ import {
     batchPrintRequestApi,
     canceledStatusOrderApi,
     conciliationRequestApi,
-    confirmConciliationRequestApi,
+    confirmConciliationRequestApi, fetchCustomerOrderFinishedApi,
     fetchDeliveryMethodsApi,
     fetchDeliveryQuoteApi,
     fetchOrderApi,
@@ -107,6 +107,7 @@ const ORDER_DELIVERY_SYNC_API_REQUEST = syncOrderDelivery;
 const ORDER_DELIVERY_REFRESH_API_REQUEST = refreshStatusDelivery;
 const INCREASE_PHOTO_COUNTER_API_REQUEST = increasePhotoCounterApi;
 const GENERATE_LINK_PAYMENT = generateLinkPaymentApi;
+const GET_ORDER_FINISHED = fetchCustomerOrderFinishedApi;
 
 //actions
 const CUSTOM_SUCCESS_ACTION = customOrderSuccess;
@@ -143,12 +144,35 @@ function* get({id}) {
     }
 }
 
-function* fetch({conditional, limit, offset, order}) {
+function* fetch({conditional, limit, offset, order, ordersFinished = false}) {
     try {
         const cond = Conditionals.getConditionalFormat(conditional);
         const query = Conditionals.buildHttpGetQuery(cond, limit, offset,order);
 
         const response = yield call(LIST_API_REQUEST, query)
+
+        if(ordersFinished) {
+            const customers = response.data.map(order => order.customer && order.customer.id);
+            const responseFinished = yield call(GET_ORDER_FINISHED, {customers});
+
+            const getQtyFinished = (responseFinished, item) => {
+                try {
+                    const _orderFinished = responseFinished.filter(_ordersFinished => (_ordersFinished && _ordersFinished.id) == (item.customer && item.customer.id));
+                    return (_orderFinished[0] && _orderFinished[0].qty) || 0;
+                } catch (e) {
+                    return 0;
+                }
+            }
+
+            if (responseFinished && responseFinished.length > 0) {
+                response.data = response.data && response.data.map(order => ({
+                        ...order,
+                        ordersFinished: getQtyFinished(responseFinished, order),
+                    })
+                );
+            }
+        }
+
         yield put(LIST_SUCCESS_ACTION(response.data, response.meta));
     } catch (error) {
         yield put(LIST_FAILED_ACTION(getErrorMessage(error)))
