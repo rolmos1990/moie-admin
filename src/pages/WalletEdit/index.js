@@ -48,7 +48,7 @@ const WalletEdit = (props) => {
             delete data._status;
 
             if(data.type){
-                data.amount = (data.type && data.type.value == 1) ? priceFormat(Math.abs(data.amount)) : priceFormat(Math.abs(data.amount) * -1);
+                data.amount = (data.type && data.type.value == 1) ? priceFormat(Math.abs(data.amount), "", false) : priceFormat(Math.abs(data.amount) * -1, "", false);
             }
 
             if (!isEdit) {
