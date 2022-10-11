@@ -159,7 +159,7 @@ const orderColumns = (onSelectedOrder, showAsModal, conciliationView) => {
             sort: false,
             filterType: "asyncSelect",
             filter: true,
-            urlStr: USER,
+            urlStr: USER + '?limit=100',
             conditionalOptions: {fieldName: 'name', operator: Conditionals.OPERATORS.LIKE},
             formatter: (cellContent, item) => (
                 <div>{item.user.name}</div>
