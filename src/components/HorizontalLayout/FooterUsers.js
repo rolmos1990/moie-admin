@@ -4,6 +4,7 @@ import {connect} from "react-redux";
 import {priceFormat} from "../../common/utils";
 import FlipMove from 'react-flip-move';
 import userImage from "../../assets/images/users/user.png"
+import {baseImagePathNew} from "../../helpers/api_helper";
 
 class ListItem extends Component {
     render() {
@@ -44,7 +45,7 @@ const FooterUsers = ({data, user}) => {
                     name: o.user.name,
                     sales: o.origen,
                     amount: priceFormat(o.totalAmount),
-                    image: o.user.photo || userImage
+                    image: o.user.photo ? baseImagePathNew + '/' + o.user.photo : userImage
                 }));
 
                 const limit = 6;
