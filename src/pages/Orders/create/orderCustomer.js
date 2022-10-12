@@ -141,7 +141,7 @@ const OrderCustomer = (props) => {
                                 placeholder="Buscar por nombre"
                                 defaultValue={customerDefault}
                                 isClearable={true}
-                                hasWild={false}
+                                hasWild={true}
                                 conditionalOptions={{fieldName: 'name', operator: Conditionals.OPERATORS.LIKE}}
                                 onChange={(c, meta) => {
                                     if(meta.action === "clear"){

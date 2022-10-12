@@ -65,7 +65,7 @@ function* get({ id }) {
 }
 
 
-function* fetch({conditional, limit, offset}) {
+function* fetch({conditional, limit = 50, offset}) {
     try {
 
         const cond = Conditionals.getConditionalFormat(conditional);

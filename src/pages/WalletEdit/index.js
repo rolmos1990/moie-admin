@@ -102,6 +102,7 @@ const WalletEdit = (props) => {
                                     <div className="mb-3">
                                         <Label htmlFor="field_type">Tipo <span className="text-danger">*</span></Label>
                                         <FieldSelect
+                                            disabled={!canEdit}
                                             id={"field_type"}
                                             name={"type"}
                                             options={[
