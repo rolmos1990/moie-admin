@@ -45,7 +45,7 @@ const FooterUsers = ({data, user}) => {
                     name: o.user.name,
                     sales: o.origen,
                     amount: priceFormat(o.totalAmount),
-                    image: o.user.photo ? baseImagePathNew + '/' + o.user.photo : userImage
+                    image: o.user.photo ? baseImagePathNew + o.user.photo : userImage
                 }));
 
                 const limit = 6;
