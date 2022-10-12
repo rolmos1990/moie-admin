@@ -19,7 +19,7 @@ const SortableItem = SortableElement(({value, index}) => (
     <Col xs={3} className={`text-center ${!value.published || (value.productAvailable && value.productAvailable.available <= 0) ? 'opacity-50' : ''}`} style={{padding: '20px', position:"relative"}}>
         {value.quantity}
         <div className={`border-1`} id={`product-${index}`} role="tabpanel">
-            <Images src={`${getImageByQuality(getImageByGroup(value.productImage, 1), 'medium')}`}
+            <Images src={`${getImageByQuality(getImageByGroup(value.productImage, 1), 'small')}`}
                     alt={"image"}
                     height={350}
                     className="img-fluid d-block"
@@ -50,6 +50,7 @@ const ProductOrderEdit = (props) => {
     const {onGetProducts, products, onReorderProduct, onGetCategory, category} = props;
     const [categoryData, setCategoryData] = useState(null);
     const [productsList, setProductsList] = useState([]);
+    const [limited, setLimited] = useState(true);
 
     useEffect(() => {
         if(onGetCategory){
@@ -63,9 +64,11 @@ const ProductOrderEdit = (props) => {
             setCategoryData(category);
             const conditions = new Conditionals.Condition;
             conditions.add('category', category.id);
-            onGetProducts(conditions.condition, 10000, 0);
+
+            const limit = (limited) ? 200 : 10000;
+            onGetProducts(conditions.condition, limit, 0);
         }
-    }, [category]);
+    }, [category, limited]);
 
     useEffect(() => {
         if (products) {
@@ -102,6 +105,11 @@ const ProductOrderEdit = (props) => {
                         <div>
                             <Card>
                                 <CardBody>
+                                    {limited && (
+                                        <button size="small" className="btn btn-sm btn-primary" onClick={() => setLimited(false)}>
+                                            Ver Todos <i className="fa fa-ellipsis-h"> </i>
+                                        </button>
+                                    )}
                                     {categoryData == null ? (
                                         <Spinner size="lg" className="m-5" color="primary"/>
                                     ) : <div></div>}
