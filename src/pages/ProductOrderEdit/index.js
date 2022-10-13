@@ -19,7 +19,7 @@ const SortableItem = SortableElement(({value, index}) => (
     <Col xs={3} className={`text-center ${!value.published || (value.productAvailable && value.productAvailable.available <= 0) ? 'opacity-50' : ''}`} style={{padding: '20px', position:"relative"}}>
         {value.quantity}
         <div className={`border-1`} id={`product-${index}`} role="tabpanel">
-            <Images src={`${getImageByQuality(getImageByGroup(value.productImage, 1), 'small')}`}
+            <Images src={`${getImageByQuality(getImageByGroup(value.productImage, 1), 'medium')}`}
                     alt={"image"}
                     height={350}
                     className="img-fluid d-block"
@@ -47,10 +47,11 @@ const SortableList = SortableContainer(({items}) => {
 
 
 const ProductOrderEdit = (props) => {
-    const {onGetProducts, products, onReorderProduct, onGetCategory, category} = props;
+    const {onGetProducts, products, onReorderProduct, onGetCategory, category, loading} = props;
+    const [page, setPage] = useState(0);
     const [categoryData, setCategoryData] = useState(null);
     const [productsList, setProductsList] = useState([]);
-    const [limited, setLimited] = useState(true);
+    const limited = 100;
 
     useEffect(() => {
         if(onGetCategory){
@@ -61,21 +62,21 @@ const ProductOrderEdit = (props) => {
 
     useEffect(() => {
         if(category && onGetProducts){
+
             setCategoryData(category);
             const conditions = new Conditionals.Condition;
             conditions.add('category', category.id);
 
-            const limit = (limited) ? 200 : 10000;
-            onGetProducts(conditions.condition, limit, 0);
+            const order = {field: "orden", type: "asc"}
+            onGetProducts(conditions.condition, limited, page, order);
+            setPage(page + 1);
         }
-    }, [category, limited]);
+    }, [category]);
 
     useEffect(() => {
-        if (products) {
-            products.sort(function(a,b) {
-                return a.orden - b.orden;
-            })
-            setProductsList(products);
+        if (products && products.length > 0) {
+            let merged = productsList.concat(products);
+            setProductsList(merged);
         }
     }, [products]);
 
@@ -94,6 +95,14 @@ const ProductOrderEdit = (props) => {
         }
     }
 
+    const getMore = () => {
+        const nextPage = page + 1;
+        const conditions = new Conditionals.Condition;
+        conditions.add('category', category.id);
+        onGetProducts(conditions.condition, limited, nextPage);
+        setPage(nextPage);
+    }
+
     return (
         <React.Fragment>
             <div className="page-content">
@@ -105,17 +114,17 @@ const ProductOrderEdit = (props) => {
                         <div>
                             <Card>
                                 <CardBody>
-                                    {limited && (
-                                        <button size="small" className="btn btn-sm btn-primary" onClick={() => setLimited(false)}>
-                                            Ver Todos <i className="fa fa-ellipsis-h"> </i>
-                                        </button>
-                                    )}
                                     {categoryData == null ? (
                                         <Spinner size="lg" className="m-5" color="primary"/>
                                     ) : <div></div>}
 
                                     {productsList.length > 0 && (
                                         <SortableList items={productsList} onSortEnd={onSortEnd} lockOffset={false} axis={"xy"} />
+                                    )}
+                                    {!loading && (
+                                        <button size="small" className="btn btn-sm btn-primary" onClick={() => getMore()}>
+                                            Mostrar m&aacute;s <i className="fa fa-ellipsis-h"> </i>
+                                        </button>
                                     )}
                                 </CardBody>
                             </Card>
@@ -131,7 +140,7 @@ const mapDispatchToProps = dispatch => ({
     onResetProducts: () => {
         dispatch(resetProduct());
     },
-    onGetProducts: (conditional = null, limit = DEFAULT_PAGE_LIMIT, page) => dispatch(getProducts(conditional, limit, page)),
+    onGetProducts: (conditional = null, limit = DEFAULT_PAGE_LIMIT, page, order) => dispatch(getProducts(conditional, limit, page, order)),
     onReorderProduct: (data, history) => dispatch(reorderProduct(data, history)),
     onGetCategory: (id) => dispatch(getCategory(id))
 })

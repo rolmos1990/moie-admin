@@ -23,11 +23,12 @@ export const resetProduct = () => ({
     type: RESET_PRODUCT,
 })
 
-export const getProducts = (conditional, limit, offset) => ({
+export const getProducts = (conditional, limit, offset, order) => ({
     type: GET_PRODUCTS,
     conditional: conditional,
     limit: limit,
-    offset: offset
+    offset: offset,
+    order: order
 })
 
 
