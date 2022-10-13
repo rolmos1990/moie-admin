@@ -51,7 +51,7 @@ const ProductOrderEdit = (props) => {
     const [page, setPage] = useState(0);
     const [categoryData, setCategoryData] = useState(null);
     const [productsList, setProductsList] = useState([]);
-    const limited = 100;
+    const limited = 200;
 
     useEffect(() => {
         if(onGetCategory){
@@ -62,14 +62,14 @@ const ProductOrderEdit = (props) => {
 
     useEffect(() => {
         if(category && onGetProducts){
-
+            console.log('primera vez...');
             setCategoryData(category);
             const conditions = new Conditionals.Condition;
             conditions.add('category', category.id);
 
             const order = {field: "orden", type: "asc"}
             onGetProducts(conditions.condition, limited, page, order);
-            setPage(page + 1);
+            setPage(page );
         }
     }, [category]);
 
@@ -96,10 +96,11 @@ const ProductOrderEdit = (props) => {
     }
 
     const getMore = () => {
-        const nextPage = page + 1;
+        const nextPage = page + limited;
         const conditions = new Conditionals.Condition;
         conditions.add('category', category.id);
-        onGetProducts(conditions.condition, limited, nextPage);
+        const order = {field: "orden", type: "asc"}
+        onGetProducts(conditions.condition, limited, nextPage, order);
         setPage(nextPage);
     }
 
@@ -122,9 +123,11 @@ const ProductOrderEdit = (props) => {
                                         <SortableList items={productsList} onSortEnd={onSortEnd} lockOffset={false} axis={"xy"} />
                                     )}
                                     {!loading && (
-                                        <button size="small" className="btn btn-sm btn-primary" onClick={() => getMore()}>
+                                        <div className={"text-center"}>
+                                        <button size="small" className="btn btn-md btn-primary" onClick={() => getMore()}>
                                             Mostrar m&aacute;s <i className="fa fa-ellipsis-h"> </i>
                                         </button>
+                                        </div>
                                     )}
                                 </CardBody>
                             </Card>
