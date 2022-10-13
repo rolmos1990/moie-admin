@@ -10,6 +10,7 @@ export const PERMISSIONS = {
     CATEGORY_EDIT: 'category.edit',
     CATEGORY_SHOW: 'category.show',
     CATEGORY_LIST: 'category.list',
+    CATEGORY_REORDER: 'category.reorder',
     CUSTOMER_CREATE: 'customer.create',
     CUSTOMER_EDIT: 'customer.edit',
     CUSTOMER_SHOW: 'customer.show',

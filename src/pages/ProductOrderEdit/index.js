@@ -14,6 +14,8 @@ import {arrayMove, SortableContainer, SortableElement} from 'react-sortable-hoc'
 import Images from "../../components/Common/Image";
 import {getImageByGroup, getImageByQuality, productPriceWithDiscount} from "../../common/utils";
 import {getCategory} from "../../store/category/actions";
+import {resetOrderCategoryApi} from "../../helpers/backend_helper";
+import HasPermissionsFunc from "../../components/HasPermissionsFunc";
 
 const SortableItem = SortableElement(({value, index}) => (
     <Col xs={3} className={`text-center ${!value.published || (value.productAvailable && value.productAvailable.available <= 0) ? 'opacity-50' : ''}`} style={{padding: '20px', position:"relative"}}>
@@ -48,6 +50,7 @@ const SortableList = SortableContainer(({items}) => {
 
 const ProductOrderEdit = (props) => {
     const {onGetProducts, products, onReorderProduct, onGetCategory, category, loading} = props;
+    const [gloading, setGloading] = useState(false);
     const [page, setPage] = useState(0);
     const [categoryData, setCategoryData] = useState(null);
     const [productsList, setProductsList] = useState([]);
@@ -62,7 +65,6 @@ const ProductOrderEdit = (props) => {
 
     useEffect(() => {
         if(category && onGetProducts){
-            console.log('primera vez...');
             setCategoryData(category);
             const conditions = new Conditionals.Condition;
             conditions.add('category', category.id);
@@ -82,16 +84,39 @@ const ProductOrderEdit = (props) => {
 
     const onSortEnd = ({oldIndex, newIndex}) => {
 
+        const _newOrder = newIndex + 1;
+        const _oldOrder = oldIndex + 1;
+
         if(category && (oldIndex !== newIndex)) {
-            const productToMove = products[oldIndex];
+
+            const productToMove = (productsList.filter(item => item.orden == _oldOrder))[0];
 
             const dataToMove = {
-                orden: (newIndex + 1),
+                orden: _newOrder,
                 category: categoryData.id
             };
 
             onReorderProduct(productToMove.id, dataToMove, props.history);
-            setProductsList(arrayMove(productsList, oldIndex, newIndex));
+
+            const newProductsLists = productsList.map(item => {
+               if(item.orden == _oldOrder){
+                   item.orden = _newOrder;
+                   return item;
+               } else if(item.orden == _newOrder){
+                   item.orden = _oldOrder;
+                   return item;
+               }
+
+               return item;
+            });
+
+            newProductsLists.sort(function(a, b) {
+                const x = a['orden'];
+                const y = b['orden'];
+                return ((x < y) ? -1 : ((x > y) ? 1 : 0));
+            });
+
+            setProductsList(newProductsLists);
         }
     }
 
@@ -104,6 +129,23 @@ const ProductOrderEdit = (props) => {
         setPage(nextPage);
     }
 
+    const reorder = () => {
+        if((category && category.id) && !gloading) {
+            setGloading(true);
+            resetOrderCategoryApi(category.id).then(function (resp) {
+                const conditions = new Conditionals.Condition;
+                conditions.add('category', category.id);
+                const order = {field: "orden", type: "asc"}
+                onGetProducts(conditions.condition, limited, 0, order);
+                setPage(0);
+                setGloading(false);
+            });
+        }
+    }
+
+    const canReorder = (HasPermissionsFunc([PERMISSIONS.CATEGORY_REORDER]));
+
+
     return (
         <React.Fragment>
             <div className="page-content">
@@ -115,6 +157,14 @@ const ProductOrderEdit = (props) => {
                         <div>
                             <Card>
                                 <CardBody>
+                                    <div className={"text-center"}>
+                                        {canReorder && (
+                                            <button size="small" className="btn btn-md btn-primary" onClick={() => reorder()}>
+                                                {gloading && <Spinner size="sm" className="m-1" color="white"/>}
+                                                Re-organizar &nbsp; <i className="fa fa-sync-alt"> </i>
+                                            </button>
+                                        )}
+                                    </div>
                                     {categoryData == null ? (
                                         <Spinner size="lg" className="m-5" color="primary"/>
                                     ) : <div></div>}
