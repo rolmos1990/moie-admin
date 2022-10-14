@@ -8,7 +8,7 @@ import PropTypes from "prop-types";
 import {FieldDate, FieldSelect} from "../../components/Fields";
 import {DATE_MODES} from "../../components/Fields/InputDate";
 import ButtonSubmit from "../../components/Common/ButtonSubmit";
-import {formatDateToServer} from "../../common/utils";
+import {formatDateToServer, formatDateToServerEndOfDay} from "../../common/utils";
 import {generateReport, generateReportRestart} from "../../store/reports/actions";
 import { BILL_MEMO_TYPES, REPORT_TYPES } from "../../common/constants";
 
@@ -32,7 +32,7 @@ const BillsReportForm = ({onCloseModal, loading, error, success, onGenerateRepor
         const payload = {
             type: values.type.value,
             dateFrom: formatDateToServer(values.reportDate[0]),
-            dateTo: formatDateToServer(values.reportDate[1])
+            dateTo: formatDateToServerEndOfDay(values.reportDate[1])
         };
         onGenerateReport(payload);
     }
