@@ -106,6 +106,11 @@ const ProductOrderEdit = (props) => {
             }
 
             const newProductsLists = productsList.map(item => {
+
+                if(recount == _newOrder){
+                    recount++;
+                }
+
                 if(item.orden <= orderPointer) {
                     if (item.id != productToMove.id) {
                         item.orden = recount;
