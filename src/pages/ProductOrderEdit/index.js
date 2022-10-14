@@ -98,25 +98,27 @@ const ProductOrderEdit = (props) => {
 
             onReorderProduct(productToMove.id, dataToMove, props.history);
 
+            let recount = 1;
+
+            let orderPointer = _newOrder;
+            if(_oldOrder > _newOrder){
+                orderPointer = _oldOrder;
+            }
+
             const newProductsLists = productsList.map(item => {
-               if(item.orden == _oldOrder){
-                   item.orden = _newOrder;
-                   return item;
-               } else if(item.orden == _newOrder){
-                   item.orden = _oldOrder;
-                   return item;
-               }
-
-               return item;
-            });
-
-            newProductsLists.sort(function(a, b) {
-                const x = a['orden'];
-                const y = b['orden'];
-                return ((x < y) ? -1 : ((x > y) ? 1 : 0));
+                if(item.orden <= orderPointer) {
+                    if (item.id != productToMove.id) {
+                        item.orden = recount;
+                        recount++;
+                    } else {
+                        item.orden = _newOrder;
+                    }
+                }
+                return item;
             });
 
             setProductsList(newProductsLists);
+            setProductsList(arrayMove(productsList, oldIndex, newIndex));
         }
     }
 
