@@ -1,7 +1,6 @@
 import {Card, CardBody, Col, Row} from "reactstrap";
 import {Link} from "react-router-dom";
 import PropTypes from "prop-types";
-import {DEFAULT_PAGE_LIMIT} from "../../../common/pagination";
 import {connect} from "react-redux";
 import {getProducts, resetProduct, updateProduct} from "../../../store/product/actions";
 import React, {useEffect, useState} from "react";
@@ -17,6 +16,8 @@ import StatsStatusCard from "../../../components/Common/StatsStatusCard";
 import {countProductsByStatus} from "../../../helpers/service";
 import HasPermissions from "../../../components/HasPermissions";
 import {PERMISSIONS} from "../../../helpers/security_rol";
+
+const DEFAULT_PAGE_LIMIT = 30;
 
 
 const series2 = [70]
