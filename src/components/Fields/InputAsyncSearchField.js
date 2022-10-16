@@ -72,7 +72,8 @@ class AvAsyncSearchInput extends AvBaseInput {
                                 cond.operator = Conditionals.OPERATORS.LIKE;
                             } else {
                                 cond.operator = Conditionals.OPERATORS.EQUAL;
-                            }                         return getData(urlStr, textSearch, cond, defaultConditions).then(response => {
+                            }
+                            return getData(urlStr, textSearch, cond, defaultConditions).then(response => {
                                 const fieldName = conditionalOptions && conditionalOptions.fieldName ? conditionalOptions.fieldName : 'name';
                                 const options = arrayToOptionsByFieldName(response.data, fieldName);
                                 //options.unshift(getEmptyOptions());

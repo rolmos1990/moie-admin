@@ -5,7 +5,7 @@ import {DEFAULT_PAGE_LIMIT} from "../common/pagination";
 import * as url from "./url_helper";
 import {formatDateToServer, getMoment} from "../common/utils";
 
-export const getData = (urlStr, name, conditionalOptions, defaultConditions) => {
+export const getData = (urlStr, name, conditionalOptions, defaultConditions, limit = DEFAULT_PAGE_LIMIT) => {
     const conditions = new Conditionals.Condition;
     if (defaultConditions) {
         defaultConditions.forEach(dc => conditions.add(dc.field, dc.value, dc.operator));
@@ -19,7 +19,7 @@ export const getData = (urlStr, name, conditionalOptions, defaultConditions) => 
     }
     
     const cond = Conditionals.getConditionalFormat(conditions.all());
-    const query = Conditionals.buildHttpGetQuery(cond, DEFAULT_PAGE_LIMIT, 0);
+    const query = Conditionals.buildHttpGetQuery(cond, limit, 0);
     return fetchDataApi(urlStr, query);
 }
 

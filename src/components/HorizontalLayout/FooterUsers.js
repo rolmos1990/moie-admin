@@ -33,7 +33,7 @@ const FooterUsers = ({data, user}) => {
     const [users, setUsers] = useState([])
 
     useEffect(() => {
-        getData();
+        //getData();
     }, [data])
 
     const findData = () => {
@@ -71,7 +71,7 @@ const FooterUsers = ({data, user}) => {
         }
         findData();
         let newTimeout = setTimeout(() => {
-            getData();
+            //getData();
         }, 45000);
 
         if (currentTimeout) clearTimeout(currentTimeout);
