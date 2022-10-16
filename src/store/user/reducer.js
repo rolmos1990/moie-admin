@@ -10,7 +10,8 @@ import {
     REGISTER_USER_FAILED,
     REGISTER_USER_SUCCESS, RESET_CHANGE_PASSWORD, RESET_USER,
     UPDATE_USER, UPDATE_USER_FAILED,
-    UPDATE_USER_SUCCESS, USER_CHANGE_PASSWORD
+    UPDATE_USER_SUCCESS, USER_CHANGE_PASSWORD,
+    COUNTER_REGISTER_ORDERS
 } from "./actionTypes";
 
 const initialState = {
@@ -25,7 +26,8 @@ const initialState = {
         loading: false,
         success: null,
         error: null,
-    }
+    },
+    registerOrderActive: false
 }
 
 const user = (state = initialState, action) => {
@@ -158,6 +160,12 @@ const user = (state = initialState, action) => {
                     success: null,
                     loading: false,
                 }
+            }
+            break
+        case COUNTER_REGISTER_ORDERS:
+            state = {
+                ...state,
+                registerOrderActive: action.active
             }
             break
         default:

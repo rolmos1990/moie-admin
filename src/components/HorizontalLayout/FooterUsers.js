@@ -5,6 +5,7 @@ import {priceFormat} from "../../common/utils";
 import FlipMove from 'react-flip-move';
 import userImage from "../../assets/images/users/user.png"
 import {baseImagePathNew} from "../../helpers/api_helper";
+import {setCounterRegisterOrders} from "../../store/user/actions";
 
 class ListItem extends Component {
     render() {
@@ -27,14 +28,17 @@ class ListItem extends Component {
     }
 };
 
-const FooterUsers = ({data, user}) => {
+const FooterUsers = ({data, user, registerOrderActive, onSetCounterRegisterOrders}) => {
 
     const [currentTimeout, setCurrentTimeout] = useState(null)
     const [users, setUsers] = useState([])
 
     useEffect(() => {
-        //getData();
-    }, [data])
+        if(registerOrderActive === false) {
+            getData();
+        }
+        onSetCounterRegisterOrders(true);
+    }, [registerOrderActive])
 
     const findData = () => {
         countUsersOrders().then(resp => {
@@ -71,8 +75,9 @@ const FooterUsers = ({data, user}) => {
         }
         findData();
         let newTimeout = setTimeout(() => {
-            //getData();
-        }, 45000);
+            getData();
+        }, 60000);
+        setCounterRegisterOrders(true);
 
         if (currentTimeout) clearTimeout(currentTimeout);
         setCurrentTimeout(newTimeout);
@@ -105,10 +110,12 @@ const FooterUsers = ({data, user}) => {
 
 const mapStateToProps = state => {
     const {user} = state.Login
-    return {user}
+    const {registerOrderActive} = state.User
+    return {user, registerOrderActive}
 }
 const mapDispatchToProps = dispatch => ({
     countUsersOrders,
+    onSetCounterRegisterOrders: (comment) => dispatch(setCounterRegisterOrders(comment)),
 })
 
 export default connect(

@@ -17,7 +17,13 @@ import {
     RESET_CHANGE_PASSWORD,
     USER_CHANGE_PASSWORD,
     RESET_USER,
+    COUNTER_REGISTER_ORDERS,
 } from "./actionTypes";
+
+export const setCounterRegisterOrders = active => ({
+    type: COUNTER_REGISTER_ORDERS,
+    active: active
+})
 
 export const resetUser = () => ({
     type: RESET_USER,
