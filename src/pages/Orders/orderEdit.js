@@ -298,7 +298,7 @@ const OrderEdit = (props) => {
             .then(function (dataUrl) {
                 setDownloadingPhoto(false);
                 var link = document.createElement('a');
-                link.download = `${order.customer.name.replace(/\s+/g, '_')}_NRO_${order.id}.png`.toUpperCase();
+                link.download = `${order.customer.name.replace(/\s+/g, '_')}_NRO_${order.id}.png`.toUpperCwase();
                 link.href = dataUrl;
                 link.click();
                 onDownloadPhoto(orderData.id);

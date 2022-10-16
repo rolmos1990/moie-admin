@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react"
-import {CardBody, Col, Container, Row} from "reactstrap"
+import {CardBody, Col, Container, Row, Spinner} from "reactstrap"
 import {Card} from "@material-ui/core";
 import {withRouter} from "react-router-dom"
 import {connect} from "react-redux";
@@ -20,7 +20,7 @@ import NoAccess from "../../../components/Common/NoAccess";
 import HasPermissions from "../../../components/HasPermissions";
 
 const CreateOrder = (props) => {
-    const {onResetOrder, car, onRegisterOrder, error} = props;
+    const {onResetOrder, car, onRegisterOrder, error, loading} = props;
     const [initComponent, setInitComponent] = useState(true);
     const [isValidOrder, setIsValidOrder] = useState(false);
 
@@ -68,30 +68,32 @@ const CreateOrder = (props) => {
     }
 
     const onCreateOrder = () => {
-        const order = {
-            customer: car.customer.id,
-            deliveryMethod: car.deliveryOptions.method,
-            deliveryCost: car.deliveryOptions.cost,
-            chargeOnDelivery: car.deliveryOptions.type === 3,
-            origen: car.deliveryOptions.origin,
-            deliveryType: parseInt(car.deliveryOptions.type),
-            otherMethod: car.deliveryOptions.otherMethod,
-            products: car.products.map(prod => ({
-                id: prod.origin.id,
-                productSize: prod.sizeId,
-                quantity: prod.quantity,
-                discountPercentage: prod.discountPercentage,
-            }))
-        };
+        if(!loading) {
+            const order = {
+                customer: car.customer.id,
+                deliveryMethod: car.deliveryOptions.method,
+                deliveryCost: car.deliveryOptions.cost,
+                chargeOnDelivery: car.deliveryOptions.type === 3,
+                origen: car.deliveryOptions.origin,
+                deliveryType: parseInt(car.deliveryOptions.type),
+                otherMethod: car.deliveryOptions.otherMethod,
+                products: car.products.map(prod => ({
+                    id: prod.origin.id,
+                    productSize: prod.sizeId,
+                    quantity: prod.quantity,
+                    discountPercentage: prod.discountPercentage,
+                }))
+            };
 
-        if (DELIVERY_METHODS_PAYMENT_TYPES.includes(order.deliveryMethod)) {
-            order.piecesForChanges = parseInt(car.deliveryOptions.piecesForChanges);
-            order.paymentMode = car.deliveryOptions.paymentType === PAYMENT_TYPES.CASH ? 1 : 2;
-        } else {
-            order.deliveryLocality = car.deliveryOptions.deliveryLocality;
+            if (DELIVERY_METHODS_PAYMENT_TYPES.includes(order.deliveryMethod)) {
+                order.piecesForChanges = parseInt(car.deliveryOptions.piecesForChanges);
+                order.paymentMode = car.deliveryOptions.paymentType === PAYMENT_TYPES.CASH ? 1 : 2;
+            } else {
+                order.deliveryLocality = car.deliveryOptions.deliveryLocality;
+            }
+
+            onRegisterOrder(order, props.history);
         }
-
-        onRegisterOrder(order, props.history);
     }
 
     return (
@@ -147,6 +149,7 @@ const CreateOrder = (props) => {
                                                 Cancelar
                                             </button>
                                             <button type="button" className="btn btn-primary" disabled={!isValidOrder} onClick={() => onCreateOrder()}>
+                                                {loading && <Spinner size="sm" className="m-1" color="primary"/>}
                                                 <i className="uil uil-shopping-cart-alt me-2"> </i> Crear pedido
                                             </button>
                                         </div>
