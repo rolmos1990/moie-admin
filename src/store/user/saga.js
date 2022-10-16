@@ -1,7 +1,15 @@
 import {all, call, fork, put, takeEvery} from "redux-saga/effects"
 
 //Account Redux states
-import {GET_USERS, GET_USER, REGISTER_USER, UPDATE_USER, CHANGE_PASSWORD} from "./actionTypes"
+import {
+    GET_USERS,
+    GET_USER,
+    REGISTER_USER,
+    UPDATE_USER,
+    CHANGE_PASSWORD,
+    COUNT_USERS_SUCCESS,
+    COUNT_USERS_FAILED, COUNT_USERS
+} from "./actionTypes"
 
 import {
     getUsersSuccess,
@@ -11,18 +19,19 @@ import {
     getUserFailed,
     registerUserFailed,
     updateUserSuccess,
-    updateUserFail, changePasswordSuccess, changePasswordFailed
+    updateUserFail, changePasswordSuccess, changePasswordFailed, countUsersSuccess, countUsersFailed
 } from "./actions"
 
 import {
     registerUserApi,
     updateUserApi,
     fetchUserApi,
-    fetchUsersApi, changePasswordApi
+    fetchUsersApi, changePasswordApi, fetchOrdersApi
 } from "../../helpers/backend_helper"
 
 import Conditionals from "../../common/conditionals";
 import {showResponseMessage} from "../../helpers/service";
+import {formatDateToServer, getMoment} from "../../common/utils";
 
 /**
  * *  Configuración de CRUD Saga (Realizar configuración para cada uno de las replicas)
@@ -112,12 +121,33 @@ function* changePassword({ payload }) {
     }
 }
 
+function* getCountUsers() {
+    try {
+        const conditions = new Conditionals.Condition;
+        conditions.add('status', [1,2,3,4,5,7].join("::"), Conditionals.OPERATORS.IN);
+        conditions.add('createdAt', formatDateToServer(getMoment().startOf('day')), Conditionals.OPERATORS.GREATER_THAN_OR_EQUAL)
+
+        const query = {};
+        query.conditional = Conditionals.getConditionalFormat(conditions.all());
+        query.operation = 'origen::count,totalAmount::sum';
+        query.group = 'user_id';
+
+        const payload = Conditionals.urlSearchParams(query);
+
+        const response = yield call(fetchOrdersApi, payload)
+        yield put(countUsersSuccess(response))
+    } catch (error) {
+        yield put(countUsersFailed(error))
+    }
+}
+
 export function* watchUser() {
     yield takeEvery(ACTION_NAME_CREATE, register);
     yield takeEvery(ACTION_NAME_UPDATE, update);
     yield takeEvery(ACTION_NAME_LIST, fetch);
     yield takeEvery(ACTION_NAME_GET, get)
     yield takeEvery(ACTION_NAME_CHANGE_PASSWORD, changePassword)
+    yield takeEvery(COUNT_USERS, getCountUsers)
 }
 
 function* userSaga() {

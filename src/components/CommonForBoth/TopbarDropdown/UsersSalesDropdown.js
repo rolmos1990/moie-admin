@@ -13,7 +13,7 @@ import {countUsersOrders} from "../../../helpers/service";
 import {getImagePath, priceFormat} from "../../../common/utils";
 import {Tooltip} from "@material-ui/core";
 
-const UsersSalesDropdown = ({data}) => {
+const UsersSalesDropdown = ({countUsers}) => {
 
     const [loading, setLoading] = useState(false)
     const [menu, setMenu] = useState(false)
@@ -21,63 +21,36 @@ const UsersSalesDropdown = ({data}) => {
     const [mainUser, setMainUser] = useState({})
 
     useEffect(() => {
-        findData();
-    }, [data])
+        findData(countUsers);
+    }, [countUsers])
 
-    const findData = () => {
-        setLoading(true);
-        countUsersOrders().then(resp => {
-            setLoading(false);
-            if (resp && resp.data && resp.data.length > 0) {
-                let u = [];
-                resp.data.filter(o => o.user && o.user.id).forEach(o => u.push({name: o.user.name, sales: o.origen, amount: priceFormat(o.totalAmount), image: getImagePath(o.user?.photo)}))
-                u = u.sort((a, b) => a.sales === b.sales ? 0 : (a.sales > b.sales) ? -1 : 1);
-                if(u.length > 6){
-                    u.splice(6);
-                }
-                setUsers(u);
-                setMainUser(u[0]);
+    const findData = (countUsers) => {
+        const resp = countUsers;
+        console.log('debug resp', resp);
+        if (resp && resp.data && resp.data.length > 0) {
+            let u = [];
+            resp.data.filter(o => o.user && o.user.id).forEach(o => u.push({name: o.user.name, sales: o.origen, amount: priceFormat(o.totalAmount), image: getImagePath(o.user?.photo)}))
+
+            const limit = 6;
+
+            u = u.sort((a, b) => a.sales === b.sales ? 0 : (a.sales > b.sales) ? -1 : 1);
+
+            if (u.length > limit) {
+                u.splice(limit);
             }
-        });
+
+            if (u.length > 0) {
+                let user = u[u.length - 1];
+                user.hasCrown = true;
+            }
+
+            setUsers(u);
+            setMainUser(u[0]);
+        }
     }
 
     return (
         <>
-            {/* > 1832px */}
-            {/*<div className="user-sales-list">
-                <Card>
-                    <CardBody className="p-2">
-                        <Row className="align-items-center">
-                            <Col xs={10}>
-                                <h6 className="m-0 font-size-16"> Ventas por usuarios</h6>
-                            </Col>
-                            <Col xs={2} className="text-right">
-                                <button size="small" className="btn btn-sm text-primary" onClick={() => findData()}>
-                                    {!loading && <i className="uil uil-refresh"> </i>}
-                                    {loading && <i className="fa fa-spinner fa-spin"> </i>}
-                                </button>
-                            </Col>
-                        </Row>
-                        <div style={{height: "284px", overflowY: "auto"}}>
-                            {users.map((user, k) => (
-                                <div key={k} className="text-reset notification-item">
-                                    <div className="d-flex p-1">
-                                        <img src={user.image} className="me-3 rounded-circle avatar-xs" alt="user-pic"/>
-                                        <div className="flex-1">
-                                            <h6 className="mt-0 mb-1">{k === 0 && <i className={"mdi mdi-crown font-size-18 mr-1 text-warning"}> </i>}{user.name}</h6>
-                                            <div className="font-size-12 text-muted">
-                                                <p className="m-0">Pedidos: <b>{user.sales}</b></p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
-                    </CardBody>
-                </Card>
-            </div>*/}
-
-            {/* < 1832px */}
             <div className="user-sales-dropdown-menu">
                 <Dropdown
                     isOpen={menu}
@@ -116,7 +89,7 @@ const UsersSalesDropdown = ({data}) => {
                                     <div className="d-flex p-1">
                                         <img  src={user.image} className="me-3 rounded-circle avatar-xs" alt="user-pic"/>
                                         <div className="flex-1">
-                                            <h6 className="mt-0 mb-1">{k === 0 && <i className={"mdi mdi-crown font-size-18 mr-1 text-warning"}> </i>}{user.name}</h6>
+                                            <h6 className="mt-0 mb-1">{user.hasCrown && <i className={"mdi mdi-crown font-size-18 mr-1 text-warning"}> </i>}{user.name}</h6>
                                             <div className="font-size-12 text-muted">
                                                 <p className="mb-1">
                                                     Pedidos completados {user.sales}
@@ -138,7 +111,8 @@ const UsersSalesDropdown = ({data}) => {
 }
 
 const mapStateToProps = state => {
-    return {}
+    const {countUsers} = state.User
+    return {countUsers}
 }
 const mapDispatchToProps = dispatch => ({
     countUsersOrders,

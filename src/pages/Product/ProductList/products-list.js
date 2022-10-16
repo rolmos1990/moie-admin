@@ -81,67 +81,6 @@ const options3 = {
 };
 
 
-/*
-
-const reportss = [
-    {
-        id: 1,
-        icon: "mdi mdi-clock-five-time",
-        title: "Productos",
-        value: pageOptions.totalSize,
-        prefix: "",
-        suffix: "",
-        decimal: 0,
-        charttype: "bar",
-        chartheight: 40,
-        chartwidth: 70,
-        badgeValue: parseInt(statusGroup.filter(s => s.status === 1 ).map(s => s.count)),
-        color: "success",
-        desc: "activos",
-        badgeValue2: parseInt(statusGroup.filter(s => s.status === 0 ).map(s => s.count)),
-        color2: "danger",
-        desc2: "inactivos",
-        series: series1,
-        options: options1,
-    },
-    {
-        id: 2,
-        icon: "mdi mdi-arrow-up-bold",
-        title: "Productos publicados",
-        value: parseInt(pageOptions.totalSize * 0.67),
-        decimal: 0,
-        charttype: "radialBar",
-        chartheight: 45,
-        chartwidth: 45,
-        prefix: "",
-        suffix: "",
-        badgeValue: "0.2%",
-        color: "success",
-        desc: "desde ayer",
-        series: series2,
-        options: options2,
-    },
-    {
-        id: 3,
-        icon: "mdi mdi-arrow-up-bold",
-        title: "Agregados en esta semana",
-        value: 265,
-        decimal: 0,
-        prefix: "",
-        suffix: "",
-        charttype: "radialBar",
-        chartheight: 45,
-        chartwidth: 45,
-        badgeValue: "0.24%",
-        color: "success",
-        desc: "desde hace una semana",
-        series: series3,
-        options: options3,
-    },
-];
-*/
-
-
 const ProductList = props => {
 
     const {refresh, onGetProducts, onResetProducts, countProductsByStatus, products, meta, onUpdateProduct} = props;
@@ -156,13 +95,9 @@ const ProductList = props => {
     };
 
     useEffect(() => {
-        onGetProducts();
-    }, [refresh])
-
-    useEffect(() => {
         onResetProducts();
         onGetProducts();
-    }, [onGetProducts])
+    }, [refresh, onGetProducts])
 
     useEffect(() => {
         setProductList(products)

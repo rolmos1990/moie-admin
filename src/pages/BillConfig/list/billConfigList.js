@@ -28,14 +28,11 @@ const BillConfigList = props => {
         custom: true,
     }
     useEffect(() => {
+        if(refresh === null) {
+            onResetBillConfig();
+        }
         onGetBillConfigs();
-    }, [refresh])
-
-    useEffect(() => {
-        onResetBillConfig();
-        onGetBillConfigs();
-        //getStates();
-    }, [onGetBillConfigs])
+    }, [refresh, onGetBillConfigs])
 
     useEffect(() => {
         setBillConfigList(billConfigs);

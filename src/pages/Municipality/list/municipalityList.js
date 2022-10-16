@@ -33,14 +33,12 @@ const MunicipalityList = props => {
     const {SearchBar} = Search
 
     useEffect(() => {
+        if(refresh === null) {
+            onResetLocation();
+            getStates();
+        }
         onGetMunicipalities();
-    }, [refresh])
-
-    useEffect(() => {
-        onResetLocation();
-        onGetMunicipalities()
-        getStates();
-    }, [onGetMunicipalities])
+    }, [refresh, onGetMunicipalities])
 
     useEffect(() => {
         setMunicipalityList(municipalities.map(m => {

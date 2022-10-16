@@ -35,6 +35,7 @@ const CustomersList = props => {
     }
 
     useEffect(() => {
+        onResetCustomers();
         onGetCustomers();
         onGetCustomerRegistereds();
         countMayoristas().then(data => {
@@ -42,13 +43,7 @@ const CustomersList = props => {
                 setCountMayorista(data[1])
             }
         })
-    }, [refresh])
-
-    useEffect(() => {
-        onResetCustomers();
-        onGetCustomerRegistereds();
-        onGetCustomers();
-    }, [onGetCustomers])
+    }, [refresh, onGetCustomers])
 
     useEffect(() => {
         setCustomerList(customers)

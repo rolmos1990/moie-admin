@@ -38,15 +38,15 @@ const PostSaleList = props => {
     }
 
     useEffect(() => {
-        if (null !== refresh) onGetOrders(conditional, DEFAULT_PAGE_LIMIT, currentPage * DEFAULT_PAGE_LIMIT);
-    }, [refresh])
-
-    useEffect(() => {
-        onGetOrders(conditional);
-        if (customActions) {
-            setFilterable(false);
+        if (null !== refresh) {
+            onGetOrders(conditional, DEFAULT_PAGE_LIMIT, currentPage * DEFAULT_PAGE_LIMIT);
+        } else {
+            onGetOrders(conditional);
+            if (customActions) {
+                setFilterable(false);
+            }
         }
-    }, [onGetOrders])
+    }, [refresh, onGetOrders])
 
     useEffect(() => {
         setStatesList(orders)

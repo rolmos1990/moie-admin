@@ -32,13 +32,11 @@ const UserList = props => {
     // const {SearchBar} = Search
 
     useEffect(() => {
+        if(refresh === null){
+            onResetUsers();
+        }
         onGetUsers();
-    }, [refresh])
-
-    useEffect(() => {
-        onResetUsers();
-        onGetUsers()
-    }, [onGetUsers])
+    }, [refresh, onGetUsers])
 
     useEffect(() => {
         setCategoriesList(users)

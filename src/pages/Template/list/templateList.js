@@ -32,13 +32,11 @@ const TemplateList = props => {
     const {SearchBar} = Search
 
     useEffect(() => {
+        if(refresh === null){
+            onResetTemplate();
+        }
         onGetTemplates();
-    }, [refresh])
-
-    useEffect(() => {
-        onResetTemplate();
-        onGetTemplates()
-    }, [onGetTemplates])
+    }, [refresh, onGetTemplates])
 
     useEffect(() => {
         setTemplatesList(templates)

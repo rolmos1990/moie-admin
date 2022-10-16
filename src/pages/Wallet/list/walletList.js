@@ -36,13 +36,13 @@ const WalletList = props => {
     const {SearchBar} = Search
 
     useEffect(() => {
-        onGetWallets();
-    }, [refresh])
-
-    useEffect(() => {
-        onResetwallet();
-        onGetWallets()
-    }, [onGetWallets])
+        if(refresh === null){
+            onResetwallet();
+            onGetWallets()
+        } else {
+            onGetWallets();
+        }
+    }, [refresh, onGetWallets])
 
     useEffect(() => {
         setWalletsList(wallets)

@@ -52,10 +52,19 @@ const OrderList = props => {
     }
 
     useEffect(() => {
+
         if (null !== refresh) {
-            onGetOrders(getConditionals(), DEFAULT_PAGE_LIMIT, currentPage * DEFAULT_PAGE_LIMIT);
+                onGetOrders(getConditionals(), DEFAULT_PAGE_LIMIT, currentPage * DEFAULT_PAGE_LIMIT);
+        } else {
+            onResetOrders();
+            if (customActions) {
+                setFilterable(false);
+            }
+
+            onGetOrders(getConditionals());
         }
-    }, [refresh])
+
+    }, [refresh, onGetOrders])
 
     useEffect(() => {
         if (null !== conciliationView) {
@@ -69,14 +78,6 @@ const OrderList = props => {
             setConciliationView(false);
         }
     }, [conciliation])
-
-    useEffect(() => {
-        onResetOrders();
-        onGetOrders(getConditionals());
-        if (customActions) {
-            setFilterable(false);
-        }
-    }, [onGetOrders])
 
     useEffect(() => {
         setColumns(orderColumns(setOrderSelected, showAsModal, conciliationView));

@@ -40,15 +40,14 @@ const CategoryList = props => {
     }
 
     useEffect(() => {
-        if(currentPage) onGetCategories(conditional, DEFAULT_PAGE_LIMIT,currentPage*DEFAULT_PAGE_LIMIT);
-        onGetCatalogBatchRequest();
-    }, [refresh])
-
-    useEffect(() => {
         onResetCategories();
-        onGetCategories();
+        if(!conditional){
+            onGetCategories();
+        } else {
+            if (currentPage) onGetCategories(conditional, DEFAULT_PAGE_LIMIT, currentPage * DEFAULT_PAGE_LIMIT);
+        }
         onGetCatalogBatchRequest();
-    }, [onGetCategories])
+    }, [refresh, onGetCategories])
 
     useEffect(() => {
         setCategoriesList(categories)

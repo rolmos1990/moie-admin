@@ -11,7 +11,7 @@ import {
     REGISTER_USER_SUCCESS, RESET_CHANGE_PASSWORD, RESET_USER,
     UPDATE_USER, UPDATE_USER_FAILED,
     UPDATE_USER_SUCCESS, USER_CHANGE_PASSWORD,
-    COUNTER_REGISTER_ORDERS
+    COUNTER_REGISTER_ORDERS, COUNT_USERS, COUNT_USERS_SUCCESS
 } from "./actionTypes";
 
 const initialState = {
@@ -27,6 +27,7 @@ const initialState = {
         success: null,
         error: null,
     },
+    countUsers: [],
     registerOrderActive: false
 }
 
@@ -165,7 +166,20 @@ const user = (state = initialState, action) => {
         case COUNTER_REGISTER_ORDERS:
             state = {
                 ...state,
-                registerOrderActive: action.active
+                registerOrderActive: action.active,
+                registerOrderTime: action.time
+            }
+            break
+        case COUNT_USERS_SUCCESS:
+            state = {
+                ...state,
+                countUsers: action.users
+            }
+            break
+        case COUNT_USERS_SUCCESS:
+            state = {
+                ...state,
+                countUsers: []
             }
             break
         default:

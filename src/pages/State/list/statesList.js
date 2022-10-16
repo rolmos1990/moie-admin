@@ -34,13 +34,11 @@ const StatesList = props => {
     const {SearchBar} = Search
 
     useEffect(() => {
+        if(refresh === null) {
+            onResetLocation();
+        }
         onGetStates();
-    }, [refresh])
-
-    useEffect(() => {
-        onResetLocation();
-        onGetStates()
-    }, [onGetStates])
+    }, [refresh, onGetStates])
 
     useEffect(() => {
         setStatesList(states)

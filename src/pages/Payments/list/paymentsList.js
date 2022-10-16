@@ -35,11 +35,7 @@ const PaymentsList = props => {
 
     useEffect(() => {
         onGetPayments();
-    }, [refresh])
-
-    useEffect(() => {
-        onGetPayments()
-    }, [onGetPayments])
+    }, [refresh, onGetPayments])
 
     useEffect(() => {
         setPaymentsList(payments)

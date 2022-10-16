@@ -35,14 +35,11 @@ const OfficeList = props => {
     const {SearchBar} = Search
 
     useEffect(() => {
+        if(refresh === null){
+            onResetOffices();
+        }
         onGetOffices();
-    }, [refresh])
-
-    useEffect(() => {
-        onResetOffices();
-        onGetOffices()
-        //getStates();
-    }, [onGetOffices])
+    }, [refresh, onGetOffices])
 
     useEffect(() => {
         setOfficeList(offices);

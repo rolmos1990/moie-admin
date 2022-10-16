@@ -36,14 +36,11 @@ const BillList = props => {
         totalSize: meta?.totalRegisters,
     }
     useEffect(() => {
+        if(refresh === null){
+            onResetBill();
+        }
         onGetBills();
-    }, [refresh])
-
-    useEffect(() => {
-        onResetBill();
-        onGetBills();
-        //getStates();
-    }, [onGetBills])
+    }, [refresh, onGetBills])
 
     useEffect(() => {
         setBillList(bills);

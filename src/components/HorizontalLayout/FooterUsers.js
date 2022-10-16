@@ -1,11 +1,9 @@
 import React, {Component, useEffect, useState} from "react"
-import {countUsersOrders} from "../../helpers/service";
 import {connect} from "react-redux";
 import {priceFormat} from "../../common/utils";
 import FlipMove from 'react-flip-move';
 import userImage from "../../assets/images/users/user.png"
 import {baseImagePathNew} from "../../helpers/api_helper";
-import {setCounterRegisterOrders} from "../../store/user/actions";
 
 class ListItem extends Component {
     render() {
@@ -28,45 +26,42 @@ class ListItem extends Component {
     }
 };
 
-const FooterUsers = ({data, user, registerOrderActive, onSetCounterRegisterOrders}) => {
+const FooterUsers = ({data, user, countUsers}) => {
 
-    const [currentTimeout, setCurrentTimeout] = useState(null)
     const [users, setUsers] = useState([])
 
     useEffect(() => {
-        if(registerOrderActive === false) {
-            getData();
-        }
-        onSetCounterRegisterOrders(true);
-    }, [registerOrderActive])
+        getData();
+    }, [countUsers])
 
     const findData = () => {
-        countUsersOrders().then(resp => {
-            if (resp && resp.data && resp.data.length > 0) {
-                let u = [];
-                resp.data.filter(o => o.user && o.user.id).forEach((o, i) => u.push({
-                    id: o.user.id,
-                    name: o.user.name,
-                    sales: o.origen,
-                    amount: priceFormat(o.totalAmount),
-                    image: o.user.photo ? baseImagePathNew + o.user.photo : userImage
-                }));
+        const resp = countUsers;
 
-                const limit = 6;
+        if (resp && resp.data && resp.data.length > 0) {
+            let u = [];
+            resp.data.filter(o => o.user && o.user.id).forEach((o, i) => u.push({
+                id: o.user.id,
+                name: o.user.name,
+                sales: o.origen,
+                amount: priceFormat(o.totalAmount),
+                image: o.user.photo ? baseImagePathNew + o.user.photo : userImage
+            }));
 
-                u = u.sort((a, b) => a.sales === b.sales ? 0 : (a.sales > b.sales) ? 1 : -1);
+            const limit = 6;
 
-                if (u.length > limit) {
-                    u.splice(limit);
-                }
+            u = u.sort((a, b) => a.sales === b.sales ? 0 : (a.sales > b.sales) ? 1 : -1);
 
-                if (u.length > 0) {
-                    let user = u[u.length - 1];
-                    user.hasCrown = true;
-                }
-                setUsers(u);
+            if (u.length > limit) {
+                u.splice(limit);
             }
-        });
+
+            if (u.length > 0) {
+                let user = u[u.length - 1];
+                user.hasCrown = true;
+            }
+
+            setUsers(u);
+        }
     }
 
     const getData = () => {
@@ -74,13 +69,6 @@ const FooterUsers = ({data, user, registerOrderActive, onSetCounterRegisterOrder
             return;
         }
         findData();
-        let newTimeout = setTimeout(() => {
-            getData();
-        }, 60000);
-        setCounterRegisterOrders(true);
-
-        if (currentTimeout) clearTimeout(currentTimeout);
-        setCurrentTimeout(newTimeout);
     }
 
     const render = () => {
@@ -110,12 +98,10 @@ const FooterUsers = ({data, user, registerOrderActive, onSetCounterRegisterOrder
 
 const mapStateToProps = state => {
     const {user} = state.Login
-    const {registerOrderActive} = state.User
-    return {user, registerOrderActive}
+    const {countUsers} = state.User
+    return {user, countUsers}
 }
 const mapDispatchToProps = dispatch => ({
-    countUsersOrders,
-    onSetCounterRegisterOrders: (comment) => dispatch(setCounterRegisterOrders(comment)),
 })
 
 export default connect(

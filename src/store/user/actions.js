@@ -17,12 +17,13 @@ import {
     RESET_CHANGE_PASSWORD,
     USER_CHANGE_PASSWORD,
     RESET_USER,
-    COUNTER_REGISTER_ORDERS,
+    COUNTER_REGISTER_ORDERS, COUNT_USERS, COUNT_USERS_SUCCESS, COUNT_USERS_FAILED,
 } from "./actionTypes";
 
-export const setCounterRegisterOrders = active => ({
+export const setCounterRegisterOrders = (active,time) => ({
     type: COUNTER_REGISTER_ORDERS,
-    active: active
+    active: active,
+    time: time
 })
 
 export const resetUser = () => ({
@@ -133,6 +134,24 @@ export const changePasswordSuccess = data => {
 export const changePasswordFailed = error => {
     return {
         type: CHANGE_PASSWORD_FAILED,
+        error: error,
+    }
+}
+
+export const counterUsers = () => {
+    return {
+        type: COUNT_USERS
+    }
+}
+export const countUsersSuccess = data => {
+    return {
+        type: COUNT_USERS_SUCCESS,
+        users: data,
+    }
+}
+export const countUsersFailed = error => {
+    return {
+        type: COUNT_USERS_FAILED,
         error: error,
     }
 }
