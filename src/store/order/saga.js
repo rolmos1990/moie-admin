@@ -153,23 +153,27 @@ function* fetch({conditional, limit, offset, order, ordersFinished = false}) {
 
         if(ordersFinished) {
             const customers = response.data.map(order => order.customer && order.customer.id);
-            const responseFinished = yield call(GET_ORDER_FINISHED, {customers});
 
-            const getQtyFinished = (responseFinished, item) => {
-                try {
-                    const _orderFinished = responseFinished.filter(_ordersFinished => (_ordersFinished && _ordersFinished.id) == (item.customer && item.customer.id));
-                    return (_orderFinished[0] && _orderFinished[0].qty) || 0;
-                } catch (e) {
-                    return 0;
+            if(customers && customers.length > 0) {
+                const responseFinished = yield call(GET_ORDER_FINISHED, {customers});
+
+                const getQtyFinished = (responseFinished, item) => {
+                    try {
+                        const _orderFinished = responseFinished.filter(_ordersFinished => (_ordersFinished && _ordersFinished.id) == (item.customer && item.customer.id));
+                        return (_orderFinished[0] && _orderFinished[0].qty) || 0;
+                    } catch (e) {
+                        return 0;
+                    }
                 }
-            }
 
-            if (responseFinished && responseFinished.length > 0) {
-                response.data = response.data && response.data.map(order => ({
-                        ...order,
-                        ordersFinished: getQtyFinished(responseFinished, order),
-                    })
-                );
+                if (responseFinished && responseFinished.length > 0) {
+                    response.data = response.data && response.data.map(order => ({
+                            ...order,
+                            ordersFinished: getQtyFinished(responseFinished, order),
+                        })
+                    );
+                }
+
             }
         }
 
