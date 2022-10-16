@@ -21,7 +21,7 @@ import {PERMISSIONS} from "../../../helpers/security_rol";
 import HasPermissions from "../../../components/HasPermissions";
 
 const OfficeList = props => {
-    const {offices, onGetOffices, onResetOffices, refresh} = props; //onDeleteOffice,
+    const {offices, onGetOffices, onResetOffices, refresh, meta} = props; //onDeleteOffice,
     const [officeList, setOfficeList] = useState([])
     const [filter, setFilter] = useState(false);
     const [conditional, setConditional] = useState(null);
@@ -30,6 +30,7 @@ const OfficeList = props => {
     const pageOptions = {
         sizePerPage: DEFAULT_PAGE_LIMIT,
         custom: true,
+        totalSize: meta?.totalRegisters,
     }
     const {SearchBar} = Search
 

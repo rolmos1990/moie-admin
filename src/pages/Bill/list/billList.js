@@ -33,6 +33,7 @@ const BillList = props => {
     const pageOptions = {
         sizePerPage: DEFAULT_PAGE_LIMIT,
         custom: true,
+        totalSize: meta?.totalRegisters,
     }
     useEffect(() => {
         onGetBills();
