@@ -9,7 +9,12 @@ import PropTypes from "prop-types";
 import {addOrderOffice, confirmOffice, deleteOffice, deleteOrderOffice, getOffice, printOfficeReport, registerOffice, resetPrintOfficeReport, updateOffice} from "../../store/office/actions";
 import {FieldDate, FieldSelect, FieldText} from "../../components/Fields";
 import Breadcrumb from "../../components/Common/Breadcrumb";
-import {DATE_FORMAT, formatDate, printPartOfPage} from "../../common/utils";
+import {
+    DATE_FORMAT,
+    formatDate,
+    formatDateToServerEndOfDay,
+    printPartOfPage
+} from "../../common/utils";
 import {DELIVERY_METHODS, DELIVERY_TYPES, GROUPS, OFFICE_STATUS, ORDERS_ENUM, STATUS} from "../../common/constants";
 import ButtonSubmit from "../../components/Common/ButtonSubmit";
 import {DATE_MODES} from "../../components/Fields/InputDate";
@@ -116,13 +121,13 @@ const OfficeEdit = (props) => {
             status: values._status,
             deliveryMethod: selectedDelivery.id,
             type: values.deliveryType.value,
-            batchDate: values.batchDate[0] ? formatDate(values.batchDate[0], DATE_FORMAT.ONLY_DATE) : null
+            batchDate: values.batchDate[0] ? formatDateToServerEndOfDay(values.batchDate[0].end) : null
         };
         if (values.batchDate && values.batchDate.length === 1) {
-            data.batchDate = values.batchDate[0] ? formatDate(values.batchDate[0], DATE_FORMAT.ONLY_DATE) : null
+            data.batchDate = values.batchDate[0] ? formatDateToServerEndOfDay(values.batchDate[0]) : null
         }
         if (values.batchDate && values.batchDate.length > 1) {
-            data.batchDate = values.batchDate ? formatDate(values.batchDate, DATE_FORMAT.ONLY_DATE) : null
+            data.batchDate = values.batchDate ? formatDateToServerEndOfDay(values.batchDate) : null
         }
         delete data._status;
         delete data.deliveryType;

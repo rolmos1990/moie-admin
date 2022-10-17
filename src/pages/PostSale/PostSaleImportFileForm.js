@@ -12,7 +12,7 @@ import {DATE_MODES} from "../../components/Fields/InputDate";
 import DropZoneIcon from "../../components/Common/DropZoneIcon";
 import {getEmptyOptions} from "../../common/converters";
 import {importFile, importFileReset} from "../../store/office/actions";
-import {DATE_FORMAT, formatDate} from "../../common/utils";
+import {DATE_FORMAT, formatDate, formatDateToServerEndOfDay} from "../../common/utils";
 import {DELIVERY_METHODS} from "../../common/constants";
 
 const PostSaleImportFileForm = ({onCloseModal, deliveryMethods, loading, error, success, getDeliveryMethods, importFileReset, importFile}) => {
@@ -47,7 +47,7 @@ const PostSaleImportFileForm = ({onCloseModal, deliveryMethods, loading, error, 
         const payload = {
             file: file.base64.replace('data:image/xlsx;base64,', ''),
             deliveryMethod: values.deliveryMethod.value,
-            deliveryDate: values.deliveryDate[0] ? formatDate(values.deliveryDate[0], DATE_FORMAT.ONLY_DATE) : null
+            deliveryDate: values.deliveryDate[0] ? formatDateToServerEndOfDay(values.deliveryDate[0]) : null
         };
         onImportFile(payload);
     }
