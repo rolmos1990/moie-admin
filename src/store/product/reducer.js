@@ -34,7 +34,7 @@ const initialState = {
 
 const product = (state = initialState, action) => {
     switch (action.type) {
-        case CLEAR_PRODUCTS:
+        case RESET_PRODUCT:
             return {
                 ...initialState,
                 products: []
