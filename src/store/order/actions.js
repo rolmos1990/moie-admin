@@ -28,7 +28,7 @@ import {
     GET_ORDERS_OFFICE,
     GET_ORDERS_OFFICE_FAILED,
     GET_ORDERS_OFFICE_SUCCESS,
-    GET_ORDERS_SUCCESS,
+    GET_ORDERS_SUCCESS, MARK_RECEIVED, MARK_RECEIVED_FAILED, MARK_RECEIVED_SUCCESS,
     NEXT_STATUS_ORDER,
     PRINT_BATCH_REQUEST,
     PRINT_BATCH_REQUEST_FAILED,
@@ -324,7 +324,6 @@ export const printBatchRequestFailed = error => ({
     type: PRINT_BATCH_REQUEST_FAILED,
     error: error,
 })
-
 
 export const refreshOrders = () => {
     return {

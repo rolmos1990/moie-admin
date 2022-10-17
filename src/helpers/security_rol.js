@@ -31,6 +31,8 @@ export const PERMISSIONS = {
     POSTSALE_EDIT: 'postsale.edit',
     POSTSALE_SHOW: 'postsale.show',
     POSTSALE_LIST: 'postsale.list',
+    POSTSALE_SYNC: 'postsale.sync',
+    POSTSALE_RECEIVED: 'postsale.received',
     PAYMENT_CREATE: 'payment.create',
     PAYMENT_EDIT: 'payment.edit',
     PAYMENT_SHOW: 'payment.show',

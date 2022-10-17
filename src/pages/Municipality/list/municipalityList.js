@@ -24,11 +24,16 @@ const MunicipalityList = props => {
     const [municipalityList, setMunicipalityList] = useState([])
     const [filter, setFilter] = useState(false);
     const [conditional, setConditional] = useState(null);
+    const [defaultPage, setDefaultPage] = useState(1);
 
     const pageOptions = {
         sizePerPage: DEFAULT_PAGE_LIMIT,
         //totalSize: meta?.totalRegisters, // replace later with size(users),
         custom: true,
+        page: defaultPage,
+        onPageChange: (page, sizePerPage) => {
+            setDefaultPage(page);
+        },
     }
     const {SearchBar} = Search
 
@@ -54,6 +59,7 @@ const MunicipalityList = props => {
     const onFilterAction = (condition) => {
         setConditional(condition);
         onGetMunicipalities(condition, DEFAULT_PAGE_LIMIT, 0);
+        setDefaultPage(1);
     }
     const onConfirmDelete = (id) => {
         onDeleteMunicipality(id);

@@ -15,7 +15,7 @@ import {
     UPDATE_PRODUCT,
     UPDATE_PRODUCT_FAILED,
     UPDATE_PRODUCT_SUCCESS,
-    ORDER_PRODUCT, ORDER_PRODUCT_SUCCESS, ORDER_PRODUCT_FAILED,
+    ORDER_PRODUCT, ORDER_PRODUCT_SUCCESS, ORDER_PRODUCT_FAILED, CLEAR_PRODUCTS,
 } from "./actionTypes";
 
 const initialState = {
@@ -34,9 +34,14 @@ const initialState = {
 
 const product = (state = initialState, action) => {
     switch (action.type) {
-        case RESET_PRODUCT:
+        case CLEAR_PRODUCTS:
             return {
                 ...initialState,
+                products: []
+            }
+        case CLEAR_PRODUCTS:
+            return {
+                ...state,
                 products: []
             }
         case GET_PRODUCTS:

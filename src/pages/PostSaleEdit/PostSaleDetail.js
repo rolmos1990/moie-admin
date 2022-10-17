@@ -1,6 +1,6 @@
 import React, {useEffect} from "react"
 import {Col, Container, Row} from "reactstrap"
-import {Card, Tooltip} from "@material-ui/core";
+import {Button, Card, Tooltip} from "@material-ui/core";
 import {withRouter} from "react-router-dom"
 import {connect} from "react-redux";
 import PropTypes from "prop-types";
@@ -14,6 +14,8 @@ import {getOrder, refreshOrderDelivery, syncOrder} from "../../store/order/actio
 import {PERMISSIONS} from "../../helpers/security_rol";
 import NoAccess from "../../components/Common/NoAccess";
 import HasPermissions from "../../components/HasPermissions";
+import {ConfirmationModalAction} from "../../components/Modal/ConfirmationModal";
+import {markOrderReceived, showResponseMessage} from "../../helpers/service";
 
 const PostSaleDetail = (props) => {
 
@@ -31,6 +33,20 @@ const PostSaleDetail = (props) => {
 
     const refreshDeliveryStatus = () => {
         props.onRefreshOrderDelivery(order.id);
+    }
+
+    const onMarkReceived = async () => {
+        ConfirmationModalAction({
+            title: 'Confirmación',
+            description: '¿Seguro desea marcar este pedido como recibido?',
+            id: '_OrderModal',
+            onConfirm: () => {
+                markOrderReceived(order.id).then(resp => {
+                    onGetOrder(props.match.params.id);
+                    showResponseMessage({status: 200}, "PostVenta actualizado");
+                });
+            }
+        });
     }
 
     return order.id ? (
@@ -57,7 +73,15 @@ const PostSaleDetail = (props) => {
                                                 <i className={"mdi mdi-refresh"}> </i>
                                             </button>
                                         </Tooltip>
-
+                                        {!order.manualReceived && (
+                                            <HasPermissions permission={PERMISSIONS.POSTSALE_RECEIVED}>
+                                                <Tooltip placement="bottom" title="Marcar Recibido" aria-label="add">
+                                                    <button type="button" color="primary" className="btn-sm btn btn-outline-info waves-effect waves-light" onClick={() => onMarkReceived()}>
+                                                        <i className={"mdi mdi-check"}> </i>
+                                                    </button>
+                                                </Tooltip>
+                                            </HasPermissions>
+                                        )}
                                     </div>
                                 </div>
                             </Col>
@@ -138,6 +162,7 @@ const PostSaleDetail = (props) => {
                                         <Col md={6}>
                                             <label>Estatus del envío: </label>
                                             <span className="p-1">{order.orderDelivery.deliveryStatus || ''}</span>
+                                            {order.manualReceived && (<span className={"badge rounded-pill p-2  bg-soft-success"}><i className="mdi mdi-check"></i> Recibido</span>) }
                                         </Col>
                                         <Col md={6}>
                                             <label>Fecha del estatus del envío: </label>

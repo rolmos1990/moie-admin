@@ -26,11 +26,17 @@ const PaymentsList = props => {
     const [paymentSelected, setPaymentSelected] = useState(null);
     const [filter, setFilter] = useState(false);
     const [conditional, setConditional] = useState(null);
+    const [defaultPage, setDefaultPage] = useState(1);
+
 
     const pageOptions = {
         sizePerPage: DEFAULT_PAGE_LIMIT,
         totalSize: meta?.totalRegisters,
         custom: true,
+        page: defaultPage,
+        onPageChange: (page, sizePerPage) => {
+            setDefaultPage(page);
+        },
     }
 
     useEffect(() => {
@@ -48,6 +54,7 @@ const PaymentsList = props => {
     const onFilterAction = (condition) => {
         setConditional(condition);
         onGetPayments(condition, DEFAULT_PAGE_LIMIT, 0);
+        setDefaultPage(1);
     }
 
     const columns = paymentsColumns(setPaymentSelected);

@@ -116,7 +116,7 @@ const postSaleColumns = () => {
             filterType: "text",
             formatter: (cellContent, item) => {
                 if (item.orderDelivery.deliveryStatus) {
-                    return <small className="text-muted">{item.orderDelivery.deliveryStatus}</small>;
+                    return <small className="text-muted">{item.orderDelivery.deliveryStatus} &nbsp;{item.manualReceived && <Tooltip placement="bottom" title="Marcado como recibido" aria-label="add"><span className={"mb-0 badge bg-soft-success p-1"}><i className="mdi mdi-check"></i></span></Tooltip>}</small>;
                 }
                 return '';
             },

@@ -89,7 +89,7 @@ const OrderEdit = (props) => {
     const [showAsTable, setShowAsTable] = useState(false);
     const [orderPrint, setOrderPrint] = useState('');
     const [downloadingPhoto, setDownloadingPhoto] = useState(false);
-    const [activeTab, setActiveTab] = useState(2);
+    const [activeTab, setActiveTab] = useState(3);
 
     const [openPrintConfirmModal, setOpenPrintConfirmModal] = useState(false);
     const [openCustomerModal, setOpenCustomerModal] = useState(false);
@@ -298,7 +298,7 @@ const OrderEdit = (props) => {
             .then(function (dataUrl) {
                 setDownloadingPhoto(false);
                 var link = document.createElement('a');
-                link.download = `${order.customer.name.replace(/\s+/g, '_')}_NRO_${order.id}.png`.toUpperCwase();
+                link.download = `${order.customer.name.replace(/\s+/g, '_')}_NRO_${order.id}.png`.toUpperCase();
                 link.href = dataUrl;
                 link.click();
                 onDownloadPhoto(orderData.id);

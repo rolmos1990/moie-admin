@@ -29,11 +29,16 @@ const BillList = props => {
     const [openOrdersModal, setOpenOrdersModal] = useState(false);
     const [orderListConditions, setOrderListConditions] = useState([]);
     const [openReportModal, setOpenReportModal] = useState(false);
+    const [defaultPage, setDefaultPage] = useState(1);
 
     const pageOptions = {
         sizePerPage: DEFAULT_PAGE_LIMIT,
         custom: true,
         totalSize: meta?.totalRegisters,
+        page: defaultPage,
+        onPageChange: (page, sizePerPage) => {
+            setDefaultPage(page);
+        },
     }
     useEffect(() => {
         if(refresh === null){
@@ -54,6 +59,7 @@ const BillList = props => {
     const onFilterAction = (condition) => {
         setConditional(condition);
         onGetBills(condition, DEFAULT_PAGE_LIMIT, 0);
+        setDefaultPage(1);
     }
     const onConfirmDelete = (id) => {
         //onDeleteBill(id);

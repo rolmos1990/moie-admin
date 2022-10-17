@@ -26,11 +26,16 @@ const OfficeList = props => {
     const [filter, setFilter] = useState(false);
     const [conditional, setConditional] = useState(null);
     const [openReportModal, setOpenReportModal] = useState(null);
+    const [defaultPage, setDefaultPage] = useState(1);
 
     const pageOptions = {
         sizePerPage: DEFAULT_PAGE_LIMIT,
         custom: true,
         totalSize: meta?.totalRegisters,
+        page: defaultPage,
+        onPageChange: (page, sizePerPage) => {
+            setDefaultPage(page);
+        },
     }
     const {SearchBar} = Search
 
@@ -52,6 +57,7 @@ const OfficeList = props => {
     const onFilterAction = (condition) => {
         setConditional(condition);
         onGetOffices(condition, DEFAULT_PAGE_LIMIT, 0);
+        setDefaultPage(1);
     }
     const onConfirmDelete = (id) => {
         //onDeleteOffice(id);

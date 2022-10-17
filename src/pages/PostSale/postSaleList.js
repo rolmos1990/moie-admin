@@ -19,6 +19,8 @@ import PostSaleImportFileForm from "./PostSaleImportFileForm";
 import PostSaleReportForm from "../Reports/PostSaleReportForm";
 import {refreshAllStatusDelivery} from "../../helpers/backend_helper";
 import {showMessage} from "../../components/MessageToast/ShowToastMessages";
+import {PERMISSIONS} from "../../helpers/security_rol";
+import HasPermissions from "../../components/HasPermissions";
 
 const PostSaleList = props => {
     const {orders, meta, onGetOrders, loading, refresh, customActions} = props;
@@ -29,12 +31,17 @@ const PostSaleList = props => {
     const [currentPage, setCurrentPage] = useState(null);
     const [filterable, setFilterable] = useState(true);
     const [openReportModal, setOpenReportModal] = useState(false);
-    const [syncing, setSyncing] = useState(false)
+    const [syncing, setSyncing] = useState(false);
+    const [defaultPage, setDefaultPage] = useState(1);
 
     const pageOptions = {
         sizePerPage: DEFAULT_PAGE_LIMIT,
         totalSize: meta?.totalRegisters,
         custom: true,
+        page: defaultPage,
+        onPageChange: (page, sizePerPage) => {
+            setDefaultPage(page);
+        },
     }
 
     useEffect(() => {
@@ -61,6 +68,7 @@ const PostSaleList = props => {
     const onFilterAction = (condition) => {
         setConditional(condition);
         onGetOrders(condition, DEFAULT_PAGE_LIMIT, 0);
+        setDefaultPage(1);
     }
 
     const handleImportFile = (reload) => {
@@ -129,12 +137,14 @@ const PostSaleList = props => {
                                                                 <i className={"mdi mdi-file"}> </i>
                                                             </Button>
                                                         </Tooltip>
+                                                        <HasPermissions permission={PERMISSIONS.POSTSALE_SYNC}>
                                                         <Tooltip placement="bottom" title="Sincronizar todas" aria-label="add">
                                                             <Button onClick={() => syncAllDeliveries()}>
                                                                 {syncing && <Spinner size="sm" className="m-1" color="primary"/>}
                                                                 <i className={"mdi mdi-refresh"}> </i>
                                                             </Button>
                                                         </Tooltip>
+                                                        </HasPermissions>
                                                     </div>
                                                 </Col>
                                             </Row>

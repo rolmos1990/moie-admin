@@ -44,11 +44,16 @@ const OrderList = props => {
     const [openReportConciliationModal, setOpenReportConciliationModal] = useState(false);
     const [columns, setColumns] = useState(orderColumns(setOrderSelected, showAsModal, false));
     const [selectAll, setSelectAll] = useState(false);
+    const [defaultPage, setDefaultPage] = useState(1);
 
     const pageOptions = {
         sizePerPage: DEFAULT_PAGE_LIMIT,
         totalSize: meta?.totalRegisters,
         custom: true,
+        page: defaultPage,
+        onPageChange: (page, sizePerPage) => {
+            setDefaultPage(page);
+        },
     }
 
     useEffect(() => {
@@ -99,6 +104,7 @@ const OrderList = props => {
         handleConciliateStatus(conditionals);
         setConditional(conditionals);
         onGetOrders(conditionals, DEFAULT_PAGE_LIMIT, 0);
+        setDefaultPage(1);
     }
 
     const printOrders = () => {

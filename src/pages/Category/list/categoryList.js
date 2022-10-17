@@ -25,7 +25,7 @@ import HasPermissions from "../../../components/HasPermissions";
 import {showMessage} from "../../../components/MessageToast/ShowToastMessages";
 
 const CategoryList = props => {
-    const {categories, onGetCategories, onResetCategories, onDeleteState, getCatalogBatchRequest, onCatalogPrintBatchRequest, refresh} = props;
+    const {categories, onGetCategories, onResetCategories, onDeleteState, getCatalogBatchRequest, onCatalogPrintBatchRequest, refresh, meta} = props;
     const [categoriesList, setCategoriesList] = useState([])
     const [filter, setFilter] = useState(false);
     const [conditional, setConditional] = useState(null);
@@ -33,10 +33,16 @@ const CategoryList = props => {
     const [printCategoriesId, setPrintCategoriesId] = useState([]);
     const [catalogs, setCatalogs] = useState([]);
     const [selectAll, setSelectAll] = useState(false);
+    const [defaultPage, setDefaultPage] = useState(1);
 
     const pageOptions = {
         sizePerPage: DEFAULT_PAGE_LIMIT,
+        totalSize: meta?.totalRegisters || 0,
         custom: true,
+        page: defaultPage,
+        onPageChange: (page, sizePerPage) => {
+            setDefaultPage(page);
+        },
     }
 
     useEffect(() => {
@@ -62,6 +68,7 @@ const CategoryList = props => {
     const onFilterAction = (condition) => {
         setConditional(condition);
         onGetCategories(condition, DEFAULT_PAGE_LIMIT, 0);
+        setDefaultPage(1);
     }
     const onConfirmDelete = (id) => {
         onDeleteState(id);

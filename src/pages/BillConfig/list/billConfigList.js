@@ -22,10 +22,16 @@ const BillConfigList = props => {
     const [billConfigList, setBillConfigList] = useState([])
     const [filter, setFilter] = useState(false);
     const [conditional, setConditional] = useState(null);
+    const [defaultPage, setDefaultPage] = useState(1);
+
 
     const pageOptions = {
         sizePerPage: DEFAULT_PAGE_LIMIT,
         custom: true,
+        page: defaultPage,
+        onPageChange: (page, sizePerPage) => {
+            setDefaultPage(page);
+        },
     }
     useEffect(() => {
         if(refresh === null) {
@@ -46,6 +52,7 @@ const BillConfigList = props => {
     const onFilterAction = (condition) => {
         setConditional(condition);
         onGetBillConfigs(condition, DEFAULT_PAGE_LIMIT, 0);
+        setDefaultPage(1);
     }
     const onConfirmDelete = (id) => {
         //onDeleteBillConfig(id);

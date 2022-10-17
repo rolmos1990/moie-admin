@@ -1,4 +1,5 @@
 import {
+    CLEAR_PRODUCTS,
     GET_PRODUCT,
     GET_PRODUCT_FAILED,
     GET_PRODUCT_SUCCESS,
@@ -21,6 +22,10 @@ import Conditionals from "../../common/conditionals";
 
 export const resetProduct = () => ({
     type: RESET_PRODUCT,
+})
+
+export const clearProducts = () => ({
+    type: CLEAR_PRODUCTS,
 })
 
 export const getProducts = (conditional, limit, offset, order) => ({

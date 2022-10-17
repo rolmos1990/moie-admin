@@ -26,12 +26,16 @@ const WalletList = props => {
     const [walletStats, setWalletStats] = useState({})
     const [filter, setFilter] = useState(false);
     const [conditional, setConditional] = useState(null);
-
+    const [defaultPage, setDefaultPage] = useState(1);
 
     const pageOptions = {
         sizePerPage: DEFAULT_PAGE_LIMIT,
         totalSize: meta?.totalRegisters,
         custom: true,
+        page: defaultPage,
+        onPageChange: (page, sizePerPage) => {
+            setDefaultPage(page);
+        },
     }
     const {SearchBar} = Search
 
@@ -63,6 +67,7 @@ const WalletList = props => {
     const onFilterAction = (condition) => {
         setConditional(condition);
         onGetWallets(condition, DEFAULT_PAGE_LIMIT, 0);
+        setDefaultPage(1);
     }
 
     const columns = walletsColumns();

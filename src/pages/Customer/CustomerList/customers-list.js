@@ -28,10 +28,15 @@ const CustomersList = props => {
     const [filter, setFilter] = useState(false);
     const [conditional, setConditional] = useState(null);
     const [countMayorista, setCountMayorista] = useState(0);
+    const [defaultPage, setDefaultPage] = useState(1);
     const pageOptions = {
         sizePerPage: DEFAULT_PAGE_LIMIT,
         totalSize: meta?.totalRegisters,
         custom: true,
+        page: defaultPage,
+        onPageChange: (page, sizePerPage) => {
+            setDefaultPage(page);
+        },
     }
 
     useEffect(() => {
@@ -56,6 +61,7 @@ const CustomersList = props => {
     const onFilterAction = (condition) => {
         setConditional(condition);
         onGetCustomers(condition, DEFAULT_PAGE_LIMIT, 0);
+        setDefaultPage(1);
     }
     const onConfirmDelete = (id) => {
         onDeleteCustomer(id);

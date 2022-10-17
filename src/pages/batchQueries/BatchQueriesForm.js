@@ -29,7 +29,6 @@ const BatchQueriesForm = (props) => {
     const [defaultValue, setDefaultValue] = useState(null);
 
     useEffect(() => {
-        console.log('productos', )
         onGetCategories();
         onGetSizes();
         onResetProduct();
@@ -85,8 +84,8 @@ const BatchQueriesForm = (props) => {
             }
 
             const listToCopy = tmpProductList.map(p => {
-                const ll = p.productSize.filter((s) => s.quantity > 0).map(s => {
-                    return `TALLA ${s.name}: ${s.label}`
+                const ll = p.productSize.map(s => {
+                    return s.quantity > 0 ? `TALLA ${s.name}: ${s.label}` : 'AGOTADO';
                 })
                 return `${p.reference}\n${ll.join("\n")}\n`
             });
@@ -106,8 +105,6 @@ const BatchQueriesForm = (props) => {
 
     const onSearchRefs = (e) => {
 
-        console.log('cargo referencia: ...');
-
         if (productRefs.length === 0) {
             return;
         }
@@ -117,11 +114,9 @@ const BatchQueriesForm = (props) => {
         if (productRefs.length > 0) conditions.add("reference", refs.join("::"), Conditionals.OPERATORS.IN);
         onGetProducts(conditions.all(), refs.length);
         form.reset();
-        //setProductList([]);
     }
 
     const onSearch = () => {
-        console.log("hago una busqueda...");
         const conditions = new Conditionals.Condition;
         if (sizeSelected && sizeSelected.value && sizeSelected.value > 0) {
             conditions.add("size.id", sizeSelected.value, Conditionals.OPERATORS.EQUAL);
@@ -130,13 +125,10 @@ const BatchQueriesForm = (props) => {
             conditions.add("category.id", categorySelected.value, Conditionals.OPERATORS.EQUAL);
         }
 
-
         onGetProducts(conditions.all());
-        //setProductList([]);
     }
 
     const clearFilters = () => {
-        console.log("hago una busqueda...");
         setProductList([]);
         setTextToCopy([]);
         setCategorySelected(null)

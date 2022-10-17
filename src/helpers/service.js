@@ -1,4 +1,4 @@
-import {fetchDataApi} from "./backend_helper";
+import {fetchDataApi, postApi} from "./backend_helper";
 import Conditionals from "../common/conditionals";
 import {showMessage} from "../components/MessageToast/ShowToastMessages";
 import {DEFAULT_PAGE_LIMIT} from "../common/pagination";
@@ -141,4 +141,8 @@ export const customerProductStats = (customerId, date) => {
 }
 export const customerCategoryStats = (customerId, date) => {
     return fetchDataApi(`${url.CUSTOMER}/${customerId}/stats?beforeDate=${date.format("YYYY-MM-DD")}&categoryMode=true`, {});
+}
+
+export const markOrderReceived = (orderId) => {
+    return postApi(url.ORDER_CONFIRM_RECEIVED, {order: orderId});
 }

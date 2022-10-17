@@ -87,15 +87,23 @@ const ProductList = props => {
     const [productList, setProductList] = useState([]);
     const [filter, setFilter] = useState(false);
     const [conditional, setConditional] = useState(null);
+    const [defaultPage, setDefaultPage] = useState(1);
 
     const pageOptions = {
         sizePerPage: DEFAULT_PAGE_LIMIT,
         totalSize: meta?.totalRegisters || 0,
         custom: true,
+        showTotal: true,
+        page: defaultPage,
+        onPageChange: (page, sizePerPage) => {
+            setDefaultPage(page);
+        },
     };
 
     useEffect(() => {
-        onResetProducts();
+        if(refresh === null) {
+            onResetProducts();
+        }
         onGetProducts();
     }, [refresh, onGetProducts])
 
@@ -106,6 +114,7 @@ const ProductList = props => {
     const onFilterAction = (condition) => {
         setConditional(condition);
         onGetProducts(condition, DEFAULT_PAGE_LIMIT, 0);
+        setDefaultPage(1);
     }
 
     const handleTableChange = (type, {page, searchText}) => {

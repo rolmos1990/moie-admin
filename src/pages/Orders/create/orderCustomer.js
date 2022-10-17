@@ -17,7 +17,7 @@ import {hasCustomerOpenOrders} from "../../../helpers/service";
 import OrdersPieChart from "../../CustomerEdit/OrdersPieChart";
 import CategoriesPieChart from "../../CustomerEdit/CategoriesPieChart";
 
-const searchByOptions = [{label: "Documento", value: "doc"}, {label: "Nombre", value: "name"}, {label: "Correo", value: "email"}, {label: "Teléfono", value: "phone"}];
+const searchByOptions = [{label: "Nombre", value: "name"}, {label: "Documento", value: "doc"}, {label: "Correo", value: "email"}, {label: "Teléfono", value: "phone"}];
 
 const OrderCustomer = (props) => {
     const {car, customer, onGetCustomer, hasCustomerOpenOrders, onUpdateCar, showAsModal, onUpdateCustomer} = props;
@@ -109,29 +109,6 @@ const OrderCustomer = (props) => {
                             }}
                         />
                     </Col>
-                    {searchBy === "doc" && (
-                        <Col md={9}>
-                            <Label htmlFor="product">Documento</Label>
-                            <FieldAsyncSelect
-                                name={"product"}
-                                urlStr={CUSTOMER}
-                                placeholder="Buscar por documento"
-                                defaultValue={customerDocumentDefault}
-                                isClearable={true}
-                                hasWild={false}
-                                conditionalOptions={{fieldName: 'document', operator: Conditionals.OPERATORS.LIKE}}
-                                onChange={(c, meta) => {
-                                    if(meta.action === "clear"){
-                                        resetData();
-                                    }
-                                    else {
-                                        onGetCustomer(c.value);
-                                        setCustomerDefault(getEmptyOptions());
-                                    }
-                                }}
-                            />
-                        </Col>
-                    )}
                     {searchBy === "name" && (
                         <Col md={9}>
                             <Label htmlFor="customer">Nombre</Label>
@@ -143,6 +120,29 @@ const OrderCustomer = (props) => {
                                 isClearable={true}
                                 hasWild={true}
                                 conditionalOptions={{fieldName: 'name', operator: Conditionals.OPERATORS.LIKE}}
+                                onChange={(c, meta) => {
+                                    if(meta.action === "clear"){
+                                        resetData();
+                                    }
+                                    else {
+                                        onGetCustomer(c.value);
+                                        setCustomerDocumentDefault(getEmptyOptions());
+                                    }
+                                }}
+                            />
+                        </Col>
+                    )}
+                    {searchBy === "doc" && (
+                        <Col md={9}>
+                            <Label htmlFor="doc">Documento</Label>
+                            <FieldAsyncSelect
+                                name={"doc"}
+                                urlStr={CUSTOMER}
+                                placeholder="Buscar por documento"
+                                defaultValue={customerDocumentDefault}
+                                isClearable={true}
+                                hasWild={false}
+                                conditionalOptions={{fieldName: 'document', operator: Conditionals.OPERATORS.EQUAL}}
                                 onChange={(c, meta) => {
                                     if(meta.action === "clear"){
                                         resetData();
@@ -187,7 +187,7 @@ const OrderCustomer = (props) => {
                                 defaultValue={customerEmailDefault}
                                 isClearable={true}
                                 hasWild={true}
-                                conditionalOptions={{fieldName: 'phone', operator: Conditionals.OPERATORS.EQUAL}}
+                                conditionalOptions={{fieldName: 'cellphone', operator: Conditionals.OPERATORS.EQUAL}}
                                 onChange={(c, meta) => {
                                     if (meta.action === "clear") {
                                         resetData();

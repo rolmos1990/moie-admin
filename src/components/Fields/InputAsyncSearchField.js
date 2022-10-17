@@ -73,12 +73,14 @@ class AvAsyncSearchInput extends AvBaseInput {
                             } else {
                                 cond.operator = Conditionals.OPERATORS.EQUAL;
                             }
-                            return getData(urlStr, textSearch, cond, defaultConditions).then(response => {
-                                const fieldName = conditionalOptions && conditionalOptions.fieldName ? conditionalOptions.fieldName : 'name';
-                                const options = arrayToOptionsByFieldName(response.data, fieldName);
-                                //options.unshift(getEmptyOptions());
-                                return options
-                            })
+
+                           return getData(urlStr, textSearch, cond, defaultConditions).then(response => {
+                               const fieldName = conditionalOptions && conditionalOptions.fieldName ? conditionalOptions.fieldName : 'name';
+                               const options = arrayToOptionsByFieldName(response.data, fieldName);
+                               //options.unshift(getEmptyOptions());
+                               return options
+                           })
+
                         }}
                     />
                 </div>

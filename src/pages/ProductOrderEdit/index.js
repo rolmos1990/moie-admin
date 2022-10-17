@@ -8,7 +8,7 @@ import {PERMISSIONS} from "../../helpers/security_rol";
 import NoAccess from "../../components/Common/NoAccess";
 import HasPermissions from "../../components/HasPermissions";
 import Conditionals from "../../common/conditionals";
-import {getProducts, reorderProduct, resetProduct} from "../../store/product/actions";
+import {clearProducts, getProducts, reorderProduct, resetProduct} from "../../store/product/actions";
 import {DEFAULT_PAGE_LIMIT} from "../../common/pagination";
 import {arrayMove, SortableContainer, SortableElement} from 'react-sortable-hoc';
 import Images from "../../components/Common/Image";
@@ -49,7 +49,7 @@ const SortableList = SortableContainer(({items}) => {
 
 
 const ProductOrderEdit = (props) => {
-    const {onGetProducts, products, onReorderProduct, onGetCategory, category, loading} = props;
+    const {onGetProducts, products, onReorderProduct, onGetCategory, category, loading, onResetProducts, onClearProducts} = props;
     const [gloading, setGloading] = useState(false);
     const [page, setPage] = useState(0);
     const [categoryData, setCategoryData] = useState(null);
@@ -58,25 +58,32 @@ const ProductOrderEdit = (props) => {
 
     useEffect(() => {
         if(onGetCategory){
+            //clean all
+            onResetProducts();
+            setCategoryData([]);
+            setProductsList([]);
+
+            //get category first time
             const _category = props.match.params.id;
             onGetCategory(_category);
+
+            //on get products
+            const conditions = new Conditionals.Condition;
+            conditions.add('category', _category);
+            const order = {field: "orden", type: "asc"};
+            onGetProducts(conditions.condition, limited, page, order);
+            setPage(page);
         }
     }, [onGetCategory]);
 
     useEffect(() => {
-        if(category && onGetProducts){
+        if(category){
             setCategoryData(category);
-            const conditions = new Conditionals.Condition;
-            conditions.add('category', category.id);
-
-            const order = {field: "orden", type: "asc"}
-            onGetProducts(conditions.condition, limited, page, order);
-            setPage(page );
         }
     }, [category]);
 
     useEffect(() => {
-        if (products && products.length > 0) {
+        if (products && products.length > 0 && categoryData) {
             let merged = productsList.concat(products);
             setProductsList(merged);
         }
@@ -199,6 +206,9 @@ const ProductOrderEdit = (props) => {
 const mapDispatchToProps = dispatch => ({
     onResetProducts: () => {
         dispatch(resetProduct());
+    },
+    onClearProducts: () => {
+        dispatch(clearProducts());
     },
     onGetProducts: (conditional = null, limit = DEFAULT_PAGE_LIMIT, page, order) => dispatch(getProducts(conditional, limit, page, order)),
     onReorderProduct: (data, history) => dispatch(reorderProduct(data, history)),
