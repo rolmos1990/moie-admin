@@ -51,7 +51,7 @@ const OrderDeliveryOptions = (props) => {
             setOriginOrder(null);
             setDeliveryType(null);
             setPaymentType(null);
-            setDeliveryCost(0);
+            setDeliveryCost(null);
             setPieceToChange(null);
             setShowPaymentType(false);
             setProductQty(0);
