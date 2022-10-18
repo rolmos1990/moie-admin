@@ -15,6 +15,7 @@ import Header from "./Header"
 import Sidebar from "./Sidebar"
 import Footer from "./Footer"
 import Rightbar from "../CommonForBoth/Rightbar"
+import CountUsers from "../HorizontalLayout/CountUsers";
 
 class Layout extends Component {
   constructor(props) {
@@ -76,6 +77,7 @@ class Layout extends Component {
   render() {
     return (
       <React.Fragment>
+        <CountUsers />
         <div id="preloader">
           <div id="status">
             <div className="spinner">

@@ -14,7 +14,7 @@ import Navbar from "./Navbar"
 import Header from "./Header"
 import Footer from "./Footer"
 import Rightbar from "../CommonForBoth/Rightbar"
-import OutsideClickHandler from "../OutsideClickHandler";
+import CountUsers from "./CountUsers";
 
 class Layout extends Component {
   constructor(props) {
@@ -67,6 +67,7 @@ class Layout extends Component {
   render() {
     return (
       <React.Fragment>
+        <CountUsers />
         <div id="preloader">
             <div id="status">
                 <div className="spinner">
