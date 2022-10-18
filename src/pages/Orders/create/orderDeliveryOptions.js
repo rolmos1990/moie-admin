@@ -54,6 +54,8 @@ const OrderDeliveryOptions = (props) => {
             setDeliveryCost(null);
             setPieceToChange(null);
             setShowPaymentType(false);
+            setDeliveryLocality(null);
+            setOtherMethod(null);
             setProductQty(0);
             setTracking("");
             setHasAddress(false);

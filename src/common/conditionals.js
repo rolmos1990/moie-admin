@@ -11,7 +11,11 @@ function getConditionalFormat(options) {
                 if (!item.moreValues) {
                     return (item.field + item.operator + item.value)
                 } else {
-                    item.moreValues = item.moreValues.join("::");
+                    if(item.moreValues && Array.isArray(item.moreValues)) {
+                        item.moreValues = item.moreValues.join("::");
+                    } else {
+                        item.moreValues = item.moreValues;
+                    }
                     return (item.field + item.operator + item.value + "::" + item.moreValues)
                 }
             } else {
