@@ -78,7 +78,7 @@ const CustomerForm = (props) => {
         if (state != null) {
             const conditions = new Conditionals.Condition;
             conditions.add('state', state);
-            getMunicipalities(conditions.all());
+            getMunicipalities(conditions.all(), 500);
         }
     }, [state]);
 
