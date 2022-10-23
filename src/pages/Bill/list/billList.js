@@ -20,9 +20,10 @@ import BillGenerateReportForm from "../../Reports/BillsReportForm";
 import HasPermissions from "../../../components/HasPermissions";
 import {PERMISSIONS} from "../../../helpers/security_rol";
 import {CHARGE_ON_DELIVERY, DELIVERY_METHODS_IDS, ORDERS_ENUM} from "../../../common/constants";
+import {clearTableConditions, saveTableConditions} from "../../../store/layout/actions";
 
 const BillList = props => {
-    const {states, bills, meta, getStates, onGetBills, onResetBill, loading, refresh} = props; //onDeleteBill,
+    const {states, bills, meta, getStates, onGetBills, onResetBill, loading, refresh, onSaveTableConditions, onClearTableConditions, conditionType, conditions, offset} = props; //onDeleteBill,
     const [billList, setBillList] = useState([])
     const [filter, setFilter] = useState(false);
     const [conditional, setConditional] = useState(null);
@@ -38,13 +39,22 @@ const BillList = props => {
         page: defaultPage,
         onPageChange: (page, sizePerPage) => {
             setDefaultPage(page);
+            const offset = (page - 1) * DEFAULT_PAGE_LIMIT;
+            onSaveTableConditions(conditions, offset, 'bill');
         },
     }
     useEffect(() => {
         if(refresh === null){
             onResetBill();
         }
-        onGetBills();
+
+        if(conditionType !== 'bill'){
+            onClearTableConditions();
+            onGetBills();
+        } else {
+            //reload the filter loaded
+            onFilterAction(conditions, offset);
+        }
     }, [refresh, onGetBills])
 
     useEffect(() => {
@@ -53,14 +63,23 @@ const BillList = props => {
 
     // eslint-disable-next-line no-unused-vars
     const handleTableChange = (type, {page, searchText}) => {
-        onGetBills(conditional, DEFAULT_PAGE_LIMIT, (page - 1)*DEFAULT_PAGE_LIMIT);
+        const offset = (page - 1) * DEFAULT_PAGE_LIMIT;
+        onGetBills(conditional, DEFAULT_PAGE_LIMIT, offset);
+        onSaveTableConditions(conditional, offset, 'bill');
     }
 
-    const onFilterAction = (condition) => {
+    const onFilterAction = (condition, offset = 0) => {
+        const page = Math.floor(offset / DEFAULT_PAGE_LIMIT);
         setConditional(condition);
-        onGetBills(condition, DEFAULT_PAGE_LIMIT, 0);
-        setDefaultPage(1);
+        onGetBills(condition, DEFAULT_PAGE_LIMIT, offset);
+        setDefaultPage(page + 1);
+        if(condition && condition.length > 0) {
+            onSaveTableConditions(condition, offset, 'bill');
+        } else {
+            onClearTableConditions();
+        }
     }
+
     const onConfirmDelete = (id) => {
         //onDeleteBill(id);
     };
@@ -133,7 +152,7 @@ const BillList = props => {
                                                     <Col md={6}>
                                                         <div className="form-inline mb-3">
                                                             <div className="search-box ms-2">
-                                                                <h4 className="text-info"><i className="uil-bill me-2"></i> Facturas</h4>
+                                                                <h4 className="text-info"><i className="uil-bill me-2"></i> Facturas {conditionType && <small className={'font-size-12 badge rounded-pill bg-grey'}>Filtrados</small>}</h4>
                                                             </div>
                                                         </div>
                                                     </Col>
@@ -203,7 +222,8 @@ BillList.propTypes = {
 
 const mapStateToProps = state => {
     const {states, bills, loading, meta, refresh} = state.Bill
-    return {states, bills, loading, meta, refresh}
+    const {conditionType, conditions, offset} = state.Layout;
+    return {states, bills, loading, meta, refresh, conditionType, conditions, offset}
 }
 
 const mapDispatchToProps = dispatch => ({
@@ -212,6 +232,8 @@ const mapDispatchToProps = dispatch => ({
     },
     onGetBills: (conditional = null, limit = DEFAULT_PAGE_LIMIT, page) => dispatch(getBills(conditional, limit, page)),
     onCreateBill: (ids) => dispatch(registerBill(ids)),
+    onSaveTableConditions: (conditions, offset, conditionType) => dispatch(saveTableConditions(conditions, offset, conditionType)),
+    onClearTableConditions: () => dispatch(clearTableConditions())
 })
 
 export default connect(

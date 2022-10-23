@@ -7,7 +7,7 @@ import {
   SHOW_RIGHT_SIDEBAR,
   SHOW_SIDEBAR,
   CHANGE_PRELOADER,
-  TOGGLE_LEFTMENU,
+  TOGGLE_LEFTMENU, TABLE_CONDITIONS_ADD, TABLE_CONDITIONS_CLEAR,
 } from "./actionTypes"
 
 export const changeLayout = layout => ({
@@ -55,4 +55,16 @@ export const showSidebar = isopen => ({
 export const toggleLeftmenu = isopen => ({
   type: TOGGLE_LEFTMENU,
   payload: isopen,
+})
+
+
+export const saveTableConditions = (conditions,offset, conditionType) => ({
+  type: TABLE_CONDITIONS_ADD,
+  conditions: conditions,
+  conditionType: conditionType,
+  offset: offset
+})
+
+export const clearTableConditions = () => ({
+  type: TABLE_CONDITIONS_CLEAR,
 })

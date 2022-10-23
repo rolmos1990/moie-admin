@@ -21,9 +21,10 @@ import {refreshAllStatusDelivery} from "../../helpers/backend_helper";
 import {showMessage} from "../../components/MessageToast/ShowToastMessages";
 import {PERMISSIONS} from "../../helpers/security_rol";
 import HasPermissions from "../../components/HasPermissions";
+import {clearTableConditions, saveTableConditions} from "../../store/layout/actions";
 
 const PostSaleList = props => {
-    const {orders, meta, onGetOrders, loading, refresh, customActions} = props;
+    const {orders, meta, onGetOrders, loading, refresh, customActions, onSaveTableConditions, onClearTableConditions, conditionType, conditions, offset} = props;
     const [statesList, setStatesList] = useState([])
     const [filter, setFilter] = useState(false);
     const [conditional, setConditional] = useState(null);
@@ -41,16 +42,29 @@ const PostSaleList = props => {
         page: defaultPage,
         onPageChange: (page, sizePerPage) => {
             setDefaultPage(page);
+            const offset = (page - 1) * DEFAULT_PAGE_LIMIT;
+            onSaveTableConditions(conditions, offset, 'postSale');
         },
     }
 
     useEffect(() => {
         if (null !== refresh) {
-            onGetOrders(conditional, DEFAULT_PAGE_LIMIT, currentPage * DEFAULT_PAGE_LIMIT);
+            if(conditionType !== 'postSale'){
+                onClearTableConditions();
+                onGetOrders(conditional, DEFAULT_PAGE_LIMIT, currentPage * DEFAULT_PAGE_LIMIT);
+            } else {
+                //reload the filter loaded
+                onFilterAction(conditions, offset);
+            }
         } else {
-            onGetOrders(conditional);
-            if (customActions) {
-                setFilterable(false);
+            if(conditionType === 'postSale') {
+                onFilterAction(conditions, offset);
+            } else {
+                onGetOrders(conditional);
+                onClearTableConditions();
+                if (customActions) {
+                    setFilterable(false);
+                }
             }
         }
     }, [refresh, onGetOrders])
@@ -60,15 +74,21 @@ const PostSaleList = props => {
     }, [orders])
 
     const handleTableChange = (type, {page, searchText}) => {
-        let p = page - 1;
-        setCurrentPage(p);
-        onGetOrders(conditional, DEFAULT_PAGE_LIMIT, p * DEFAULT_PAGE_LIMIT);
+        const offset = (page - 1) * DEFAULT_PAGE_LIMIT;
+        onGetOrders(conditional, DEFAULT_PAGE_LIMIT, offset);
+        onSaveTableConditions(conditional, offset, 'postSale');
     }
 
-    const onFilterAction = (condition) => {
+    const onFilterAction = (condition, offset = 0) => {
+        const page = Math.floor(offset / DEFAULT_PAGE_LIMIT);
         setConditional(condition);
-        onGetOrders(condition, DEFAULT_PAGE_LIMIT, 0);
-        setDefaultPage(1);
+        onGetOrders(condition, DEFAULT_PAGE_LIMIT, offset);
+        setDefaultPage(page + 1);
+        if(condition && condition.length > 0) {
+            onSaveTableConditions(condition, offset, 'postSale');
+        } else {
+            onClearTableConditions();
+        }
     }
 
     const handleImportFile = (reload) => {
@@ -114,7 +134,7 @@ const PostSaleList = props => {
                                                 <Col md={6}>
                                                     <div className="form-inline mb-3">
                                                         <div className="search-box ms-2">
-                                                            <h4 className="text-info"><i className="uil-shopping-cart-alt me-2"></i> Post Venta</h4>
+                                                            <h4 className="text-info"><i className="uil-shopping-cart-alt me-2"></i> Post Venta {conditionType && <small className={'font-size-12 badge rounded-pill bg-grey'}>Filtrados</small>}</h4>
                                                         </div>
                                                     </div>
                                                 </Col>
@@ -195,7 +215,8 @@ PostSaleList.propTypes = {
 
 const mapStateToProps = state => {
     const {orders, loading, meta, refresh} = state.Order
-    return {orders, loading, meta, refresh}
+    const {conditionType, conditions, offset} = state.Layout;
+    return {orders, loading, meta, refresh, conditionType, conditions, offset}
 }
 
 const mapDispatchToProps = dispatch => ({
@@ -208,6 +229,8 @@ const mapDispatchToProps = dispatch => ({
         dispatch(getOrders(conditional, limit, page, orderFields));
     },
     onPrintBatchRequest: (conditional) => dispatch(doPrintBatchRequest(conditional)),
+    onSaveTableConditions: (conditions, offset, conditionType) => dispatch(saveTableConditions(conditions, offset, conditionType)),
+    onClearTableConditions: () => dispatch(clearTableConditions())
 })
 
 export default connect(

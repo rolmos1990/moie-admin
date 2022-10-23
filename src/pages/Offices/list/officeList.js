@@ -19,9 +19,11 @@ import OfficeReportForm from "../../Reports/OfficeReportForm";
 import NoDataIndication from "../../../components/Common/NoDataIndication";
 import {PERMISSIONS} from "../../../helpers/security_rol";
 import HasPermissions from "../../../components/HasPermissions";
+import {clearTableConditions, saveTableConditions} from "../../../store/layout/actions";
+
 
 const OfficeList = props => {
-    const {offices, onGetOffices, onResetOffices, refresh, meta} = props; //onDeleteOffice,
+    const {offices, onGetOffices, onResetOffices, refresh, meta, onSaveTableConditions, onClearTableConditions, conditionType, conditions, offset} = props; //onDeleteOffice,
     const [officeList, setOfficeList] = useState([])
     const [filter, setFilter] = useState(false);
     const [conditional, setConditional] = useState(null);
@@ -35,6 +37,8 @@ const OfficeList = props => {
         page: defaultPage,
         onPageChange: (page, sizePerPage) => {
             setDefaultPage(page);
+            const offset = (page - 1) * DEFAULT_PAGE_LIMIT;
+            onSaveTableConditions(conditions, offset, 'office');
         },
     }
     const {SearchBar} = Search
@@ -43,7 +47,15 @@ const OfficeList = props => {
         if(refresh === null){
             onResetOffices();
         }
-        onGetOffices();
+
+        if(conditionType !== 'office'){
+            onClearTableConditions();
+            onGetOffices();
+        } else {
+            //reload the filter loaded
+            onFilterAction(conditions, offset);
+        }
+
     }, [refresh, onGetOffices])
 
     useEffect(() => {
@@ -51,14 +63,23 @@ const OfficeList = props => {
     }, [offices])
 
     const handleTableChange = (type, {page}) => {
-        onGetOffices(conditional, DEFAULT_PAGE_LIMIT, (page - 1) * DEFAULT_PAGE_LIMIT);
+        const offset = (page - 1) * DEFAULT_PAGE_LIMIT;
+        onGetOffices(conditional, DEFAULT_PAGE_LIMIT, offset);
+        onSaveTableConditions(conditional, offset, 'office');
     }
 
-    const onFilterAction = (condition) => {
+    const onFilterAction = (condition, offset = 0) => {
+        const page = Math.floor(offset / DEFAULT_PAGE_LIMIT);
         setConditional(condition);
-        onGetOffices(condition, DEFAULT_PAGE_LIMIT, 0);
-        setDefaultPage(1);
+        onGetOffices(condition, DEFAULT_PAGE_LIMIT, offset);
+        setDefaultPage(page + 1);
+        if(condition && condition.length > 0) {
+            onSaveTableConditions(condition, offset, 'office');
+        } else {
+            onClearTableConditions();
+        }
     }
+
     const onConfirmDelete = (id) => {
         //onDeleteOffice(id);
     };
@@ -99,7 +120,7 @@ const OfficeList = props => {
                                                 <Col md={6}>
                                                     <div className="form-inline mb-3">
                                                         <div className="search-box ms-2">
-                                                            <h4 className="text-info"><i className="uil-truck me-2"></i> Despachos</h4>
+                                                            <h4 className="text-info"><i className="uil-truck me-2"></i> Despachos {conditionType && <small className={'font-size-12 badge rounded-pill bg-grey'}>Filtrados</small>}</h4>
                                                         </div>
                                                     </div>
                                                 </Col>
@@ -173,7 +194,8 @@ OfficeList.propTypes = {
 
 const mapStateToProps = state => {
     const {states, offices, loading, meta, refresh} = state.Office
-    return {states, offices, loading, meta, refresh}
+    const {conditionType, conditions, offset} = state.Layout;
+    return {states, offices, loading, meta, refresh,conditionType, conditions, offset}
 }
 
 const mapDispatchToProps = dispatch => ({
@@ -182,6 +204,8 @@ const mapDispatchToProps = dispatch => ({
     onResetOffices: () => {
         dispatch(resetOffice());
     },
+    onSaveTableConditions: (conditions, offset, conditionType) => dispatch(saveTableConditions(conditions, offset, conditionType)),
+    onClearTableConditions: () => dispatch(clearTableConditions())
     //onDeleteOffice: (id) => dispatch(deleteOffice(id))
 })
 

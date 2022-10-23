@@ -1,15 +1,15 @@
 // @flow
 import {
-    CHANGE_LAYOUT,
-    CHANGE_LAYOUT_WIDTH,
-    CHANGE_SIDEBAR_THEME,
-    CHANGE_SIDEBAR_TYPE,
-    CHANGE_TOPBAR_THEME,
-    SHOW_RIGHT_SIDEBAR,
-    CHANGE_PRELOADER,
-    TOGGLE_LEFTMENU,
-    SHOW_SIDEBAR,
-  } from "./actionTypes"
+  CHANGE_LAYOUT,
+  CHANGE_LAYOUT_WIDTH,
+  CHANGE_SIDEBAR_THEME,
+  CHANGE_SIDEBAR_TYPE,
+  CHANGE_TOPBAR_THEME,
+  SHOW_RIGHT_SIDEBAR,
+  CHANGE_PRELOADER,
+  TOGGLE_LEFTMENU,
+  SHOW_SIDEBAR, TABLE_CONDITIONS_ADD, TABLE_CONDITIONS_CLEAR,
+} from "./actionTypes"
 
   const INIT_STATE = {
     layoutType: "horizontal",
@@ -22,6 +22,9 @@ import {
     isMobile: true,
     showSidebar: true,
     leftMenu: false,
+    conditions: null,
+    conditionType: null,
+    offset: null
   }
 
   const Layout = (state = INIT_STATE, action) => {
@@ -72,7 +75,20 @@ import {
           ...state,
           leftMenu: action.payload,
         }
-
+      case TABLE_CONDITIONS_ADD:
+        return {
+          ...state,
+          conditions: action.conditions,
+          offset: action.offset,
+          conditionType: action.conditionType
+        }
+      case TABLE_CONDITIONS_CLEAR:
+        return {
+          ...state,
+          conditions: null,
+          conditionType: null,
+          offset: null
+        }
       default:
         return state
     }

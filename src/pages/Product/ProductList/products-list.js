@@ -16,6 +16,7 @@ import StatsStatusCard from "../../../components/Common/StatsStatusCard";
 import {countProductsByStatus} from "../../../helpers/service";
 import HasPermissions from "../../../components/HasPermissions";
 import {PERMISSIONS} from "../../../helpers/security_rol";
+import {clearTableConditions, saveTableConditions} from "../../../store/layout/actions";
 
 const DEFAULT_PAGE_LIMIT = 30;
 
@@ -83,7 +84,7 @@ const options3 = {
 
 const ProductList = props => {
 
-    const {refresh, onGetProducts, onResetProducts, countProductsByStatus, products, meta, onUpdateProduct} = props;
+    const {refresh, onGetProducts, onResetProducts, countProductsByStatus, products, meta, onUpdateProduct, onSaveTableConditions, onClearTableConditions, conditionType, conditions, offset} = props;
     const [productList, setProductList] = useState([]);
     const [filter, setFilter] = useState(false);
     const [conditional, setConditional] = useState(null);
@@ -97,6 +98,8 @@ const ProductList = props => {
         page: defaultPage,
         onPageChange: (page, sizePerPage) => {
             setDefaultPage(page);
+            const offset = (page - 1) * DEFAULT_PAGE_LIMIT;
+            onSaveTableConditions(conditions, offset, 'product');
         },
     };
 
@@ -104,21 +107,36 @@ const ProductList = props => {
         if(refresh === null) {
             onResetProducts();
         }
-        onGetProducts();
+
+        if(conditionType !== 'product'){
+            onClearTableConditions();
+            onGetProducts();
+        } else {
+            //reload the filter loaded
+            onFilterAction(conditions, offset);
+        }
     }, [refresh, onGetProducts])
 
     useEffect(() => {
         setProductList(products)
     }, [products])
 
-    const onFilterAction = (condition) => {
+    const onFilterAction = (condition, offset = 0) => {
+        const page = Math.floor(offset / DEFAULT_PAGE_LIMIT);
         setConditional(condition);
-        onGetProducts(condition, DEFAULT_PAGE_LIMIT, 0);
-        setDefaultPage(1);
+        onGetProducts(condition, DEFAULT_PAGE_LIMIT, offset);
+        setDefaultPage(page + 1);
+        if(condition && condition.length > 0) {
+            onSaveTableConditions(condition, offset, 'product');
+        } else {
+            onClearTableConditions();
+        }
     }
 
     const handleTableChange = (type, {page, searchText}) => {
-        onGetProducts(conditional, DEFAULT_PAGE_LIMIT, (page - 1) * DEFAULT_PAGE_LIMIT);
+        const offset = (page - 1) * DEFAULT_PAGE_LIMIT;
+        onGetProducts(conditional, DEFAULT_PAGE_LIMIT, offset);
+        onSaveTableConditions(conditional, offset, 'product');
     }
 
     const onUpdateStatusProduct = (id, _status) => {
@@ -161,18 +179,11 @@ const ProductList = props => {
                                     >
                                         {toolkitProps => (
                                             <React.Fragment>
-
                                                 <Row className="row mb-2">
                                                     <Col md={6}>
                                                         <div className="form-inline mb-3">
                                                             <div className="search-box ms-2">
-                                                                <h4 className="text-info"><i className="uil-box me-2 me-2"></i> Productos</h4>
-                                                                {/*{!filter && (
-                                                                <div className="position-relative">
-                                                                    <SearchBar {...toolkitProps.searchProps}/>
-                                                                    <i className="mdi mdi-magnify search-icon"> </i>
-                                                                </div>
-                                                            )}*/}
+                                                                <h4 className="text-info"><i className="uil-box me-2 me-2"></i> Productos {conditionType && <small className={'font-size-12 badge rounded-pill bg-grey'}>Filtrados</small>}</h4>
                                                             </div>
                                                         </div>
                                                     </Col>
@@ -242,7 +253,8 @@ ProductList.propTypes = {
 
 const mapStateToProps = state => {
     const {products, loading, meta, refresh, custom} = state.Product
-    return {customData: custom, products, loading, meta, refresh}
+    const {conditionType, conditions, offset} = state.Layout;
+    return {customData: custom, products, loading, meta, refresh, conditionType, conditions, offset}
 }
 
 const mapDispatchToProps = dispatch => ({
@@ -252,6 +264,8 @@ const mapDispatchToProps = dispatch => ({
     onUpdateProduct: (id, data, history) => dispatch(updateProduct(id, data, history)),
     onGetProducts: (conditional = null, limit = DEFAULT_PAGE_LIMIT, page) => dispatch(getProducts(conditional, limit, page)),
     countProductsByStatus,
+    onSaveTableConditions: (conditions, offset, conditionType) => dispatch(saveTableConditions(conditions, offset, conditionType)),
+    onClearTableConditions: () => dispatch(clearTableConditions())
 })
 
 export default connect(
