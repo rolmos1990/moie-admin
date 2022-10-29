@@ -3,7 +3,7 @@ import {Col, Label, Row} from "reactstrap"
 import {withRouter} from "react-router-dom"
 import {connect} from "react-redux";
 import PropTypes from "prop-types";
-import {FieldAsyncSelect, FieldSelect} from "../../../components/Fields";
+import {FieldAsyncSelect, FieldSelect, FieldText} from "../../../components/Fields";
 import {PRODUCT} from "../../../helpers/url_helper";
 import {getProduct, resetProduct} from "../../../store/product/actions";
 import {getEmptyOptions} from "../../../common/converters";
@@ -124,14 +124,17 @@ const OrderProducts = (props) => {
                                 hasWild={false}
                                 isClearable={true}
                                 conditionalOptions={{fieldName: 'reference', operator: Conditionals.OPERATORS.EQUAL}}
+                                onKeyPress={(e) => {
+                                    if(e.which == 13){
+                                        onGetProduct(e.target.value);
+                                        setProductDefault(getEmptyOptions());
+                                    }
+                                }}
                                 onChange={(d, meta) => {
                                     if(meta.action === "clear"){
                                         setProductDefault(getEmptyOptions());
                                         setProductReferenceDefault(getEmptyOptions());
                                         setProductData({})
-                                    } else {
-                                        onGetProduct(d.value);
-                                        setProductDefault(getEmptyOptions());
                                     }
                                 }}
                             />

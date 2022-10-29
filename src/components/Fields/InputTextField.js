@@ -34,6 +34,7 @@ TextField.propTypes = {
     disabled: PropTypes.bool,
     minLength: PropTypes.number,
     maxLength: PropTypes.number,
+    onPressEnter: PropTypes.func
 }
 
 const TextAlphaField = (props) => (
@@ -46,6 +47,7 @@ const TextAlphaField = (props) => (
         onBlur={props.onBlur ? props.onBlur : null}
         type={props.type ? props.type : "text"}
         className={`form-control ${props.className ? props.className : ''}` }
+        onPressEnter={this.onPressEnter}
         validate={
             {
                 required: { value: props.required ? true : false, errorMessage: messages.required },

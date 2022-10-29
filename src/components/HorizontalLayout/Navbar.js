@@ -11,6 +11,7 @@ import {connect} from "react-redux"
 import {PERMISSIONS} from "../../helpers/security_rol";
 import HasPermissions from "../HasPermissions";
 import OutsideClickHandler from "../OutsideClickHandler";
+import {toggleLeftmenu} from "../../store/layout/actions";
 
 const Navbar = props => {
     const [system, setsystem] = useState(false)
@@ -18,6 +19,10 @@ const Navbar = props => {
     const [auth, setauth] = useState(false)
     const [utility, setutility] = useState(false)
     const [isOpen, setIsOpen] = useState(props.leftMenu);
+
+    useEffect(() => {
+        props.toggleLeftmenu(isOpen)
+    }, [isOpen]);
 
     useEffect(() => {
         var matchingMenuItem = null
@@ -85,7 +90,7 @@ const Navbar = props => {
                         id="navigation"
                     >
                         <OutsideClickHandler
-                            onOutsideClick={() => {
+                            onOutsideClick={(e) => {
                                 setIsOpen(false);
                             }}
                         >
@@ -301,6 +306,7 @@ Navbar.propTypes = {
     leftMenu: PropTypes.any,
     location: PropTypes.any,
     menuOpen: PropTypes.any,
+    openLeftMenuCallBack: PropTypes.any,
     t: PropTypes.any,
 }
 
@@ -310,5 +316,7 @@ const mapStateToProps = state => {
 }
 
 export default withRouter(
-    connect(mapStateToProps, {})(withTranslation()(Navbar))
+    connect(mapStateToProps, {
+        toggleLeftmenu
+    })(withTranslation()(Navbar))
 )

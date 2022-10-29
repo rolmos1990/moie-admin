@@ -98,6 +98,7 @@ const OrderCar = (props) => {
                         <FieldSelect
                             id={"discount"}
                             name={"discount"}
+                            isSearchable={true}
                             options={buildNumericOptions(100, 5, 0)}
                             defaultValue={globalDiscount}
                             onChange={(item => setGlobalDiscount(parseInt(item.value)))}

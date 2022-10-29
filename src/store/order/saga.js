@@ -75,7 +75,7 @@ import {
 } from "../../helpers/backend_helper"
 
 import Conditionals from "../../common/conditionals";
-import {showResponseMessage} from "../../helpers/service";
+import {countUsersOrders, showResponseMessage} from "../../helpers/service";
 import {getErrorMessage} from "../../common/utils";
 
 /**
@@ -202,6 +202,7 @@ function* register({payload: {data, history}}) {
             history.push("/order/" + response.order.id)
         }
         yield put(CREATE_SUCCESS_ACTION(response))
+        yield put(countUsersOrders());
     } catch (error) {
         yield put(CREATE_FAILED_ACTION(getErrorMessage(error)))
     }

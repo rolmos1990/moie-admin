@@ -22,6 +22,7 @@ class OutsideClickHandler extends React.Component {
         ) {
             //Parametros de configuracion
             const _mainClassForClose = "main-content";
+            const menuTopBar = "navbar-header";
             let _parent = event.target;
             let _decrement = 10;
             let _open = true;
@@ -29,7 +30,7 @@ class OutsideClickHandler extends React.Component {
             //search and close process
             while((_parent.parentElement && _decrement > 0) && _open){
                 const _className = _parent.className;
-                if(_className == _mainClassForClose){
+                if(_className == _mainClassForClose || _className == menuTopBar){
                     this.props.onOutsideClick();
                     _open = false;
                 }

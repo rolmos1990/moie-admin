@@ -26,12 +26,11 @@ const UsersSalesDropdown = ({countUsers}) => {
 
     const findData = (countUsers) => {
         const resp = countUsers;
-        console.log('debug resp', resp);
         if (resp && resp.data && resp.data.length > 0) {
             let u = [];
             resp.data.filter(o => o.user && o.user.id).forEach(o => u.push({name: o.user.name, sales: o.origen, amount: priceFormat(o.totalAmount), image: getImagePath(o.user?.photo)}))
 
-            const limit = 6;
+            const limit = 8;
 
             u = u.sort((a, b) => a.sales === b.sales ? 0 : (a.sales > b.sales) ? -1 : 1);
 
@@ -40,7 +39,7 @@ const UsersSalesDropdown = ({countUsers}) => {
             }
 
             if (u.length > 0) {
-                let user = u[u.length - 1];
+                let user = u[0];
                 user.hasCrown = true;
             }
 

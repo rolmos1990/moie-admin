@@ -8,12 +8,14 @@ const CountUsers = ({registerOrderActive, onSetCounterRegisterOrders, onGetCount
     const [currentTimeout, setCurrentTimeout] = useState(null)
 
     useEffect(() => {
+
         if(registerOrderActive === false){
             onGetCounterUsers();
-            let newTimeout = setTimeout(() => {
+            if (currentTimeout) clearInterval(currentTimeout);
+            let newTimeout = setInterval(() => {
                 onGetCounterUsers();
-            }, 60000);
-            if (currentTimeout) clearTimeout(currentTimeout);
+            }, 45000);
+            //
             setCurrentTimeout(newTimeout);
         }
 

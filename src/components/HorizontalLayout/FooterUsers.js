@@ -47,7 +47,7 @@ const FooterUsers = ({data, user, countUsers}) => {
                 image: o.user.photo ? baseImagePathNew + o.user.photo : userImage
             }));
 
-            const limit = 6;
+            const limit = 8;
 
             u = u.sort((a, b) => a.sales === b.sales ? 0 : (a.sales > b.sales) ? 1 : -1);
 
