@@ -32,7 +32,18 @@ const UsersSalesDropdown = ({countUsers}) => {
 
             const limit = 8;
 
-            u = u.sort((a, b) => a.sales === b.sales ? 0 : (a.sales > b.sales) ? -1 : 1);
+            u = u.sort(function (a, b) {
+                if(a.sales === b.sales)
+                {
+                    return (a.amount > b.amount) ? -1 : (a.amount < b.amount) ? 1 : 0;
+                }
+                else
+                {
+                    return (a.sales > b.sales) ? -1 : 1;
+                }
+            });
+
+            //u = u.sort((a, b) => a.sales === b.sales ? 0 : (a.sales > b.sales) ? -1 : 1);
 
             if (u.length > limit) {
                 u.splice(limit);

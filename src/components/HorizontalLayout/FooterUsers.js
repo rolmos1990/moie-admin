@@ -11,12 +11,14 @@ class ListItem extends Component {
         const style = {zIndex: 100 - this.props.index, float: 'left', margin: '0 2px'};
         const user = this.props.user;
 
+        const _alias = user.name ? user.name.split(' ')[0] : '';
+
         return (
             <li id={this.props.key} className={listClass} style={style}>
                 <div style={{display: 'flex', alignItems: 'center', margin: '0 5px'}}>
                     <img src={user.image} className="rounded-circle header-profile-user" alt="user-pic"/>
                     <div className="flex-1">
-                        <small className="mt-0 mb-1">{user.hasCrown && <i className={"mdi mdi-crown mr-1 text-warning"}> </i>}{user.name} </small>
+                        <small className="mt-0 mb-1">{user.hasCrown && <i className={"mdi mdi-crown mr-1 text-warning"}> </i>}{_alias} </small>
                         <br/>
                         <small><small className="m-0">Pedidos: <b>{user.sales}</b></small></small>
                     </div>
@@ -49,7 +51,22 @@ const FooterUsers = ({data, user, countUsers}) => {
 
             const limit = 8;
 
-            u = u.sort((a, b) => a.sales === b.sales ? 0 : (a.sales > b.sales) ? 1 : -1);
+
+
+            u = u.sort(function (a, b) {
+                if(a.sales === b.sales)
+                {
+                    return (a.amount < b.amount) ? -1 : (a.amount > b.amount) ? 1 : 0;
+                }
+                else
+                {
+                    return (a.sales < b.sales) ? -1 : 1;
+                }
+            });
+
+
+
+            //u = u.sort((a, b) => a.sales === b.sales ? 0 : (a.sales > b.sales) ? 1 : -1);
 
             if (u.length > limit) {
                 u.splice(limit);
