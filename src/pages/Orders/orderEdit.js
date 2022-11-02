@@ -127,6 +127,7 @@ const OrderEdit = (props) => {
                     paymentType: order.paymentMode,
                     piecesForChanges: order.piecesForChanges || 0,
                     tracking: orderDelivery.tracking || '',
+                    otherMethod: orderDelivery.deliveryOtherDescription || '',
                     deliveryLocality: orderDelivery.deliveryLocality.id || null
                 },
                 tracking: false,
@@ -180,6 +181,7 @@ const OrderEdit = (props) => {
 
     useEffect(() => {
         if(linkPayment) {
+            console.log('link de pago: ', linkPayment);
             copyToClipboard(linkPayment);
         }
     }, [linkPayment]);
@@ -190,6 +192,7 @@ const OrderEdit = (props) => {
 
     const payuGenerate = () => {
         if(order.id) {
+            console.log('generando link de pago para orden: ', order.id);
             props.onGenerateLinkPayment(order.id);
         }
     }
@@ -605,7 +608,7 @@ const OrderEdit = (props) => {
                                     </Col>
                                     <Col md={12}>
                                         <label>Metodo de envio: </label>
-                                        <span className="p-1">{orderData.deliveryMethod.name}</span>
+                                        <span className="p-1">{orderData.deliveryMethod.name} {orderData?.orderDelivery?.deliveryOtherDescription && <small> ({orderData?.orderDelivery?.deliveryOtherDescription})</small>}</span>
                                     </Col>
                                     <Col md={12}>
                                         <label>Costo del envio: </label>
