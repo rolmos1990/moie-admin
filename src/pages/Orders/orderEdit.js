@@ -626,10 +626,12 @@ const OrderEdit = (props) => {
                                             </Col>
                                         </>
                                     )}
+                                    {orderData.orderDelivery?.deliveryLocality?.name && (
                                     <Col md={12}>
                                         <label>Localidad: </label>
                                         <span className="p-1">{orderData.orderDelivery?.deliveryLocality?.name}</span>
                                     </Col>
+                                    )}
                                     {orderData.orderDelivery.tracking && (
                                         <Col md={12}>
                                             <label>Número de guía: </label>

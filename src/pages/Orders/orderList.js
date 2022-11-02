@@ -108,7 +108,7 @@ const OrderList = props => {
     }
 
     const printOrders = () => {
-        let conditionals = [...conditional] || [];
+        let conditionals = conditional ? [...conditional] : [];
         const totalPrintsAvailables = 1000;
 
         if(conditionals.length >= 0 && (meta?.totalRegisters <= totalPrintsAvailables)) {
