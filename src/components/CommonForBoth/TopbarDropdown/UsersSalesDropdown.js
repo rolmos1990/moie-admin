@@ -28,6 +28,15 @@ const UsersSalesDropdown = ({countUsers}) => {
         const resp = countUsers;
         if (resp && resp.data && resp.data.length > 0) {
             let u = [];
+
+/*            resp.data = [
+                {totalAmount: 1800, origen: 6, user: {id: 1, name: 'Ramon', image: null}},
+                {totalAmount: 2000, origen: 5, user: {id: 3, name: 'Andres', image: null}},
+                {totalAmount: 3000, origen: 6, user: {id: 4, name: 'Michael', image: null}},
+                {totalAmount: 1500, origen: 1, user: {id: 5, name: 'Jose', image: null}},
+                {totalAmount: 1800, origen: 7, user: {id: 2, name: 'Mario', image: null}},
+            ];*/
+
             resp.data.filter(o => o.user && o.user.id).forEach(o => u.push({name: o.user.name, sales: o.origen, amount: priceFormat(o.totalAmount), image: getImagePath(o.user?.photo)}))
 
             const limit = 8;
