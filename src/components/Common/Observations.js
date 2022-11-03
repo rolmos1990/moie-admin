@@ -13,6 +13,8 @@ import {deleteComment, getCommentsByEntity, registerComment} from "../../store/c
 import {findFieldOptionByGroup} from "../../helpers/service";
 import HasPermissions from "../HasPermissions";
 import {PERMISSIONS} from "../../helpers/security_rol";
+import HasPermissionsFunc from "../HasPermissionsFunc";
+import {showMessage} from "../MessageToast/ShowToastMessages";
 
 const Observations = (props) => {
 
@@ -35,15 +37,19 @@ const Observations = (props) => {
     }, [observations[entity]]);
 
     const onDelete = (id) => {
-        ConfirmationModalAction({
-            title: '¿Seguro desea eliminar este registro?',
-            description: 'Usted está eliminado este registro, una vez eliminado no podrá ser recuperado.',
-            id: '_observationsModal',
-            onConfirm: () => {
-                const item = observationList.find(cl => cl.id === id);
-                if(onDeleteObservation) onDeleteObservation(item);
-            }
-        });
+        if (HasPermissionsFunc([PERMISSIONS.COMMENT_DELETE])) {
+            ConfirmationModalAction({
+                title: '¿Seguro desea eliminar este registro?',
+                description: 'Usted está eliminado este registro, una vez eliminado no podrá ser recuperado.',
+                id: '_observationsModal',
+                onConfirm: () => {
+                    const item = observationList.find(cl => cl.id === id);
+                    if (onDeleteObservation) onDeleteObservation(item);
+                }
+            });
+        } else {
+            showMessage.error('Usted no tiene permiso para eliminar comentarios');
+        }
     }
 
     const onAdd = (comment) => {
@@ -105,7 +111,7 @@ const Observations = (props) => {
                         <hr/>
                         <h4 className="card-title text-info">Observaciones</h4>
                     </Col>
-                    <HasPermissions permission={PERMISSIONS.COMMENT_EDIT}>
+                    <HasPermissions permission={PERMISSIONS.COMMENT_SHOW}>
                         <Col md={12} style={{maxHeight: '500px', overflowY: 'auto'}}>
                             {observationList.length > 0 ? (<CustomizedTimeline data={observationList} onDelete={onDelete}/>) : "No hay observaciones"}
                         </Col>

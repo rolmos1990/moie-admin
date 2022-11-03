@@ -69,6 +69,7 @@ export const PERMISSIONS = {
     COMMENT_EDIT: 'comment.edit',
     COMMENT_SHOW: 'comment.show',
     COMMENT_LIST: 'comment.list',
+    COMMENT_DELETE: 'comment.delete',
     ORDER_PERSONAL: 'order.personal',
     OFFICE_DOWNLOAD: 'office.download',
     BILL_DOWNLOAD: 'bill.download',
