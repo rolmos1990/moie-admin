@@ -53,6 +53,7 @@ const FooterUsers = ({data, user, countUsers}) => {
                 id: o.user.id,
                 name: o.user.name,
                 sales: o.origen,
+                amountNumber: parseFloat(o.totalAmount),
                 amount: priceFormat(o.totalAmount),
                 image: o.user.photo ? baseImagePathNew + o.user.photo : userImage
             }));
@@ -64,7 +65,7 @@ const FooterUsers = ({data, user, countUsers}) => {
             u = u.sort(function (a, b) {
                 if(a.sales === b.sales)
                 {
-                    return (a.amount < b.amount) ? -1 : (a.amount > b.amount) ? 1 : 0;
+                    return (a.amountNumber < b.amountNumber) ? -1 : (a.amountNumber > b.amountNumber) ? 1 : 0;
                 }
                 else
                 {

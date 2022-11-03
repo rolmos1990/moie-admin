@@ -37,14 +37,14 @@ const UsersSalesDropdown = ({countUsers}) => {
                 {totalAmount: 1800, origen: 7, user: {id: 2, name: 'Mario', image: null}},
             ];*/
 
-            resp.data.filter(o => o.user && o.user.id).forEach(o => u.push({name: o.user.name, sales: o.origen, amount: priceFormat(o.totalAmount), image: getImagePath(o.user?.photo)}))
+            resp.data.filter(o => o.user && o.user.id).forEach(o => u.push({name: o.user.name, sales: o.origen, amountNumber: parseFloat(o.totalAmount), amount: priceFormat(o.totalAmount), image: getImagePath(o.user?.photo)}))
 
             const limit = 8;
 
             u = u.sort(function (a, b) {
                 if(a.sales === b.sales)
                 {
-                    return (a.amount > b.amount) ? -1 : (a.amount < b.amount) ? 1 : 0;
+                    return (a.amountNumber > b.amountNumber) ? -1 : (a.amountNumber < b.amountNumber) ? 1 : 0;
                 }
                 else
                 {
