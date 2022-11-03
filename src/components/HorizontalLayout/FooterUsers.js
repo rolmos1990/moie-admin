@@ -39,7 +39,7 @@ const FooterUsers = ({data, user, countUsers}) => {
     const findData = () => {
         let resp = countUsers;
 
-        resp.data = [
+/*        resp.data = [
             {totalAmount: 1800, origen: 6, user: {id: 1, name: 'Ramon', image: null}},
             {totalAmount: 2000, origen: 5, user: {id: 3, name: 'Andres', image: null}},
             {totalAmount: 3000, origen: 6, user: {id: 4, name: 'Michael', image: null}},
@@ -50,7 +50,7 @@ const FooterUsers = ({data, user, countUsers}) => {
             {totalAmount: 1800, origen: 10, user: {id: 10, name: 'Mario3', image: null}},
             {totalAmount: 1800, origen: 10, user: {id: 11, name: 'Mario4', image: null}},
             {totalAmount: 1800, origen: 13, user: {id: 12, name: 'Mario4', image: null}},
-        ];
+        ];*/
 
         if (resp && resp.data && resp.data.length > 0) {
             let u = [];
