@@ -13,7 +13,7 @@ const Customer = () => {
             <div className="page-content">
                 <Container fluid>
                     <Breadcrumb path="/customers" title={null} item="Clientes"/>
-                    <HasPermissions permission={PERMISSIONS.CATEGORY_LIST} renderNoAccess={() => <NoAccess/>}>
+                    <HasPermissions permission={PERMISSIONS.CUSTOMER_LIST} renderNoAccess={() => <NoAccess/>}>
                         <CustomersList/>
                     </HasPermissions>
                 </Container>
