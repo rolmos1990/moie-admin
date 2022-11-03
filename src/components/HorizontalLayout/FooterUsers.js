@@ -39,13 +39,18 @@ const FooterUsers = ({data, user, countUsers}) => {
     const findData = () => {
         let resp = countUsers;
 
-/*        resp.data = [
+        resp.data = [
             {totalAmount: 1800, origen: 6, user: {id: 1, name: 'Ramon', image: null}},
             {totalAmount: 2000, origen: 5, user: {id: 3, name: 'Andres', image: null}},
             {totalAmount: 3000, origen: 6, user: {id: 4, name: 'Michael', image: null}},
-            {totalAmount: 1500, origen: 1, user: {id: 5, name: 'Jose', image: null}},
-            {totalAmount: 1800, origen: 4, user: {id: 2, name: 'Mario', image: null}},
-        ];*/
+            {totalAmount: 3200, origen: 6, user: {id: 8, name: 'Michael2', image: null}},
+            {totalAmount: 1500, origen: 11, user: {id: 5, name: 'Jose2', image: null}},
+            {totalAmount: 1800, origen: 4, user: {id: 7, name: 'Mario', image: null}},
+            {totalAmount: 1800, origen: 9, user: {id: 9, name: 'Mario2', image: null}},
+            {totalAmount: 1800, origen: 10, user: {id: 10, name: 'Mario3', image: null}},
+            {totalAmount: 1800, origen: 10, user: {id: 11, name: 'Mario4', image: null}},
+            {totalAmount: 1800, origen: 13, user: {id: 12, name: 'Mario4', image: null}},
+        ];
 
         if (resp && resp.data && resp.data.length > 0) {
             let u = [];
@@ -58,9 +63,28 @@ const FooterUsers = ({data, user, countUsers}) => {
                 image: o.user.photo ? baseImagePathNew + o.user.photo : userImage
             }));
 
-            const limit = 8;
+            const limit = 10;
 
 
+
+            u = u.sort(function (a, b) {
+                if(a.sales === b.sales)
+                {
+                    return (a.amountNumber < b.amountNumber) ? 1 : (a.amountNumber > b.amountNumber) ? -1 : 0;
+                }
+                else
+                {
+                    return (a.sales < b.sales) ? 1 : 0;
+                }
+            });
+
+
+
+            //u = u.sort((a, b) => a.sales === b.sales ? 0 : (a.sales > b.sales) ? 1 : -1);
+
+            if (u.length > limit) {
+                u.splice(limit);
+            }
 
             u = u.sort(function (a, b) {
                 if(a.sales === b.sales)
@@ -72,14 +96,6 @@ const FooterUsers = ({data, user, countUsers}) => {
                     return (a.sales < b.sales) ? -1 : 1;
                 }
             });
-
-
-
-            //u = u.sort((a, b) => a.sales === b.sales ? 0 : (a.sales > b.sales) ? 1 : -1);
-
-            if (u.length > limit) {
-                u.splice(limit);
-            }
 
             if (u.length > 0) {
                 let user = u[u.length - 1];
