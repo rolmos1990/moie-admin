@@ -16,6 +16,7 @@ import {updateCard} from "../../../store/order/actions";
 const OrderCar = (props) => {
     const {car, onUpdateCar} = props;
     const [globalDiscount, setGlobalDiscount] = useState(0);
+    const [totalAmount, setTotalAmount] = useState(0);
 
     useEffect(() => {
         if (car.products && car.products.length > 0) {
@@ -23,6 +24,7 @@ const OrderCar = (props) => {
             let totaledProductList = getProductListWithTotals(list);
 
             if(JSON.stringify(totaledProductList) !== JSON.stringify(car.products)){
+                calculateAll(totaledProductList);
                 onUpdateCar({...car, products: totaledProductList})
             }
         }
@@ -72,8 +74,22 @@ const OrderCar = (props) => {
                     prod.quantity = parseInt(quantity);
                 }
             });
+            calculateAll(list);
             onUpdateCar({...car, products: getProductListWithTotals(list)})
         }
+    }
+
+    const calculateAll = (list) => {
+        const totals = getProductListWithTotals(list);
+
+        let _sum = totals.reduce((accumulator, _product) => {
+            return accumulator + _product.total;
+        }, 0);
+
+        if(car.deliveryOptions && car.deliveryOptions.cost) {
+            _sum = _sum + car.deliveryOptions.cost;
+        }
+        setTotalAmount(_sum);
     }
 
     const onChangeDiscount = (discountPercentage, p) => {
@@ -83,6 +99,7 @@ const OrderCar = (props) => {
                 prod.discountPercentage = parseFloat(discountPercentage);
             }
         });
+        calculateAll(list);
         onUpdateCar({...car, products: getProductListWithTotals(list)})
     }
 
@@ -175,6 +192,15 @@ const OrderCar = (props) => {
                                 </tr>
                             )}
                             </tbody>
+                            {props.showTotalAmount && (
+                                <tfoot>
+                                <tr>
+                                    <th colSpan={7} className={'text-right p-2'}>Total con Envio:</th>
+                                    <td><b>{priceFormat(totalAmount)}</b></td>
+
+                                </tr>
+                                </tfoot>
+                            )}
                         </table>
                     </Col>
                 </Row>
@@ -184,7 +210,8 @@ const OrderCar = (props) => {
 }
 
 OrderCar.propTypes = {
-    history: PropTypes.object
+    history: PropTypes.object,
+    showTotalAmount: PropTypes.bool
 }
 
 const mapStateToProps = state => {

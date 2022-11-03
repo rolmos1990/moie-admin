@@ -990,7 +990,7 @@ const OrderEdit = (props) => {
                 <hr/>
                 <Row>
                     <Col md={12}>
-                        <OrderCar/>
+                        <OrderCar showTotalAmount={true} />
                     </Col>
                 </Row>
                 <hr/>
