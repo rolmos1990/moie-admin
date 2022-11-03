@@ -140,6 +140,7 @@ const OrderCustomer = (props) => {
                                 urlStr={CUSTOMER}
                                 placeholder="Buscar por documento"
                                 defaultValue={customerDocumentDefault}
+                                removeDots={true}
                                 isClearable={true}
                                 hasWild={false}
                                 conditionalOptions={{fieldName: 'document', operator: Conditionals.OPERATORS.EQUAL}}

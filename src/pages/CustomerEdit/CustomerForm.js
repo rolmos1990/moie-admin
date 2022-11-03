@@ -101,6 +101,10 @@ const CustomerForm = (props) => {
         data.status = values._status;
         data.cellphone = values.cellphone ? values.cellphone.replace(/\s/g, '') : '';
         data.phone = values.phone ? values.phone.replace(/\s/g, '') : '';
+        if(data.document) {
+            data.document = data.document.replace(/\./g, '');
+        }
+
         delete data._status;
         return data;
     }

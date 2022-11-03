@@ -24,6 +24,7 @@ const InputAsyncSearchField = (props) => {
             hasWild={props.hasWild || false}
             value={selected}
             placeholder={props.placeholder}
+            removeDots={props.removeDots}
             urlStr={props.urlStr}
             isClearable={props.isClearable}
             onKeyPress={props.onKeyPress ? props.onKeyPress : null}
@@ -46,7 +47,7 @@ InputAsyncSearchField.propTypes = {
 
 class AvAsyncSearchInput extends AvBaseInput {
     render() {
-        const {name, value, onChange, validate, isClearable, hasWild, urlStr, conditionalOptions, defaultConditions, placeholder, helpMessage, onKeyPress} = this.props;
+        const {name, value, onChange, validate, isClearable, hasWild, urlStr, conditionalOptions, defaultConditions, placeholder, helpMessage, onKeyPress, removeDots} = this.props;
         const validation = this.context.FormCtrl.getInputState(this.props.name);
         const feedback = validation.errorMessage ? (<div className="invalid-feedback" style={{display: "block"}}>{validation.errorMessage}</div>) : null;
         const help = helpMessage ? (<FormText>{helpMessage}</FormText>) : null;
@@ -62,11 +63,17 @@ class AvAsyncSearchInput extends AvBaseInput {
                         value={value}
                         onChange={onChange}
                         placeholder={placeholder}
+                        removeDots={removeDots}
                         isClearable={isClearable}
                         onKeyDown={onKeyPress ? onKeyPress : null}
                         loadOptions={inputValue => {
                             const cond = {...conditionalOptions};
                             let textSearch = inputValue +'';
+                            if(removeDots){
+                                textSearch = textSearch.replace(/\./g, '');
+                            }
+
+
                             if(hasWild && inputValue.includes("*")){
                                 cond.operator = Conditionals.OPERATORS.LIKE;
                                 textSearch = textSearch.replace('*', '')
