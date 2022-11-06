@@ -107,6 +107,18 @@ const BillList = props => {
         setOpenOrdersModal(true);
     };
 
+    const addOrdersPayu = () => {
+        const conditions = new Conditionals.Condition;
+        conditions.add('bill.id', '', Conditionals.OPERATORS.NULL);
+        conditions.add('office', '', Conditionals.OPERATORS.NOT_NULL);
+        conditions.add('createdAt', '2022-01-01T00:00:00.000Z', Conditionals.OPERATORS.GREATER_THAN_OR_EQUAL);
+        conditions.add('deliveryMethod', DELIVERY_METHODS_IDS.PAYU, Conditionals.OPERATORS.EQUAL);
+        conditions.add('status', [ORDERS_ENUM.PRINTED, ORDERS_ENUM.SENT, ORDERS_ENUM.CONCILIED, ORDERS_ENUM.FINISHED].join("::"), Conditionals.OPERATORS.IN);
+
+        setOrderListConditions(conditions.condition);
+        setOpenOrdersModal(true);
+    };
+
     const onCloseModal = () => {
         setOpenOrdersModal(false);
     };
@@ -173,9 +185,19 @@ const BillList = props => {
                                                             </Tooltip>
 
                                                             <HasPermissions permission={PERMISSIONS.BILL_CREATE}>
+                                                                <Tooltip placement="bottom" title="Generar Factura" aria-label="add">
                                                                 <Button color="primary" className="btn btn-rounded waves-effect waves-light" onClick={addOrders}>
-                                                                    <i className="mdi mdi-plus"> </i> Generar Factura
+                                                                    <i className="uil-bill me-2"> </i>
                                                                 </Button>
+                                                                </Tooltip>
+                                                            </HasPermissions>
+
+                                                            <HasPermissions permission={PERMISSIONS.BILL_CREATE}>
+                                                                <Tooltip placement="bottom" title="Generar Factura (Payu)" aria-label="add">
+                                                                <Button color="primary" className="btn btn-rounded waves-effect waves-effect" onClick={addOrdersPayu}>
+                                                                    <i className="uil-bill me-2"> </i>
+                                                                </Button>
+                                                                </Tooltip>
                                                             </HasPermissions>
                                                         </div>
                                                     </Col>
