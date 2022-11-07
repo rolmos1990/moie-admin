@@ -25,6 +25,7 @@ const InputPhoneField = (props) => {
                     required: {value: props.required ? true : false, errorMessage: messages.required}
                 }
             }
+            onValidate={props.onValidate}
         />
     )
 }
@@ -40,7 +41,7 @@ InputPhoneField.propTypes = {
 
 class AvPhoneInput extends AvBaseInput {
     render() {
-        const {id, name, value, onChange, validate, required, country, placeholder, helpMessage} = this.props;
+        const {id, name, value, onChange, required, country, placeholder, helpMessage, onValidate} = this.props;
         const validation = this.context.FormCtrl.getInputState(this.props.name);
         const feedback = validation.errorMessage ? (<div className="invalid-feedback" style={{display: "block"}}>{validation.errorMessage}</div>) : null;
         const help = helpMessage ? (<FormText>{helpMessage}</FormText>) : null;
@@ -66,6 +67,7 @@ class AvPhoneInput extends AvBaseInput {
                         onChange={(value, country, e, formattedValue) => {
                             onChange(formattedValue);
                         }}
+                        isValid={onValidate}
                     />
                 </div>
                 {feedback}

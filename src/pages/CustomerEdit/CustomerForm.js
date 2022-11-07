@@ -14,6 +14,7 @@ import ButtonSubmit from "../../components/Common/ButtonSubmit";
 const CustomerForm = (props) => {
     const {getCustomer, customer, showAsModal = false, onCloseModal= false, onAcceptModal= false} = props;
     const [customerData, setCustomerData] = useState({_status: "true"});
+    const [validPhone, setValidPhone] = useState(false);
 
     // definición de localidades
     const {getStates, states} = props;
@@ -84,6 +85,11 @@ const CustomerForm = (props) => {
 
     const handleValidSubmit = (event, values) => {
         const data = filteredValues(values);
+
+        if(!validPhone){
+            return false;
+        }
+
         if (!customer.id) {
             props.registerCustomer(data, props.history)
         } else {
@@ -103,6 +109,23 @@ const CustomerForm = (props) => {
         data.phone = values.phone ? values.phone.replace(/\s/g, '') : '';
         if(data.document) {
             data.document = data.document.replace(/\./g, '');
+        }
+        if(data.document) {
+            data.document = data.document.replace(/\./g, '');
+        }
+        if(data.name){
+            data.name = data.name.trim();
+            data.name = data.name.replace(/\s+/g, ' ').trim();
+        }
+
+        if(data.phone){
+            data.phone = data.phone.trim();
+            data.phone = data.phone.replace(/\s+/g, ' ').trim();
+        }
+
+        if(data.cellphone){
+            data.cellphone = data.cellphone.trim();
+            data.cellphone = data.cellphone.replace(/\s+/g, ' ').trim();
         }
 
         delete data._status;
@@ -182,6 +205,14 @@ const CustomerForm = (props) => {
                                         className="form-control"
                                         validate={{required: {value: true}}}
                                         onChange={(value) => setCustomerData({...customerData, cellphone: value})}
+                                        onValidate={(value, country) => {
+                                            if(country.iso2 === 'co' && (value && value.length === 12)){
+                                                setValidPhone(true);
+                                                return true
+                                            }
+                                            setValidPhone(false);
+                                            return false;
+                                        }}
                                     />
                                 </div>
                             </Col>
