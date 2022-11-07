@@ -122,6 +122,11 @@ const orderColumns = (onSelectedOrder, showAsModal, conciliationView) => {
                             <i className={"mdi mdi-handshake font-size-18 mr-1 text-info"}> </i>
                         </Tooltip>
                     )}
+                    {item.prints > 0 && (
+                        <Tooltip placement="bottom" title={`Pedido tiene ${item.prints} impresiones`} aria-label="add">
+                            <i className={"badge rounded-pill bg-soft-danger mdi mdi-printer"}> </i>
+                        </Tooltip>
+                    )}
                 </>
             ),
         },
