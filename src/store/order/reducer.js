@@ -27,7 +27,7 @@ import {
     GET_ORDERS_OFFICE,
     GET_ORDERS_OFFICE_FAILED,
     GET_ORDERS_OFFICE_SUCCESS,
-    GET_ORDERS_SUCCESS,
+    GET_ORDERS_SUCCESS, NEXT_STATUS_ORDER,
     PRINT_BATCH_REQUEST,
     PRINT_BATCH_REQUEST_FAILED,
     PRINT_BATCH_REQUEST_SUCCESS,
@@ -206,6 +206,12 @@ const order = (state = initialState, action) => {
                 error: action.payload
             }
             break
+        case NEXT_STATUS_ORDER:
+            state = {
+                ...state,
+                loading: true
+            }
+            break;
         case UPDATE_ORDER:
             state = {
                 ...state,

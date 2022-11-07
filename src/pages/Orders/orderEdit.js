@@ -56,6 +56,7 @@ import HasPermissions from "../../components/HasPermissions";
 import {PERMISSIONS} from "../../helpers/security_rol";
 import OrderTracking from "./create/orderTracking";
 import {changePreloader} from "../../store/layout/actions";
+import ButtonLoading from "../../components/Common/ButtonLoading";
 
 // import {toPng, toJpeg, toBlob, toPixelData, toSvg} from 'html-to-image';
 
@@ -459,16 +460,16 @@ const OrderEdit = (props) => {
                             <div className="button-items">
                                 {canCancel() && (
                                     <Tooltip placement="bottom" title="Anular" aria-label="add">
-                                        <button type="button" color="primary" className="btn-sm btn btn-outline-danger waves-effect waves-light" onClick={() => onCanceledStatusOrder(order.id)}>
+                                        <ButtonLoading loading={props.loading} type="button" color="primary" className="btn-sm btn btn-outline-danger waves-effect waves-light" onClick={() => onCanceledStatusOrder(order.id)}>
                                             <i className={"mdi mdi-delete"}> </i>
-                                        </button>
+                                        </ButtonLoading>
                                     </Tooltip>
                                 )}
                                 {canConfirm() && (
                                     <Tooltip placement="bottom" title="Confirmar" aria-label="add">
-                                        <button type="button" color="primary" className="btn-sm btn btn-outline-success waves-effect waves-light" onClick={() => onNextStatusOrder(order.id)}>
+                                        <ButtonLoading loading={props.loading} type="button" color="primary" className="btn-sm btn btn-outline-success waves-effect waves-light" onClick={() => onNextStatusOrder(order.id)}>
                                             <i className={"mdi mdi-check"}> </i>
-                                        </button>
+                                        </ButtonLoading>
                                     </Tooltip>
                                 )}
                                 {/*{(order && order.status === 3) && (
@@ -480,20 +481,20 @@ const OrderEdit = (props) => {
                                 )}*/}
                                 {canPrint() && (
                                     <Tooltip placement="bottom" title="Imprimir" aria-label="add">
-                                        <button type="button" color="primary" className="btn-sm btn btn-outline-info waves-effect waves-light" onClick={() => printOrder()}>
+                                        <ButtonLoading type="button" color="primary" className="btn-sm btn btn-outline-info waves-effect waves-light" onClick={() => printOrder()}>
                                             <i className={"mdi mdi-printer"}> </i>
                                             {order.prints && order.prints > 0 && (
                                                 <span className="badge bg-danger rounded-pill noti-icon">{order.prints || 0}</span>
                                             )}
-                                        </button>
+                                        </ButtonLoading>
                                     </Tooltip>
 
                                 )}
                                 {canGeneratePayu() && (
                                 <Tooltip placement="bottom" title="Generar link de Pago" aria-label="add">
-                                    <button type="button" color="primary" className="btn-sm btn btn-outline-info waves-effect waves-light" onClick={() => payuGenerate()}>
+                                    <ButtonLoading type="button" color="primary" className="btn-sm btn btn-outline-info waves-effect waves-light" onClick={() => payuGenerate()}>
                                         <i className={"mdi mdi-link"}> </i>
-                                    </button>
+                                    </ButtonLoading>
                                 </Tooltip>)}
                                 <Tooltip placement="bottom" title="Copiar resumen" aria-label="add">
                                     <button type="button" color="primary" className="btn-sm btn btn-outline-info waves-effect waves-light" onClick={() => copyResume()}>
