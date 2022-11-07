@@ -76,6 +76,11 @@ const OrderDeliveryOptions = (props) => {
         const list = deliveryMethods || [];
         const ot = deliveryType + '';
         setDeliveryMethodList([getEmptyOptions(), ...list.filter(op => (op.settings.includes(ot))).map(op => ({label: op.name, value: op.code}))]);
+
+        if(!(deliveryMethod && !showPaymentType && hasAddress)) {
+            setDeliveryLocality(null);
+        }
+
         onChangeDeliveryOptions();
     }, [deliveryType]);
 
@@ -229,7 +234,7 @@ const OrderDeliveryOptions = (props) => {
                         </Col>
                     )}
 
-                    {(deliveryMethod && !showPaymentType && hasAddress) && (
+                    {(deliveryMethod && !showPaymentType && hasAddress && deliveryType !== null) && (
                         <Col md={12} className="p-1">
                             <Label htmlFor="weight">Localidad</Label>
                             <FieldSelect

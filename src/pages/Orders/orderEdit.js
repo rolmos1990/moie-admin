@@ -29,6 +29,7 @@ import {
 import CustomModal from "../../components/Modal/CommosModal";
 import OrderDeliveryOptions from "./create/orderDeliveryOptions";
 import {
+    CHARGE_ON_DELIVERY,
     COMMENT_ENTITIES,
     DELIVERY_METHODS_IDS,
     DELIVERY_METHODS_PAYMENT_TYPES,
@@ -225,24 +226,39 @@ const OrderEdit = (props) => {
         toggleDeliveryModal();
     }
     const onAcceptDeliveryModal = () => {
-        toggleDeliveryModal();
         if (car.deliveryOptions) {
-            const deliveryData = {
-                deliveryMethod: car.deliveryOptions.method,
-                deliveryCost: car.deliveryOptions.cost,
-                chargeOnDelivery: car.deliveryOptions.type === 3,
-                origen: car.deliveryOptions.origin,
-                tracking: car.deliveryOptions.tracking,
-                deliveryLocality: car.deliveryOptions.deliveryLocality,
-                deliveryType: parseInt(car.deliveryOptions.type),
-                otherMethod: car.deliveryOptions.otherMethod,
-            };
+            try {
+                const deliveryData = {
+                    deliveryMethod: car.deliveryOptions.method,
+                    deliveryCost: car.deliveryOptions.cost,
+                    chargeOnDelivery: car.deliveryOptions.type === 3,
+                    origen: car.deliveryOptions.origin,
+                    tracking: car.deliveryOptions.tracking,
+                    deliveryLocality: car.deliveryOptions.deliveryLocality,
+                    deliveryType: parseInt(car.deliveryOptions.type),
+                    otherMethod: car.deliveryOptions.otherMethod,
+                };
 
-            if (DELIVERY_METHODS_PAYMENT_TYPES.includes(deliveryData.deliveryMethod)) {
-                deliveryData.piecesForChanges = parseInt(car.deliveryOptions.piecesForChanges);
-                deliveryData.paymentMode = car.deliveryOptions.paymentType === PAYMENT_TYPES.CASH ? 1 : 2;
+                if (DELIVERY_METHODS_PAYMENT_TYPES.includes(deliveryData.deliveryMethod)) {
+                    deliveryData.piecesForChanges = parseInt(car.deliveryOptions.piecesForChanges);
+                    deliveryData.paymentMode = car.deliveryOptions.paymentType === PAYMENT_TYPES.CASH ? 1 : 2;
+                }
+
+                if (deliveryData.deliveryType == CHARGE_ON_DELIVERY || deliveryData.deliveryMethod == 'PAYU') {
+                    if (deliveryData.deliveryLocality == null) {
+                        return false;
+                    } else {
+                        toggleDeliveryModal();
+                        onUpdateOrder(orderData.id, deliveryData);
+                    }
+                } else {
+                    toggleDeliveryModal();
+                    onUpdateOrder(orderData.id, deliveryData);
+                }
+            }catch(e){
+                toggleDeliveryModal();
             }
-            onUpdateOrder(orderData.id, deliveryData);
+
         }
     }
 

@@ -109,6 +109,8 @@ const CustomerForm = (props) => {
         data.phone = values.phone ? values.phone.replace(/\s/g, '') : '';
         if(data.document) {
             data.document = data.document.replace(/\./g, '');
+            data.name = data.name.trim();
+            data.name = data.name.replace(/\s+/g, ' ').trim();
         }
         if(data.document) {
             data.document = data.document.replace(/\./g, '');
