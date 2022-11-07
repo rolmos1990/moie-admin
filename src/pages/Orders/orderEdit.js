@@ -57,6 +57,7 @@ import {PERMISSIONS} from "../../helpers/security_rol";
 import OrderTracking from "./create/orderTracking";
 import {changePreloader} from "../../store/layout/actions";
 import ButtonLoading from "../../components/Common/ButtonLoading";
+import HasPermissionsFunc from "../../components/HasPermissionsFunc";
 
 // import {toPng, toJpeg, toBlob, toPixelData, toSvg} from 'html-to-image';
 
@@ -357,7 +358,14 @@ const OrderEdit = (props) => {
             const canEditPreviewPayment = [ORDERS_ENUM.PENDING, ORDERS_ENUM.CONCILIED, ORDERS_ENUM.PRINTED].includes(parseInt(order.status)) && isPrevPayment;
             const canEditChargeOnDelivery = [ORDERS_ENUM.PENDING, ORDERS_ENUM.CONFIRMED, ORDERS_ENUM.PRINTED].includes(parseInt(order.status)) && !isPrevPayment;
             if (order && (canEditPreviewPayment || canEditChargeOnDelivery)) {
+                if (
+                    order.status === ORDERS_ENUM.PRINTED && !HasPermissionsFunc([PERMISSIONS.CUSTOMER_PRINT_EDIT])
+                ) {
+                    return false;
+                }
+
                 return true;
+
             } else {
                 return false;
             }
