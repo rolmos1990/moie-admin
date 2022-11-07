@@ -128,7 +128,7 @@ const customerListColumns = (onDelete = false) => {
                             <Link to={`/customer/${item.id}`} className="px-2 text-primary"><i className="uil uil-pen font-size-18"></i></Link>
                         </HasPermissions>
                     </li>
-                    <HasPermissions permission={PERMISSIONS.CUSTOMER_EDIT}>
+                    <HasPermissions permission={PERMISSIONS.CUSTOMER_DELETE}>
                         {onDelete && (
                             <li className="list-inline-item">
                                 <button size="small" className="btn btn-sm text-danger" onClick={() => onDelete(item.id)}>
