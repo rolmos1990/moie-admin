@@ -107,14 +107,13 @@ const CustomerForm = (props) => {
         data.status = values._status;
         data.cellphone = values.cellphone ? values.cellphone.replace(/\s/g, '') : '';
         data.phone = values.phone ? values.phone.replace(/\s/g, '') : '';
+
         if(data.document) {
             data.document = data.document.replace(/\./g, '');
-            data.name = data.name.trim();
-            data.name = data.name.replace(/\s+/g, ' ').trim();
+            data.document = data.document.trim();
+            data.document = data.document.replace(/\s+/g, ' ').trim();
         }
-        if(data.document) {
-            data.document = data.document.replace(/\./g, '');
-        }
+
         if(data.name){
             data.name = data.name.trim();
             data.name = data.name.replace(/\s+/g, ' ').trim();
