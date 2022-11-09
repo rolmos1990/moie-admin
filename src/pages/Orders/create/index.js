@@ -91,11 +91,11 @@ const CreateOrder = (props) => {
             } else {
                 order.deliveryLocality = car.deliveryOptions.deliveryLocality;
 
-                if (order.deliveryType == CHARGE_ON_DELIVERY || order.deliveryMethod == 'PAYU') {
+                /*if (order.deliveryType == CHARGE_ON_DELIVERY || order.deliveryMethod == 'PAYU') {
                     if (order.deliveryLocality == null) {
                         return false;
                     }
-                }
+                }*/
 
             }
 
