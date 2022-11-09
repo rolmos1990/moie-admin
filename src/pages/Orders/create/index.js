@@ -90,12 +90,13 @@ const CreateOrder = (props) => {
                 order.paymentMode = car.deliveryOptions.paymentType === PAYMENT_TYPES.CASH ? 1 : 2;
             } else {
                 order.deliveryLocality = car.deliveryOptions.deliveryLocality;
-            }
 
-            if (order.deliveryType == CHARGE_ON_DELIVERY || order.deliveryMethod == 'PAYU') {
-                if (order.deliveryLocality == null) {
-                    return false;
+                if (order.deliveryType == CHARGE_ON_DELIVERY || order.deliveryMethod == 'PAYU') {
+                    if (order.deliveryLocality == null) {
+                        return false;
+                    }
                 }
+
             }
 
             onRegisterOrder(order, props.history);
