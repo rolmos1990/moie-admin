@@ -18,6 +18,7 @@ import {CHARGE_ON_DELIVERY, DELIVERY_METHODS_PAYMENT_TYPES, PAYMENT_TYPES} from 
 import {PERMISSIONS} from "../../../helpers/security_rol";
 import NoAccess from "../../../components/Common/NoAccess";
 import HasPermissions from "../../../components/HasPermissions";
+import {showMessage} from "../../../components/MessageToast/ShowToastMessages";
 
 const CreateOrder = (props) => {
     const {onResetOrder, car, onRegisterOrder, error, loading} = props;
@@ -91,11 +92,10 @@ const CreateOrder = (props) => {
             } else {
                 order.deliveryLocality = car.deliveryOptions.deliveryLocality;
 
-                /*if (order.deliveryType == CHARGE_ON_DELIVERY || order.deliveryMethod == 'PAYU') {
-                    if (order.deliveryLocality == null) {
+                if (((order.deliveryType == CHARGE_ON_DELIVERY && order.deliveryMethod != 'MENSAJERO') || order.deliveryMethod == 'PAYU') && order.deliveryLocality == null) {
+                        showMessage.error("Localidad Requerida");
                         return false;
-                    }
-                }*/
+                }
 
             }
 
