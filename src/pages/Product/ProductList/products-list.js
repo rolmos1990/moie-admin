@@ -104,9 +104,10 @@ const ProductList = props => {
     };
 
     useEffect(() => {
-        if(refresh === null) {
+        if (null !== refresh) {
             onResetProducts();
         }
+
 
         if(conditionType !== 'product'){
             onClearTableConditions();

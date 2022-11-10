@@ -395,6 +395,16 @@ const OrderEdit = (props) => {
     }
 
     //Permite imprimir la orden
+    const canSent = () => {
+        const isPrevPayment = order?.orderDelivery && ([1, 2].includes(order?.orderDelivery.deliveryType));
+        if (order && order.status === ORDERS_ENUM.PRINTED && isPrevPayment && order.deliveryMethod.name == 'PAYU') {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    //Permite imprimir la orden
     const canPrint = () => {
         const isPrevPayment = order?.orderDelivery && ([1, 2].includes(order?.orderDelivery.deliveryType));
         if (order && order.status < ORDERS_ENUM.CONCILIED) {
@@ -487,6 +497,14 @@ const OrderEdit = (props) => {
                                         </button>
                                     </Tooltip>
                                 )}*/}
+                                {canSent() && (
+                                    <Tooltip placement="bottom" title="Enviar" aria-label="add">
+                                        <ButtonLoading loading={props.loading} type="button" color="primary" className="btn-sm btn btn-outline-success waves-effect waves-light" onClick={() => onNextStatusOrder(order.id)}>
+                                            <i className={"mdi mdi-share"}> </i>
+                                        </ButtonLoading>
+                                    </Tooltip>
+                                )}
+
                                 {canPrint() && (
                                     <Tooltip placement="bottom" title="Imprimir" aria-label="add">
                                         <ButtonLoading type="button" color="primary" className="btn-sm btn btn-outline-info waves-effect waves-light" onClick={() => printOrder()}>
