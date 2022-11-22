@@ -286,3 +286,12 @@ export const productPriceWithDiscount = (product) => {
         return 0;
     }
 }
+
+export const trim = (_str) => {
+    if(!_str){
+       return _str;
+    }
+    _str = _str.trim();
+    _str = _str.replace(/\s+/g, '').trim();
+    return _str;
+}

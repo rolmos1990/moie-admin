@@ -8,6 +8,7 @@ import {arrayToOptionsByFieldName, getEmptyOptions} from "../../common/converter
 import {AvBaseInput} from "availity-reactstrap-validation";
 import messages from "./messages";
 import Conditionals from "../../common/conditionals";
+import {trim} from "../../common/utils";
 
 const InputAsyncSearchField = (props) => {
     const {defaultValue, conditionalOptions, defaultConditions} = props;
@@ -27,6 +28,7 @@ const InputAsyncSearchField = (props) => {
             removeDots={props.removeDots}
             urlStr={props.urlStr}
             isClearable={props.isClearable}
+            noSpaces={props.noSpaces}
             onKeyPress={props.onKeyPress ? props.onKeyPress : null}
             onChange={(value, meta) => {
                 setSelected(value)
@@ -47,7 +49,7 @@ InputAsyncSearchField.propTypes = {
 
 class AvAsyncSearchInput extends AvBaseInput {
     render() {
-        const {name, value, onChange, validate, isClearable, hasWild, urlStr, conditionalOptions, defaultConditions, placeholder, helpMessage, onKeyPress, removeDots} = this.props;
+        const {name, value, onChange, validate, isClearable, hasWild, urlStr, conditionalOptions, defaultConditions, placeholder, helpMessage, onKeyPress, removeDots, noSpaces} = this.props;
         const validation = this.context.FormCtrl.getInputState(this.props.name);
         const feedback = validation.errorMessage ? (<div className="invalid-feedback" style={{display: "block"}}>{validation.errorMessage}</div>) : null;
         const help = helpMessage ? (<FormText>{helpMessage}</FormText>) : null;
@@ -71,6 +73,9 @@ class AvAsyncSearchInput extends AvBaseInput {
                             let textSearch = inputValue +'';
                             if(removeDots){
                                 textSearch = textSearch.replace(/\./g, '');
+                            }
+                            if(noSpaces){
+                                textSearch = trim(textSearch);
                             }
 
 

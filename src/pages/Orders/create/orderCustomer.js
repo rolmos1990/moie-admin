@@ -16,6 +16,7 @@ import {updateCard} from "../../../store/order/actions";
 import {hasCustomerOpenOrders} from "../../../helpers/service";
 import OrdersPieChart from "../../CustomerEdit/OrdersPieChart";
 import CategoriesPieChart from "../../CustomerEdit/CategoriesPieChart";
+import {trim} from "../../../common/utils";
 
 const searchByOptions = [{label: "Nombre", value: "name"}, {label: "Documento", value: "doc"}, {label: "Correo", value: "email"}, {label: "Teléfono", value: "phone"}];
 
@@ -193,6 +194,7 @@ const OrderCustomer = (props) => {
                                 placeholder="Buscar por número de teléfono"
                                 defaultValue={customerEmailDefault}
                                 isClearable={true}
+                                noSpaces={true}
                                 hasWild={true}
                                 conditionalOptions={{fieldName: 'cellphone', operator: Conditionals.OPERATORS.EQUAL}}
                                 onChange={(c, meta) => {
