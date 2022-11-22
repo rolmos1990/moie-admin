@@ -85,6 +85,9 @@ function* customerRegister({ payload: { customer, history } }) {
         yield put(registerCustomerSuccess(response))
         //history.push("/customers")
     } catch (error) {
+        if(error && error.response && error.response.data && error.response.data.error == 'doc_exists'){
+            showResponseMessage({status: 400}, "Documento ya se encuentra registrado!");
+        }
         yield put(registerCustomerFail(error))
     }
 }
