@@ -31,7 +31,7 @@ import {changePreloader} from "../../store/layout/actions";
 import {showMessage} from "../../components/MessageToast/ShowToastMessages";
 
 const OrderList = props => {
-    const {orders, meta, onGetOrders, onResetOrders, refresh, customActions, conditionals, showAsModal, conciliation, onChangePreloader, externalView} = props;
+    const {orders, meta, onGetOrders, onResetOrders, refresh, customActions, conditionals, showAsModal, conciliation, onChangePreloader, externalView, reset} = props;
     const [statesList, setStatesList] = useState([])
     const [filter, setFilter] = useState(false);
     const [conditional, setConditional] = useState(null);
@@ -55,6 +55,10 @@ const OrderList = props => {
             setDefaultPage(page);
         },
     }
+
+    useEffect(() => {
+        setConditional([]);
+    },[reset]);
 
     useEffect(() => {
 
@@ -381,7 +385,7 @@ OrderList.propTypes = {
 }
 
 const mapStateToProps = state => {
-    const {orders, loading, meta, refresh, conciliation} = state.Order
+    const {orders, loading, meta, refresh, conciliation, reset} = state.Order
     const {isPreloader} = state.Layout;
     return {
         orders,
@@ -389,7 +393,8 @@ const mapStateToProps = state => {
         meta,
         refresh,
         conciliation,
-        isPreloader
+        isPreloader,
+        reset
     }
 }
 

@@ -98,14 +98,16 @@ const initialState = {
         error: null,
         loading: false,
         success: false
-    }
+    },
+    reset: false
 }
 
 const order = (state = initialState, action) => {
     switch (action.type) {
         case RESET_ORDER:
             return {
-                ...initialState
+                ...initialState,
+                reset: !state.reset
             }
         case RESET_CAR:
             return {

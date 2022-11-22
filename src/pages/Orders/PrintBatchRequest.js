@@ -5,7 +5,7 @@ import {withRouter} from "react-router-dom"
 import {connect} from "react-redux";
 import PropTypes from "prop-types";
 import {printPartOfPage} from "../../common/utils";
-import {nextStatusOrder, printBatchRequest, resetBatchRequest} from "../../store/order/actions";
+import {nextStatusOrder, printBatchRequest, resetBatchRequest, resetOrder} from "../../store/order/actions";
 import CustomModal from "../../components/Modal/CommosModal";
 import {changePreloader} from "../../store/layout/actions";
 
@@ -47,6 +47,7 @@ const PrintBatchRequest = (props) => {
 
     const onConfirmPrintOrder = () => {
         setOpenPrintConfirmModal(false);
+        props.onResetOrder();
         props.onNextStatusOrder(batch.id);
     }
 
@@ -82,6 +83,7 @@ const mapStateToProps = state => {
 }
 
 const mapDispatchToProps = dispatch => ({
+    onResetOrder: () => dispatch(resetOrder()),
     onChangePreloader: (preloader) => dispatch(changePreloader(preloader)),
     onPrintBatchRequest: (conditional) => dispatch(printBatchRequest(conditional)),
     onNextStatusOrder: (id = []) => dispatch(nextStatusOrder({batch: id})),
