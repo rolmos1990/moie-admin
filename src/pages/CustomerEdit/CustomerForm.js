@@ -190,6 +190,8 @@ const CustomerForm = (props) => {
                                         id='document'
                                         name={"document"}
                                         value={customerData.document}
+                                        pattern={"/^[0-9]{0,}$/"}
+                                        patternMessage={'Debe contener solo numeros sin espacios'}
                                         required/>
                                 </div>
                             </Col>

@@ -268,7 +268,7 @@ const OrderProducts = (props) => {
                                         id={"quantity"}
                                         name={"quantity"}
                                         options={buildNumericOptions(quantityAvailable, 1, 1)}
-                                        defaultValue={defaultQuantity}
+                                        defaultValue={(quantityAvailable > 0 && !!defaultQuantity) ? 1 : defaultQuantity}
                                         onChange={(e) => setDefaultQuantity(e.value)}
                                         required
                                     />

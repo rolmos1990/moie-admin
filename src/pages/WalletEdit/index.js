@@ -20,6 +20,7 @@ import HasPermissionsFunc from "../../components/HasPermissionsFunc";
 import DropZoneIcon from "../../components/Common/DropZoneIcon";
 import Images from "../../components/Common/Image";
 import moment from "moment";
+import ButtonLoading from "../../components/Common/ButtonLoading";
 
 const WalletEdit = (props) => {
     const {getWallet, wallet, refresh, loading} = props;
@@ -59,6 +60,26 @@ const WalletEdit = (props) => {
         }
     }
 
+    /** Genera el reverso */
+    const cancelMovement = () => {
+
+        if(canEdit && walletData) {
+            const newMovement = {...walletData};
+            newMovement.id = null;
+            newMovement.amount = priceFormat(parseFloat(walletData.amount) * -1, '', false);
+            newMovement.description = 'REVERSO MOV '+walletData.id+' - ' + walletData.description;
+            newMovement.canceled = 1;
+
+            props.registersWallet(newMovement);
+
+            const data = Object.assign({}, walletData, {status: walletData._status});
+            data.amount = priceFormat(parseFloat(data.amount), '', false);
+            data.canceled = 1;
+            props.updateWallet(props.match.params.id, data, props.history);
+
+        }
+    }
+
     const handleAcceptedFiles = (files) => {
         if(canAttach) {
             const payload = {
@@ -86,8 +107,8 @@ const WalletEdit = (props) => {
     const addDays = moment(walletData.date, "YYYY-MM-DD").add(4, 'days');
     const isNotExpired = moment().isSameOrBefore(addDays);
 
-    const canEdit = ((HasPermissionsFunc([PERMISSIONS.WALLET_EDIT])) && isEdit && isNotExpired || !isEdit);
-    const canAttach = ((HasPermissionsFunc([PERMISSIONS.WALLET_EDIT])) && isEdit);
+    const canEdit = ((HasPermissionsFunc([PERMISSIONS.WALLET_EDIT])) && isEdit && isNotExpired || !isEdit) && !walletData.canceled;
+    const canAttach = ((HasPermissionsFunc([PERMISSIONS.WALLET_EDIT])) && isEdit) && !walletData.canceled;
 
     //only show mode
     const renderShowMode = <HasPermissions permissions={[PERMISSIONS.WALLET_CREATE, PERMISSIONS.WALLET_EDIT]} renderNoAccess={() => <NoAccess/>}>
@@ -109,7 +130,7 @@ const WalletEdit = (props) => {
                                                 {value: 1, label: 'INGRESO'},
                                                 {value: 2, label: 'EGRESO'}
                                             ]}
-                                            defaultValue={1}
+                                            defaultValue={walletData.amount < 0 ? 2 : 1}
                                             required
                                         />
                                     </div>
@@ -153,13 +174,15 @@ const WalletEdit = (props) => {
                             <Row>
                                 <Col md="12">
                                     <div className="mb-3">
-                                        <Label htmlFor="field_comment">Comentario <span className="text-danger">*</span></Label>
+                                        <Label htmlFor="field_comment">Comentario <span className="text-danger"></span></Label>
                                         <FieldText
                                             disabled
                                             id={"field_comment"}
                                             name={"comment"}
                                             type={"textarea"}
                                             value={walletData.comment}
+                                            minLength={0}
+                                            maxLength={255}
                                         />
                                     </div>
                                 </Col>
@@ -171,7 +194,7 @@ const WalletEdit = (props) => {
         </AvForm>
     </HasPermissions>;
 
-    const renderAttachments = wallet.attachments && wallet.attachments.length > 0 && wallet.attachments.map(item => (
+    const renderAttachments = walletData.attachments && walletData.attachments.length > 0 && walletData.attachments.map(item => (
                     <Col md={4} className="image-left-panel" style={{minHeight: '225px'}}>
                         <div className={`nav flex-column nav-pills`} id="v-pills-tab" role="tablist" aria-orientation="vertical">
                             <a href={item.fileUrl} target={"_blank"}>
@@ -271,7 +294,7 @@ const WalletEdit = (props) => {
                                                 {value: 1, label: 'INGRESO'},
                                                 {value: 2, label: 'EGRESO'}
                                             ]}
-                                            defaultValue={1}
+                                            defaultValue={walletData.amount < 0 ? 2 : 1}
                                             required
                                         />
                                     </div>
@@ -318,15 +341,14 @@ const WalletEdit = (props) => {
                             <Row>
                                 <Col md="12">
                                     <div className="mb-3">
-                                        <Label htmlFor="field_comment">Comentario <span className="text-danger">*</span></Label>
+                                        <Label htmlFor="field_comment">Comentario <span className="text-danger"></span></Label>
                                         <FieldText
                                             id={"field_comment"}
                                             name={"comment"}
                                             type={"textarea"}
                                             value={walletData.comment}
-                                            minLength={2}
+                                            minLength={0}
                                             maxLength={255}
-                                            required
                                         />
                                     </div>
                                 </Col>
@@ -349,6 +371,19 @@ const WalletEdit = (props) => {
                 <Container fluid>
                     <Breadcrumb hasBack path="/wallets" title={walletData.name} item={"Billeteras"}/>
                     <HasPermissions permissions={[PERMISSIONS.WALLET_CREATE, PERMISSIONS.WALLET_EDIT, PERMISSIONS.WALLET_SHOW]} renderNoAccess={() => <NoAccess/>}>
+
+                        <div className={"mb-3 float-md-end"}>
+                            {canEdit && (
+                                <div className="button-items">
+                                    <Tooltip placement="bottom" title="Generar Reverso" aria-label="add">
+                                        <ButtonLoading loading={props.loading} type="button" color="primary" className="btn-sm btn btn-outline-danger waves-effect waves-light" onClick={() => cancelMovement()}>
+                                            <i className={"mdi mdi-delete"}> </i>
+                                        </ButtonLoading>
+                                    </Tooltip>
+                                </div>
+                            )}
+                        </div>
+
                         <div>
                         {canEdit ? renderForm : renderShowMode}
                         </div>

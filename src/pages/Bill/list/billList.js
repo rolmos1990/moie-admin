@@ -101,7 +101,7 @@ const BillList = props => {
         conditions.add('createdAt', '2022-01-01T00:00:00.000Z', Conditionals.OPERATORS.GREATER_THAN_OR_EQUAL);
         conditions.add('deliveryMethod', DELIVERY_METHODS_IDS.INTERRAPIDISIMO, Conditionals.OPERATORS.EQUAL);
         conditions.add('orderDelivery.deliveryType', CHARGE_ON_DELIVERY, Conditionals.OPERATORS.EQUAL);
-        conditions.add('status', [ORDERS_ENUM.PRINTED, ORDERS_ENUM.SENT, ORDERS_ENUM.CONCILIED, ORDERS_ENUM.FINISHED].join("::"), Conditionals.OPERATORS.IN);
+        conditions.add('status', [ORDERS_ENUM.SENT, ORDERS_ENUM.FINISHED].join("::"), Conditionals.OPERATORS.IN);
 
         setOrderListConditions(conditions.condition);
         setOpenOrdersModal(true);
@@ -113,7 +113,7 @@ const BillList = props => {
         conditions.add('office', '', Conditionals.OPERATORS.NOT_NULL);
         conditions.add('createdAt', '2022-01-01T00:00:00.000Z', Conditionals.OPERATORS.GREATER_THAN_OR_EQUAL);
         conditions.add('deliveryMethod', DELIVERY_METHODS_IDS.PAYU, Conditionals.OPERATORS.EQUAL);
-        conditions.add('status', [ORDERS_ENUM.PRINTED, ORDERS_ENUM.SENT, ORDERS_ENUM.CONCILIED, ORDERS_ENUM.FINISHED].join("::"), Conditionals.OPERATORS.IN);
+        conditions.add('status', [ORDERS_ENUM.SENT, ORDERS_ENUM.FINISHED].join("::"), Conditionals.OPERATORS.IN);
 
         setOrderListConditions(conditions.condition);
         setOpenOrdersModal(true);

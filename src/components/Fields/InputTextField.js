@@ -15,8 +15,10 @@ const TextField = (props) => (
         type={props.type ? props.type : "text"}
         className={`form-control ${props.className ? props.className : ''}` }
         disabled={!!props.disabled}
+        pattern={props.pattern ? props.pattern : false}
         validate={
             {
+                pattern:  { value: props.pattern ? props.pattern : false, errorMessage: props.patternMessage ? props.patternMessage : 'Formato de campo invalido' },
                 required: { value: props.required ? true : false, errorMessage: messages.required },
                 minLength: { value: props.minLength ? props.minLength: 0, errorMessage: messages.minLength.replace("{length}", props.minLength)},
                 maxLength: { value: props.maxLength ? props.maxLength: 255, errorMessage: messages.maxLength.replace("{length}", props.maxLength)}
@@ -34,7 +36,9 @@ TextField.propTypes = {
     disabled: PropTypes.bool,
     minLength: PropTypes.number,
     maxLength: PropTypes.number,
-    onPressEnter: PropTypes.func
+    onPressEnter: PropTypes.func,
+    pattern: PropTypes.string,
+    patternMessage: PropTypes.string,
 }
 
 const TextAlphaField = (props) => (

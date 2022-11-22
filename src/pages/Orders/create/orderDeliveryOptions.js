@@ -87,6 +87,7 @@ const OrderDeliveryOptions = (props) => {
     useEffect(() => {
         if (deliveryMethod) {
             setShowPaymentType(DELIVERY_METHODS_PAYMENT_TYPES.includes(deliveryMethod));
+            setOtherMethod(null);
             //getQuote();
             onChangeDeliveryOptions();
         }

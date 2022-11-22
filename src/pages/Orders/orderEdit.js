@@ -247,7 +247,7 @@ const OrderEdit = (props) => {
                 }
 
                 if (deliveryData.deliveryType == CHARGE_ON_DELIVERY || deliveryData.deliveryMethod == 'PAYU') {
-                    if (deliveryData.deliveryLocality == null) {
+                    if (deliveryData.deliveryLocality == null && deliveryData.deliveryMethod != 'MENSAJERO') {
                         return false;
                     } else {
                         toggleDeliveryModal();

@@ -31,6 +31,7 @@ const OrderCustomer = (props) => {
     const [customerDefault, setCustomerDefault] = useState(getEmptyOptions());
     const [customerEmailDefault, setCustomerEmailDefault] = useState(getEmptyOptions());
     const [customerDocumentDefault, setCustomerDocumentDefault] = useState(getEmptyOptions());
+    const [isNewCustomer, setIsNewCustomer] = useState(true);
 
     useEffect(() => {
         if (showAsModal && car.isEdit && car.customer && car.customer.id && initComponent) {
@@ -52,7 +53,12 @@ const OrderCustomer = (props) => {
     const toggleCustomerStatsModal = () => {
         setOpenCustomerStatsModal(!openCustomerStatsModal);
     }
+    const toggleModalNew = () => {
+        setIsNewCustomer(true);
+        setOpenCustomerModal(!openCustomerModal);
+    }
     const toggleModal = () => {
+        setIsNewCustomer(false);
         setOpenCustomerModal(!openCustomerModal);
     }
     const toggleActivateCustomer = () => {
@@ -201,7 +207,7 @@ const OrderCustomer = (props) => {
                     )}
                     <Col md={1} style={{display: 'flex', 'alignItems': 'flex-end'}}>
                         <Tooltip placement="bottom" title="Agregar nuevo cliente" aria-label="add">
-                            <button type="button" className="btn btn-primary btn-block waves-effect waves-light mt-2 me-1 w-100" onClick={() => toggleModal()}>
+                            <button type="button" className="btn btn-primary btn-block waves-effect waves-light mt-2 me-1 w-100" onClick={() => toggleModalNew()}>
                                 <i className="fa fa-user-plus"> </i>
                             </button>
                         </Tooltip>
@@ -320,8 +326,8 @@ const OrderCustomer = (props) => {
                     )}
                 </Row>
             )}
-            <CustomModal title={editCustomer ? "Modificar cliente" : "Nuevo cliente"} size="lg" showFooter={false} isOpen={openCustomerModal} onClose={onCloseCustomerModal}>
-                <CustomerForm customer={customerData}
+            <CustomModal title={editCustomer && !isNewCustomer ? "Modificar cliente" : "Nuevo cliente"} size="lg" showFooter={false} isOpen={openCustomerModal} onClose={onCloseCustomerModal}>
+                <CustomerForm customer={!isNewCustomer ? customerData : {}}
                               showAsModal={true}
                               onCloseModal={onCloseCustomerModal}
                               onAcceptModal={onAcceptCustomerModal}

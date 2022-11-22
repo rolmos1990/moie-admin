@@ -230,12 +230,12 @@ const PaymentOverlay = (props) => {
                             </Row>
                             <Row>
                                 <Col md={4}>
-                                    <label>Monto: </label>
-                                    <span className="p-1">{priceFormat(payment.order.subTotalAmount, "", true)}</span>
+                                    <label>Monto con Descuento: </label>
+                                    <span className="p-1">{priceFormat(payment.order.totalWithDiscount, "", true)}</span>
                                 </Col>
                                 <Col md={4}>
                                     <label>Envio: </label>
-                                    <span className="p-1">{priceFormat(payment.order.totalAmount - payment.order.subTotalAmount, "", true)}</span>
+                                    <span className="p-1">{priceFormat(payment.order.orderDelivery.deliveryCost, "", true)}</span>
                                 </Col>
                                 <Col md={4}>
                                     <label>Total: </label>

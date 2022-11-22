@@ -22,7 +22,7 @@ const ProductsPendingList = ({onGetProductsPending, product, pendingProducts}) =
             <Card className="p-3">
                 <Row>
                     <Col md={12}>
-                        <h4 className="card-title text-info">Ordenes pendientes</h4>
+                        <h4 className="card-title text-info">Ordenes</h4>
                     </Col>
                 </Row>
                 <Row>

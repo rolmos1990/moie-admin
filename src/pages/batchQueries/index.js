@@ -9,7 +9,7 @@ const BatchQueries = () => {
         <React.Fragment>
             <div className="page-content">
                 <Container fluid>
-                    <Breadcrumb path="/bq" title={null} item="Consultas Masivas"/>
+                    <Breadcrumb hasBack path="/products" title={null} item="Consultas Masivas"/>
                     <BatchQueriesForm/>
                 </Container>
             </div>
