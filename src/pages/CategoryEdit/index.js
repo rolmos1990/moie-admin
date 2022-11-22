@@ -6,7 +6,7 @@ import {withRouter} from "react-router-dom"
 import {connect} from "react-redux";
 import {apiError} from "../../store/auth/login/actions";
 import PropTypes from "prop-types";
-import {getCategory, registerCategory, updateCategory} from "../../store/category/actions";
+import {getCategory, getPiecesUnpublished, registerCategory, updateCategory} from "../../store/category/actions";
 import {FieldNumber, FieldSwitch, FieldText} from "../../components/Fields";
 import Breadcrumb from "../../components/Common/Breadcrumb";
 import {STATUS} from "../../common/constants";
@@ -19,7 +19,7 @@ import Images from "../../components/Common/Image";
 import {getBaseCategoryPath} from "../../common/utils";
 
 const CategoryEdit = (props) => {
-    const {getCategory, category} = props;
+    const {getCategory, category, pieces} = props;
     const [categoryData, setCategory] = useState({_status: STATUS.ACTIVE});
     const isEdit = !!props.match.params.id;
 
@@ -33,6 +33,7 @@ const CategoryEdit = (props) => {
             setFile(null);
             setFileBanner(null);
             getCategory(props.match.params.id);
+            props.getPiecesUnpublished(props.match.params.id);
         }
     }, [getCategory]);
 
@@ -193,6 +194,14 @@ const CategoryEdit = (props) => {
                                         </CardBody>
                                     </Card>
                                 </Col>
+                                <Col xl={"4"}>
+                                    <Card>
+                                        <CardBody>
+                                            <h4>Piezas no publicadas</h4><br />
+                                            {pieces && pieces.map(item => <p className="mb-0 badge bg-soft-primary p-2">{item}</p>)}
+                                        </CardBody>
+                                    </Card>
+                                </Col>
                             </Row>
                         </AvForm>
                     </HasPermissions>
@@ -203,12 +212,12 @@ const CategoryEdit = (props) => {
 }
 
 const mapStateToProps = state => {
-    const {error, category, loading} = state.Category
-    return {error, category, loading}
+    const {error, category, loading, pieces} = state.Category
+    return {error, category, loading, pieces}
 }
 
 export default withRouter(
-    connect(mapStateToProps, {apiError, registerCategory, updateCategory, getCategory})(CategoryEdit)
+    connect(mapStateToProps, {apiError, registerCategory, updateCategory, getCategory, getPiecesUnpublished})(CategoryEdit)
 )
 
 CategoryEdit.propTypes = {

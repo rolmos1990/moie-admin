@@ -33,6 +33,7 @@ const registerCategoryApi = data => post(url.CATEGORY, data);
 const updateCategoryApi = (id, data) => put(`${url.CATEGORY}/${id}`, data);
 const catalogBatchPrintRequestApi = (data) => get(`${url.CATEGORY}/batch/printRequest`,{}, data);
 const resetOrderCategoryApi = (id) => get(`${url.CATEGORY}/resetOrder/${id}`,{});
+const getPiecesUnpublishedApi = (id) => get(`${url.CATEGORY}/piecesunpublished/${id}`,{});
 
 //Users
 const fetchUsersApi = data => get(url.USER, {}, data);
@@ -231,6 +232,7 @@ export {
     updateCategoryApi,
     catalogBatchPrintRequestApi,
     resetOrderCategoryApi,
+    getPiecesUnpublishedApi,
     conciliationRequestApi,
     confirmConciliationRequestApi,
     postSaleGenerateReportApi,

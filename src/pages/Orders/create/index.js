@@ -26,6 +26,11 @@ const CreateOrder = (props) => {
     const [isValidOrder, setIsValidOrder] = useState(false);
 
     useEffect(() => {
+        console.log('only first time...');
+        onResetOrder();
+    }, []);
+
+    useEffect(() => {
         if (initComponent) {
             onResetOrder();
             setInitComponent(false);

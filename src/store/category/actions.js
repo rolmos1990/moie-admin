@@ -16,7 +16,11 @@ import {
     CATALOG_PRINT_BATCH_REQUEST_SUCCESS,
     CATALOG_PRINT_BATCH_REQUEST_FAILED,
     CATALOG_RESET_BATCH_REQUEST,
-    CATALOG_DO_BATCH_REQUEST, REFRESH_CATEGORIES,
+    CATALOG_DO_BATCH_REQUEST,
+    REFRESH_CATEGORIES,
+    GET_PIECES_UNPUBLISHED,
+    GET_PIECES_UNPUBLISHED_SUCCESS,
+    GET_PIECES_UNPUBLISHED_FAILED,
 } from "./actionTypes";
 
 export const resetCategory = () => ({
@@ -53,6 +57,21 @@ export const getCategorySuccess = data => ({
 
 export const getCategoryFailed = error => ({
     type: GET_CATEGORY_FAILED,
+    payload: error,
+})
+
+export const getPiecesUnpublished = id => ({
+    type: GET_PIECES_UNPUBLISHED,
+    id
+})
+
+export const getPiecesUnpublishedSuccess = data => ({
+    type: GET_PIECES_UNPUBLISHED_SUCCESS,
+    pieces: data,
+})
+
+export const getPiecesUnpublishedFailed = error => ({
+    type: GET_PIECES_UNPUBLISHED_FAILED,
     payload: error,
 })
 

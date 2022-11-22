@@ -1,7 +1,14 @@
 import {all, call, fork, put, takeEvery} from "redux-saga/effects"
 
 //Account Redux states
-import {GET_CATEGORIES, GET_CATEGORY, REGISTER_CATEGORY, UPDATE_CATEGORY, CATALOG_PRINT_BATCH_REQUEST} from "./actionTypes"
+import {
+    GET_CATEGORIES,
+    GET_CATEGORY,
+    REGISTER_CATEGORY,
+    UPDATE_CATEGORY,
+    CATALOG_PRINT_BATCH_REQUEST,
+    GET_PIECES_UNPUBLISHED
+} from "./actionTypes"
 
 import {
     getCategoriesSuccess,
@@ -13,7 +20,7 @@ import {
     updateCategorySuccess,
     updateCategoryFail,
     printCatalogBatchRequestFailed,
-    printCatalogBatchRequestSuccess
+    printCatalogBatchRequestSuccess, getPiecesUnpublishedFailed, getPiecesUnpublishedSuccess
 } from "./actions"
 
 import {
@@ -21,7 +28,7 @@ import {
     updateCategoryApi,
     fetchCategoryApi,
     fetchCategoriesApi,
-    catalogBatchPrintRequestApi
+    catalogBatchPrintRequestApi, getPiecesUnpublishedApi
 } from "../../helpers/backend_helper"
 
 import Conditionals from "../../common/conditionals";
@@ -35,6 +42,7 @@ const ACTION_NAME_LIST      =   GET_CATEGORIES;
 const ACTION_NAME_GET       =   GET_CATEGORY;
 const ACTION_NAME_CREATE    =   REGISTER_CATEGORY;
 const ACTION_NAME_UPDATE    =   UPDATE_CATEGORY;
+const ACTION_PIECES_UNPUBLISHED    =   GET_PIECES_UNPUBLISHED;
 
 const LIST_API_REQUEST      =   fetchCategoriesApi;
 const GET_API_REQUEST       =   fetchCategoryApi;
@@ -51,6 +59,10 @@ const CREATE_SUCCESS_ACTION =   registerCategorySuccess;
 const CREATE_FAILED_ACTION  =   registerCategoryFailed;
 const UPDATE_SUCCESS_ACTION =   updateCategorySuccess;
 const UPDATE_FAILED_ACTION  =   updateCategoryFail;
+
+
+const GET_PIECES_UNPUBLISHED_FAILED_ACTION     =   getPiecesUnpublishedFailed;
+const GET_PIECES_UNPUBLISHED_SUCCESS_ACTION =   getPiecesUnpublishedSuccess;
 
 const PRINT_BATCH_REQUEST_SUCCESS_ACTION = printCatalogBatchRequestSuccess;
 const PRINT_BATCH_REQUEST_FAILED_ACTION = printCatalogBatchRequestFailed;
@@ -104,6 +116,22 @@ function* update({ payload: { id, data, history } }) {
         yield put(UPDATE_FAILED_ACTION(error))
     }
 }
+
+function* getPiecesUnpublished({id}) {
+    try {
+        const response = yield call(getPiecesUnpublishedApi, id);
+        console.log(response);
+        if(response.status == 200) {
+            console.log(response.pieces);
+            yield put(GET_PIECES_UNPUBLISHED_SUCCESS_ACTION(response.pieces));
+        } else {
+            yield put(GET_PIECES_UNPUBLISHED_SUCCESS_ACTION([]));
+        }
+    } catch (error) {
+        yield put(GET_PIECES_UNPUBLISHED_FAILED_ACTION(error))
+    }
+}
+
 function* catalogBatchRequest({conditionals}) {
     try {
         const cond = Conditionals.getConditionalFormat(conditionals);
@@ -120,7 +148,8 @@ export function* watchCategory() {
     yield takeEvery(ACTION_NAME_CREATE, register);
     yield takeEvery(ACTION_NAME_UPDATE, update);
     yield takeEvery(ACTION_NAME_LIST, fetch);
-    yield takeEvery(ACTION_NAME_GET, get)
+    yield takeEvery(ACTION_NAME_GET, get);
+    yield takeEvery(ACTION_PIECES_UNPUBLISHED, getPiecesUnpublished);
     yield takeEvery(CATALOG_PRINT_BATCH_REQUEST, catalogBatchRequest)
 }
 

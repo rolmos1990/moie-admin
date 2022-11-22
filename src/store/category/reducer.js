@@ -8,13 +8,19 @@ import {
     REGISTER_CATEGORY,
     REGISTER_CATEGORY_FAILED,
     REGISTER_CATEGORY_SUCCESS,
-    UPDATE_CATEGORY, UPDATE_CATEGORY_FAILED,
+    UPDATE_CATEGORY,
+    UPDATE_CATEGORY_FAILED,
     UPDATE_CATEGORY_SUCCESS,
     CATALOG_PRINT_BATCH_REQUEST,
     CATALOG_PRINT_BATCH_REQUEST_SUCCESS,
     CATALOG_PRINT_BATCH_REQUEST_FAILED,
     CATALOG_RESET_BATCH_REQUEST,
-    CATALOG_DO_BATCH_REQUEST, REFRESH_CATEGORIES, RESET_CATEGORY,
+    CATALOG_DO_BATCH_REQUEST,
+    REFRESH_CATEGORIES,
+    RESET_CATEGORY,
+    GET_PIECES_UNPUBLISHED,
+    GET_PIECES_UNPUBLISHED_FAILED,
+    GET_PIECES_UNPUBLISHED_SUCCESS,
 } from "./actionTypes";
 
 const initialState = {
@@ -24,6 +30,7 @@ const initialState = {
     categories: [],
     category: {},
     refresh: false,
+    pieces: [],
     batchRequest: {
         batch: null,
         error: null,
@@ -39,6 +46,23 @@ const category = (state = initialState, action) => {
         case RESET_CATEGORY:
             return {
                 ...initialState
+            }
+        case GET_PIECES_UNPUBLISHED:
+            return {
+                ...state,
+                pieces: [],
+            }
+        case GET_PIECES_UNPUBLISHED_FAILED:
+            return {
+                ...state,
+                error: action.payload,
+                pieces: [],
+            }
+
+        case GET_PIECES_UNPUBLISHED_SUCCESS:
+            return {
+                ...state,
+                pieces: action.pieces
             }
         case GET_CATEGORIES:
             return {
