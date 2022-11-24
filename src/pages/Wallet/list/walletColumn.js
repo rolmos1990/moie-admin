@@ -8,6 +8,14 @@ import {DATE_FORMAT, formatDate, priceFormat} from "../../../common/utils";
 const walletColumns = (onDelete = false) => {
     let cols = [
         {
+            text: "#",
+            dataField: "id",
+            sort: true,
+            filter: true,
+            filterType: "text",
+            filterCondition: Conditionals.OPERATORS.EQUAL,
+        },
+        {
             text: "Fecha",
             dataField: "date",
             sort: true,
