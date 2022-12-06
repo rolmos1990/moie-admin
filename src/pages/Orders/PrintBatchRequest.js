@@ -47,7 +47,7 @@ const PrintBatchRequest = (props) => {
 
     const onConfirmPrintOrder = () => {
         setOpenPrintConfirmModal(false);
-        props.onResetOrder();
+        //props.onResetOrder();
         props.onNextStatusOrder(batch.id);
     }
 

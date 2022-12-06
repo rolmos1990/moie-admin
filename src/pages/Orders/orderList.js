@@ -352,6 +352,15 @@ const OrderList = props => {
                             <div style={{"margin": "50px 30px"}}>
                             <h6><i className="text-info uil-shopping-cart-alt me-2"></i>No se han encontrado pedidos asociados</h6>
                                 {!conciliationView && !externalView && (
+                                    <div>
+                                    <Tooltip placement="bottom" title="Filtros Avanzados" aria-label="add">
+                                        <Button onClick={() => setFilter(!filter)}>
+                                            <i className={"mdi mdi-filter"}> </i>
+                                        </Button>
+                                    </Tooltip>
+                                    </div>
+                                )}
+                                {!conciliationView && !externalView && (
                                     <div className="text-center mt-2 mb-2">
                                         <HasPermissions permission={PERMISSIONS.ORDER_CREATE}>
                                             <Link to={"/orders/create"} className="btn btn-primary waves-effect waves-light text-light">

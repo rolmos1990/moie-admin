@@ -345,7 +345,10 @@ const OrderEdit = (props) => {
         const isPrevPayment = order?.orderDelivery && ([1, 2].includes(order?.orderDelivery.deliveryType));
         const canCancelPreviewPayment = [ORDERS_ENUM.PENDING].includes(parseInt(order.status)) && isPrevPayment;
         const canCancelChargeOnDelivery = [ORDERS_ENUM.PENDING, ORDERS_ENUM.CONFIRMED, ORDERS_ENUM.PRINTED, ORDERS_ENUM.SENT].includes(parseInt(order.status)) && !isPrevPayment;
-        if (order && (canCancelPreviewPayment || canCancelChargeOnDelivery)) {
+
+        const hasPermission = HasPermissionsFunc([PERMISSIONS.ORDER_CANCEL]);
+
+        if (order && hasPermission && (canCancelPreviewPayment || canCancelChargeOnDelivery)) {
             return true;
         } else {
             return false;

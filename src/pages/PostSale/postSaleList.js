@@ -80,12 +80,9 @@ const PostSaleList = props => {
     }
 
     const onFilterAction = (condition, offset = 0) => {
+
         const page = Math.floor(offset / DEFAULT_PAGE_LIMIT);
         setConditional(condition);
-
-/*        if((condition.filter(item => item.field === 'postSaleDate').length) > 1){
-            condition = condition.filter(item => item.field === 'postSaleDate' && item.operator !== '$nnull');
-        }*/
 
         onGetOrders(condition, DEFAULT_PAGE_LIMIT, offset);
         setDefaultPage(page + 1);
@@ -153,11 +150,13 @@ const PostSaleList = props => {
                                                                 </Button>
                                                             </Tooltip>
                                                         )}
+                                                        <HasPermissions permission={PERMISSIONS.POSTSALE_CREATE}>
                                                         <Tooltip placement="bottom" title="Importar archivo" aria-label="add">
                                                             <Button onClick={() => setOpenImportFileModal(true)}>
                                                                 <i className={"mdi mdi-file-excel"}> </i>
                                                             </Button>
                                                         </Tooltip>
+                                                        </HasPermissions>
                                                         <Tooltip placement="bottom" title="Generar reporte" aria-label="add">
                                                             <Button onClick={() => setOpenReportModal(true)}>
                                                                 <i className={"mdi mdi-file"}> </i>
@@ -229,7 +228,11 @@ const mapDispatchToProps = dispatch => ({
     onImportFile: (data) => dispatch(importFile(data)),
     onGetOrders: (conditional = null, limit = DEFAULT_PAGE_LIMIT, page) => {
         if(!conditional) conditional = [];
-        conditional.push({field:'postSaleDate', value:'', operator: Conditionals.OPERATORS.NOT_NULL});
+        if(conditional && conditional.filter(_item => _item.field === 'postSaleDate').length > 0){
+
+        } else {
+            conditional.push({field: 'postSaleDate', value: '', operator: Conditionals.OPERATORS.NOT_NULL});
+        }
         //conditional.push({field:'orderDelivery.deliveryMethod', value: [1,3,4,5].join("::"), operator: Conditionals.OPERATORS.IN})
         const orderFields = {field:'postSaleDate',type: 'DESC'};
         dispatch(getOrders(conditional, limit, page, orderFields));

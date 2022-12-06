@@ -104,7 +104,7 @@ const Sales = ({users, onGetUsers, className}) => {
         if (users) {
             const options = users.map((user) => ({label: user.name, value: user.id}))
             setStats({...stats, usuarios: [getEmptyOptions(), ...options]});
-            const addedUsers = users.map(user => ({label: user.username, value: user.id}));
+            const addedUsers = users.filter(user => !!user.status).map(user => ({label: user.username, value: user.id}));
             addedUsers.unshift({value: null, label: "Todos"});
             setUserList(addedUsers);
         }

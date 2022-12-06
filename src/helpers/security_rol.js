@@ -21,6 +21,7 @@ export const PERMISSIONS = {
     ORDER_SHOW: 'order.show',
     ORDER_LIST: 'order.list',
     ORDER_CREATE: 'order.create',
+    ORDER_CANCEL: 'order.cancel',
     OFFICE_CREATE: 'office.create',
     OFFICE_EDIT: 'office.edit',
     OFFICE_SHOW: 'office.show',

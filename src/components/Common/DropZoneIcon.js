@@ -11,7 +11,7 @@ const DropZoneIcon = props => {
                 const base64EncodedStr = btoa(fileAsBinaryString);
 
                 if (props.onDrop) {
-                    props.onDrop({f: file, base64: `data:image/${file.name.split('.')[1]};base64,${base64EncodedStr}`});
+                    props.onDrop({f: file, base64: `data:image/${file.name.split('.').pop()};base64,${base64EncodedStr}`});
                 }
             };
             reader.readAsBinaryString(file);
