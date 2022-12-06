@@ -63,7 +63,7 @@ const WalletEdit = (props) => {
     /** Genera el reverso */
     const cancelMovement = () => {
 
-        if(canEdit && walletData) {
+        if(canCancel && walletData) {
             const newMovement = {...walletData};
             newMovement.id = null;
             newMovement.amount = priceFormat(parseFloat(walletData.amount) * -1, '', false);
@@ -108,6 +108,7 @@ const WalletEdit = (props) => {
     const isNotExpired = moment().isSameOrBefore(addDays);
 
     const canEdit = ((HasPermissionsFunc([PERMISSIONS.WALLET_EDIT])) && isEdit && isNotExpired || !isEdit) && !walletData.canceled;
+    const canCancel = ((HasPermissionsFunc([PERMISSIONS.WALLET_EDIT])) && (isEdit || !isEdit)) && !walletData.canceled;
     const canAttach = ((HasPermissionsFunc([PERMISSIONS.WALLET_EDIT])) && isEdit) && !walletData.canceled;
 
     //only show mode
@@ -373,7 +374,7 @@ const WalletEdit = (props) => {
                     <HasPermissions permissions={[PERMISSIONS.WALLET_CREATE, PERMISSIONS.WALLET_EDIT, PERMISSIONS.WALLET_SHOW]} renderNoAccess={() => <NoAccess/>}>
 
                         <div className={"mb-3 float-md-end"}>
-                            {canEdit && (
+                            {canCancel && (
                                 <div className="button-items">
                                     <Tooltip placement="bottom" title="Generar Reverso" aria-label="add">
                                         <ButtonLoading loading={props.loading} type="button" color="primary" className="btn-sm btn btn-outline-danger waves-effect waves-light" onClick={() => cancelMovement()}>

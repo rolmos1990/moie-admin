@@ -1,6 +1,6 @@
 import React from "react"
 import Conditionals from "../../../common/conditionals";
-import {formatDate, priceFormat} from "../../../common/utils";
+import {formatDate, PAYMENT_OPTIONS, priceFormat, STATUS_OPTIONS} from "../../../common/utils";
 import {StatusField} from "../../../components/StatusField";
 import {ORDER_STATUS, PAYMENT_STATUS} from "../../../common/constants";
 
@@ -83,7 +83,9 @@ const paymentsColumns = (onSelected) => [
         dataField: "status",
         sort: true,
         filter: true,
-        filterType: "text",
+        filterType: "select",
+        filterOptions: PAYMENT_OPTIONS,
+        filterDefaultOption: PAYMENT_OPTIONS[0],
         formatter: (cellContent, item) => (
             <StatusField color={PAYMENT_STATUS[item.status]?.color}>
                 {PAYMENT_STATUS[item.status]?.name}

@@ -18,10 +18,11 @@ import PaymentOverlay from "../paymentOverlay";
 import {PERMISSIONS} from "../../../helpers/security_rol";
 import HasPermissions from "../../../components/HasPermissions";
 import OutsideClickHandler from "../../../components/OutsideClickHandler";
+import {clearTableConditions, saveTableConditions} from "../../../store/layout/actions";
 
 
 const PaymentsList = props => {
-    const {payments, meta, onGetPayments, onDeletePayment, loading, refresh} = props;
+    const {payments, meta, onGetPayments, onDeletePayment, loading, refresh, onSaveTableConditions, onClearTableConditions, conditionType, conditions, offset} = props;
     const [paymentsList, setPaymentsList] = useState([])
     const [paymentSelected, setPaymentSelected] = useState(null);
     const [filter, setFilter] = useState(false);
@@ -36,11 +37,17 @@ const PaymentsList = props => {
         page: defaultPage,
         onPageChange: (page, sizePerPage) => {
             setDefaultPage(page);
+            onSaveTableConditions(conditions, offset, 'payments');
         },
     }
 
     useEffect(() => {
+        if(conditionType !== 'payments'){
+        onClearTableConditions();
         onGetPayments();
+        } else {
+            onFilterAction(conditions, offset);
+        }
     }, [refresh, onGetPayments])
 
     useEffect(() => {
@@ -52,9 +59,15 @@ const PaymentsList = props => {
     }
 
     const onFilterAction = (condition) => {
+        const page = Math.floor(offset / DEFAULT_PAGE_LIMIT);
         setConditional(condition);
-        onGetPayments(condition, DEFAULT_PAGE_LIMIT, 0);
-        setDefaultPage(1);
+        onGetPayments(condition, DEFAULT_PAGE_LIMIT, offset);
+        setDefaultPage(page + 1);
+        if(condition && condition.length > 0) {
+            onSaveTableConditions(condition, offset, 'payments');
+        } else {
+            onClearTableConditions();
+        }
     }
 
     const columns = paymentsColumns(setPaymentSelected);
@@ -86,7 +99,7 @@ const PaymentsList = props => {
                                                     <Col md={6}>
                                                         <div className="form-inline mb-3">
                                                             <div className="search-box ms-2">
-                                                                <h4 className="text-info"><i className="uil-shopping-cart-alt me-2"></i> Pagos</h4>
+                                                                <h4 className="text-info"><i className="uil-shopping-cart-alt me-2"></i> Pagos {conditionType && <small className={'font-size-12 badge rounded-pill bg-grey'}>Filtrados</small>}</h4>
                                                             </div>
                                                         </div>
                                                     </Col>
@@ -161,11 +174,15 @@ PaymentsList.propTypes = {
 
 const mapPaymentToProps = state => {
     const {payments, loading, meta, refresh} = state.Payments
-    return {payments, loading, meta, refresh}
+    const {conditionType, conditions, offset} = state.Layout;
+
+    return {payments, loading, meta, refresh, conditionType, conditions, offset}
 }
 
 const mapDispatchToProps = dispatch => ({
     onGetPayments: (conditional = null, limit = DEFAULT_PAGE_LIMIT, page) => dispatch(getPayments(conditional, limit, page)),
+    onSaveTableConditions: (conditions, offset, conditionType) => dispatch(saveTableConditions(conditions, offset, conditionType)),
+    onClearTableConditions: () => dispatch(clearTableConditions())
 })
 
 export default connect(

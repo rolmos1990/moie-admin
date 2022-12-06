@@ -37,14 +37,14 @@ const postSaleColumns = () => {
             text: "Fecha de importación / (Sync)",
             dataField: "postSaleDate",
             sort: true,
-            filter: true,
+            filter: false,
             filterType: "dateRange",
             formatter: (cellContent, item) => (
                 <div>{formatDate(item.postSaleDate, DATE_FORMAT.ONLY_DATE)} / {item.orderDelivery.syncDate ? formatDate(item.orderDelivery.syncDate) : ''}</div>
             ),
         },
         {
-            text: "Fecha de Sync.",
+            text: "Fecha de importación",
             dataField: "postSaleDate",
             sort: true,
             filter: true,

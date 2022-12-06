@@ -6,6 +6,7 @@ import {Button as ButtonMaterial} from "@material-ui/core";
 import Conditionals from "../../common/conditionals";
 import {FieldAsyncSelect, FieldDate, FieldNumber, FieldSelect, FieldText} from "../Fields";
 import {
+    __trim,
     formatDateToServer,
     formatDateToServerEndOfDay,
     formatDateToServerStartOfDay,
@@ -82,11 +83,12 @@ export const TableFilter = (props) => {
         if (field && field.length) {
             fieldName = fieldName.replace('__', ".")
             const filter = field[0];
-            const value = data[dataField];
+            let value = data[dataField];
 
             let operator;
             if (filter.filterType === "text") {
                 operator = filter.filterCondition ? filter.filterCondition : Conditionals.OPERATORS.LIKE;
+                value = __trim(value);
                 conditions.add(fieldName, value, operator);
             }
             if (filter.filterType === "voyed") {//for status

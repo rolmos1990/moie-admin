@@ -23,6 +23,13 @@ export const STATUS_OPTIONS = [
     {label: "Inactive", value: false}
 ];
 
+export const PAYMENT_OPTIONS = [
+    {label: '-', value: null},
+    {label: "Pendiente", value: 0},
+    {label: "Conciliado", value: 1},
+    {label: "Anulado", value: 2}
+];
+
 export const DATE_FORMAT = {
     FULL_DATE: 'FULL_DATE',
     ONLY_DATE: 'ONLY_DATE',
@@ -294,4 +301,17 @@ export const trim = (_str) => {
     _str = _str.trim();
     _str = _str.replace(/\s+/g, '').trim();
     return _str;
+}
+
+//trim double spaces
+export const __trim = (_str) => {
+    try {
+        if (!_str) {
+            return _str;
+        }
+        _str = _str.trim().replace(/\s+/g, " ");
+        return _str;
+    }catch(e){
+        return _str;
+    }
 }

@@ -82,8 +82,14 @@ const PostSaleList = props => {
     const onFilterAction = (condition, offset = 0) => {
         const page = Math.floor(offset / DEFAULT_PAGE_LIMIT);
         setConditional(condition);
+
+/*        if((condition.filter(item => item.field === 'postSaleDate').length) > 1){
+            condition = condition.filter(item => item.field === 'postSaleDate' && item.operator !== '$nnull');
+        }*/
+
         onGetOrders(condition, DEFAULT_PAGE_LIMIT, offset);
         setDefaultPage(page + 1);
+
         if(condition && condition.length > 0) {
             onSaveTableConditions(condition, offset, 'postSale');
         } else {
