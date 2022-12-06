@@ -101,6 +101,7 @@ const OrderEdit = (props) => {
     const [openTrackingModal, setOpenTrackingModal] = useState(false);
     const [allowEdit, setAllowEdit] = useState(false);
     const [allowUpdateTracking, setAllowUpdateTracking] = useState(false);
+    const [carRefresh, setCarRefresh] = useState(false);
 
     const productSummaryRef = React.createRef();
 
@@ -168,7 +169,7 @@ const OrderEdit = (props) => {
 
         setAllowEdit(canEdit());
         setAllowUpdateTracking(canUpdateTracking());
-    }, [order]);
+    }, [order, carRefresh]);
 
     useEffect(() => {
         if (resume) {
@@ -212,6 +213,7 @@ const OrderEdit = (props) => {
     }
     const onCloseModal = () => {
         toggleModal();
+        setCarRefresh(!carRefresh);
         onUpdateCar({...car, customer: {}});
     }
     const onAcceptModal = () => {
@@ -226,6 +228,7 @@ const OrderEdit = (props) => {
     }
     const onCloseDeliveryModal = () => {
         toggleDeliveryModal();
+        setCarRefresh(!carRefresh);
     }
     const onAcceptDeliveryModal = () => {
         if (car.deliveryOptions) {
@@ -244,6 +247,10 @@ const OrderEdit = (props) => {
                 if (DELIVERY_METHODS_PAYMENT_TYPES.includes(deliveryData.deliveryMethod)) {
                     deliveryData.piecesForChanges = parseInt(car.deliveryOptions.piecesForChanges);
                     deliveryData.paymentMode = car.deliveryOptions.paymentType === PAYMENT_TYPES.CASH ? 1 : 2;
+                }
+
+                if(deliveryData.deliveryType == CHARGE_ON_DELIVERY && deliveryData.deliveryMethod == 'MENSAJERO'){
+                    deliveryData.deliveryLocality = null;
                 }
 
                 if (deliveryData.deliveryType == CHARGE_ON_DELIVERY || deliveryData.deliveryMethod == 'PAYU') {
@@ -270,6 +277,7 @@ const OrderEdit = (props) => {
 
     const onCloseTrackingModal = () => {
         toggleTrackingModal();
+        setCarRefresh(!carRefresh);
     }
 
     const onAcceptTrackingModal = (_tracking) => {
@@ -287,6 +295,7 @@ const OrderEdit = (props) => {
     }
     const onCloseProductsModal = () => {
         toggleProductsModal();
+        setCarRefresh(!carRefresh);
     }
     const onAcceptProductsModal = () => {
         toggleProductsModal();
@@ -861,8 +870,14 @@ const OrderEdit = (props) => {
                                 <Card id={'summary-detail'} className="p-3">
                                     <Row>
                                         <Row>
-                                            <Col md={10}>
-                                                <h4 className="card-title text-info"><i className="uil uil-bill"> </i> Totales</h4>
+                                            <Col md={8}>
+                                                <h4 className="card-title text-info"><i className="uil uil-bill"> </i> Totales </h4>
+                                            </Col>
+                                            <Col md={2}>
+                                                <div className="card-title text-right"><span><Tooltip placement="bottom" title="Prendas" aria-label="add">
+                                                    <i className="fa fa-shopping-bag text-warning"></i>
+                                                </Tooltip></span> : {orderData.quantity}
+                                                </div>
                                             </Col>
                                             <Col md={2}>
                                                 <div className="card-title text-right"><span><Tooltip placement="bottom" title="Peso" aria-label="add">

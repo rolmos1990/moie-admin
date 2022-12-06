@@ -12,6 +12,7 @@ import {getDeliveryMethods, getDeliveryQuote, updateCard} from "../../../store/o
 import {arrayToOptions, getEmptyOptions} from "../../../common/converters";
 import {Button} from "@material-ui/core";
 import {getAllDeliveryLocalities} from "../../../store/deliveryLocality/actions";
+import {sortAlphanumeric} from "../../../common/utils";
 
 const OrderDeliveryOptions = (props) => {
     const {
@@ -87,7 +88,10 @@ const OrderDeliveryOptions = (props) => {
     useEffect(() => {
         if (deliveryMethod) {
             setShowPaymentType(DELIVERY_METHODS_PAYMENT_TYPES.includes(deliveryMethod));
-            setOtherMethod(null);
+
+            if(deliveryMethod !== DELIVERY_METHODS.OTRO) {
+                setOtherMethod(null);
+            }
             //getQuote();
             onChangeDeliveryOptions();
         }
@@ -186,7 +190,8 @@ const OrderDeliveryOptions = (props) => {
                         <FieldSelect
                             id={"originOrder"}
                             name={"originOrder"}
-                            options={originOrders}
+                            isSearchable={true}
+                            options={sortAlphanumeric(originOrders,'label')}
                             defaultValue={originOrder}
                             onChange={item => setOriginOrder(item.value)}
                             required

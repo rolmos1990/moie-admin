@@ -315,3 +315,18 @@ export const __trim = (_str) => {
         return _str;
     }
 }
+
+//sort alphanumeric
+export const sortAlphanumeric = (arr,key) => {
+    try {
+        const sorted = arr.sort((a, b) => {
+            return a[key].localeCompare(b[key], undefined, {
+                numeric: true,
+                sensitivity: 'base'
+            })
+        })
+        return sorted;
+    }catch(e){
+        return arr;
+    }
+};

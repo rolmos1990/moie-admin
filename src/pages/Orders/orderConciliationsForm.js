@@ -221,6 +221,7 @@ const OrderConciliationForm = ({
                                         onChange={(e) => {
                                             setLote(e.target.value);
                                         }}
+                                        maxLength={3000}
                                     />
                                 </Col>
                             )}
@@ -235,6 +236,7 @@ const OrderConciliationForm = ({
                                         onChange={(e) => {
                                             setLote(e.target.value);
                                         }}
+                                        maxLength={3000}
                                     />
                                 </Col>
                             )}

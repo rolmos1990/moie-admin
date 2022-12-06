@@ -21,9 +21,10 @@ import StatsRegisteredCard from "../../../components/Common/StatsRegisteredCard"
 import CountUp from "react-countup";
 import {PERMISSIONS} from "../../../helpers/security_rol";
 import HasPermissions from "../../../components/HasPermissions";
+import {clearTableConditions, saveTableConditions} from "../../../store/layout/actions";
 
 const CustomersList = props => {
-    const {customers, meta, onGetCustomers, onResetCustomers, onDeleteCustomer, onGetCustomerRegistereds, refresh, countCustomersByStatus, registereds} = props;
+    const {customers, meta, onGetCustomers, onResetCustomers, onDeleteCustomer, onGetCustomerRegistereds, refresh, countCustomersByStatus, registereds, onSaveTableConditions, onClearTableConditions, conditionType, conditions, offset} = props;
     const [customerList, setCustomerList] = useState([])
     const [filter, setFilter] = useState(false);
     const [conditional, setConditional] = useState(null);
@@ -36,18 +37,30 @@ const CustomersList = props => {
         page: defaultPage,
         onPageChange: (page, sizePerPage) => {
             setDefaultPage(page);
+            const offset = (page - 1) * DEFAULT_PAGE_LIMIT;
+            onSaveTableConditions(conditions, offset, 'customer');
         },
     }
 
     useEffect(() => {
-        onResetCustomers();
-        onGetCustomers();
+
         onGetCustomerRegistereds();
         countMayoristas().then(data => {
             if (data[1]) {
                 setCountMayorista(data[1])
             }
         })
+
+        if(conditionType !== 'customer'){
+            onClearTableConditions();
+            onResetCustomers();
+            onGetCustomers();
+        } else {
+            //reload the filter loaded
+            onFilterAction(conditions, offset);
+        }
+
+
     }, [refresh, onGetCustomers])
 
     useEffect(() => {
@@ -59,9 +72,16 @@ const CustomersList = props => {
     }
 
     const onFilterAction = (condition) => {
+        const page = Math.floor(offset / DEFAULT_PAGE_LIMIT);
         setConditional(condition);
-        onGetCustomers(condition, DEFAULT_PAGE_LIMIT, 0);
-        setDefaultPage(1);
+        onGetCustomers(condition, DEFAULT_PAGE_LIMIT, offset);
+        setDefaultPage(page + 1);
+        if(condition && condition.length > 0) {
+            onSaveTableConditions(condition, offset, 'customer');
+        } else {
+            onClearTableConditions();
+        }
+
     }
     const onConfirmDelete = (id) => {
         onDeleteCustomer(id);
@@ -134,13 +154,7 @@ const CustomersList = props => {
                                                     <Col md={6}>
                                                         <div className="form-inline mb-3">
                                                             <div className="search-box ms-2">
-                                                                <h4 className="text-info"><i className="uil-users-alt me-2"></i> Clientes</h4>
-                                                                {/* {!filter && (
-                                                                            <div className="position-relative">
-                                                                                <SearchBar {...toolkitProps.searchProps}/>
-                                                                                <i className="mdi mdi-magnify search-icon"></i>
-                                                                            </div>
-                                                                        )}*/}
+                                                                <h4 className="text-info"><i className="uil-users-alt me-2"></i> Clientes {conditionType && <small className={'font-size-12 badge rounded-pill bg-grey'}>Filtrados</small>}</h4>
                                                             </div>
                                                         </div>
                                                     </Col>
@@ -200,7 +214,8 @@ CustomersList.propTypes = {
 
 const mapStateToProps = state => {
     const {customers, loading, meta, refresh, custom, registereds} = state.Customer
-    return {customData: custom, customers, loading, meta, refresh, registereds}
+    const {conditionType, conditions, offset} = state.Layout;
+    return {customData: custom, customers, loading, meta, refresh, registereds, conditionType, conditions, offset}
 }
 
 const mapDispatchToProps = dispatch => ({
@@ -213,7 +228,9 @@ const mapDispatchToProps = dispatch => ({
     countCustomersByStatus,
     countMayoristas,
     onGetCustomers: (conditional = null, limit = DEFAULT_PAGE_LIMIT, page) => dispatch(getCustomers(conditional, limit, page)),
-    onDeleteCustomer: (id) => dispatch(deleteCustomer(id))
+    onDeleteCustomer: (id) => dispatch(deleteCustomer(id)),
+    onSaveTableConditions: (conditions, offset, conditionType) => dispatch(saveTableConditions(conditions, offset, conditionType)),
+    onClearTableConditions: () => dispatch(clearTableConditions())
 })
 
 export default connect(

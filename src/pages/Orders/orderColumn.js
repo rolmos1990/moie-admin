@@ -91,7 +91,7 @@ const orderColumns = (onSelectedOrder, showAsModal, conciliationView) => {
             filter: true,
             filterType: "dateRange",
             formatter: (cellContent, item) => (
-                <div>{formatDate(item.createdAt)}</div>
+                <div>{item.modifiedDate ? formatDate(item.modifiedDate) : formatDate(item.createdAt)}</div>
             ),
         },
         {
