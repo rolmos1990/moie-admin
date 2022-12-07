@@ -2,6 +2,7 @@ import axios from "axios";
 import accessToken from "./jwt-token-access/accessToken";
 import authHeader from "./jwt-token-access/auth-token-header";
 import {b64toBlob} from "../common/utils";
+import {showMessage} from "../components/MessageToast/ShowToastMessages";
 
 //pass new generated access token here
 const token = authHeader().Authorization || accessToken;
@@ -37,24 +38,42 @@ export async function file(filename, url, config, params) {
   }
 }
 
+export function resolveResponseData(response) {
+  try {
+      if(response && response.data && response.data.code === 440) {
+        localStorage.removeItem("authUser");
+        showMessage.warning('Su sesion ha expirado!');
+        setTimeout(function() {
+          window.location = '/';
+        }, 1000);
+        return response.data;
+      } else if(response && response.data){
+        return response.data;
+      } else {
+        return response;
+      }
+  }catch(e){
+    return response.data;
+  }
+}
 export async function get(url, config = {}, params = undefined) {
-  return await axiosApi.get(url, {params: params, config: config}).then(response => response.data);
+  return await axiosApi.get(url, {params: params, config: config}).then(response => resolveResponseData(response));
 }
 
 export async function post(url, data, config = {}) {
   return axiosApi
     .post(url, data, { ...config })
-    .then(response => response.data);
+    .then(response => resolveResponseData(response));
 }
 
 export async function put(url, data, config = {}) {
   return axiosApi
     .put(url,  data , { ...config })
-    .then(response => response.data);
+    .then(response => resolveResponseData(response.data));
 }
 
 export async function del(url, config = {}) {
   return await axiosApi
     .delete(url, { ...config })
-    .then(response => response.data);
+    .then(response => resolveResponseData(response.data));
 }

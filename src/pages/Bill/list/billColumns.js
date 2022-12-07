@@ -58,18 +58,18 @@ const municipalityColumns = (onDelete = false) => [
         text: "Impuesto",
         dataField: "tax",
         sort: true,
-        filter: true,
+        filter: false,
         filterType: "number"
     },
     {
         text: "Nota de Crédito",
         dataField: "creditMemo",
         sort: true,
-        filter: false,
-        filterType: "voyed",
+        filter: true,
+        filterType: "select",
         filterOptions: [
-            { label: "No", value: false },
-            { label: "Si", value: true }
+            { label: "No", value: 0 },
+            { label: "Si", value: 1 }
         ],
         formatter: (cellContent, item) => (
             <>

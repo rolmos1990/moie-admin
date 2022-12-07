@@ -8,6 +8,7 @@ import {map} from "lodash";
 import {pendingProducts} from "../../store/product/actions";
 import {StatusField} from "../../components/StatusField";
 import {ORDER_STATUS} from "../../common/constants";
+import {formatDate} from "../../common/utils";
 
 const ProductsPendingList = ({onGetProductsPending, product, pendingProducts}) => {
 
@@ -31,7 +32,7 @@ const ProductsPendingList = ({onGetProductsPending, product, pendingProducts}) =
                            <thead>
                            <tr>
                                <th style={{width: '25%'}} className="text-center">Pedido #</th>
-                               <th style={{width: '25%'}} className="text-center">Color</th>
+                               <th style={{width: '25%'}} className="text-center">Fecha</th>
                                <th style={{width: '25%'}} className="text-center">Talla</th>
                                <th style={{width: '25%'}} className="text-center">Cantidad</th>
                                <th style={{width: '25%'}} className="text-center">Cliente</th>
@@ -46,7 +47,7 @@ const ProductsPendingList = ({onGetProductsPending, product, pendingProducts}) =
                                            <small className="font-weight-600 text-info">{prod.order.id}</small>
                                        </Link>
                                    </td>
-                                   <td className="text-center">{prod.color}</td>
+                                   <td className="text-center">{prod.order.modifiedDate ? formatDate(prod.order.modifiedDate) : formatDate(prod.order.createdAt)}</td>
                                    <td className="text-center">{prod.size}</td>
                                    <td className="text-center">{prod.quantity}</td>
                                    <td className="text-center">{prod.customer.name}</td>

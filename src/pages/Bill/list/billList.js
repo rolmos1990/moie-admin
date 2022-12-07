@@ -70,6 +70,19 @@ const BillList = props => {
 
     const onFilterAction = (condition, offset = 0) => {
         const page = Math.floor(offset / DEFAULT_PAGE_LIMIT);
+
+        let creditMemo = condition.find(c => c.field === 'creditMemo');
+
+        if(creditMemo && creditMemo.value === 1){
+            condition.push({field: 'creditMemo.id', value: '', operator: Conditionals.OPERATORS.NOT_NULL});
+        } else if(creditMemo && creditMemo.value === 0){
+            condition.push({field: 'creditMemo.id', value: '', operator: Conditionals.OPERATORS.NULL});
+        } else {
+            condition = condition.filter(c => c.field !== 'creditMemo.id');
+        }
+
+        condition = condition.filter(c => c.field !== 'creditMemo');
+
         setConditional(condition);
         onGetBills(condition, DEFAULT_PAGE_LIMIT, offset);
         setDefaultPage(page + 1);

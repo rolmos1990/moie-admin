@@ -19,6 +19,7 @@ const OrderDeliveryOptions = (props) => {
         onUpdateCar, car, fieldOptions, onGetFieldOptions, onGetDeliveryMethods, onGetDeliveryQuote, deliveryMethods, deliveryQuote,
         showAsModal, onCloseModal, onAcceptModal, pOriginOrder,
         onGetDeliveryLocalities, deliveryLocalities,
+        order
     } = props;
 
     const [initComponent, setInitComponent] = useState(true);
@@ -175,6 +176,12 @@ const OrderDeliveryOptions = (props) => {
         onAcceptModal(car);
     }
 
+    const isDisabled = () => {
+        if(!order || !order.orderDelivery){
+            return false;
+        }
+        return (order.status == 5 && order.orderDelivery && order.orderDelivery.deliveryType === 1);
+    }
     const showGuia = () => car.deliveryOptions.tracking
     return (
         <React.Fragment>
@@ -206,6 +213,7 @@ const OrderDeliveryOptions = (props) => {
                             defaultValue={deliveryType}
                             onChange={item => setDeliveryType(item.value)}
                             required
+                            disabled={isDisabled()}
                         />
                     </Col>
                     <Col md={6} className="p-1">
@@ -329,8 +337,8 @@ const mapDispatchToProps = dispatch => ({
 const mapStateToProps = state => {
     const {deliveryLocalities} = state.DeliveryLocalities
     const {fieldOptions} = state.FieldOption
-    const {car, deliveryMethods, deliveryQuote} = state.Order
-    return {car, deliveryLocalities, deliveryMethods: deliveryMethods.data, deliveryQuote: deliveryQuote.data, fieldOptions};
+    const {car, deliveryMethods, deliveryQuote, order} = state.Order
+    return {car, deliveryLocalities, deliveryMethods: deliveryMethods.data, deliveryQuote: deliveryQuote.data, fieldOptions, order};
 }
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(OrderDeliveryOptions))

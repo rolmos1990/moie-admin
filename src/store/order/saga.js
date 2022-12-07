@@ -263,11 +263,12 @@ function* update({payload: {id, data, history}}) {
 
 function* updateOrderProducts({payload: {id, data, history}}) {
     try {
-        const response = yield call(PUT_ORDER_PRODUCTS_API_REQUEST, id, data)
+        const response = yield call(PUT_ORDER_PRODUCTS_API_REQUEST, id, data);
         showResponseMessage(response, "Operación exitosa!");
-        yield put(UPDATE_SUCCESS_ACTION(response.order))
+        yield put(UPDATE_SUCCESS_ACTION(response.order));
         yield put(getOrder(id))
     } catch (error) {
+        console.log('error generado..', error.message);
         yield put(CREATE_FAILED_ACTION(getErrorMessage(error)))
     }
 }
