@@ -208,7 +208,7 @@ const Header = props => {
                     </div>
 
                     <UsersSalesDropdown/>
-                    {/*<NotificationDropdown/>*/}
+                    <NotificationDropdown/>
                     <ProfileMenu/>
 
                     {/*            <div className="dropdown d-inline-block">

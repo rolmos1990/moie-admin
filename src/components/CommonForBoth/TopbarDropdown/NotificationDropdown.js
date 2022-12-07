@@ -19,7 +19,7 @@ const NotificationDropdown = props => {
 
   return (
     <>
-      <Dropdown
+      {/*<Dropdown
         isOpen={menu}
         toggle={() => setMenu(!menu)}
         className="dropdown d-inline-block"
@@ -33,7 +33,7 @@ const NotificationDropdown = props => {
           <i className="uil-bell"></i>
         </DropdownToggle>
 
-      </Dropdown>
+      </Dropdown>*/}
 
       <PrintBatchRequest />
       <CatalogPrintBatchRequest />

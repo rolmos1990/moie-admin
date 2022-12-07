@@ -168,7 +168,7 @@ const Header = props => {
             </Dropdown>
 
             <UsersSalesDropdown />
-           {/* <NotificationDropdown />*/}
+            <NotificationDropdown />
             <ProfileMenu />
             <div onClick={() => props.showRightSidebarAction(!props.showRightSidebar)}
               className="dropdown d-inline-block">
