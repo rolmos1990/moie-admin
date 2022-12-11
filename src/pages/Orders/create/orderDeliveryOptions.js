@@ -107,9 +107,9 @@ const OrderDeliveryOptions = (props) => {
 
     useEffect(() => {
         if (deliveryMethod && deliveryQuote) {
-            if (!car.isEdit) {
+            /*if (!car.isEdit) {
                 setDeliveryCost(parseFloat(deliveryQuote.amount));
-            }
+            }*/
             onChangeDeliveryOptions();
         }
     }, [deliveryQuote]);
