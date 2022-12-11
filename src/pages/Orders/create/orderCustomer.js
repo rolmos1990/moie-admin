@@ -126,6 +126,7 @@ const OrderCustomer = (props) => {
                                 defaultValue={customerDefault}
                                 isClearable={true}
                                 hasWild={true}
+                                noDoubleSpaces={true}
                                 conditionalOptions={{fieldName: 'name', operator: Conditionals.OPERATORS.LIKE}}
                                 onChange={(c, meta) => {
                                     if(meta.action === "clear"){
@@ -147,6 +148,7 @@ const OrderCustomer = (props) => {
                                 urlStr={CUSTOMER}
                                 placeholder="Buscar por documento"
                                 defaultValue={customerDocumentDefault}
+                                noDoubleSpaces={true}
                                 removeDots={true}
                                 isClearable={true}
                                 hasWild={false}
@@ -173,6 +175,7 @@ const OrderCustomer = (props) => {
                                 defaultValue={customerEmailDefault}
                                 isClearable={true}
                                 hasWild={true}
+                                noDoubleSpaces={true}
                                 conditionalOptions={{fieldName: 'email', operator: Conditionals.OPERATORS.LIKE}}
                                 onChange={(c, meta) => {
                                     if(meta.action === "clear"){
@@ -191,6 +194,7 @@ const OrderCustomer = (props) => {
                             <FieldAsyncSelect
                                 name={"phone"}
                                 urlStr={CUSTOMER}
+                                noSpaces={true}
                                 placeholder="Buscar por número de teléfono"
                                 defaultValue={customerEmailDefault}
                                 isClearable={true}

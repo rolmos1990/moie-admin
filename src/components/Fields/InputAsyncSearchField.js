@@ -8,7 +8,7 @@ import {arrayToOptionsByFieldName, getEmptyOptions} from "../../common/converter
 import {AvBaseInput} from "availity-reactstrap-validation";
 import messages from "./messages";
 import Conditionals from "../../common/conditionals";
-import {trim} from "../../common/utils";
+import {__trim, trim} from "../../common/utils";
 
 const InputAsyncSearchField = (props) => {
     const {defaultValue, conditionalOptions, defaultConditions} = props;
@@ -29,6 +29,7 @@ const InputAsyncSearchField = (props) => {
             urlStr={props.urlStr}
             isClearable={props.isClearable}
             noSpaces={props.noSpaces}
+            noDoubleSpaces={props.noDoubleSpaces}
             onKeyPress={props.onKeyPress ? props.onKeyPress : null}
             onChange={(value, meta) => {
                 setSelected(value)
@@ -49,7 +50,7 @@ InputAsyncSearchField.propTypes = {
 
 class AvAsyncSearchInput extends AvBaseInput {
     render() {
-        const {name, value, onChange, validate, isClearable, hasWild, urlStr, conditionalOptions, defaultConditions, placeholder, helpMessage, onKeyPress, removeDots, noSpaces} = this.props;
+        const {name, value, onChange, validate, isClearable, hasWild, urlStr, conditionalOptions, defaultConditions, placeholder, helpMessage, onKeyPress, removeDots, noSpaces, noDoubleSpaces} = this.props;
         const validation = this.context.FormCtrl.getInputState(this.props.name);
         const feedback = validation.errorMessage ? (<div className="invalid-feedback" style={{display: "block"}}>{validation.errorMessage}</div>) : null;
         const help = helpMessage ? (<FormText>{helpMessage}</FormText>) : null;
@@ -77,6 +78,9 @@ class AvAsyncSearchInput extends AvBaseInput {
                             if(noSpaces){
                                 textSearch = trim(textSearch);
                             }
+                            if(noDoubleSpaces){
+                                textSearch = __trim(textSearch);
+                            }
 
 
                             if(hasWild && inputValue.includes("*")){
@@ -87,6 +91,9 @@ class AvAsyncSearchInput extends AvBaseInput {
                             } else {
                                 cond.operator = Conditionals.OPERATORS.EQUAL;
                             }
+
+                            console.log('text to search: ', textSearch);
+                            console.log('cond: operator:', cond.operator);
 
                            return getData(urlStr, textSearch, cond, defaultConditions).then(response => {
                                const fieldName = conditionalOptions && conditionalOptions.fieldName ? conditionalOptions.fieldName : 'name';
