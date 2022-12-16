@@ -164,8 +164,10 @@ const orderColumns = (onSelectedOrder, showAsModal, conciliationView) => {
             sort: false,
             filterType: "asyncSelect",
             filter: true,
-            urlStr: USER + '?limit=100&conditional=status$true',
+            urlStr: USER,
+            hasWild: true,
             conditionalOptions: {fieldName: 'name', operator: Conditionals.OPERATORS.LIKE},
+            defaultConditions: [{field: 'status', value: '', operator: Conditionals.OPERATORS.TRUE}],
             formatter: (cellContent, item) => (
                 <div>{item.user.name}</div>
             ),

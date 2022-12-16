@@ -237,6 +237,8 @@ export const TableFilter = (props) => {
                                                 placeholder={field.text}
                                                 defaultValue={field.filterDefaultOption}
                                                 conditionalOptions={field.conditionalOptions}
+                                                defaultConditions={field.defaultConditions}
+                                                hasWild={field.hasWild}
                                             />
                                         </div>
                                     </Col>
