@@ -308,6 +308,7 @@ const ProductEdit = (props) => {
                                                                         setSizeSelected(sizes.find(s => s.id === e.value));
                                                                     }
                                                                 }}
+                                                                required
                                                                 disabled={hasOrders || product.id}
                                                                 isSearchable
                                                             />
