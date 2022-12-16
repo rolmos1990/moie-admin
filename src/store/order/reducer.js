@@ -358,7 +358,7 @@ const order = (state = initialState, action) => {
                 ...state,
                 batchRequest: {
                     ...state.batchRequest,
-                    error: action.error,
+                    error: action.error +" - "+ Date.now(),
                     loading: false
                 },
                 error: action.error

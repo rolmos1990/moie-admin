@@ -11,7 +11,7 @@ import {changePreloader} from "../../store/layout/actions";
 
 const PrintBatchRequest = (props) => {
 
-    const {batch, conditionals, doRequest, refresh} = props;
+    const {batch, conditionals, doRequest, refresh, error} = props;
     const [openPrintConfirmModal, setOpenPrintConfirmModal] = useState(false);
 
     useEffect(() => {
@@ -38,6 +38,13 @@ const PrintBatchRequest = (props) => {
             printOrder(html)
         }
     }, [batch]);
+
+    useEffect(() => {
+        if (error) {
+            setOpenPrintConfirmModal(false);
+            props.onChangePreloader(false);
+        }
+    }, [error]);
 
     const printOrder = (text) => {
         setOpenPrintConfirmModal(true)
