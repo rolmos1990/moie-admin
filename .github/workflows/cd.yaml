@@ -31,7 +31,7 @@ jobs:
       - run: REACT_APP_ENV=production yarn build
 
       - uses: benjlevesque/short-sha@v1.2
-      - uses: elgohr/Publish-Docker-Github-Action@master
+      - uses: elgohr/Publish-Docker-Github-Action@v5
         name: Publish to Github Packages Registry
         with:
           name: ${{ secrets.DOCKER_REPOSITORY }}
