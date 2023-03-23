@@ -158,6 +158,9 @@ const fetchTemplateApi = (id) => get(`${url.TEMPLATES}/${id}`, {});
 const registerTemplateApi = data => post(url.TEMPLATES, data);
 const updateTemplateApi = (id, data) => put(`${url.TEMPLATES}/${id}`, data);
 
+//templates catalogs
+const fetchTemplatesCatalogsApi = data => get(url.TEMPLATES_CATALOG, {}, data);
+
 //wallet
 const fetchWalletsApi = data => get(url.WALLETS, {}, data);
 const fetchWalletApi = (id) => get(`${url.WALLETS}/${id}`, {});
@@ -284,6 +287,8 @@ export {
     fetchTemplateApi,
     registerTemplateApi,
     updateTemplateApi,
+
+    fetchTemplatesCatalogsApi,
 
     fetchWalletsApi,
     fetchWalletApi,

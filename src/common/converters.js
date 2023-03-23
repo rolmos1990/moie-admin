@@ -28,6 +28,12 @@ export const statesToOptions = (states) => {
         value: item.id
     }));
 }
+export const arrayToOptionsDescription = (array) => {
+    return array.map(item => ({
+        label: item.description,
+        value: item.id
+    }));
+}
 export const arrayToOptions = (array) => {
     return array.map(item => ({
         label: item.name,

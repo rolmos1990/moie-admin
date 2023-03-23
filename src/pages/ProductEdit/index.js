@@ -13,7 +13,7 @@ import {FieldNumber, FieldSelect, FieldSwitch, FieldText} from '../../components
 import {Card} from "@material-ui/core";
 import {getCategories} from "../../store/category/actions";
 import {getSizes} from "../../store/sizes/actions";
-import {arrayToOptions} from "../../common/converters";
+import {arrayToOptions, arrayToOptionsDescription} from "../../common/converters";
 import {GROUPS, STATUS} from "../../common/constants";
 import ProductSize from "./ProductSize";
 import ProductImage from "./ProductImage";
@@ -23,6 +23,7 @@ import Autocomplete from "../../components/Fields/Autocomplete";
 import {PERMISSIONS} from "../../helpers/security_rol";
 import NoAccess from "../../components/Common/NoAccess";
 import HasPermissions from "../../components/HasPermissions";
+import {getTemplatesCatalog} from "../../store/template/actions";
 
 const ProductEdit = (props) => {
 
@@ -43,13 +44,16 @@ const ProductEdit = (props) => {
         product, categories, sizes, fieldOptions, refreshProduct,
         onGetProduct, onCreateProduct, onUpdateProduct,
         onGetCategories, onGetSizes, onResetProductSize, onResetProductImages,
-        onGetFieldOptions, onCreateFieldOption, refreshFieldOptions, onDeleteProductImage
+        onGetFieldOptions, onCreateFieldOption, refreshFieldOptions, onDeleteProductImage,
+        templatesCatalog, onGetTemplateCatalogs
     } = props;
 
     const [productData, setProductData] = useState({_status: STATUS.ACTIVE, sizeModelList: []});
 
     const [categoriesList, setCategoriesList] = useState([]);
     const [categoryDefault, setCategoryDefault] = useState({});
+    const [templateCatalogList, setTemplateCatalogList] = useState([]);
+    const [templateCatalogDefault, setTemplateCatalogDefault] = useState({});
 
     const [materialsList, setMaterialsList] = useState([]);
     const [providerList, setProviderList] = useState([]);
@@ -72,10 +76,11 @@ const ProductEdit = (props) => {
         onGetCategories();
         onGetSizes();
         onGetFieldOptions();
+        onGetTemplateCatalogs();
+
     }, [onGetProduct]);
 
     useEffect(() => {
-        console.log("reiniciando");
         if (product.id) {
             onGetProduct(product.id);
         }
@@ -88,6 +93,7 @@ const ProductEdit = (props) => {
         if (product.id) {
             setProductData({...product, _status: product.status});
             setCategoryDefault(product.category?.id || null);
+            setTemplateCatalogDefault(product.template || null);
             setSizeDefault(product.size?.id || null);
             if (!isEdit) {
                 if (product.productSize.length === 0) {
@@ -109,6 +115,15 @@ const ProductEdit = (props) => {
             setCategoriesList([]);
         }
     }, [categories])
+
+    useEffect(() => {
+        if (templatesCatalog && templatesCatalog.length > 0) {
+            console.log('data: ', templatesCatalog);
+            setTemplateCatalogList(arrayToOptionsDescription(templatesCatalog));
+        } else {
+            setTemplateCatalogList([]);
+        }
+    }, [templatesCatalog])
 
     useEffect(() => {
         if (sizes && sizes.length > 0) {
@@ -162,6 +177,7 @@ const ProductEdit = (props) => {
             price: Number.parseFloat(values.price),
             providerReference: values.providerReference,
             cost: Number.parseFloat(values.cost),
+            template: values.template.value || 1
         };
 
         delete data._status;
@@ -400,7 +416,7 @@ const ProductEdit = (props) => {
                                                     </Col>
                                                 </Row>
                                                 <Row>
-                                                    <Col md="12">
+                                                    <Col md="6">
                                                         <div className="mb-0">
                                                             <Label htmlFor="description">Nombre en el Catálogo</Label>
                                                             <FieldText
@@ -409,6 +425,19 @@ const ProductEdit = (props) => {
                                                                 value={productData.description}
                                                                 minLength={3}
                                                                 maxLength={255}
+                                                            />
+                                                        </div>
+                                                    </Col>
+                                                    <Col md="6">
+                                                        <div className="mb-3">
+                                                            <Label className="control-label">Plantilla <span className="text-danger">*</span></Label>
+                                                            <FieldSelect
+                                                                id={"field_template"}
+                                                                name={"template"}
+                                                                options={templateCatalogList}
+                                                                defaultValue={templateCatalogDefault}
+                                                                required
+                                                                disabled={hasOrders}
                                                             />
                                                         </div>
                                                     </Col>
@@ -537,7 +566,8 @@ const mapStateToProps = state => {
     const refreshProduct = state.ProductSize.refresh || state.ProductImage.refresh || state.Product.refresh;
     const {categories} = state.Category
     const {sizes} = state.Sizes
-    return {error, product, categories, sizes, fieldOptions, loading, refreshProduct, refreshFieldOptions: refresh}
+    const {templatesCatalog} = state.Template;
+    return {error, product, categories, sizes, fieldOptions, loading, refreshProduct, refreshFieldOptions: refresh, templatesCatalog}
 }
 
 const mapDispatchToProps = dispatch => ({
@@ -551,6 +581,7 @@ const mapDispatchToProps = dispatch => ({
     onResetProductSize: () => dispatch(resetProductSize()),
     onResetProductImages: () => dispatch(resetProductImages()),
     onDeleteProductImage: (product,number) => dispatch(deleteProductImage(product,number)),
+    onGetTemplateCatalogs: () => dispatch(getTemplatesCatalog(null, 500, 0)),
 })
 
 export default withRouter(

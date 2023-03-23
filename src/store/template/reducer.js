@@ -1,5 +1,5 @@
 import {
-    GET_TEMPLATE,
+    GET_TEMPLATE, GET_TEMPLATE_CATALOG, GET_TEMPLATE_CATALOG_FAILED, GET_TEMPLATE_CATALOG_SUCCESS,
     GET_TEMPLATE_FAILED,
     GET_TEMPLATE_SUCCESS,
     GET_TEMPLATES,
@@ -95,6 +95,26 @@ const template = (state = initialState, action) => {
         case UPDATE_TEMPLATE_FAILED:
             state = {
                 ...state,
+                loading: false,
+            }
+            break
+        case GET_TEMPLATE_CATALOG:
+            return {
+                ...state,
+                loading: true,
+            }
+        case GET_TEMPLATE_CATALOG_FAILED:
+            return {
+                ...state,
+                error: action.payload,
+                loading: true,
+            }
+
+        case GET_TEMPLATE_CATALOG_SUCCESS:
+            return {
+                ...state,
+                templatesCatalog: action.payload,
+                meta: action.meta,
                 loading: false,
             }
             break

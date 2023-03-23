@@ -25,6 +25,7 @@ const CategoryEdit = (props) => {
 
     const [file, setFile] = useState(null);
     const [fileBanner, setFileBanner] = useState(null);
+    const [fileCatalog, setFileCatalog] = useState(null);
 
 
     //carga inicial
@@ -32,6 +33,7 @@ const CategoryEdit = (props) => {
         if (isEdit && getCategory) {
             setFile(null);
             setFileBanner(null);
+            setFileCatalog(null);
             getCategory(props.match.params.id);
             props.getPiecesUnpublished(props.match.params.id);
         }
@@ -61,6 +63,16 @@ const CategoryEdit = (props) => {
 
                 setFileBanner(fileBanner);
             }
+            //banner
+            if(!!category.filenameCatalog){
+                const fileCatalog = {
+                    preview: getBaseCategoryPath(category.filenameCatalog),
+                    name: category.id,
+                    content: null
+                };
+
+                setFileCatalog(fileCatalog);
+            }
 
             setCategory({...category, _status:category.status});
 
@@ -76,6 +88,9 @@ const CategoryEdit = (props) => {
         }
         if(fileBanner && fileBanner.content){
             data.fileBanner = fileBanner.content;
+        }
+        if(fileCatalog && fileCatalog.content){
+            data.fileCatalog = fileCatalog.content;
         }
 
         delete data._status;
@@ -97,6 +112,9 @@ const CategoryEdit = (props) => {
 
         if(_type == "banner"){
             setFileBanner(file);
+        }
+        else if(_type == "catalog"){
+            setFileCatalog(file);
         } else {
             setFile(file);
         }
@@ -183,6 +201,22 @@ const CategoryEdit = (props) => {
                                                             height={370}
                                                             alt={fileBanner && fileBanner.name}
                                                             src={fileBanner && fileBanner.preview}
+                                                    />
+                                                </DropZoneIcon>
+                                            </Col>
+                                            <Col md={12} className="text-center p-2" style={{height: '400px'}}>
+                                                <Label htmlFor="field_discount">Foto de Catalogo</Label>
+                                                <DropZoneIcon
+                                                    maxFiles={1}
+                                                    mode="block"
+                                                    hasImage={fileCatalog && fileCatalog.preview}
+                                                    onDrop={(files) => {
+                                                        handleAcceptedFiles(files, 'catalog');
+                                                    }}>
+                                                    <Images className="img-fluid mx-auto d-block tab-img rounded"
+                                                            height={370}
+                                                            alt={fileCatalog && fileCatalog.name}
+                                                            src={fileCatalog && fileCatalog.preview}
                                                     />
                                                 </DropZoneIcon>
                                             </Col>

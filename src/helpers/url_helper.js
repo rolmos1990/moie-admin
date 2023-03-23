@@ -58,6 +58,9 @@ export const ADD_MESSAGE = "/add/messages"
 //TEMPLATES
 export const TEMPLATES = "/template"
 
+//TEMPLATES CATALOG
+export const TEMPLATES_CATALOG = "/templateCatalog"
+
 //WALLETS
 export const WALLETS = "/movement"
 

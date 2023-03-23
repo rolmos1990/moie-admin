@@ -10,7 +10,11 @@ import {
     REGISTER_TEMPLATE_FAILED,
     UPDATE_TEMPLATE,
     UPDATE_TEMPLATE_SUCCESS,
-    UPDATE_TEMPLATE_FAILED, RESET_TEMPLATE
+    UPDATE_TEMPLATE_FAILED,
+    RESET_TEMPLATE,
+    GET_TEMPLATE_CATALOG_FAILED,
+    GET_TEMPLATE_CATALOG_SUCCESS,
+    GET_TEMPLATE_CATALOG
 } from "./actionTypes";
 
 export const resetTemplate = () => ({
@@ -90,3 +94,21 @@ export const updateTemplateFail = error => {
         payload: error,
     }
 }
+
+export const getTemplatesCatalog = (conditional, limit, offset) => ({
+    type: GET_TEMPLATE_CATALOG,
+    conditional: conditional,
+    limit: limit,
+    offset: offset
+})
+
+export const getTemplatesCatalogSuccess = (data, meta) => ({
+    type: GET_TEMPLATE_CATALOG_SUCCESS,
+    meta: meta,
+    payload: data,
+})
+
+export const getTemplatesCatalogFailed = error => ({
+    type: GET_TEMPLATE_CATALOG_FAILED,
+    payload: error,
+})
