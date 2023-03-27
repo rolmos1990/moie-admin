@@ -170,6 +170,21 @@ const UserEdit = (props) => {
                                                 )}
                                             </Row>
                                             <Row>
+                                                <Col md="12">
+                                                    <div className="mb-3">
+                                                        <Label htmlFor="lastname">Whatsapps <span className="text-danger">*</span></Label>
+                                                        <FieldText
+                                                            id={"whatsapps"}
+                                                            name={"whatsapps"}
+                                                            value={userData.whatsapps}
+                                                            minLength={5}
+                                                            maxLength={500}
+                                                            required
+                                                        />
+                                                    </div>
+                                                </Col>
+                                            </Row>
+                                            <Row>
                                                 <Col md={12} className="text-right">
                                                     <ButtonSubmit loading={props.loading}/>
                                                 </Col>

@@ -17,7 +17,7 @@ class NonAuthLayout extends Component {
     let currentage = this.capitalizeFirstLetter(this.props.location.pathname)
 
     document.title =
-      currentage + " | Minible - Responsive Bootstrap 5 Admin Dashboard"
+      currentage + " | Moie"
   }
   render() {
     return <React.Fragment>{this.props.children}</React.Fragment>

@@ -330,3 +330,8 @@ export const sortAlphanumeric = (arr,key) => {
         return arr;
     }
 };
+
+export const _encodePhone = (_string) => {
+    const encoded = btoa(_string);
+    return encoded;
+}

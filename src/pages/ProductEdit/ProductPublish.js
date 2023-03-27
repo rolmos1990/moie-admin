@@ -1,12 +1,10 @@
 import React, {useEffect, useState} from "react"
 import PropTypes from 'prop-types'
-import {CardBody, Col, Label, Row, Spinner} from "reactstrap"
-import {FieldNumber, FieldSelect, FieldSwitch, FieldText} from "../../components/Fields";
+import {Col, Label, Row} from "reactstrap"
+import {FieldSwitch, FieldText} from "../../components/Fields";
 import {connect} from "react-redux";
 import {AvForm} from "availity-reactstrap-validation";
 import {updateProduct} from "../../store/product/actions";
-import {STATUS} from "../../common/constants";
-import {Button} from "@material-ui/core";
 import ButtonSubmit from "../../components/Common/ButtonSubmit";
 import {map} from "lodash";
 
@@ -22,6 +20,7 @@ const ProductPublish = props => {
 
     const handleValidSubmit = (event, values) => {
         const data = {
+            video: values.video || null,
             published: values.published === true,
             discount: Number.parseFloat(discount)
         };
@@ -64,6 +63,17 @@ const ProductPublish = props => {
                                         <option key={k3} value={o.value}>{o.label}</option>
                                     ))}
                                 </select>
+                            </div>
+                        </Col>
+                        <Col lg={12}>
+                            <div className="mb-3">
+                                <Label htmlFor="video">Enlace de Video</Label>
+                                <FieldText
+                                    id={"field_video"}
+                                    name={"video"}
+                                    value={productData.video}
+                                    maxLength={300}
+                                    />
                             </div>
                         </Col>
                     </Row>

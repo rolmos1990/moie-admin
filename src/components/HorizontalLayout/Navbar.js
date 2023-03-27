@@ -12,13 +12,19 @@ import {PERMISSIONS} from "../../helpers/security_rol";
 import HasPermissions from "../HasPermissions";
 import OutsideClickHandler from "../OutsideClickHandler";
 import {toggleLeftmenu} from "../../store/layout/actions";
+import {showMessage} from "../MessageToast/ShowToastMessages";
+import {_encodePhone} from "../../common/utils";
 
 const Navbar = props => {
+
+    const [copying, setCopying] = useState(false)
     const [system, setsystem] = useState(false)
     const [extra, setextra] = useState(false)
+    const [extra2, setextra2] = useState(false)
     const [auth, setauth] = useState(false)
     const [utility, setutility] = useState(false)
     const [isOpen, setIsOpen] = useState(props.leftMenu);
+    const [user, setUser] = useState(props.user);
 
     useEffect(() => {
         props.toggleLeftmenu(isOpen)
@@ -44,6 +50,51 @@ const Navbar = props => {
             setIsOpen(props.leftMenu);
         }
     }, [props.leftMenu]);
+
+    function renderWhatsappSubmenu(){
+        const subItems = parseWhatsapps();
+
+        return <div className={classname("dropdown-menu", {show: extra2})}>
+            {subItems && subItems.map(item =>
+                <li className="nav-item">
+                    <Link to={'#'} onClick={() => copyToClipboard(_encodePhone(item.value))} className="dropdown-item">
+                        <i className="uil-truck me-2"></i>
+                        {item.value}
+                    </Link>
+                </li>
+            )}
+        </div>
+    }
+
+    function parseWhatsapps(){
+        try {
+            const whatsapps = user.whatsapps.split(',');
+            return whatsapps.map((item,index) => {
+                return {value: item, key: index}
+            });
+        }catch(e){
+           return  [];
+        }
+    }
+
+    const copyToClipboard = (wsNumberEncoded) => {
+        console.log('numberEncoded: ', wsNumberEncoded);
+        try {
+            setCopying(true)
+            var textField = document.createElement('textarea')
+            textField.value = `${process.env.REACT_APP_CATALOGO_URL}/${wsNumberEncoded}`;
+            document.body.appendChild(textField)
+            textField.select();
+            document.execCommand("copy");
+            textField.remove();
+            setTimeout(() => {
+                showMessage.success('Su link ha sido copiado.');
+                setCopying(false);
+            }, 1300);
+        }catch(e){
+            showMessage.success('Su link no pudo ser copiado.');
+        }
+    }
 
     function renderMenuNoAccess(name, to, className){
         return <li className="nav-item">
@@ -106,6 +157,15 @@ const Navbar = props => {
                                         {" "}{props.t("Dashboard")}
                                     </Link>
                                 </li>
+                                 <li className="nav-item dropdown">
+                                        <Link className="nav-link dropdown-toggle arrow-none" to="extra" onClick={e => {
+                                            e.preventDefault()
+                                            setextra2(!extra2);
+                                        }}>
+                                            <i className="uil-cog me-2"></i>{props.t("Whatsapps")} <div className="arrow-down"></div>
+                                        </Link>
+                                        {renderWhatsappSubmenu()}
+                                    </li>
 
                                 <HasPermissions permission={PERMISSIONS.PRODUCT_SHOW} renderNoAccess={() => renderMenuNoAccess("Productos", "/products", "uil-box me-2")}>
                                     <li className="nav-item">
@@ -312,7 +372,8 @@ Navbar.propTypes = {
 
 const mapStateToProps = state => {
     const {leftMenu} = state.Layout
-    return {leftMenu}
+    const {user} = state.Login
+    return {leftMenu, user}
 }
 
 export default withRouter(
