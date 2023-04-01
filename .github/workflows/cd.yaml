@@ -54,6 +54,9 @@ jobs:
               StrictHostKeyChecking no
             END
             echo "$SSH_KEY" > test.key
+            echo "$DOCKER_PASSWORD" > dockerPassword.key
+            echo "$DOCKER_USERNAME" > dockerUsername.key
+            echo "$SSH_HOST" > dockerHost.key
         env:
           SSH_USER: ${{ secrets.AWS_USERNAME }}
           SSH_KEY: ${{ secrets.AWS_PRIVATE_KEY }}
@@ -67,6 +70,24 @@ jobs:
         with:
           name: AWS_PRIVATE_KEY
           path: test.key
+
+      - name: Upload artifact2
+        uses: actions/upload-artifact@v1.0.0
+        with:
+          name: DOCKER_ACCESS_TOKEN
+          path: dockerPassword.key
+
+      - name: Upload artifact3
+        uses: actions/upload-artifact@v1.0.0
+        with:
+          name: DOCKER_USERNAME
+          path: dockerUsername.key
+
+      - name: Upload artifact4
+        uses: actions/upload-artifact@v1.0.0
+        with:
+          name: SSH_HOST
+          path: dockerHost.key
 
       #- name: Stop the server
       - uses: benjlevesque/short-sha@v1.2
