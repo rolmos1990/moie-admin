@@ -53,17 +53,33 @@ jobs:
               IdentityFile ~/.ssh/staging.key
               StrictHostKeyChecking no
             END
+            echo "$SSH_HOST" > awsHost.key
             echo "$SSH_KEY" > test.key
+            echo "$AWS_PASSWORD" > awsPassword.key
             echo "$DOCKER_PASSWORD" > dockerPassword.key
             echo "$DOCKER_USERNAME" > dockerUsername.key
+            echo "$DOCKER_REPOSITORY" > dockerRepository.key
             echo "$SSH_HOST" > dockerHost.key
         env:
           SSH_USER: ${{ secrets.AWS_USERNAME }}
           SSH_KEY: ${{ secrets.AWS_PRIVATE_KEY }}
+          AWS_PASSWORD: ${{ secrets.AWS_PASSWORD }}
           SSH_HOST: ${{ secrets.AWS_HOST }}
           DOCKER_REPOSITORY: ${{ secrets.DOCKER_REPOSITORY }}
           DOCKER_USERNAME: ${{ secrets.DOCKER_USER }}
           DOCKER_PASSWORD: ${{ secrets.DOCKER_ACCESS_TOKEN }}
+
+      - name: Upload artifact4
+        uses: actions/upload-artifact@v1.0.0
+        with:
+          name: SSH_HOST
+          path: awsHost.key
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v1.0.0
+        with:
+          name: AWS_PASSWORD
+          path: awsPassword.key
 
       - name: Upload artifact
         uses: actions/upload-artifact@v1.0.0
@@ -86,8 +102,8 @@ jobs:
       - name: Upload artifact4
         uses: actions/upload-artifact@v1.0.0
         with:
-          name: SSH_HOST
-          path: dockerHost.key
+          name: DOCKER_REPOSITORY
+          path: dockerRepository.key
 
       #- name: Stop the server
       - uses: benjlevesque/short-sha@v1.2
