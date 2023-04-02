@@ -58,8 +58,8 @@ const Navbar = props => {
             {subItems && subItems.map(item =>
                 <li className="nav-item">
                     <Link to={'#'} onClick={() => copyToClipboard(_encodePhone(item.value))} className="dropdown-item">
-                        <i className="uil-truck me-2"></i>
-                        {item.value}
+                        <i className="uil-mobile-android-alt me-2"></i>
+                        <span className="badge badge-info bg-success">{item.key}</span> - {item.value}
                     </Link>
                 </li>
             )}
@@ -70,7 +70,22 @@ const Navbar = props => {
         try {
             const whatsapps = user.whatsapps.split(',');
             return whatsapps.map((item,index) => {
-                return {value: item, key: index}
+                //render alias
+                let phoneAlias = item;
+                let phone = item;
+
+
+                const aliasAndPhone = item.split(':');
+                if(aliasAndPhone){
+                    phoneAlias = aliasAndPhone[0];
+
+                    if(phone.indexOf("+57") === -1){
+                        phone = "+57" + phone;
+                    }
+
+                    phone = aliasAndPhone[1];
+                }
+                return {value: phone, key: phoneAlias}
             });
         }catch(e){
            return  [];
