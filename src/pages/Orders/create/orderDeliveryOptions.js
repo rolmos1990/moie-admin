@@ -7,7 +7,15 @@ import {FieldDecimalNumber, FieldNumber, FieldSelect, FieldText} from "../../../
 import {getProduct} from "../../../store/product/actions";
 import {AvForm} from "availity-reactstrap-validation";
 import {getFieldOptionByGroups} from "../../../store/fieldOptions/actions";
-import {DELIVERY_METHODS, DELIVERY_METHODS_PAYMENT_TYPES, DELIVERY_TYPES, GROUPS, PAYMENT_TYPES, PAYMENT_TYPES_LIST} from "../../../common/constants";
+import {
+    DELIVERY_METHODS,
+    DELIVERY_METHODS_IDS,
+    DELIVERY_METHODS_PAYMENT_TYPES,
+    DELIVERY_TYPES,
+    GROUPS,
+    PAYMENT_TYPES,
+    PAYMENT_TYPES_LIST
+} from "../../../common/constants";
 import {getDeliveryMethods, getDeliveryQuote, updateCard} from "../../../store/order/actions";
 import {arrayToOptions, getEmptyOptions} from "../../../common/converters";
 import {Button} from "@material-ui/core";
@@ -70,9 +78,14 @@ const OrderDeliveryOptions = (props) => {
     }, [fieldOptions]);
 
     useEffect(() => {
-        const list = deliveryLocalities || [];
-        setDeliveryLocalitiesList([getEmptyOptions(), ...arrayToOptions(list)]);
-    }, [deliveryLocalities]);
+        console.log('deliveryMethod: ', deliveryMethod);
+        if(deliveryMethod === "INTERRAPIDISIMO" || deliveryMethod === "SERVIENTREGA") {
+            console.log('all locality:', deliveryLocalities);
+            console.log('filter localities: ', deliveryLocalities.filter(me => me.deliveryMethodId == DELIVERY_METHODS_IDS[deliveryMethod]));
+            const list = deliveryLocalities.filter(me => me.deliveryMethodId === DELIVERY_METHODS_IDS[deliveryMethod]) || [];
+            setDeliveryLocalitiesList([getEmptyOptions(), ...arrayToOptions(list)]);
+        }
+    }, [deliveryLocalities, deliveryMethod]);
 
     useEffect(() => {
         const list = deliveryMethods || [];

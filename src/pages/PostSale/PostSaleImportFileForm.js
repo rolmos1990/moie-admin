@@ -30,9 +30,9 @@ const PostSaleImportFileForm = ({onCloseModal, deliveryMethods, loading, error, 
 
     useEffect(() => {
         if (deliveryMethods && deliveryMethods.length > 0) {
-            setDeliveryMethod(deliveryMethods.find(op => op.name === DELIVERY_METHODS.INTERRAPIDISIMO).code);
+            setDeliveryMethod(deliveryMethods.find(op => [DELIVERY_METHODS.INTERRAPIDISIMO, DELIVERY_METHODS.SERVIENTREGA].includes(op.name)).code);
             setDeliveryMethodList([getEmptyOptions(),
-                ...deliveryMethods.filter(op => op.name === DELIVERY_METHODS.INTERRAPIDISIMO || op.name === DELIVERY_METHODS.PAYU).map(op => ({label: op.name, value: op.code}))]
+                ...deliveryMethods.filter(op => [DELIVERY_METHODS.INTERRAPIDISIMO, DELIVERY_METHODS.PAYU, DELIVERY_METHODS.SERVIENTREGA].includes(op.name)).map(op => ({label: op.name, value: op.code}))]
             );
         }
     }, [deliveryMethods]);

@@ -14,7 +14,7 @@ import {
 } from "./actionTypes";
 
 export const getAllDeliveryLocalities = () => {
-    return getDeliveryLocalities(null, 1300, 0);
+    return getDeliveryLocalities(null, 2000, 0);
 }
 
 export const getDeliveryLocalities = (conditional, limit, offset) => ({

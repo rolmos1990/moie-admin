@@ -276,7 +276,7 @@ const OfficeEdit = (props) => {
                                             </button>
                                         </Tooltip>*/}
 
-                                            {!!((officeData?.type === 3 && DELIVERY_METHODS.INTERRAPIDISIMO === officeData?.deliveryMethod?.code) || (DELIVERY_METHODS.PAYU === officeData?.deliveryMethod?.code)) && (
+                                            {!!(officeData?.type === 3 && [DELIVERY_METHODS.INTERRAPIDISIMO, DELIVERY_METHODS.SERVIENTREGA, DELIVERY_METHODS.PAYU].includes(officeData?.deliveryMethod?.code)) && (
                                                 <Tooltip placement="bottom" title="Descargar Plantilla Excel" aria-label="add">
                                                     <button type="button" color="primary" className="btn-sm btn btn-outline-info waves-effect waves-light" onClick={() => handleDownloadTemplate(officeData.id)}>
                                                         <i className={"mdi mdi-file-excel"}> </i>
