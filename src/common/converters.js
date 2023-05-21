@@ -37,7 +37,8 @@ export const arrayToOptionsDescription = (array) => {
 export const arrayToOptions = (array) => {
     return array.map(item => ({
         label: item.name,
-        value: item.id
+        value: item.id,
+        icon: item.icon || false
     }));
 }
 export const arrayToOptionsByFieldName = (array, fieldName) => {

@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import PropTypes from "prop-types";
-import Select from "react-select";
+import Select, {components} from "react-select";
 import {AvBaseInput} from "availity-reactstrap-validation";
 import messages from "./messages";
 import {FormText, FormGroup} from "reactstrap";
@@ -53,6 +53,16 @@ InputSearchField.propTypes = {
 };
 
 class AvSearchInput extends AvBaseInput {
+
+    CustomOption ({ children, ...props }) {
+        return (
+            <components.Option {...props}>
+                {children}
+                {((props.data && props.data.icon && <span dangerouslySetInnerHTML={{__html: props.data.icon}} />) || '' )}
+            </components.Option>
+        );
+    }
+
     render() {
         const {name, value, onChange, validate, options, placeholder, helpMessage, isSearchable, disabled, isLoading} = this.props;
         const validation = this.context.FormCtrl.getInputState(this.props.name);
@@ -80,6 +90,9 @@ class AvSearchInput extends AvBaseInput {
                         menuPortalTarget={document.body}
                         menuPosition={'fixed'}
                         styles={{ menuPortal: base => ({ ...base, zIndex: 9999 }) }}
+                        components={{
+                            Option: this.CustomOption.bind(this)
+                        }}
                     />
                 </div>
                 {feedback}

@@ -78,12 +78,22 @@ const OrderDeliveryOptions = (props) => {
     }, [fieldOptions]);
 
     useEffect(() => {
-        console.log('deliveryMethod: ', deliveryMethod);
         if(deliveryMethod === "INTERRAPIDISIMO" || deliveryMethod === "SERVIENTREGA") {
-            console.log('all locality:', deliveryLocalities);
-            console.log('filter localities: ', deliveryLocalities.filter(me => me.deliveryMethodId == DELIVERY_METHODS_IDS[deliveryMethod]));
-            const list = deliveryLocalities.filter(me => me.deliveryMethodId === DELIVERY_METHODS_IDS[deliveryMethod]) || [];
-            setDeliveryLocalitiesList([getEmptyOptions(), ...arrayToOptions(list)]);
+            const list = deliveryLocalities.map(item => {
+                if(deliveryMethod === 'SERVIENTREGA') {
+                    if (item.deliveryType == 1) {
+                        item.icon = "&nbsp;&nbsp;&nbsp;&nbsp;<i class='fa fa-building' ></i>";
+                    }
+                    if (item.deliveryType == 2) {
+                        item.icon = "&nbsp;&nbsp;&nbsp;&nbsp;<i class='fa fa-motorcycle' ></i>";
+                    }
+                    if (item.deliveryType == 3) {
+                        item.icon = "&nbsp;&nbsp;&nbsp;&nbsp;<span><i class='fa fa-building' ></i>&nbsp;<i class='fa fa-motorcycle' ></i></span>";
+                    }
+                }
+                return item;
+            }).filter(me => me.deliveryMethodId === DELIVERY_METHODS_IDS[deliveryMethod]) || [];
+            setDeliveryLocalitiesList([getEmptyOptions(), ...arrayToOptions(list, deliveryMethod === "SERVIENTREGA")]);
         }
     }, [deliveryLocalities, deliveryMethod]);
 
