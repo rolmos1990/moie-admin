@@ -136,8 +136,9 @@ const BillList = props => {
         const conditions = new Conditionals.Condition;
         conditions.add('bill.id', '', Conditionals.OPERATORS.NULL);
         conditions.add('office', '', Conditionals.OPERATORS.NOT_NULL);
-        conditions.add('createdAt', '2022-01-01T00:00:00.000Z', Conditionals.OPERATORS.GREATER_THAN_OR_EQUAL);
+        conditions.add('createdAt', '2023-05-20T00:00:00.000Z', Conditionals.OPERATORS.GREATER_THAN_OR_EQUAL);
         conditions.add('deliveryMethod', DELIVERY_METHODS_IDS.SERVIENTREGA, Conditionals.OPERATORS.EQUAL);
+        conditions.add('orderDelivery.deliveryType', CHARGE_ON_DELIVERY, Conditionals.OPERATORS.EQUAL);
         conditions.add('status', [ORDERS_ENUM.SENT, ORDERS_ENUM.FINISHED].join("::"), Conditionals.OPERATORS.IN);
 
         setOrderListConditions(conditions.condition);
