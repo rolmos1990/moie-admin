@@ -36,7 +36,7 @@ const PostSaleReportForm = ({onCloseModal, deliveryMethods, onGetDeliveryMethods
         if (deliveryMethods && deliveryMethods.length > 0) {
             setDeliveryMethod(deliveryMethods.find(op => op.name === DELIVERY_METHODS.INTERRAPIDISIMO).code);
             setDeliveryMethodList([getEmptyOptions(),
-                ...deliveryMethods.filter(op => op.name === DELIVERY_METHODS.INTERRAPIDISIMO).map(op => ({label: op.name, value: op.code}))]
+                ...deliveryMethods.filter(op => [DELIVERY_METHODS.INTERRAPIDISIMO, DELIVERY_METHODS.SERVIENTREGA].includes(op.name)).map(op => ({label: op.name, value: op.code}))]
             );
         }
     }, [deliveryMethods]);
