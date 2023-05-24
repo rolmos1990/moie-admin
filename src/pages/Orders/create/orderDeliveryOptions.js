@@ -82,13 +82,13 @@ const OrderDeliveryOptions = (props) => {
             const list = deliveryLocalities.map(item => {
                 if(deliveryMethod === 'SERVIENTREGA') {
                     if (item.deliveryType == 1) {
-                        item.icon = "&nbsp;&nbsp;&nbsp;&nbsp;<i class='fa fa-building' ></i>";
+                        item.icon = "&nbsp;&nbsp;&nbsp;&nbsp;"+ item.timeInDays +"&nbsp;&nbsp;<i class='fa fa-building' ></i>";
                     }
                     if (item.deliveryType == 2) {
-                        item.icon = "&nbsp;&nbsp;&nbsp;&nbsp;<i class='fa fa-motorcycle' ></i>";
+                        item.icon = "&nbsp;&nbsp;&nbsp;&nbsp;"+ item.timeInDays +"&nbsp;&nbsp;<i class='fa fa-motorcycle' ></i>";
                     }
                     if (item.deliveryType == 3) {
-                        item.icon = "&nbsp;&nbsp;&nbsp;&nbsp;<span><i class='fa fa-building' ></i>&nbsp;<i class='fa fa-motorcycle' ></i></span>";
+                        item.icon = "&nbsp;&nbsp;&nbsp;&nbsp;"+ item.timeInDays +"&nbsp;&nbsp;<span><i class='fa fa-building' ></i>&nbsp;<i class='fa fa-motorcycle' ></i></span>";
                     }
                 }
                 return item;
