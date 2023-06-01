@@ -86,6 +86,7 @@ export const PERMISSIONS = {
     WALLET_EDIT: 'wallet.edit',
     WALLET_SHOW: 'wallet.show',
     WALLET_LIST: 'wallet.list',
+    CATALOG_SYNC: 'catalog.sync',
 };
 export const hasPermissionAccess = (roles, permission) => {
     return true;

@@ -23,6 +23,7 @@ import authHeader from "../../../helpers/jwt-token-access/auth-token-header";
 import {PERMISSIONS} from "../../../helpers/security_rol";
 import HasPermissions from "../../../components/HasPermissions";
 import {showMessage} from "../../../components/MessageToast/ShowToastMessages";
+import {syncCatalog} from "../../../helpers/backend_helper";
 
 const CategoryList = props => {
     const {categories, onGetCategories, onResetCategories, onDeleteState, getCatalogBatchRequest, onCatalogPrintBatchRequest, refresh, meta} = props;
@@ -34,6 +35,7 @@ const CategoryList = props => {
     const [catalogs, setCatalogs] = useState([]);
     const [selectAll, setSelectAll] = useState(false);
     const [defaultPage, setDefaultPage] = useState(1);
+    const [syncing, setSyncing] = useState(false);
 
     const pageOptions = {
         sizePerPage: DEFAULT_PAGE_LIMIT,
@@ -94,6 +96,13 @@ const CategoryList = props => {
             onConfirm: () => onConfirmDelete(id)
         });
     };
+
+    const syncCatalogs = async () => {
+        setSyncing(true);
+        const response = await syncCatalog();
+        showMessage.success('Solicitud procesada, favor espere unos minutos');
+        setSyncing(false);
+    }
 
     const printCatalogs= (hasReferences) => {
         let conditionals = conditional || [];
@@ -227,6 +236,13 @@ const CategoryList = props => {
                                                                     <Button color="primary" onClick={() => printCatalogs(true)}
                                                                             disabled={(printCategoriesId.length === 0 && !selectAll) && (!conditional || conditional.length === 0)}>
                                                                         <i className="mdi mdi-download-circle"> </i>
+                                                                    </Button>
+                                                                </Tooltip>
+                                                            </HasPermissions>
+                                                            <HasPermissions permission={PERMISSIONS.CATALOG_SYNC}>
+                                                                <Tooltip placement="bottom" title="Sincronizar Catalogo" aria-label="add">
+                                                                    <Button color="primary" onClick={() => syncCatalogs()}>
+                                                                        <i className="mdi mdi-sync-circle"></i>
                                                                     </Button>
                                                                 </Tooltip>
                                                             </HasPermissions>

@@ -195,6 +195,9 @@ const postApi = (urlStr, data) => post(urlStr, data);
 const updateDataApi = (urlStr, id, data) => put(`${urlStr}/${id}`, data);
 const deleteDataApi = (urlStr, id) => del(`${urlStr}/${id}`);
 
+const syncCatalog = () => get(`${url.PRODUCT_IMAGES}/updateCatalogVersion/sync`, {});
+
+
 export {
     fetchDataApi,
     registerDataApi,
@@ -362,5 +365,7 @@ export {
     fetchBillConfigApi,
     registerBillConfigApi,
     updateBillConfigApi,
-    deleteBillConfigApi
+    deleteBillConfigApi,
+
+    syncCatalog
 }
