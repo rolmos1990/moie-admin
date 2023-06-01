@@ -432,17 +432,7 @@ const ProductEdit = (props) => {
                                                     </Col>
                                                     <Col md="6">
                                                         <div className="mb-3">
-                                                            <Label className="control-label">Plantilla <HtmlTooltip
-                                                                title={
-                                                                    <React.Fragment>
-                                                                        <Images src={`http://moie.lucymodas.com:18210/./uploads/catalogs/${productData.reference}.jpg`}
-                                                                                alt={productData.reference}
-                                                                                height={100}
-                                                                                className="img-fluid mx-auto d-block tab-img rounded"/>
-                                                                    </React.Fragment>
-                                                                }>
-                                                                <i class="fa fa-search"></i>
-                                                            </HtmlTooltip>
+                                                            <Label className="control-label">Plantilla
                                                                 <span className="text-danger">*</span></Label>
                                                             <FieldSelect
                                                                 id={"field_template"}
@@ -452,6 +442,19 @@ const ProductEdit = (props) => {
                                                                 required
                                                                 disabled={hasOrders}
                                                             />
+                                                        </div>
+                                                    </Col>
+                                                </Row>
+                                                <Row>
+                                                    <Col md="12">
+                                                        <div className="text-center m-5">
+                                                            <h3>Vista Previa</h3> <br />
+                                                            <div style={{backgroundColor: '1px lightgray solid', padding: '10px'}}>
+                                                            <Images src={`http://moie.lucymodas.com:18210/./uploads/catalogs/${productData.reference}.jpg`}
+                                                                    alt={productData.reference}
+                                                                    height={300}
+                                                                    className="img-fluid mx-auto d-block tab-img"/>
+                                                            </div>
                                                         </div>
                                                     </Col>
                                                 </Row>
