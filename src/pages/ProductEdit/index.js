@@ -24,6 +24,8 @@ import {PERMISSIONS} from "../../helpers/security_rol";
 import NoAccess from "../../components/Common/NoAccess";
 import HasPermissions from "../../components/HasPermissions";
 import {getTemplatesCatalog} from "../../store/template/actions";
+import Images from "../../components/Common/Image";
+import {HtmlTooltip} from "../../components/Common/HtmlTooltip";
 
 const ProductEdit = (props) => {
 
@@ -430,7 +432,18 @@ const ProductEdit = (props) => {
                                                     </Col>
                                                     <Col md="6">
                                                         <div className="mb-3">
-                                                            <Label className="control-label">Plantilla <span className="text-danger">*</span></Label>
+                                                            <Label className="control-label">Plantilla <HtmlTooltip
+                                                                title={
+                                                                    <React.Fragment>
+                                                                        <Images src={`http://moie.lucymodas.com:18210/./uploads/catalogs/${productData.reference}.jpg`}
+                                                                                alt={productData.reference}
+                                                                                height={100}
+                                                                                className="img-fluid mx-auto d-block tab-img rounded"/>
+                                                                    </React.Fragment>
+                                                                }>
+                                                                <i class="fa fa-search"></i>
+                                                            </HtmlTooltip>
+                                                                <span className="text-danger">*</span></Label>
                                                             <FieldSelect
                                                                 id={"field_template"}
                                                                 name={"template"}
