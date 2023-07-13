@@ -7,12 +7,14 @@ import SaleType from "../Stats/SaleType";
 import Bests from "../Stats/Bests";
 import Hours from "../Stats/Hours";
 import Reincidents from "../Stats/Reincidents";
+import SalesCreated from "../Stats/SalesCreated";
 
 const Stats = () => {
 
     return (
         <React.Fragment>
             <Sales className="mb-2" />
+            <SalesCreated className="mb-2" />
             <Departments className="mb-2" />
             <Origens className="mb-2" />
             <Whatsapp className="mb-2" />

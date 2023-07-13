@@ -21,6 +21,7 @@ const fetchProductApi = data => get((data && data.id) ? `${url.PRODUCT}/${data.i
 const registerProductApi = data => post(url.PRODUCT, data);
 const updateProductApi = (id, data) => put(`${url.PRODUCT}/${id}`, data);
 const reorderProductApi = (id, data) => post(`${url.PRODUCT}/${id}/reorder`, data);
+const fetchInventoryProductsApi = params => get(`${url.PRODUCT}/get/products/withAvailabilities`, {}, params);
 
 //const deleteProductApi = (id) => del(`${url.DELETE_PRODUCT}/${id}`);
 const updateProductSizeListApi = (productId, data) => post(`${url.PRODUCT}/${productId}/changeSize`, data);
@@ -367,5 +368,6 @@ export {
     updateBillConfigApi,
     deleteBillConfigApi,
 
-    syncCatalog
+    syncCatalog,
+    fetchInventoryProductsApi
 }

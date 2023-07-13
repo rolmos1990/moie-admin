@@ -4,7 +4,7 @@ import {Breadcrumbs} from "@material-ui/core";
 import MiniWidget from "./mini-widget";
 import TopVendors from "./top-vendors";
 import LatestTransaction from "./latest-transaction";
-import TopUsers from "./top-users";
+import Inventory from "./inventory";
 import {getOrders} from "../../store/order/actions";
 import {connect} from "react-redux";
 import {getReportDashbord} from "../../store/reports/actions";
@@ -271,7 +271,7 @@ const Dashboard = (props) => {
             </Row>
             <Row>
                 <Col xl={4}>
-                <TopUsers/>
+                <Inventory/>
                 </Col>
                 <Col xl={8}>
                     <LatestTransaction />

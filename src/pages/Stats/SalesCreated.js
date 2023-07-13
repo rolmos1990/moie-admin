@@ -123,7 +123,7 @@ const Sales = ({users, onGetUsers, className}) => {
         if (valida(stats.ventasTotal.fecha)) {
             stats.cargando = 'Cargando estadisticas de ventas...';
             //definir la url para la consulta a la API
-            var url = '/stats/estadistica_ventas/sales';
+            var url = '/stats/estadistica_ventas/created';
             url += '/' + parserServerDate(stats.ventasTotal.fecha.inicial);
             url += '/' + parserServerDate(stats.ventasTotal.fecha.final);
             url += '/' + stats.ventasTotal.opciones.grupo;
@@ -203,51 +203,51 @@ const Sales = ({users, onGetUsers, className}) => {
 
     return (
         <AvForm className="needs-validation" autoComplete="off">
-        <Card className={className}>
-        <CardBody>
-            <Row id="ventasTotal">
-                <Col md={12}>
-                    <h4 className="card-title text-info"> Total de ventas</h4>
-                </Col>
-                <Col md={4}>
-                    <div className="mb-3">
-                        <Label>Fecha</Label>
-                        <FieldDate
-                            name="ventas_total_dates"
-                            mode={DATE_MODES.RANGE}
-                            defaultValue={defaultDates}
-                            onChange={(dates) => onChangeDate(dates, "ventasTotal")}
-                        />
-                    </div>
-                </Col>
-                <Col md={4}>
-                    <div className="mb-3">
-                        <Label>Mostrar por</Label>
-                        <FieldSelect
-                            name="ventas_total_grupo"
-                            options={showByList}
-                            defaultValue={showByList.length > 0 ? showByList[0] : null}
-                            onChange={(data) => onChangeGrupo(data, "ventasTotal")}
-                        />
-                    </div>
-                </Col>
-                <Col md={4}>
-                    <div className="mb-3">
-                        <Label>Usuarios</Label>
-                        <FieldSelect
-                            name="ventas_total_users"
-                            options={userList}
-                            defaultValue={stats.usuarios.length > 0 ? stats.usuarios[0] : null}
-                            onChange={(data) => onChangeUser(data, "ventasTotal")}
-                        />
-                    </div>
-                </Col>
-                <Col md={12}>
-                    <HighChartsWrapper options={stats.ventasTotal.data}/>
-                </Col>
-            </Row>
-        </CardBody>
-        </Card>
+            <Card className={className}>
+                <CardBody>
+                    <Row id="ventasTotal">
+                        <Col md={12}>
+                            <h4 className="card-title text-info"> Total de ventas (Fecha de Creación)</h4>
+                        </Col>
+                        <Col md={4}>
+                            <div className="mb-3">
+                                <Label>Fecha</Label>
+                                <FieldDate
+                                    name="ventas_total_dates"
+                                    mode={DATE_MODES.RANGE}
+                                    defaultValue={defaultDates}
+                                    onChange={(dates) => onChangeDate(dates, "ventasTotal")}
+                                />
+                            </div>
+                        </Col>
+                        <Col md={4}>
+                            <div className="mb-3">
+                                <Label>Mostrar por</Label>
+                                <FieldSelect
+                                    name="ventas_total_grupo"
+                                    options={showByList}
+                                    defaultValue={showByList.length > 0 ? showByList[0] : null}
+                                    onChange={(data) => onChangeGrupo(data, "ventasTotal")}
+                                />
+                            </div>
+                        </Col>
+                        <Col md={4}>
+                            <div className="mb-3">
+                                <Label>Usuarios</Label>
+                                <FieldSelect
+                                    name="ventas_total_users"
+                                    options={userList}
+                                    defaultValue={stats.usuarios.length > 0 ? stats.usuarios[0] : null}
+                                    onChange={(data) => onChangeUser(data, "ventasTotal")}
+                                />
+                            </div>
+                        </Col>
+                        <Col md={12}>
+                            <HighChartsWrapper options={stats.ventasTotal.data}/>
+                        </Col>
+                    </Row>
+                </CardBody>
+            </Card>
         </AvForm>
     )
 }
