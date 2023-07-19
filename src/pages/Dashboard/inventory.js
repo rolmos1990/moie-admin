@@ -22,7 +22,7 @@ const Inventory = (props) => {
 
         fetchInventoryProductsApi({}).then((p => {
             if (p && p.data && p.data[0]) {
-                setPrice(p.data[0].price);
+                setPrice(p.data[0].cost);
                 setQty(p.data[0].qty);
                 console.log('p: data', p.data);
                 //props.history.push(`/product/detail/${p.data[0].id}`);
