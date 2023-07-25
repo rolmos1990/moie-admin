@@ -38,24 +38,43 @@ const OrderStatusStats = (props) => {
     const renderInventario = () => {
         return <Card>
             <CardBody>
-                <h5>Total en Inventario</h5> <br />
-                <div>
-                    <h4 className="mb-1 mt-1">
-                        <span>
-                            <i class="text-success uil-money-bill me-2"></i> &nbsp; -
-                        </span>
-                    </h4>
-                    <p className="text-muted mb-0">Monto</p>
-                </div>
-
-                <div>
-                    <h4 className="mb-1 mt-1">
-                        <span>
-                            <i class="text-warning uil-box me-2"></i> &nbsp; -
-                        </span>
-                    </h4>
-                    <p className="text-muted mb-0">Cantidades</p>
-                </div>
+                <h5>Pedidos por Estado</h5> <br />
+                <Row>
+                    <Col md={6}>
+                        <h5 className="mb-2 mt-1"><b>Pendientes</b></h5>
+                        <h4>
+                            <span>
+                            <i class={`text-${STATUS_COLORS.DANGER} uil-shopping-cart-alt me-2`}></i> &nbsp; -
+                            </span>
+                        </h4>
+                    </Col>
+                    <Col md={6}>
+                        <div>
+                            <h5 className="mb-2 mt-1"><b>Conciliados</b></h5>
+                            <h4>
+                                <span>
+                                <i class={`text-${STATUS_COLORS.INFO} uil-shopping-cart-alt me-2`}></i> &nbsp; -
+                                </span>
+                            </h4>
+                        </div>
+                    </Col>
+                    <Col md={6}>
+                        <h5 className="mb-2 mt-1"><b>Impresos</b></h5>
+                        <h4>
+                            <span>
+                            <i class={`text-${STATUS_COLORS.WARNING} uil-shopping-cart-alt me-2`}></i> &nbsp; -
+                            </span>
+                        </h4>
+                    </Col>
+                    <Col md={6}>
+                        <h5 className="mb-2 mt-1"><b>Anulados</b></h5>
+                        <h4>
+                            <span>
+                            <i class={`text-${STATUS_COLORS.SECONDARY} uil-shopping-cart-alt me-2`}></i> &nbsp; -
+                            </span>
+                        </h4>
+                    </Col>
+                </Row>
             </CardBody>
         </Card>
     }
