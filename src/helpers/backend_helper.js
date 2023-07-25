@@ -111,6 +111,7 @@ const syncOrderDelivery = (id, data) => post(`${url.ORDERS}/${id}/sync/orderDeli
 const refreshStatusDelivery = (id) => get(`${url.ORDERS}/${id}/refresh/orderDelivery`, {});
 const refreshAllStatusDelivery = () => get(`${url.ORDERS}/refresh/all/orderDelivery`, {});
 const increasePhotoCounterApi = (id) => get(`${url.ORDERS}/${id}/counters/increasePhoto`, {});
+const fetchOrderStatusStatsProductsApi = params => get(`${url.ORDERS}/orderStats/get/byStatus`, {}, params);
 
 //offices
 const fetchOfficesApi = params => get(url.OFFICES, {}, params);
@@ -369,5 +370,6 @@ export {
     deleteBillConfigApi,
 
     syncCatalog,
-    fetchInventoryProductsApi
+    fetchInventoryProductsApi,
+    fetchOrderStatusStatsProductsApi
 }
