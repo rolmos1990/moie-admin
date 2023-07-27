@@ -14,7 +14,7 @@ const CountUsers = ({registerOrderActive, onSetCounterRegisterOrders, onGetCount
             if (currentTimeout) clearInterval(currentTimeout);
             let newTimeout = setInterval(() => {
                 onGetCounterUsers();
-            }, 45000);
+            }, 70000);
             //
             setCurrentTimeout(newTimeout);
         }
