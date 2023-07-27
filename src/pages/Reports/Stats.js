@@ -8,6 +8,7 @@ import Bests from "../Stats/Bests";
 import Hours from "../Stats/Hours";
 import Reincidents from "../Stats/Reincidents";
 import SalesCreated from "../Stats/SalesCreated";
+import SalesByStatus from "../Stats/SalesByStatus";
 
 const Stats = () => {
 
@@ -22,6 +23,7 @@ const Stats = () => {
             <Bests className="mb-2" />
             <Hours className="mb-2" />
             <Reincidents className="mb-2" />
+            <SalesByStatus className="mb-2" />
         </React.Fragment>
     )
 }
