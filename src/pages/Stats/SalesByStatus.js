@@ -58,7 +58,7 @@ const initialState = {
                     data: []
                 },
                 {
-                    name: 'Completado ($)',
+                    name: 'Cofirmado ($)',
                     data: []
                 },
                 {

@@ -18,6 +18,7 @@ const OrderStatusStats = (props) => {
     const {onGetUsers} = props;
 
     const [pending, setPending] = useState(0);
+    const [confirmed, setConfirmed] = useState(0);
     const [reconcilied, setReconcilied] = useState(0);
     const [printed, setPrinted] = useState(0);
     const [cancelled, setCancelled] = useState(0);
@@ -27,6 +28,7 @@ const OrderStatusStats = (props) => {
         fetchOrderStatusStatsProductsApi({}).then((p => {
             if (p && p.data) {
                 setPending(p.data.pending);
+                setConfirmed(p.data.confirmed);
                 setReconcilied(p.data.reconcilied);
                 setPrinted(p.data.printed);
                 setCancelled(p.data.cancelled);
@@ -47,6 +49,16 @@ const OrderStatusStats = (props) => {
                             <i class={`text-${STATUS_COLORS.DANGER} uil-shopping-cart-alt me-2`}></i> &nbsp; -
                             </span>
                         </h4>
+                    </Col>
+                    <Col md={6}>
+                        <div>
+                            <h5 className="mb-2 mt-1"><b>Conciliados</b></h5>
+                            <h4>
+                                <span>
+                                <i class={`text-${STATUS_COLORS.SUCCESS} uil-shopping-cart-alt me-2`}></i> &nbsp; -
+                                </span>
+                            </h4>
+                        </div>
                     </Col>
                     <Col md={6}>
                         <div>
@@ -94,6 +106,16 @@ const OrderStatusStats = (props) => {
                             <i class={`text-${STATUS_COLORS.DANGER} uil-shopping-cart-alt me-2`}></i> &nbsp; <CountUp end={pending} separator="," prefix={''} suffix={''} decimals={0}/>
                             </span>
                             </h4>
+                            </Col>
+                            <Col md={6}>
+                                <div>
+                                    <h5 className="mb-2 mt-1"><b>Confirmados</b></h5>
+                                    <h4>
+                                <span>
+                                <i class={`text-${STATUS_COLORS.SUCCESS} uil-shopping-cart-alt me-2`}></i> &nbsp; <CountUp end={confirmed} separator="," prefix={''} suffix={''} decimals={0}/>
+                                </span>
+                                    </h4>
+                                </div>
                             </Col>
                             <Col md={6}>
                             <div>

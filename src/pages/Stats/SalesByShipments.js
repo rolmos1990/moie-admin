@@ -20,75 +20,98 @@ import {Card} from "@material-ui/core";
 
 const hoy = new Date();
 const defaultDates = [new Date(hoy.getTime() - 518400000), new Date()];
-const initialState = {
-    cargando: '',
-    usuarios: [],
-    ventasEnvios: {
-        data: {
-            title: {
-                text: 'Ventas envios Total'
-            },
-            subtitle: {
-                text: null
-            },
-            tooltip: {
-                shared: true
-            },
-            xAxis: {
-                crosshair: true,
-                categories: []
-            },
-            yAxis: [{
-                labels: {
-                    format: '$ {value}'
-                },
-                title: {
-                    text: 'Monto'
-                }
-            }, {
-                labels: {
-                    format: '{value}'
-                },
-                title: {
-                    text: 'Pedidos'
-                },
-                opposite: true
-            }],
-            series: [
-                {
-                    name: 'Con Costo de Envio (Cantidad)',
-                    yAxis: 1,
-                    color: '#434348',
-                    data: []
-                },
-                {
-                    name: 'Sin Costo de Envio (Cantidad)',
-                    yAxis: 1,
-                    color: '#7CB5EC',
-                    data: []
-                },
-                /*{
-                    name: 'Con Costo de Envio (Monto)',
-                    yAxis: 1,
-                    color: '#34c38f',
-                    data: []
-                }*/
-            ]
-        },
-        opciones: {
-            grupo: 'dia'
-        },
-        fecha: {
-            inicial: new Date(hoy.getTime() - 518400000),
-            final: new Date(hoy.getTime()),
-        }
-    },
-}
 
 const SalesByShipments = ({users, onGetUsers, className}) => {
 
+    const initialState = {
+        cargando: '',
+        usuarios: [],
+        ventasEnvios: {
+            data: {
+                title: {
+                    text: 'Ventas envios Total'
+                },
+                subtitle: {
+                    text: null
+                },
+                tooltip: {
+                    formatter: function() {
+
+                        var color = this.color;
+                        var name = this.series.name;
+
+
+                        var xPosition = this.point.x;
+                        const montoEnvio = this.series.chart.series[2]['yData'][xPosition];
+
+                        var hasCosto = name.includes('Con Costo');
+                        var monto = hasCosto ? this.y + ' ('+priceFormat(montoEnvio)+' COP)' : this.y + ' (0 COP)';
+
+                        let html = '<div><div><small>'+ this.point.category +'</small><br/><p><i style="color: '+color+'" class="uil-money-bill me-2"></i> '+this.series.name+' : <b>' + monto + '</b></p></div><br /></div>';
+
+                        return html;
+                    },
+                    shared: false
+                },
+                xAxis: {
+                    crosshair: true,
+                    categories: []
+                },
+                yAxis: [{
+                    labels: {
+                        format: '$ {value}'
+                    },
+                    formatter: function(val) {
+                        console.log('value test: ', val);
+                        return val
+                    },
+                    title: {
+                        text: 'Monto'
+                    }
+                }, {
+                    labels: {
+                        format: '{value}'
+                    },
+                    title: {
+                        text: 'Pedidos'
+                    },
+                    opposite: true
+                }],
+                series: [
+                    {
+                        name: 'Con Costo de Envio (Cantidad)',
+                        yAxis: 1,
+                        color: '#434348',
+                        data: []
+                    },
+                    {
+                        name: 'Sin Costo de Envio (Cantidad)',
+                        yAxis: 1,
+                        color: '#7CB5EC',
+                        data: []
+                    },
+                    {
+                        name: 'Monto de Envio',
+                        yAxis: 1,
+                        color: '#7CB5EC',
+                        data: [],
+                        visible: false
+                    }
+                ],
+            },
+            opciones: {
+                grupo: 'dia'
+            },
+            fecha: {
+                inicial: new Date(hoy.getTime() - 518400000),
+                final: new Date(hoy.getTime()),
+            }
+        },
+    }
+
     const [stats, setStats] = useState(initialState);
     const [userList, setUserList] = useState([]);
+    const [result, setResult] = useState([]);
 
     useEffect(() => {
         if (onGetUsers) {
@@ -127,6 +150,7 @@ const SalesByShipments = ({users, onGetUsers, className}) => {
             url += '/' + stats.ventasEnvios.opciones.grupo;
             //leer estadisticas de ventas
             statsApi(url).then(function (resp) {
+                setResult(resp);
                 var fechas = [];
                 var cantidadEnvios = [];
                 var cantidadNoEnvios = [];
@@ -137,14 +161,14 @@ const SalesByShipments = ({users, onGetUsers, className}) => {
                     fechas[i] = data.fecha;
                     cantidadEnvios[i] = parseFloat(data.deliveryQty);
                     cantidadNoEnvios[i] = parseFloat(data.deliveryZeroQty);
-                    //montoEnvios[i] = parseFloat(data.deliveryCosts);
+                    montoEnvios[i] = parseFloat(data.deliveryCosts);
                 }
                 const newStats = {...stats};
                 newStats.ventasEnvios.data.subtitle.text = getStatsLabel(newStats,'ventasEnvios');
                 newStats.ventasEnvios.data.xAxis.categories = fechas;
                 newStats.ventasEnvios.data.series[0].data = cantidadEnvios;
                 newStats.ventasEnvios.data.series[1].data = cantidadNoEnvios;
-                //newStats.ventasEnvios.data.series[2].data = montoEnvios;
+                newStats.ventasEnvios.data.series[2].data = montoEnvios;
                 newStats.cargando = '';
                 setStats(newStats);
             })
