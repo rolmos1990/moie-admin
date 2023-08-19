@@ -9,6 +9,7 @@ import Hours from "../Stats/Hours";
 import Reincidents from "../Stats/Reincidents";
 import SalesCreated from "../Stats/SalesCreated";
 import SalesByStatus from "../Stats/SalesByStatus";
+import SalesByShipments from "../Stats/SalesByShipments";
 
 const Stats = () => {
 
@@ -24,6 +25,7 @@ const Stats = () => {
             <Hours className="mb-2" />
             <Reincidents className="mb-2" />
             <SalesByStatus className="mb-2" />
+            <SalesByShipments className="mb-2" />
         </React.Fragment>
     )
 }
