@@ -16,7 +16,9 @@ import {updateCard} from "../../../store/order/actions";
 import {hasCustomerOpenOrders} from "../../../helpers/service";
 import OrdersPieChart from "../../CustomerEdit/OrdersPieChart";
 import CategoriesPieChart from "../../CustomerEdit/CategoriesPieChart";
-import {trim} from "../../../common/utils";
+import {hiddenPhone, trim} from "../../../common/utils";
+import HasPermissionsFunc from "../../../components/HasPermissionsFunc";
+import {PERMISSIONS} from "../../../helpers/security_rol";
 
 const searchByOptions = [{label: "Nombre", value: "name"}, {label: "Documento", value: "doc"}, {label: "Correo", value: "email"}, {label: "Teléfono", value: "phone"}];
 
@@ -33,6 +35,8 @@ const OrderCustomer = (props) => {
     const [customerEmailDefault, setCustomerEmailDefault] = useState(getEmptyOptions());
     const [customerDocumentDefault, setCustomerDocumentDefault] = useState(getEmptyOptions());
     const [isNewCustomer, setIsNewCustomer] = useState(true);
+    const hasPhonePermission = HasPermissionsFunc([PERMISSIONS.CUSTOMER_PHONE]);
+
 
     useEffect(() => {
         if (showAsModal && car.isEdit && car.customer && car.customer.id && initComponent) {
@@ -190,7 +194,7 @@ const OrderCustomer = (props) => {
                     )}
                     {searchBy === "phone" && (
                         <Col md={9}>
-                            <Label htmlFor="customer">Telefono</Label>
+                            <Label htmlFor="customer">Teléfono</Label>
                             <FieldAsyncSelect
                                 name={"phone"}
                                 urlStr={CUSTOMER}
@@ -251,11 +255,11 @@ const OrderCustomer = (props) => {
                             </Col>
                             <Col md={6}>
                                 <label>Teléfono Celular: </label>
-                                <span className="p-1">{customerData.cellphone}</span>
+                                <span className="p-1">{hasPhonePermission ? customerData.cellphone : hiddenPhone(customerData.cellphone) }</span>
                             </Col>
                             <Col md={6}>
                                 <label>Teléfono Residencial: </label>
-                                <span className="p-1">{customerData.phone}</span>
+                                <span className="p-1">{hasPhonePermission ? customerData.phonee : hiddenPhone(customerData.phone) }</span>
                             </Col>
                             <Col md={12}>
                                 <label>Dirección: </label>

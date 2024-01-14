@@ -335,3 +335,13 @@ export const _encodePhone = (_string) => {
     const encoded = btoa(_string);
     return encoded;
 }
+
+export const hiddenPhone = (phone) => {
+
+    if (!phone || phone.length <= 3) {
+        return ""; // Devolver cadena vacía si no hay valor
+    }
+
+    // Obtener los últimos cuatro dígitos
+    return '** ** ** ' + phone.slice(-4);
+}

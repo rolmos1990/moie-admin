@@ -3,12 +3,14 @@ import {Link} from "react-router-dom"
 import {ConverterCustomerStatus} from "../customer_status";
 import {Tooltip} from "@material-ui/core";
 import {STATUS_COLORS, StatusField} from "../../../components/StatusField";
-import {formatDate, STATUS_OPTIONS, YES_NO_OPTIONS} from "../../../common/utils";
+import {formatDate, hiddenPhone, STATUS_OPTIONS, YES_NO_OPTIONS} from "../../../common/utils";
 import {PERMISSIONS} from "../../../helpers/security_rol";
 import HasPermissions from "../../../components/HasPermissions";
 import HasPermissionsFunc from "../../../components/HasPermissionsFunc";
+import {HiddenPhone} from "../../../components/Common/HiddenPhone";
 
-const customerListColumns = (onDelete = false) => {
+
+const customerListColumns = (onDelete = false, hasPhonePermission = HasPermissionsFunc([PERMISSIONS.CUSTOMER_PHONE])) => {
     let cols = [
         {
             text: "Nombre",
@@ -58,8 +60,8 @@ const customerListColumns = (onDelete = false) => {
             filter: true,
             formatter: (cellContent, item) => (
                 <>
-                    <div>Cel.: {item.cellphone && item.cellphone.length > 3 ? item.cellphone : ''}</div>
-                    <div>Res.: {item.phone && item.phone.length > 3 ? item.phone : ''}</div>
+                    <div>Cel.: {item.cellphone && item.cellphone.length > 3 ? hasPhonePermission ? item.cellphone : hiddenPhone(item.cellphone) : ''}</div>
+                    <div>Res.: {item.phone && item.phone.length > 3 ? hasPhonePermission ? item.phone : hiddenPhone(item.phone) : ''}</div>
                 </>
             ),
         },

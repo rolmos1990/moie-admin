@@ -17,6 +17,7 @@ export const PERMISSIONS = {
     CUSTOMER_LIST: 'customer.list',
     CUSTOMER_DELETE: 'customer.delete',
     CUSTOMER_PRINT_EDIT: 'customer.printEdit',
+    CUSTOMER_PHONE: 'customer.phone',
     ORDER_EDIT: 'order.edit',
     ORDER_SHOW: 'order.show',
     ORDER_LIST: 'order.list',

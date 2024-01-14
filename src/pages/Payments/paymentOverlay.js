@@ -7,18 +7,20 @@ import PropTypes from "prop-types";
 import NoDataIndication from "../../components/Common/NoDataIndication";
 import {getOrders} from "../../store/order/actions";
 import Conditionals from "../../common/conditionals";
-import {formatDate, priceFormat} from "../../common/utils";
+import {formatDate, hiddenPhone, priceFormat} from "../../common/utils";
 import {ConfirmationModalAction} from "../../components/Modal/ConfirmationModal";
 import {StatusField} from "../../components/StatusField";
 import {ORDER_STATUS, PAYMENT_STATUS} from "../../common/constants";
 import {applyPayment, deletePayment, getPayment} from "../../store/payments/actions";
 import {PERMISSIONS} from "../../helpers/security_rol";
 import HasPermissions from "../../components/HasPermissions";
+import HasPermissionsFunc from "../../components/HasPermissionsFunc";
 
 const PaymentOverlay = (props) => {
 
     const {paymentSelected, payment, onRelateOrder, onCloseOverlay, onGetOrders, orders, onGetPayment, refresh, onCancelPayment} = props;
     const [findOrderBy, setFindOrderBy] = useState(null);
+    const hasPhonePermission = HasPermissionsFunc([PERMISSIONS.CUSTOMER_PHONE]);
 
     useEffect(() => {
         if (paymentSelected) {
@@ -104,7 +106,7 @@ const PaymentOverlay = (props) => {
                             </Col>
                             <Col md={6}>
                                 <label>Teléfono: </label>
-                                <span className="p-1">{payment.phone}</span>
+                                <span className="p-1">{hasPhonePermission ? payment.phone : hiddenPhone(payment.phone)}</span>
                             </Col>
                             <Col md={6}>
                                 <label>Correo: </label>

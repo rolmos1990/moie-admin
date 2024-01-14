@@ -10,6 +10,9 @@ import {getMunicipalities, getStates} from "../../store/location/actions";
 import Conditionals from "../../common/conditionals";
 import {FieldEmail, FieldPhone, FieldSelect, FieldSwitch, FieldText} from "../../components/Fields";
 import ButtonSubmit from "../../components/Common/ButtonSubmit";
+import {hiddenPhone} from "../../common/utils";
+import HasPermissionsFunc from "../../components/HasPermissionsFunc";
+import {PERMISSIONS} from "../../helpers/security_rol";
 
 const CustomerForm = (props) => {
     const {getCustomer, customer, showAsModal = false, onCloseModal= false, onAcceptModal= false} = props;
@@ -21,9 +24,13 @@ const CustomerForm = (props) => {
     const {getMunicipalities, municipalities} = props;
     const [state, setState] = useState(null);
     const [municipality, setMunicipality] = useState(null);
+    const [phoneedit, setPhoneedit] = useState(false);
+    const [cellphoneedit, setCellphoneedit] = useState(false);
 
     const [statesOptions, setStates] = useState([]);
     const [municipalitiesOptions, setMunicipalities] = useState([]);
+
+    const hasPhonePermission = HasPermissionsFunc([PERMISSIONS.CUSTOMER_PHONE]);
 
     //carga inicial
     useEffect(() => {
@@ -36,7 +43,12 @@ const CustomerForm = (props) => {
     //cargar la información del cliente
     useEffect(() => {
         if (customer.id) {
-            setCustomerData(customer);
+
+            if(!hasPhonePermission) {
+                setCustomerData({...customer, phone: '', cellphone: ''});
+            } else {
+                setCustomerData(customer);
+            }
 
             //definir estado por defecto
             const defaultState = customer.state?.id || null;
@@ -137,6 +149,7 @@ const CustomerForm = (props) => {
         setState(option.value);
     }
 
+
     return (
         <React.Fragment>
             <AvForm className="needs-validation" autoComplete="off" onValidSubmit={(e, v) => handleValidSubmit(e, v)}>
@@ -197,13 +210,19 @@ const CustomerForm = (props) => {
                             </Col>
                             <Col md="4">
                                 <div className="mb-3">
-                                    <Label htmlFor="cellphone">Teléfono Celular <span className="text-danger">*</span></Label>
-                                    <FieldPhone
+                                    <Label htmlFor="cellphone">Teléfono Celular {!hasPhonePermission && <a href="#" onClick={() => setCellphoneedit(!cellphoneedit)}>{!cellphoneedit ? "( Edit )" : "( Show )" }</a>} <span className="text-danger">*</span></Label>
+
+                                    {!cellphoneedit && !hasPhonePermission ? <FieldText
+                                        id='cellphone'
+                                        name={"cellphone"}
+                                        value={hiddenPhone(customer.cellphone)}
+                                        disabled={true}
+                                    /> : <FieldPhone
                                         id="cellphone"
                                         name="cellphone"
-                                        value={customerData.cellphone}
                                         placeholder=""
                                         type="text"
+                                        value={customerData.cellphone}
                                         errorMessage="Ingrese un número valido (Ejemplo: 00000000)"
                                         className="form-control"
                                         validate={{required: {value: true}}}
@@ -216,13 +235,18 @@ const CustomerForm = (props) => {
                                             setValidPhone(false);
                                             return false;
                                         }}
-                                    />
+                                    />}
                                 </div>
                             </Col>
                             <Col md="4">
                                 <div className="mb-3">
-                                    <Label htmlFor="phone">Teléfono Residencial</Label>
-                                    <FieldPhone
+                                    <Label htmlFor="phone">Teléfono Residencial {!hasPhonePermission && <a href="#" onClick={() => setPhoneedit(!phoneedit)}>{!phoneedit ? "( Edit )" : "( Show )" }</a>}</Label>
+                                    {!phoneedit && !hasPhonePermission ? <FieldText
+                                        id='phone'
+                                        name={"phone"}
+                                        value={hiddenPhone(customer.phone)}
+                                        disabled={true}
+                                    /> :<FieldPhone
                                         id="phone"
                                         name="phone"
                                         value={customerData.phone}
@@ -232,7 +256,15 @@ const CustomerForm = (props) => {
                                         className="form-control"
                                         validate={{required: {value: true}}}
                                         onChange={(value) => setCustomerData({...customerData, phone: value})}
-                                    />
+                                        onValidate={(value, country) => {
+                                            if(country.iso2 === 'co' && (value && value.length === 12)){
+                                                setValidPhone(true);
+                                                return true
+                                            }
+                                            setValidPhone(false);
+                                            return false;
+                                        }}
+                                    />}
                                 </div>
                             </Col>
                         </Row>

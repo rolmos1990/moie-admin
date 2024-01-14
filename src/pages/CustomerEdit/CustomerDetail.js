@@ -5,7 +5,7 @@ import {Link, withRouter} from "react-router-dom"
 import {connect} from "react-redux";
 import PropTypes from "prop-types";
 import Breadcrumb from "../../components/Common/Breadcrumb";
-import {formatDate} from "../../common/utils";
+import {formatDate, hiddenPhone} from "../../common/utils";
 import NoDataIndication from "../../components/Common/NoDataIndication";
 import {getCustomer} from "../../store/customer/actions";
 import OrderCardList from "../Orders/OrderCardList";
@@ -18,6 +18,7 @@ import OrdersPieChart from "./OrdersPieChart";
 import CategoriesPieChart from "./CategoriesPieChart";
 import {PERMISSIONS} from "../../helpers/security_rol";
 import HasPermissions from "../../components/HasPermissions";
+import HasPermissionsFunc from "../../components/HasPermissionsFunc";
 
 const CustomerDetail = (props) => {
 
@@ -26,6 +27,8 @@ const CustomerDetail = (props) => {
     const [hasPendingOrders, setHasPendingOrders] = useState(false);
     const [activeTab, setActiveTab] = useState(1);
     const [productChart, setProductChart] = useState({series: [], labels: []});
+
+    const hasPhonePermission = HasPermissionsFunc([PERMISSIONS.CUSTOMER_PHONE]);
 
     useEffect(() => {
         if (props.match.params.id) {
@@ -104,11 +107,11 @@ const CustomerDetail = (props) => {
                                     </Col>
                                     <Col md={6}>
                                         <label>Teléfono Celular: </label>
-                                        <span className="p-1">{customerData.cellphone}</span>
+                                        <span className="p-1">{hasPhonePermission ? customerData.cellphone : hiddenPhone(customerData.cellphone) }</span>
                                     </Col>
                                     <Col md={6}>
                                         <label>Teléfono Residencial: </label>
-                                        <span className="p-1">{customerData.phone}</span>
+                                        <span className="p-1">{hasPhonePermission ? customerData.phone : hiddenPhone(customerData.phone) }</span>
                                     </Col>
                                 </Row>
                                 <hr/>

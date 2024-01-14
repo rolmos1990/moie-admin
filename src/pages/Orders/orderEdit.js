@@ -8,7 +8,7 @@ import {
     copyToClipboard,
     DATE_FORMAT,
     formatDate,
-    getImageByQuality,
+    getImageByQuality, hiddenPhone,
     priceFormat,
     printPartOfPage,
     threeDots
@@ -102,6 +102,8 @@ const OrderEdit = (props) => {
     const [allowEdit, setAllowEdit] = useState(false);
     const [allowUpdateTracking, setAllowUpdateTracking] = useState(false);
     const [carRefresh, setCarRefresh] = useState(false);
+    const hasPhonePermission = HasPermissionsFunc([PERMISSIONS.CUSTOMER_PHONE]);
+
 
     const productSummaryRef = React.createRef();
 
@@ -606,11 +608,11 @@ const OrderEdit = (props) => {
                                     </Col>
                                     <Col md={12}>
                                         <label>Teléfono Celular: </label>
-                                        <span className="p-1">{orderData.customer.cellphone}</span>
+                                        <span className="p-1">{hasPhonePermission ? orderData.customer.cellphone : hiddenPhone(orderData.customer.cellphone) }</span>
                                     </Col>
                                     <Col md={12}>
                                         <label>Teléfono Residencial: </label>
-                                        <span className="p-1">{orderData.customer.phone}</span>
+                                        <span className="p-1">{hasPhonePermission ? orderData.customer.phone : hiddenPhone(orderData.customer.phone)}</span>
                                     </Col>
                                     <Col md={12}>
                                         <label>Dirección: </label>
