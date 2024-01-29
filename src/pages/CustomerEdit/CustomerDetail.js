@@ -94,7 +94,6 @@ const CustomerDetail = (props) => {
                                         <label>Documento: </label>
                                         <span className="p-1">{customerData.document}</span>
                                     </Col>
-
                                 </Row>
                                 <hr/>
                                 <Row>
@@ -113,6 +112,11 @@ const CustomerDetail = (props) => {
                                         <label>Teléfono Residencial: </label>
                                         <span className="p-1">{hasPhonePermission ? customerData.phone : hiddenPhone(customerData.phone) }</span>
                                     </Col>
+                                    <HasPermissions permission={PERMISSIONS.CUSTOMER_WHATSAPP}>
+                                    <Col md={6}>
+                                        <a target="_new" href={`https://wa.me/${customerData.cellphone}`} > <i className="fa fa-customer"></i> Contactar Whatsapp</a>
+                                    </Col>
+                                    </HasPermissions>
                                 </Row>
                                 <hr/>
                                 <Row>

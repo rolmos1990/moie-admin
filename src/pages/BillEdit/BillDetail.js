@@ -7,18 +7,26 @@ import PropTypes from "prop-types";
 import Breadcrumb from "../../components/Common/Breadcrumb";
 import {formatDate} from "../../common/utils";
 import NoDataIndication from "../../components/Common/NoDataIndication";
-import {createCreditNote, getBill, sendInvoice} from "../../store/bill/actions";
+import {createCreditNote, getBill, sendInvoice, updateBill} from "../../store/bill/actions";
 import {ConfirmationModalAction} from "../../components/Modal/ConfirmationModal";
-import {BILL_STATUS} from "../../common/constants";
+import {BILL_STATUS, CHARGE_ON_DELIVERY, DELIVERY_METHODS_IDS, ORDERS_ENUM} from "../../common/constants";
 import {PERMISSIONS} from "../../helpers/security_rol";
 import NoAccess from "../../components/Common/NoAccess";
 import HasPermissions from "../../components/HasPermissions";
+import Conditionals from "../../common/conditionals";
+import OrderList from "../Orders/orderList";
+import CustomModal from "../../components/Modal/CommosModal";
+import HasPermissionsFunc from "../../components/HasPermissionsFunc";
 
 const BillDetail = (props) => {
 
     const {onGetBill, refresh, bill} = props;
 
     const [activeTab, setActiveTab] = useState(1);
+
+    const [openOrdersModal, setOpenOrdersModal] = useState(false);
+    const [orderListConditions, setOrderListConditions] = useState([]);
+    const hasAssociateOrderPermission = HasPermissionsFunc([PERMISSIONS.BILL_CHANGE_ORDER]);
 
 
     useEffect(() => {
@@ -45,6 +53,28 @@ const BillDetail = (props) => {
         });
     }
 
+    const addOrders = (billId) => {
+        const conditions = new Conditionals.Condition;
+        conditions.add('bill.id', '', Conditionals.OPERATORS.NULL);
+        conditions.add('office', '', Conditionals.OPERATORS.NOT_NULL);
+        conditions.add('createdAt', '2022-01-01T00:00:00.000Z', Conditionals.OPERATORS.GREATER_THAN_OR_EQUAL);
+        conditions.add('deliveryMethod', DELIVERY_METHODS_IDS.INTERRAPIDISIMO, Conditionals.OPERATORS.EQUAL);
+        conditions.add('orderDelivery.deliveryType', CHARGE_ON_DELIVERY, Conditionals.OPERATORS.EQUAL);
+        conditions.add('status', [ORDERS_ENUM.SENT, ORDERS_ENUM.FINISHED].join("::"), Conditionals.OPERATORS.IN);
+
+        setOrderListConditions(conditions.condition);
+        setOpenOrdersModal(true);
+    };
+
+    const associateNewOrder = () => {
+        ConfirmationModalAction({
+            title: `¿Está seguro de modificar y asociar un nuevo pedido a esta factura # ${bill.id}?`,
+            description: 'Esta acción no puede revertirse.',
+            id: '_associateNewOrder',
+            onConfirm: () => addOrders(bill.id)
+        });
+    }
+
     const formatLog = (_log) => {
         if (_log) {
             const replaceRegex = /Paso+/g;
@@ -67,8 +97,37 @@ const BillDetail = (props) => {
         return isNotSent;
     }
 
+    const canAssociateOrder = () => {
+        const canAssociate = hasAssociateOrderPermission && (bill.status === BILL_STATUS.ERROR);
+        return canAssociate;
+    }
+
+    const onCloseModal = () => {
+        setOpenOrdersModal(false);
+    };
+    const onAcceptModal = (conditionals) => {
+        if (conditionals && conditionals.length > 0) {
+            if (conditionals && conditionals.length > 1) {
+                return;
+            }
+        }
+
+        const value = conditionals[0].value;
+        const ids = value.split ? value.split('::') : [value];
+        console.log('ids: ', ids);
+        const orderId = ids[0];
+
+        console.log('orderId: ', orderId);
+
+        props.onUpdateBill(bill.id, {order: {id: orderId}});
+        setOpenOrdersModal(false);
+    };
+
     return (bill && bill.id) ? (
         <React.Fragment>
+            <CustomModal title={"Agregar pedidos"} size="lg" showFooter={false} isOpen={openOrdersModal} onClose={onCloseModal}>
+                <OrderList customActions={onAcceptModal} showAsModal={true} conditionals={orderListConditions} externalView orderLimit={1}/>
+            </CustomModal>
             <div className="page-content">
                 <Container fluid className="pb-3">
                     <Breadcrumb hasBack path="/bills" title={`Factura #${bill.id}`} item={`Factura #${bill.id}`}/>
@@ -81,6 +140,14 @@ const BillDetail = (props) => {
                                 </div>
                                 <div className={"mb-3 float-md-end"}>
                                     <div className="button-items">
+                                        {canAssociateOrder() && (
+                                        <Tooltip placement="bottom" title="Asociar un nuevo Pedido" aria-label="add">
+                                            <button type="button" color="primary" className="btn-sm btn btn-outline-info waves-effect waves-light" onClick={() => associateNewOrder()}>
+                                                <i className={`uil-shopping-cart-alt me-2`}> </i>
+                                            </button>
+                                        </Tooltip>
+                                        )}
+
                                         {canRetry() && (
                                             <Tooltip placement="bottom" title="Reenviar Factura" aria-label="add">
                                                 <button type="button" color="primary" className="btn-sm btn btn-outline-info waves-effect waves-light" onClick={() => createInvoice()}>
@@ -199,6 +266,7 @@ const mapDispatchToProps = dispatch => ({
     onGetBill: (id) => dispatch(getBill(id)),
     onCreateCreditNote: (id) => dispatch(createCreditNote(id)),
     onCreateInvoice: (id) => dispatch(sendInvoice(id)),
+    onUpdateBill: (id, data) => dispatch(updateBill(id, data))
 })
 
 export default withRouter(

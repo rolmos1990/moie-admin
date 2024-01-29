@@ -100,10 +100,10 @@ export const registerBillFailed = data => {
     }
 }
 
-export const updateBill = (id, data, history) => {
+export const updateBill = (id, data) => {
     return {
         type: UPDATE_BILL,
-        payload: {id, data, history},
+        payload: {id, data},
     }
 }
 

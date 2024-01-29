@@ -137,12 +137,12 @@ function* register({payload: {data}}) {
     }
 }
 
-function* update({ payload: { id, data, history } }) {
+function* update({ payload: { id, data } }) {
     try {
         const response = yield call(PUT_API_REQUEST, id, data)
-        showResponseMessage(response, "Despacho actualizado!")
+        showResponseMessage(response, "Factura actualizada!")
         yield put(UPDATE_SUCCESS_ACTION(response))
-        //history.push(LIST_URL)
+
     } catch (error) {
         yield put(UPDATE_FAILED_ACTION(error))
     }
@@ -152,7 +152,7 @@ function* billDelete({ payload: { id, history } }) {
     try {
         yield call(deleteBillApi, id)
         yield put(deleteBillSuccess(id))
-        showResponseMessage({status:200}, "Despacho borrado!");
+        showResponseMessage({status:200}, "Factura borrada!");
         history.push("/bills")
 
     } catch (error) {
@@ -164,7 +164,7 @@ function* billConfirm({ payload: { id, history } }) {
     try {
         yield call(confirmBillApi, id)
         yield put(confirmBillSuccess(id))
-        showResponseMessage({status:200}, "Despacho ha sido finalizado!");
+        showResponseMessage({status:200}, "Factura ha sido finalizada!");
         history.push("/bills")
 
     } catch (error) {
@@ -178,7 +178,7 @@ function* billOrderAdd({ payload: { id, data, conditional, history } }) {
         const query = Conditionals.buildHttpGetQuery(cond, 0, 200);
         yield call(addOrderBillApi, id, data, query)
         yield put(deleteBillSuccess(id))
-        showResponseMessage({status: 200}, "Despacho borrado!");
+        showResponseMessage({status: 200}, "Se ha agregado factura!");
         history.push("/bill/" + id)
 
     } catch (error) {
