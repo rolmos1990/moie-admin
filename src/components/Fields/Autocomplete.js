@@ -13,6 +13,9 @@ const Autocomplete = (props) => {
 
     const getSuggestions = value => {
         const inputValue = value.trim().toLowerCase();
+        if(options.length <= 0){
+            return;
+        }
         return inputValue.length === 0 ? [] : (options || []).filter(item => {
                 return item.name.toLowerCase().includes(inputValue)
             }
@@ -44,6 +47,11 @@ const Autocomplete = (props) => {
         setSuggestions([])
     };
 
+    const onChange = (e) => {
+        props.onChange(e.target.value || '');
+        setSelected(e.target.value || '');
+    }
+
     return (
         <AvAutoSuggestInput
             validate={{
@@ -58,7 +66,7 @@ const Autocomplete = (props) => {
             getSuggestionValue={getSuggestionValue}
             renderSuggestion={renderSuggestion}
             onSuggestionSelected={onSuggestionSelected}
-            onChange={(e) => setSelected(e.target.value || '')}
+            onChange={onChange}
             suggestions={suggestions || []}
         />
     )

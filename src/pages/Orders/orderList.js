@@ -31,7 +31,7 @@ import {changePreloader} from "../../store/layout/actions";
 import {showMessage} from "../../components/MessageToast/ShowToastMessages";
 
 const OrderList = props => {
-    const {orders, meta, onGetOrders, onResetOrders, refresh, customActions, conditionals, showAsModal, conciliation, onChangePreloader, externalView, reset} = props;
+    const {orders, meta, onGetOrders, onResetOrders, refresh, customActions, conditionals, showAsModal, conciliation, onChangePreloader, externalView, reset, orderLimit} = props;
     const [statesList, setStatesList] = useState([])
     const [filter, setFilter] = useState(false);
     const [conditional, setConditional] = useState(null);
@@ -256,7 +256,7 @@ const OrderList = props => {
                                                     {customActions ? <Col md={8}>
                                                         <div className="mb-3 float-md-end">
                                                             <Tooltip placement="bottom" title="Aceptar" aria-label="add">
-                                                                <Button onClick={() => onPressAction()} color="success" disabled={(ordersSelected.length === 0 && !selectAll) && (!conditional || conditional.length === 0)}>
+                                                                <Button onClick={() => onPressAction()} color="success" disabled={((ordersSelected.length === 0 && !selectAll) && (!conditional || conditional.length === 0)) || (orderLimit && orderLimit > 0 && ordersSelected.length > orderLimit)}>
                                                                     <i className={"mdi mdi-check"}> </i> &nbsp; Aceptar
                                                                 </Button>
                                                             </Tooltip>
