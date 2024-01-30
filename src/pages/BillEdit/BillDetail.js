@@ -53,6 +53,18 @@ const BillDetail = (props) => {
         });
     }
 
+    const addOrdersManager = (billId, type) => {
+        if(!type){
+            addOrders(billId);
+        }
+        if(type === 'SERVIENTREGA'){
+            addOrdersServiEntrega(billId);
+        }
+        if(type === 'PAYU'){
+            addOrdersPayu(billId);
+        }
+    }
+
     const addOrders = (billId) => {
         const conditions = new Conditionals.Condition;
         conditions.add('bill.id', '', Conditionals.OPERATORS.NULL);
@@ -66,12 +78,37 @@ const BillDetail = (props) => {
         setOpenOrdersModal(true);
     };
 
-    const associateNewOrder = () => {
+    const addOrdersPayu = (billId) => {
+        const conditions = new Conditionals.Condition;
+        conditions.add('bill.id', '', Conditionals.OPERATORS.NULL);
+        conditions.add('office', '', Conditionals.OPERATORS.NOT_NULL);
+        conditions.add('createdAt', '2022-01-01T00:00:00.000Z', Conditionals.OPERATORS.GREATER_THAN_OR_EQUAL);
+        conditions.add('deliveryMethod', DELIVERY_METHODS_IDS.PAYU, Conditionals.OPERATORS.EQUAL);
+        conditions.add('status', [ORDERS_ENUM.SENT, ORDERS_ENUM.FINISHED].join("::"), Conditionals.OPERATORS.IN);
+
+        setOrderListConditions(conditions.condition);
+        setOpenOrdersModal(true);
+    };
+
+    const addOrdersServiEntrega = (billId) => {
+        const conditions = new Conditionals.Condition;
+        conditions.add('bill.id', '', Conditionals.OPERATORS.NULL);
+        conditions.add('office', '', Conditionals.OPERATORS.NOT_NULL);
+        conditions.add('createdAt', '2023-05-20T00:00:00.000Z', Conditionals.OPERATORS.GREATER_THAN_OR_EQUAL);
+        conditions.add('deliveryMethod', DELIVERY_METHODS_IDS.SERVIENTREGA, Conditionals.OPERATORS.EQUAL);
+        conditions.add('orderDelivery.deliveryType', CHARGE_ON_DELIVERY, Conditionals.OPERATORS.EQUAL);
+        conditions.add('status', [ORDERS_ENUM.SENT, ORDERS_ENUM.FINISHED].join("::"), Conditionals.OPERATORS.IN);
+
+        setOrderListConditions(conditions.condition);
+        setOpenOrdersModal(true);
+    };
+
+    const associateNewOrder = (type) => {
         ConfirmationModalAction({
             title: `¿Está seguro de modificar y asociar un nuevo pedido a esta factura # ${bill.id}?`,
             description: 'Esta acción no puede revertirse.',
             id: '_associateNewOrder',
-            onConfirm: () => addOrders(bill.id)
+            onConfirm: () => addOrdersManager(bill.id, type)
         });
     }
 
@@ -141,11 +178,23 @@ const BillDetail = (props) => {
                                 <div className={"mb-3 float-md-end"}>
                                     <div className="button-items">
                                         {canAssociateOrder() && (
-                                        <Tooltip placement="bottom" title="Asociar un nuevo Pedido" aria-label="add">
-                                            <button type="button" color="primary" className="btn-sm btn btn-outline-info waves-effect waves-light" onClick={() => associateNewOrder()}>
+                                            <>
+                                                <Tooltip placement="bottom" title="Asociar un nuevo Pedido (INTERRAPIDISIMO)" aria-label="add">
+                                                    <button type="button" color="primary" className="btn-sm btn btn-outline-info waves-effect waves-light" onClick={() => associateNewOrder()}>
+                                                        <i className={`uil-shopping-cart-alt me-2`}> </i>
+                                                    </button>
+                                                </Tooltip>
+                                                <Tooltip placement="bottom" title="Asociar un nuevo Pedido (SERVIENTREGA)" aria-label="add">
+                                                <button type="button" color="primary" className="btn-sm btn btn-outline-info waves-effect waves-light" onClick={() => associateNewOrder('SERVIENTREGA')}>
                                                 <i className={`uil-shopping-cart-alt me-2`}> </i>
-                                            </button>
-                                        </Tooltip>
+                                                </button>
+                                                </Tooltip>
+                                                <Tooltip placement="bottom" title="Asociar un nuevo Pedido (PAYU)" aria-label="add">
+                                                <button type="button" color="primary" className="btn-sm btn btn-outline-info waves-effect waves-light" onClick={() => associateNewOrder('PAYU')}>
+                                                <i className={`uil-shopping-cart-alt me-2`}> </i>
+                                                </button>
+                                                </Tooltip>
+                                            </>
                                         )}
 
                                         {canRetry() && (
