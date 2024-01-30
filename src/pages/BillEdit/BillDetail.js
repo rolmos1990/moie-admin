@@ -17,6 +17,7 @@ import Conditionals from "../../common/conditionals";
 import OrderList from "../Orders/orderList";
 import CustomModal from "../../components/Modal/CommosModal";
 import HasPermissionsFunc from "../../components/HasPermissionsFunc";
+import moment from "moment";
 
 const BillDetail = (props) => {
 
@@ -151,12 +152,9 @@ const BillDetail = (props) => {
 
         const value = conditionals[0].value;
         const ids = value.split ? value.split('::') : [value];
-        console.log('ids: ', ids);
         const orderId = ids[0];
 
-        console.log('orderId: ', orderId);
-
-        props.onUpdateBill(bill.id, {order: {id: orderId}});
+        props.onUpdateBill(bill.id, {order: {id: orderId}, createdAt: moment().format('YYYY-MM-DD HH:mm:ss')});
         setOpenOrdersModal(false);
     };
 
