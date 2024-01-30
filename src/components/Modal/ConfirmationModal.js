@@ -1,10 +1,11 @@
-import {useState, useEffect} from "react";
+import React, {useState, useEffect} from "react";
 import PropTypes from "prop-types";
-import {Modal} from "reactstrap";
+import {Col, Input, Modal, Row} from "reactstrap";
 import ReactDOM from 'react-dom';
 
 export const ConfirmationModal = (props) => {
     const [openmodal, setOpenmodal] = useState(true);
+    const [text, setText] = useState(true);
 
     useEffect(() => {
         if(!openmodal) {
@@ -13,8 +14,15 @@ export const ConfirmationModal = (props) => {
     }, [openmodal]);
 
     const confirmAction = () => {
-        props.onConfirm();
-        setOpenmodal(false);
+        if(props.input){
+            const _copy = text;
+            props.onConfirm(_copy);
+            setText("");
+            setOpenmodal(false);
+        } else {
+            props.onConfirm();
+            setOpenmodal(false);
+        }
     }
     return (
     <Modal
@@ -30,6 +38,13 @@ export const ConfirmationModal = (props) => {
     <div className="modal-body">
         <p>{props.description}</p>
     </div>
+    {props.input && (
+        <Row>
+            <Col md={11}>
+                <Input type="text" className="form-control m-3" placeholder="Ingrese valor aqui..." aria-label="Add text" onChange={(e) => setText(e.target.value)} />
+            </Col>
+        </Row>
+    )}
     <div className="modal-footer">
         <button type="button" className="btn btn-light" onClick={() => setOpenmodal(false)}>Cerrar</button>
         <button type="button" className="btn btn-primary" onClick={() => confirmAction()}>Confirmar</button>

@@ -56,6 +56,7 @@ export const PERMISSIONS = {
     SECURITY_EDIT: 'security.edit',
     SECURITY_SHOW: 'security.show',
     SECURITY_LIST: 'security.list',
+    SECURITY_TOKEN: 'security.token',
     LOCALITY_CREATE: 'locality.create',
     LOCALITY_EDIT: 'locality.edit',
     LOCALITY_SHOW: 'locality.show',
@@ -93,6 +94,7 @@ export const PERMISSIONS = {
     CATALOG_SYNC: 'catalog.sync',
     DASHBOARD_INVENTORY: 'dashboard.inventory',
     DASHBOARD_ORDER_STATUS: 'dashboard.orderStatus',
+    VCARD_MANAGE: 'vcard.manage',
 };
 export const hasPermissionAccess = (roles, permission) => {
     return true;

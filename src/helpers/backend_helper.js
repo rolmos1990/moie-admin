@@ -4,6 +4,8 @@ import * as url from "./url_helper";
 
 const postLogin = data => post(url.POST_LOGIN, data);
 
+const validateAccessLogin = data => post(url.VALIDATE_ACCESS, data);
+
 const registerCustomer = data => post(url.CUSTOMER, data);
 
 const updateCustomer = (id, data) => put(`${url.CUSTOMER}/${id}`, data);
@@ -208,6 +210,7 @@ export {
     deleteDataApi,
 
     postLogin,
+    validateAccessLogin,
     registerCustomer,
     updateCustomer,
     fetchCustomer,

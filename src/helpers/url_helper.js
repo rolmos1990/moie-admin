@@ -3,6 +3,7 @@ export const POST_FAKE_REGISTER = "/post-fake-register"
 
 //LOGIN
 export const POST_LOGIN = "/user/login"
+export const VALIDATE_ACCESS = "/device/validateAccess"
 export const POST_FAKE_JWT_LOGIN = "/post-jwt-login"
 export const POST_FAKE_PASSWORD_FORGET = "/fake-forget-pwd"
 export const POST_FAKE_JWT_PASSWORD_FORGET = "/jwt-forget-pwd"
@@ -105,6 +106,7 @@ export const GET_TASKS = "/tasks"
 export const SECURITY_PERMISSIONS = "/securityPermission"
 export const SECURITY_ROLES = "/securityRol"
 export const SECURITY_PERMISSIONS_ROLES = "/sec/relate"
+export const SECURITY_AUTHORIZATIONS = "/device"
 
 //CONTACTS
 export const USER = "/user"

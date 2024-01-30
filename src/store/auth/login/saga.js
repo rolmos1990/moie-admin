@@ -7,22 +7,44 @@ import {apiError, loginSuccess, logoutUserSuccess} from "./actions"
 //Include Both Helper File with needed methods
 import {getFirebaseBackend} from "../../../helpers/firebase_helper"
 import {postSocialLogin,} from "../../../helpers/fakebackend_helper"
-import {postLogin} from "../../../helpers/backend_helper";
+import {postLogin, validateAccessLogin} from "../../../helpers/backend_helper";
 import {getErrorMessage} from "../../../common/utils";
 
 const fireBaseBackend = getFirebaseBackend()
 
+//generate a new device ID
+function generateDeviceId() {
+  const timestamp = new Date().getTime();
+  const randomValue = Math.random().toString(36).substring(2, 10); // Genera un valor aleatorio de 8 caracteres
+  return `${timestamp}-${randomValue}`;
+}
+
 function* loginUser({ payload: { user, history } }) {
   try {
+      //validate session
+    const deviceId = localStorage.getItem('moie-deviceId') || generateDeviceId();
+    yield localStorage.setItem("moie-deviceId", deviceId);
+
+    const responseAccess = yield call(validateAccessLogin, {
+      deviceId: deviceId
+    });
+
+    if(responseAccess && responseAccess.device && responseAccess.device.status === true){
+
       const response = yield call(postLogin, {
         username: user.username,
         password: user.password,
       });
+
       yield localStorage.setItem("authUser", JSON.stringify(response));
       yield put(loginSuccess(response));
       setTimeout(() => {
         window.location = "/dashboard";
       }, 1000);
+
+    } else {
+      yield put(apiError('Acceso insuficiente, Favor contacte al administrador'));
+    }
   } catch (error) {
     const message = getErrorMessage(error);
     yield put(apiError(message));
