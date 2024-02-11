@@ -173,6 +173,14 @@ const updateWalletApi = (id, data) => put(`${url.WALLETS}/${id}`, data);
 const addAttachmentWalletApi = (id, data) => post(`${url.WALLETS}/${id}/addAttachment`, data);
 const walletStatsApi = () => get(`${url.WALLETS}/reports/stats`);
 
+//items
+const fetchItemsApi = data => get(url.ITEMS, {}, data);
+const fetchItemApi = (id) => get(`${url.ITEMS}/${id}`, {});
+const registerItemApi = data => post(url.ITEMS, data);
+const updateItemApi = (id, data) => put(`${url.ITEMS}/${id}`, data);
+const fetchEventsApi = data => get(`${url.ITEMS}/get/events`, {}, data);
+
+
 //payments
 const fetchPaymentsApi = data => get(url.PAYMENTS, {}, data);
 const fetchPaymentApi = (id) => get(`${url.PAYMENTS}/${id}`, {});
@@ -198,8 +206,14 @@ const registerDataApi = (urlStr, data) => post(urlStr, data);
 const postApi = (urlStr, data) => post(urlStr, data);
 const updateDataApi = (urlStr, id, data) => put(`${urlStr}/${id}`, data);
 const deleteDataApi = (urlStr, id) => del(`${urlStr}/${id}`);
+const deleteallDataApi = (urlStr) => del(`${urlStr}`);
 
 const syncCatalog = () => get(`${url.PRODUCT_IMAGES}/updateCatalogVersion/sync`, {});
+
+const registerVCardApi = data => post(`${url.VCARD}/createVCard`, data);
+
+const fileVCardContacts = (filename) => file(filename, `${url.VCARD}/g/generateVCard`, {header: 'content-type: text/x-vcard'});
+
 
 
 export {
@@ -208,6 +222,7 @@ export {
     updateDataApi,
     postApi,
     deleteDataApi,
+    deleteallDataApi,
 
     postLogin,
     validateAccessLogin,
@@ -305,6 +320,12 @@ export {
     addAttachmentWalletApi,
     walletStatsApi,
 
+    fetchItemsApi,
+    fetchItemApi,
+    registerItemApi,
+    updateItemApi,
+    fetchEventsApi,
+
     fetchDeliveryMethodsApi,
     fetchDeliveryQuoteApi,
 
@@ -374,5 +395,9 @@ export {
 
     syncCatalog,
     fetchInventoryProductsApi,
-    fetchOrderStatusStatsProductsApi
+    fetchOrderStatusStatsProductsApi,
+
+    registerVCardApi,
+
+    fileVCardContacts
 }

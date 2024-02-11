@@ -110,6 +110,8 @@ const ConfigsList = props => {
         }
     };
 
+    const namesAndValueConfig = [GROUPS.REFERENCE_KEY, GROUPS.ALARMS];
+
     return (
         <Row>
             <Col md={5}>
@@ -178,7 +180,7 @@ const ConfigsList = props => {
                                         <tbody>
                                         {map(fieldOption.options, (option, key) => (
                                             <tr key={key}>
-                                                {groupSelected === GROUPS.REFERENCE_KEY && (
+                                                {namesAndValueConfig.includes(groupSelected) && (
                                                     <>
                                                         {fieldOptionEdited !== option.id && (
                                                             <>
@@ -207,7 +209,7 @@ const ConfigsList = props => {
                                                     </>
                                                 )}
 
-                                                {groupSelected !== GROUPS.REFERENCE_KEY && (
+                                                {!(namesAndValueConfig.includes(groupSelected)) && (
                                                     <td>
                                                         {fieldOptionEdited !== option.id && (
                                                             <>

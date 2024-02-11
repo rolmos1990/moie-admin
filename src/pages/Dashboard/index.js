@@ -9,6 +9,7 @@ import {getOrders} from "../../store/order/actions";
 import {connect} from "react-redux";
 import {getReportDashbord} from "../../store/reports/actions";
 import OrderStatusStats from "./order-status-stats";
+import EventItems from "./eventItems";
 
 const series1 = [{
     data: [25, 66, 41, 89, 63, 25, 44, 20, 36, 40, 54]
@@ -272,6 +273,7 @@ const Dashboard = (props) => {
             </Row>
             <Row>
                 <Col xl={4}>
+                <EventItems/>
                 <Inventory/>
                 <OrderStatusStats/>
                 </Col>

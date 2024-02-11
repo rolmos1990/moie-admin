@@ -65,6 +65,9 @@ export const TEMPLATES_CATALOG = "/templateCatalog"
 //WALLETS
 export const WALLETS = "/movement"
 
+//ITEMS
+export const ITEMS = "/items"
+
 //PAYMENTS
 export const PAYMENTS = "/payment"
 
@@ -114,3 +117,5 @@ export const GET_USERS = "/users"
 export const GET_USER_PROFILE = "/user"
 
 export const COMMENT = "/comment"
+
+export const VCARD = "/vcard"

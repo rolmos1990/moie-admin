@@ -24,6 +24,7 @@ export * from "./reports/actions"
 export * from "./payments/actions"
 export * from "./billConfig/actions"
 export * from "./wallet/actions"
+export * from "./items/actions"
 
 //System
 export * from "./location/actions"

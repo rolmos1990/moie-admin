@@ -16,7 +16,7 @@ import {
     DELETE_CUSTOMER_FAILED, RESET_CUSTOMERS, QUERY_CUSTOMERS, QUERY_CUSTOMERS_FAILED, QUERY_CUSTOMERS_SUCCESS,
     GET_CUSTOMER_REGISTEREDS,
     GET_CUSTOMER_REGISTEREDS_SUCCESS,
-    GET_CUSTOMER_REGISTEREDS_FAILED,
+    GET_CUSTOMER_REGISTEREDS_FAILED, REGISTER_VCARD, REGISTER_VCARD_SUCCESS, REGISTER_VCARD_FAILED,
 } from "./actionTypes"
 
 export const resetCustomer = () => ({
@@ -149,3 +149,27 @@ export const getCustomerRegisteredsSuccess = (data) => ({
     type: GET_CUSTOMER_REGISTEREDS_SUCCESS,
     payload: data,
 })
+
+
+export const registerVCard = (vcard, history) => {
+    return {
+        type: REGISTER_VCARD,
+        payload: { vcard, history },
+    }
+}
+
+export const registerVCardSuccess = data => {
+    return {
+        type: REGISTER_VCARD_SUCCESS,
+        payload: data.vcard,
+    }
+}
+
+
+export const registerVCardFail = vcard => {
+    return {
+        type: REGISTER_VCARD_FAILED,
+        payload: vcard,
+    }
+}
+

@@ -30,6 +30,7 @@ import Report from "./reports/reducer"
 import Payments from "./payments/reducer"
 import BillConfig from "./billConfig/reducer"
 import Wallet from "./wallet/reducer"
+import Item from "./items/reducer"
 
 const rootReducer = combineReducers({
   // public
@@ -57,7 +58,8 @@ const rootReducer = combineReducers({
   Report,
   Payments,
   BillConfig,
-  Wallet
+  Wallet,
+  Item
 })
 
 export default rootReducer

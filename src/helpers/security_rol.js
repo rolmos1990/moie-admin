@@ -91,10 +91,15 @@ export const PERMISSIONS = {
     WALLET_EDIT: 'wallet.edit',
     WALLET_SHOW: 'wallet.show',
     WALLET_LIST: 'wallet.list',
+    ITEMS_CREATE: 'items.create',
+    ITEMS_EDIT: 'items.edit',
+    ITEMS_SHOW: 'items.show',
+    ITEMS_LIST: 'items.list',
     CATALOG_SYNC: 'catalog.sync',
     DASHBOARD_INVENTORY: 'dashboard.inventory',
     DASHBOARD_ORDER_STATUS: 'dashboard.orderStatus',
     VCARD_MANAGE: 'vcard.manage',
+    VCARD_EXPORT: 'vcard.export',
 };
 export const hasPermissionAccess = (roles, permission) => {
     return true;

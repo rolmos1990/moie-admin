@@ -49,6 +49,9 @@ import Locality from "../pages/Locality";
 import ProductOrderEdit from "../pages/ProductOrderEdit";
 import Wallet from "../pages/Wallet";
 import WalletEdit from "../pages/WalletEdit";
+import VCard from "../pages/VCard";
+import Item from "../pages/Items";
+import ItemEdit from "../pages/ItemEdit";
 
 const userRoutes = [
   { path: "/dashboard", component: Dashboard },
@@ -100,6 +103,10 @@ const userRoutes = [
   {path: "/wallets", component: Wallet},
   {path: "/wallet", component: WalletEdit},
   {path: "/wallet/:id", component: WalletEdit},
+  {path: "/items", component: Item},
+  {path: "/item", component: ItemEdit},
+  {path: "/item/:id", component: ItemEdit},
+  {path: "/vcard", component: VCard},
 
   {path: "/404", component: PageNotFount},
 

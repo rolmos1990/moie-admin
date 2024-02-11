@@ -276,6 +276,14 @@ const Navbar = props => {
                                                     </Link>
                                                 </li>
                                             </HasPermissions>
+                                            <HasPermissions permission={PERMISSIONS.ITEMS_LIST}>
+                                                <li className="nav-item">
+                                                    <Link className="nav-link" to="/items">
+                                                        <i className="uil-briefcase me-2"></i>
+                                                        {" "}{props.t("Items")}
+                                                    </Link>
+                                                </li>
+                                            </HasPermissions>
                                         </div>
                                     </li>
                                 </HasPermissions>

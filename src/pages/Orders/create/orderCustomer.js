@@ -19,6 +19,7 @@ import CategoriesPieChart from "../../CustomerEdit/CategoriesPieChart";
 import {hiddenPhone, trim} from "../../../common/utils";
 import HasPermissionsFunc from "../../../components/HasPermissionsFunc";
 import {PERMISSIONS} from "../../../helpers/security_rol";
+import HasPermissions from "../../../components/HasPermissions";
 
 const searchByOptions = [{label: "Nombre", value: "name"}, {label: "Documento", value: "doc"}, {label: "Correo", value: "email"}, {label: "Teléfono", value: "phone"}];
 
@@ -265,6 +266,11 @@ const OrderCustomer = (props) => {
                                 <label>Dirección: </label>
                                 <small className="p-1" style={{wordBreak: 'break-all'}}>{customerData.address}</small>
                             </Col>
+                            <HasPermissions permission={PERMISSIONS.CUSTOMER_WHATSAPP}>
+                            <Col md={12}>
+                                <a href={`https://wa.me/${customerData.cellphone}`} > Contactar Whatsapp </a>
+                            </Col>
+                            </HasPermissions>
                         </Row>
 
                     </Col>

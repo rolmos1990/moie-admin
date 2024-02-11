@@ -8,7 +8,8 @@ import {
     UPDATE_CUSTOMER,
     DELETE_CUSTOMER,
     QUERY_CUSTOMERS,
-    GET_CUSTOMER_REGISTEREDS
+    GET_CUSTOMER_REGISTEREDS,
+    REGISTER_VCARD
 } from "./actionTypes"
 import {
     getCustomersSuccess,
@@ -23,7 +24,7 @@ import {
     deleteCustomerFailed,
     queryCustomersFailed,
     queryCustomersSuccess,
-    getCustomerRegisteredsSuccess, getCustomerRegisteredsFailed
+    getCustomerRegisteredsSuccess, getCustomerRegisteredsFailed, registerVCardSuccess, registerVCardFail
 } from "./actions"
 
 //Include Both Helper File with needed methods
@@ -32,7 +33,7 @@ import {
     updateCustomer,
     fetchCustomer,
     fetchCustomersApi,
-    deleteCustomerApi, fetchCustomerRegisteredsApi
+    deleteCustomerApi, fetchCustomerRegisteredsApi, registerVCardApi
 } from "../../helpers/backend_helper"
 import Conditionals from "../../common/conditionals";
 import {showResponseMessage} from "../../helpers/service";
@@ -116,6 +117,21 @@ function* customerDelete({ payload: { id, history } }) {
     }
 }
 
+// Is customer register successfull then direct plot user in redux.
+function* vcardRegister({ payload: { vcard, history } }) {
+    try {
+        const response = yield call(registerVCardApi, vcard)
+        showResponseMessage(response, "VCard creado!");
+        yield put(registerVCardSuccess(response))
+        //history.push("/customers")
+    } catch (error) {
+        if(error && error.response && error.response.data && error.response.data.error == 'doc_exists'){
+            showResponseMessage({status: 400}, "Documento ya se encuentra registrado!");
+        }
+        yield put(registerVCardFail(error))
+    }
+}
+
 export function* watchCustomer() {
     yield takeEvery(REGISTER_CUSTOMER, customerRegister);
     yield takeEvery(UPDATE_CUSTOMER, customerUpdate);
@@ -124,6 +140,7 @@ export function* watchCustomer() {
     yield takeEvery(DELETE_CUSTOMER, customerDelete);
     yield takeEvery(QUERY_CUSTOMERS, queryData);
     yield takeEvery(GET_CUSTOMER_REGISTEREDS, fetchCustomerRegistereds);
+    yield takeEvery(REGISTER_VCARD, vcardRegister);
 }
 
 function* customerSaga() {

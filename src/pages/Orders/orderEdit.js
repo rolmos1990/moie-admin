@@ -618,6 +618,11 @@ const OrderEdit = (props) => {
                                         <label>Dirección: </label>
                                         <small className="p-1" style={{wordBreak: 'break-all'}}>{orderData.customer.address}</small>
                                     </Col>
+                                    <HasPermissions permission={PERMISSIONS.CUSTOMER_WHATSAPP}>
+                                    <Col md={12}>
+                                        <a target="_new" href={`https://wa.me/${orderData.customer.cellphone}`} > <i className="fa fa-customer"></i> Contactar Whatsapp</a>
+                                    </Col>
+                                    </HasPermissions>
                                 </Row>
                             </Card>
                         </Col>
