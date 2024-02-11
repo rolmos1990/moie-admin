@@ -52,7 +52,7 @@ const OrderStatusStats = (props) => {
                     </Col>
                     <Col md={6}>
                         <div>
-                            <h5 className="mb-2 mt-1"><b>Conciliados</b></h5>
+                            <h5 className="mb-2 mt-1"><b>Confirmados</b></h5>
                             <h4>
                                 <span>
                                 <i class={`text-${STATUS_COLORS.SUCCESS} uil-shopping-cart-alt me-2`}></i> &nbsp; -

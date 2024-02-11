@@ -1,15 +1,9 @@
 import React, {useEffect, useState} from "react";
-import {Card, CardBody, Table} from "reactstrap"
-
-//Simple bar
-import SimpleBar from "simplebar-react"
+import {Card, CardBody, Col, Row} from "reactstrap"
 
 //Import Image
-import {DEFAULT_PAGE_LIMIT} from "../../common/pagination";
-import {getUsers} from "../../store/user/actions";
 import {connect} from "react-redux";
-import {fetchEventsApi, fetchInventoryProductsApi, fetchProductsApi} from "../../helpers/backend_helper";
-import CountUp from "react-countup";
+import {fetchEventsApi} from "../../helpers/backend_helper";
 import {PERMISSIONS} from "../../helpers/security_rol";
 import HasPermissions from "../../components/HasPermissions";
 import {getEvents} from "../../store/items/actions";
@@ -43,7 +37,6 @@ const EventItems = (props) => {
                 return {label: op.name, value: op.value};
             });
             setAlarms(alarms);
-            console.log('alarms: ', alarms);
         } else {
             setAlarms([]);
         }
@@ -59,12 +52,6 @@ const EventItems = (props) => {
         const down = (limits.filter(item => item.label === type+'_DOWN'))[0];
         const medium = (limits.filter(item => item.label === type+'_MEDIUM'))[0];
 
-        console.log('d- down: ', down);
-        console.log('d- medium: ', medium);
-        console.log('d- current value: ', value);
-
-        console.log('d- is less: ', val, parseInt(down['value']));
-
         if(val < parseInt(down['value'])){
             return <p class="text-danger">{value}</p>
         } else if(val < parseInt(medium['value'])){
@@ -74,27 +61,31 @@ const EventItems = (props) => {
         }
     }
 
-    const renderInventario = () => {
+    const renderInventario = (allowed = false) => {
         return <Card>
             <CardBody>
                 <h5>Alarmas</h5> <br />
-                <div>
-                    <h4 className="mb-1 mt-1">
-                        <span>
-                            <i class="me-2"></i> &nbsp; {getLimitColor('ICREDIT', interrapidisimo.amount)}
-                        </span>
+                <Row>
+                <Col md={6}>
+                    <h5 className="mb-2 mt-1"><b>Creditos Int.</b></h5>
+                    <h4>
+                            <span>
+                            <i class="me-2"></i> &nbsp; { allowed ? getLimitColor('ICREDIT', interrapidisimo.amount) : ''}
+                            </span>
                     </h4>
-                    <p className="text-muted mb-0">Credito Interrapidisimo</p>
-                </div>
+                </Col>
+                <Col md={6}>
+                    <div>
+                        <h5 className="mb-2 mt-1"><b>Bolsas</b></h5>
+                        <h4>
+                                <span>
+                                <i class="me-2"></i> &nbsp; { allowed ? getLimitColor('BAGS', bolsas.amount) : ''}
+                                </span>
+                        </h4>
+                    </div>
+                </Col>
+                </Row>
 
-                <div>
-                    <h4 className="mb-1 mt-1">
-                        <span>
-                            <i class="me-2"></i> &nbsp; {getLimitColor('BAGS', bolsas.amount)}
-                        </span>
-                    </h4>
-                    <p className="text-muted mb-0">Bolsas</p>
-                </div>
             </CardBody>
         </Card>
     }
@@ -102,8 +93,8 @@ const EventItems = (props) => {
 
     return (
         <React.Fragment>
-            <HasPermissions permission={PERMISSIONS.DASHBOARD_INVENTORY} renderNoAccess={renderInventario}>
-
+            <HasPermissions permission={PERMISSIONS.DASHBOARD_ALARMS} renderNoAccess={() => renderInventario(false)}>
+                {renderInventario(true)}
             </HasPermissions>
         </React.Fragment>
     )

@@ -273,9 +273,9 @@ const Dashboard = (props) => {
             </Row>
             <Row>
                 <Col xl={4}>
-                <EventItems/>
                 <Inventory/>
                 <OrderStatusStats/>
+                <EventItems/>
                 </Col>
                 <Col xl={8}>
                     <LatestTransaction />
