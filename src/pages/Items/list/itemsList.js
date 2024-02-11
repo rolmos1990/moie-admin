@@ -9,7 +9,7 @@ import BootstrapTable from "react-bootstrap-table-next"
 import {Link} from "react-router-dom"
 import {Button, Tooltip} from "@material-ui/core";
 import {DEFAULT_PAGE_LIMIT} from "../../../common/pagination";
-import {getItems, getWallets, resetItem, resetWallet} from "../../../store/items/actions";
+import {getItems, resetItem} from "../../../store/items/actions";
 import itemsColumns from "./itemsColumn";
 import {TableFilter} from "../../../components/TableFilter";
 import {normalizeColumnsList} from "../../../common/converters";
@@ -17,16 +17,15 @@ import NoDataIndication from "../../../components/Common/NoDataIndication";
 import HasPermissions from "../../../components/HasPermissions";
 import {PERMISSIONS} from "../../../helpers/security_rol";
 import NoAccess from "../../../components/Common/NoAccess";
-//import {itemsStatsApi} from "../../../helpers/backend_helper";
-import CountUp from "react-countup";
+import Conditionals from "../../../common/conditionals";
 
 const ItemsList = props => {
-    const {items, meta, onGetItems, onResetitems, loading, refresh} = props;
+    const {items, meta, onGetItems, onResetitems, refresh, loading} = props;
     const [itemsList, setWalletsList] = useState([])
-    const [itemsStats, setWalletStats] = useState({})
     const [filter, setFilter] = useState(false);
     const [conditional, setConditional] = useState(null);
     const [defaultPage, setDefaultPage] = useState(1);
+    const [type, setType] = useState(2);
 
     const pageOptions = {
         sizePerPage: DEFAULT_PAGE_LIMIT,
@@ -37,27 +36,31 @@ const ItemsList = props => {
             setDefaultPage(page);
         },
     }
-    const {SearchBar} = Search
+
+    useEffect( () => {
+
+        const conditions = new Conditionals.Condition;
+        conditions.add('type', type, Conditionals.OPERATORS.EQUAL);
+        onGetItems(conditions.condition);
+
+    }, [type])
 
     useEffect(() => {
         if(refresh === null){
             onResetitems();
             onGetItems()
         } else {
-            onGetItems();
+
+            const conditions = new Conditionals.Condition;
+            conditions.add('type', type, Conditionals.OPERATORS.EQUAL);
+
+            onGetItems(conditions.condition);
         }
     }, [refresh, onGetItems])
 
     useEffect(() => {
         setWalletsList(items)
-        loadStats();
     }, [items])
-
-    const loadStats = () => {
-        //itemsStatsApi().then(function (resp) {
-        //    setWalletStats(resp.items);
-        //});
-    }
 
     // eslint-disable-next-line no-unused-vars
     const handleTableChange = (type, {page, searchText}) => {
@@ -74,67 +77,6 @@ const ItemsList = props => {
 
     return (
         <Row>
-            {/*{itemsStats.fechaUltimoMovimiento && (
-                <Row>
-                    <Col md={4}>
-                        <Card>
-                            <CardBody>
-                                <div className="float-end mt-2">
-                                    <Tooltip placement="bottom" title="Saldo inicio de mes" aria-label="add">
-                                        <i className="mdi mdi-scale-balance font-size-24 mr-1 text-primary p-3"> </i>
-                                    </Tooltip>
-                                </div>
-                                <div>
-                                    <h4 className="mb-1 mt-2">
-                                        <CountUp end={itemsStats.inicioMes} separator="," decimals={0}/>
-                                    </h4>
-                                    <p className="text-muted mb-0">{"Saldo Inicio de Mes"}</p>
-                                </div>
-                                <p className="text-muted mb-0 mt-3">
-                                </p>
-                            </CardBody>
-                        </Card>
-                    </Col>
-                    <Col md={4}>
-                        <Card>
-                            <CardBody>
-                                <div className="float-end mt-2">
-                                    <Tooltip placement="bottom" title="Fecha último movimiento" aria-label="add">
-                                        <i className="mdi mdi-sort-calendar-ascending font-size-24 mr-1 text-muted p-3"> </i>
-                                    </Tooltip>
-                                </div>
-                                <div>
-                                    <h4 className="mb-1 mt-2">
-                                        {itemsStats.fechaUltimoMovimiento}
-                                    </h4>
-                                    <p className="text-muted mb-0">{"Fecha último movimiento"}</p>
-                                </div>
-                                <p className="text-muted mb-0 mt-3">
-                                </p>
-                            </CardBody>
-                        </Card>
-                    </Col>
-                    <Col md={4}>
-                        <Card>
-                            <CardBody>
-                                <div className="float-end mt-2">
-                                    <Tooltip placement="bottom" title="Saldo" aria-label="add">
-                                        <i className="mdi mdi-currency-usd font-size-24 mr-1 text-muted p-3"> </i>
-                                    </Tooltip>
-                                </div>
-                                <div>
-                                    <h4 className="mb-1 mt-2">
-                                        <CountUp end={itemsStats.saldo} separator="," decimals={0}/>
-                                    </h4>
-                                    <p className="text-muted mb-0">{"Saldo"}</p>
-                                </div>
-                                <p className="text-muted mb-0 mt-3">
-                                </p>
-                            </CardBody>
-                        </Card>
-                    </Col>
-                </Row>
-            )}*/}
             <TableFilter
                 onPressDisabled={() => setFilter(false)}
                 isActive={filter}
@@ -144,6 +86,11 @@ const ItemsList = props => {
             <Col lg={filter ? "8" : "12"}>
                 <Card>
                     <CardBody>
+                        <div className="button-items mb-3">
+                        <button onClick={() => setType(2)} className={`btn ${type == 2 ? 'btn-primary' : 'btn-secondary'}`}>Bolsas</button>
+                        <button onClick={() => setType(1)} className={`btn ${type == 1 ? 'btn-primary' : 'btn-secondary'}`}>Interrapidisimo</button>
+                        </div>
+
                         <PaginationProvider pagination={paginationFactory(pageOptions)}>
                             {({paginationProps, paginationTableProps}) => (
                                 <ToolkitProvider
@@ -165,13 +112,13 @@ const ItemsList = props => {
                                                 </Col>
                                                 <Col md={6}>
                                                     <div className="mb-3 float-md-end">
-                                                        {columns.some(s => s.filter) && (
+                                                        {/*{columns.some(s => s.filter) && (
                                                             <Tooltip placement="bottom" title="Filtros Avanzados" aria-label="add">
                                                                 <Button onClick={() => setFilter(!filter)}>
                                                                     <i className={"mdi mdi-filter"}></i>
                                                                 </Button>
                                                             </Tooltip>
-                                                        )}
+                                                        )}*/}
                                                         <HasPermissions permissions={[PERMISSIONS.ITEMS_CREATE]} renderNoAccess={() => <NoAccess/>}>
                                                             <Link to={"/item"} className="btn btn-primary waves-effect waves-light text-light">
                                                                 <i className="mdi mdi-plus"></i> Nuevo registro
@@ -186,7 +133,7 @@ const ItemsList = props => {
                                                         <BootstrapTable
                                                             remote
                                                             responsive
-                                                            loading={true}
+                                                            loading={loading}
                                                             bordered={false}
                                                             striped={true}
                                                             classes={
