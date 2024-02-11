@@ -284,6 +284,14 @@ const Navbar = props => {
                                                     </Link>
                                                 </li>
                                             </HasPermissions>
+                                            <HasPermissions permission={PERMISSIONS.VCARD_MANAGE}>
+                                                <li className="nav-item">
+                                                    <Link className="nav-link" to="/vCard">
+                                                        <i className="uil uil-phone me-2"></i>
+                                                        {" "}{props.t("VCard")}
+                                                    </Link>
+                                                </li>
+                                            </HasPermissions>
                                         </div>
                                     </li>
                                 </HasPermissions>
