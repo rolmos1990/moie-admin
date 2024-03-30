@@ -1,19 +1,19 @@
 import React from "react"
 import {Container} from "reactstrap"
 import Breadcrumb from "../../components/Common/Breadcrumb";
-import CategoryList from "./list/localityList";
+import LocalityList from "./list/localityList";
 import {PERMISSIONS} from "../../helpers/security_rol";
 import HasPermissions from "../../components/HasPermissions";
 import NoAccess from "../../components/Common/NoAccess";
 
-const Categories = () => {
+const Locality = () => {
     return (
         <React.Fragment>
             <div className="page-content">
                 <Container fluid>
                     <Breadcrumb path="/deliveryLocality" title={null} item="Localidades"/>
                     <HasPermissions permission={PERMISSIONS.DELIVERY_LOCALITY_LIST} renderNoAccess={() => <NoAccess/>}>
-                        <CategoryList/>
+                        <LocalityList/>
                     </HasPermissions>
                 </Container>
             </div>
@@ -21,4 +21,4 @@ const Categories = () => {
     )
 }
 
-export default Categories;
+export default Locality;

@@ -52,6 +52,7 @@ import WalletEdit from "../pages/WalletEdit";
 import VCard from "../pages/VCard";
 import Item from "../pages/Items";
 import ItemEdit from "../pages/ItemEdit";
+import LocalityEdit from "../pages/LocalityEdit";
 
 const userRoutes = [
   { path: "/dashboard", component: Dashboard },
@@ -99,6 +100,7 @@ const userRoutes = [
   {path: "/bq", component: BatchQueries},
   {path: "/Security", component: Security},
   {path: "/deliveryLocality", component: Locality},
+  {path: "/deliveryLocality/:id", component: LocalityEdit},
   {path: "/productOrderEdit/:id", component: ProductOrderEdit},
   {path: "/wallets", component: Wallet},
   {path: "/wallet", component: WalletEdit},

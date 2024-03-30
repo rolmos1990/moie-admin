@@ -21,6 +21,12 @@ import {arrayToOptions, getEmptyOptions} from "../../../common/converters";
 import {Button} from "@material-ui/core";
 import {getAllDeliveryLocalities} from "../../../store/deliveryLocality/actions";
 import {sortAlphanumeric} from "../../../common/utils";
+import OrderList from "../orderList";
+import CustomModal from "../../../components/Modal/CommosModal";
+import LocalityEdit from "../../LocalityEdit";
+import Conditionals from "../../../common/conditionals";
+import HasPermissions from "../../../components/HasPermissions";
+import {PERMISSIONS} from "../../../helpers/security_rol";
 
 const OrderDeliveryOptions = (props) => {
     const {
@@ -55,7 +61,11 @@ const OrderDeliveryOptions = (props) => {
         setPaymentTypes([getEmptyOptions(), ...PAYMENT_TYPES_LIST]);
         onGetFieldOptions();
         if(!deliveryMethods || deliveryMethods.length === 0) onGetDeliveryMethods();
-        onGetDeliveryLocalities();
+
+        const conditions = new Conditionals.Condition;
+        conditions.add('status', 1, Conditionals.OPERATORS.EQUAL);
+        onGetDeliveryLocalities(conditions.condition);
+
         if (car.reset) {
             setDeliveryMethod(null);
             setOriginOrder(null);
@@ -82,12 +92,15 @@ const OrderDeliveryOptions = (props) => {
             const list = deliveryLocalities.map(item => {
                 if(deliveryMethod === 'SERVIENTREGA') {
                     if (item.deliveryType == 1) {
+                        //sucursal
                         item.icon = "&nbsp;&nbsp;&nbsp;&nbsp;"+ item.timeInDays +"&nbsp;&nbsp;<i class='fa fa-building' ></i>";
                     }
                     if (item.deliveryType == 2) {
+                        //delivery
                         item.icon = "&nbsp;&nbsp;&nbsp;&nbsp;"+ item.timeInDays +"&nbsp;&nbsp;<i class='fa fa-motorcycle' ></i>";
                     }
                     if (item.deliveryType == 3) {
+                        //sucursal y delivery
                         item.icon = "&nbsp;&nbsp;&nbsp;&nbsp;"+ item.timeInDays +"&nbsp;&nbsp;<span><i class='fa fa-building' ></i>&nbsp;<i class='fa fa-motorcycle' ></i></span>";
                     }
                 }
@@ -205,9 +218,23 @@ const OrderDeliveryOptions = (props) => {
         }
         return (order.status == 5 && order.orderDelivery && order.orderDelivery.deliveryType === 1);
     }
+
+    const [openLocalityModal, setOpenLocalityModal] = useState(false);
+    const onCloseLocalityModal = () => {
+        setOpenLocalityModal(false);
+    };
+
+    const onSave = () => {
+        onGetDeliveryLocalities();
+        setOpenLocalityModal(false);
+    }
+
     const showGuia = () => car.deliveryOptions.tracking
     return (
         <React.Fragment>
+            <CustomModal title={"Editar Localidad"} size="lg" showFooter={false} isOpen={openLocalityModal} onClose={onCloseLocalityModal}>
+                <LocalityEdit customActions={onSave} showAsModal={true} externalId={deliveryLocality} externalView/>
+            </CustomModal>
             <AvForm className="needs-validation" autoComplete="off" onValidSubmit={(e, v) => acceptModal(e, v)}>
                 <Row>
                     <Col>
@@ -283,6 +310,10 @@ const OrderDeliveryOptions = (props) => {
                                 required
                                 isSearchable
                             />
+                            <HasPermissions permission={PERMISSIONS.DELIVERY_LOCALITY_EDIT} renderNoAccess={() => ""}>
+                            <br />
+                            {deliveryLocality && <button onClick={() => setOpenLocalityModal(true)} className="btn btn-sm btn-outline-primary"><i className="mdi mdi-pencil"></i></button>}
+                            </HasPermissions>
                         </Col>
                     )}
                     {showPaymentType && (
@@ -351,14 +382,14 @@ OrderDeliveryOptions.propTypes = {
 const mapDispatchToProps = dispatch => ({
     onGetProduct: (id) => dispatch(getProduct(id)),
     onGetFieldOptions: (conditional = null, limit = 500, page) => dispatch(getFieldOptionByGroups([GROUPS.ORDERS_ORIGIN], limit, page)),
-    onGetDeliveryLocalities: () => dispatch(getAllDeliveryLocalities()),
+    onGetDeliveryLocalities: (conditional = null) => dispatch(getAllDeliveryLocalities(conditional)),
     onGetDeliveryMethods: (conditional = null, limit = 50, page) => dispatch(getDeliveryMethods(conditional, limit, page)),
     onGetDeliveryQuote: (request) => dispatch(getDeliveryQuote(request)),
     onUpdateCar: (data) => dispatch(updateCard(data)),
 })
 
 const mapStateToProps = state => {
-    const {deliveryLocalities} = state.DeliveryLocalities
+    const {deliveryLocalities} = state.DeliveryLocality
     const {fieldOptions} = state.FieldOption
     const {car, deliveryMethods, deliveryQuote, order} = state.Order
     return {car, deliveryLocalities, deliveryMethods: deliveryMethods.data, deliveryQuote: deliveryQuote.data, fieldOptions, order};

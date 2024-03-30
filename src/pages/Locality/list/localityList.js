@@ -95,7 +95,7 @@ const LocalityList = props => {
                                                                 </Button>
                                                             </Tooltip>
                                                             <HasPermissions permission={PERMISSIONS.DELIVERY_LOCALITY_CREATE}>
-                                                                <Link to={"/customer"} className="btn btn-primary waves-effect waves-light text-light">
+                                                                <Link to={"/deliveryLocality"} className="btn btn-primary waves-effect waves-light text-light">
                                                                     <i className="mdi mdi-plus"></i> Nueva Localidad
                                                                 </Link>
                                                             </HasPermissions>
@@ -142,7 +142,7 @@ LocalityList.propTypes = {
 }
 
 const mapStateToProps = state => {
-    const {deliveryLocalities, loading, meta} = state.DeliveryLocalities
+    const {deliveryLocalities, loading, meta} = state.DeliveryLocality
     return {deliveryLocalities, loading, meta}
 }
 

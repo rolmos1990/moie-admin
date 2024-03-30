@@ -16,7 +16,7 @@ const TextField = (props) => (
         className={`form-control ${props.className ? props.className : ''}` }
         disabled={!!props.disabled}
         pattern={props.pattern ? props.pattern : false}
-        validate={
+        validate={ !(props.pattern || props.required || props.minLength || props.maxLength) ? {} :
             {
                 pattern:  { value: props.pattern ? props.pattern : false, errorMessage: props.patternMessage ? props.patternMessage : 'Formato de campo invalido' },
                 required: { value: props.required ? true : false, errorMessage: messages.required },

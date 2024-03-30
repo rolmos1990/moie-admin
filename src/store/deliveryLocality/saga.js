@@ -48,7 +48,7 @@ const UPDATE_SUCCESS_ACTION =   updateDeliveryLocalitySuccess;
 const UPDATE_FAILED_ACTION  =   updateDeliveryLocalityFail;
 
 
-const LIST_URL = "/deliveryLocalities";
+const LIST_URL = "/deliveryLocality";
 
 function* get({ id }) {
     try {
@@ -72,22 +72,30 @@ function* fetch({conditional, limit, offset}) {
     }
 }
 
-function* register({ payload: { data, history } }) {
+function* register({ payload: { data, history, customActions } }) {
     try {
         const response = yield call(POST_API_REQUEST, data)
         yield put(CREATE_SUCCESS_ACTION(response))
-        history.push(LIST_URL)
+        if(customActions){
+            customActions();
+        } else {
+            history.push(LIST_URL)
+        }
 
     } catch (error) {
         yield put(CREATE_FAILED_ACTION(error))
     }
 }
 
-function* update({ payload: { id, data, history } }) {
+function* update({ payload: { id, data, history, customActions } }) {
     try {
         const response = yield call(PUT_API_REQUEST, id, data)
         yield put(UPDATE_SUCCESS_ACTION(response))
-        history.push(LIST_URL)
+        if(customActions){
+            customActions();
+        } else {
+            history.push(LIST_URL)
+        }
 
     } catch (error) {
         yield put(UPDATE_FAILED_ACTION(error))

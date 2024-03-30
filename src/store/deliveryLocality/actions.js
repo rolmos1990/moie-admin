@@ -13,8 +13,8 @@ import {
     UPDATE_DELIVERY_LOCALITY_FAILED,
 } from "./actionTypes";
 
-export const getAllDeliveryLocalities = () => {
-    return getDeliveryLocalities(null, 2000, 0);
+export const getAllDeliveryLocalities = (conditional) => {
+    return getDeliveryLocalities(conditional, 2000, 0);
 }
 
 export const getDeliveryLocalities = (conditional, limit, offset) => ({
@@ -50,10 +50,10 @@ export const getDeliveryLocalityFailed = error => ({
     payload: error,
 })
 
-export const registerDeliveryLocality = (data, history) => {
+export const registerDeliveryLocality = (data, history, customActions) => {
     return {
         type: REGISTER_DELIVERY_LOCALITY,
-        payload: { data, history },
+        payload: { data, history, customActions },
     }
 }
 
@@ -72,10 +72,10 @@ export const registerDeliveryLocalityFailed = data => {
     }
 }
 
-export const updateDeliveryLocality = (id, data, history) => {
+export const updateDeliveryLocality = (id, data, history, customActions) => {
     return {
         type: UPDATE_DELIVERY_LOCALITY,
-        payload: { id, data, history },
+        payload: { id, data, history, customActions },
     }
 }
 
