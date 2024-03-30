@@ -140,7 +140,7 @@ jobs:
           node-version: 14.x
       - run: git config --global url."https://".insteadOf git://
       - run: yarn
-      - run: REACT_APP_ENV=qa yarn build
+      - run: yarn run build:qa
 
       - uses: benjlevesque/short-sha@v1.2
       - uses: elgohr/Publish-Docker-Github-Action@master

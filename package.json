@@ -103,6 +103,7 @@
     "build": "react-scripts build",
     "build:local": "REACT_APP_NODE_ENV=local;npm run build",
     "build:production": "REACT_APP_NODE_ENV=production;npm run build",
+    "build:qa": "REACT_APP_NODE_ENV=qa;REACT_APP_ENV=qa;yarn build",
     "deploy:local": "npm version minor;",
     "deploy-release:local": "REACT_APP_NODE_ENV=local;npm run build;docker build -t rolmos/moie-admin:$npm_package_version .;docker push rolmos/moie-admin:$npm_package_version",
     "deploy-fix:local": "REACT_APP_NODE_ENV=local;npm run build;docker build -t rolmos/moie-admin:$npm_package_version .;docker push rolmos/moie-admin:$npm_package_version",
