@@ -11,7 +11,7 @@ const Locality = () => {
         <React.Fragment>
             <div className="page-content">
                 <Container fluid>
-                    <Breadcrumb path="/deliveryLocality" title={null} item="Localidades"/>
+                    <Breadcrumb path="/deliveryLocalities" title={null} item="Localidades"/>
                     <HasPermissions permission={PERMISSIONS.DELIVERY_LOCALITY_LIST} renderNoAccess={() => <NoAccess/>}>
                         <LocalityList/>
                     </HasPermissions>

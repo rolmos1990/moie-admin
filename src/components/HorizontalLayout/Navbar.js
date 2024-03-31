@@ -262,7 +262,7 @@ const Navbar = props => {
                                             </HasPermissions>
                                             <HasPermissions permission={PERMISSIONS.DELIVERY_LOCALITY_LIST}>
                                                 <li className="nav-item">
-                                                    <Link to="/deliveryLocality" className="dropdown-item">
+                                                    <Link to="/deliveryLocalities" className="dropdown-item">
                                                         <i className="uil-map me-2"></i>
                                                         {props.t("Localidades")}
                                                     </Link>

@@ -48,7 +48,7 @@ const UPDATE_SUCCESS_ACTION =   updateDeliveryLocalitySuccess;
 const UPDATE_FAILED_ACTION  =   updateDeliveryLocalityFail;
 
 
-const LIST_URL = "/deliveryLocality";
+const LIST_URL = "/deliveryLocalities";
 
 function* get({ id }) {
     try {
