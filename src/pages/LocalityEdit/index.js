@@ -84,7 +84,7 @@ const LocalityEdit = (props) => {
             <div className={!externalView ? `page-content` : ''}>
                 <Container fluid>
                     {!externalView && <Breadcrumb hasBack path="/deliveryLocalities" title={deliveryLocalityData.name} item={"deliveryLocalities"}/>}
-                    <HasPermissions permissions={[PERMISSIONS.LOCALITY_CREATE, PERMISSIONS.LOCALITY_EDIT]} renderNoAccess={() => <NoAccess/>}>
+                    <HasPermissions permissions={[PERMISSIONS.DELIVERY_LOCALITY_EDIT, PERMISSIONS.DELIVERY_LOCALITY_CREATE]} renderNoAccess={() => <NoAccess/>}>
                         <AvForm className="needs-validation" autoComplete="off"
                                 onValidSubmit={(e, v) => {
                                     handleValidSubmit(e, v)
