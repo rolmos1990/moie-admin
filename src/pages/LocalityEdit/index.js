@@ -39,6 +39,18 @@ const LocalityEdit = (props) => {
         }
     }, [getDeliveryLocality]);
 
+    useEffect(() => {
+
+        if(deliveryMethod === 1){
+            setDeliveryMethodTypeList(interrapidisimo);
+        } else if(deliveryMethod === 4){
+            setDeliveryMethodTypeList(serviEntrega);
+        } else {
+            setDeliveryMethodTypeList([]);
+        }
+
+    }, [deliveryMethod]);
+
     //cargar la información del cliente
     useEffect(() => {
         if (deliveryLocality.id && isEdit) {
