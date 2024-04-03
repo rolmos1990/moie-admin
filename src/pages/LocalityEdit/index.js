@@ -19,7 +19,7 @@ const LocalityEdit = (props) => {
     const {getDeliveryLocality, deliveryLocality, externalView, externalId, customActions} = props;
     const [deliveryLocalityData, setDeliveryLocalityData] = useState({_status: STATUS.ACTIVE});
     const [deliveryMethod, setDeliveryMethod] = useState(1);
-    const isEdit = props.match.params.id || deliveryLocality;
+    const isEdit = props.match.params.id || (deliveryLocality && deliveryLocality.id);
 
     const deliveryMethods = [{label: "Interrapidisimo", value: 1}, {label: "ServiEntrega", value: 4}];
 
