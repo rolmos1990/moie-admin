@@ -23,8 +23,8 @@ const LocalityEdit = (props) => {
 
     const deliveryMethods = [{label: "Interrapidisimo", value: 1}, {label: "ServiEntrega", value: 4}];
 
-    const serviEntrega = [{label: "Sucursal", value: 1}, {label: "Delivery", value: 2}, {label: "Sucursal y Delivery", value: 3}];
-    const interrapidisimo = [{label: "Sucursal", value: 1}, {label: "Delivery", value: 2}, {label: "Sucursal y Delivery", value: 3}];
+    const serviEntrega = [{label: "Contado", value: 1}, {label: "Contado - AlCobro", value: 2}, {label: "AlCobro", value: 3}];
+    const interrapidisimo = [{label: "Contado", value: 1}, {label: "Contado - AlCobro", value: 2}, {label: "AlCobro", value: 3}];
 
     const [deliveryMethodTypeList, setDeliveryMethodTypeList] = useState([]);
 
