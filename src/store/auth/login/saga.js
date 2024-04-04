@@ -36,7 +36,7 @@ function* loginUser({ payload: { user, history } }) {
         password: user.password,
       });
 
-      yield localStorage.setItem("authUser", JSON.stringify(response));
+      yield localStorage.setItem("authUserV2", JSON.stringify(response));
       yield put(loginSuccess(response));
       setTimeout(() => {
         window.location = "/dashboard";
@@ -53,7 +53,7 @@ function* loginUser({ payload: { user, history } }) {
 
 function* logoutUser({ payload: { history } }) {
   try {
-    localStorage.removeItem("authUser")
+    localStorage.removeItem("authUserV2")
 
     if (process.env.REACT_APP_DEFAULTAUTH === "firebase") {
       const response = yield call(fireBaseBackend.logout)
@@ -74,11 +74,11 @@ function* socialLogin({ payload: { data, history, type } }) {
         data,
         type,
       )
-      localStorage.setItem("authUser", JSON.stringify(response))
+      localStorage.setItem("authUserV2", JSON.stringify(response))
       yield put(loginSuccess(response))
     } else {
       const response = yield call(postSocialLogin, data)
-      localStorage.setItem("authUser", JSON.stringify(response))
+      localStorage.setItem("authUserV2", JSON.stringify(response))
       yield put(loginSuccess(response))
     }
     history.push("/dashboard")

@@ -88,8 +88,8 @@ mock.onPost(url.POST_FAKE_REGISTER).reply(config => {
             users[objIndex].username = user.username
 
             // Assign a value to locastorage
-            localStorage.removeItem("authUser")
-            localStorage.setItem("authUser", JSON.stringify(users[objIndex]))
+            localStorage.removeItem("authUserV2")
+            localStorage.setItem("authUserV2", JSON.stringify(users[objIndex]))
 
             resolve([200, "Profile Updated successfully"])
           } else {
@@ -119,7 +119,7 @@ mock.onPost(url.POST_FAKE_REGISTER).reply(config => {
           users[objIndex].username = user.username
 
           // Assign a value to locastorage
-          localStorage.removeItem("authUser")
+          localStorage.removeItem("authUserV2")
           localStorage.setItem("authUser", JSON.stringify(users[objIndex]))
 
           resolve([200, "Profile Updated successfully"])

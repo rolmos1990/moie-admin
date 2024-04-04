@@ -1,5 +1,5 @@
 const hasPermissionsFunc = (permissionsRequired = [], containAll) => {
-    let authUser = JSON.parse(localStorage.getItem("authUser"));
+    let authUser = JSON.parse(localStorage.getItem("authUserV2"));
     let permissions = authUser && authUser.user ? authUser.user.securityRol.permissions : [];
     if (!permissions || permissions.length === 0) {
         return false;

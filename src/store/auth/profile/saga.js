@@ -55,9 +55,9 @@ function* changeProfilePicture({payload}) {
       showResponseMessage({status: 200}, "Perfil actualizado", response.error);
 
       //REFRESH PROFILE DATA
-      let authUser = JSON.parse(localStorage.getItem("authUser"));
+      let authUser = JSON.parse(localStorage.getItem("authUserV2"));
       authUser.user.photo = response.user.photo;
-      localStorage.setItem("authUser", JSON.stringify(authUser));
+      localStorage.setItem("authUserV2", JSON.stringify(authUser));
       yield put(loginSuccess(authUser));
       //REFRESH PROFILE DATA
 

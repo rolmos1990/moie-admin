@@ -13,7 +13,7 @@ class FirebaseAuthBackend {
         if (user) {
           localStorage.setItem("authUser", JSON.stringify(user))
         } else {
-          localStorage.removeItem("authUser")
+          localStorage.removeItem("authUserV2")
         }
       })
     }
@@ -162,8 +162,8 @@ class FirebaseAuthBackend {
    * Returns the authenticated user
    */
   getAuthenticatedUser = () => {
-    if (!localStorage.getItem("authUser")) return null
-    return JSON.parse(localStorage.getItem("authUser"))
+    if (!localStorage.getItem("authUserV2")) return null
+    return JSON.parse(localStorage.getItem("authUserV2"))
   }
 
   /**

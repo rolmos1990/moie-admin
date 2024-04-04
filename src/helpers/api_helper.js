@@ -41,7 +41,7 @@ export async function file(filename, url, config, params) {
 export function resolveResponseData(response) {
   try {
       if(response && response.data && response.data.code === 440) {
-        localStorage.removeItem("authUser");
+        localStorage.removeItem("authUserV2");
         showMessage.warning('Su sesion ha expirado!');
         setTimeout(function() {
           window.location = '/';
