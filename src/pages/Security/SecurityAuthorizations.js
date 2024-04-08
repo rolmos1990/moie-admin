@@ -4,9 +4,10 @@ import {connect} from "react-redux"
 import {Card, CardBody, Col, Row} from "reactstrap"
 import {map} from "lodash";
 import {AvForm} from "availity-reactstrap-validation";
-import {fetchDataApi, registerDataApi, updateDataApi} from "../../helpers/backend_helper";
+import {deleteDataApi, fetchDataApi, registerDataApi, updateDataApi} from "../../helpers/backend_helper";
 import * as url from "../../helpers/url_helper";
 import {ConfirmationModalAction} from "../../components/Modal/ConfirmationModal";
+import {Tooltip} from "@material-ui/core";
 
 const SecurityAuthorizations = (props) => {
 
@@ -32,6 +33,18 @@ const SecurityAuthorizations = (props) => {
         const list = [...authorizations];
         list.unshift({id: null, name: ''});
         setAuthorizations(list);
+    };
+
+    const onDelete = (id) => {
+
+        const func = deleteDataApi(url.SECURITY_AUTHORIZATIONS, id);
+        func.then(resp => {
+            if (resp.status === 200) {
+                getAuthorizations();
+            }
+            getAuthorizations(null)
+        })
+
     };
 
     const onSave = (ev, data) => {
@@ -120,18 +133,31 @@ const SecurityAuthorizations = (props) => {
                                                         <li className="list-inline-item">
                                                             <div className="btn-group">
                                                                 <div className="btn-group">
-                                                    {permission.status == false ? (
-                                                        <button type="button" size="small" className="btn btn-sm text-primary"
-                                                                onClick={() => onChange(permission.id, true, permission.alias)}>
-                                                            <i className="uil uil-check font-size-18"> </i>
-                                                        </button>
-                                                    ) :
-                                                        (
-                                                            <button type="button" size="small" className="btn btn-sm text-primary"
-                                                                    onClick={() => onChange(permission.id, false, permission.alias)}>
-                                                                <i className="uil uil-trash font-size-18"> </i>
-                                                            </button>
-                                                        )}
+                                                                    {permission.status == false ? (
+                                                                        <Tooltip placement="bottom" title="Modificar Alias" aria-label="modify">
+                                                                            <button type="button" size="small"
+                                                                                    className="btn btn-sm text-primary"
+                                                                                    onClick={() => onChange(permission.id, true, permission.alias)}>
+                                                                                <i className="uil uil-check font-size-18"> </i>
+                                                                            </button>
+                                                                        </Tooltip>
+                                                                        ) :
+                                                                        (
+                                                                            <Tooltip placement="bottom" title="Desactivar" aria-label="add">
+                                                                            <button type="button" size="small"
+                                                                                    className="btn btn-sm text-primary"
+                                                                                    onClick={() => onChange(permission.id, false, permission.alias)}>
+                                                                                <i className="uil uil-disabled font-size-18"> </i>
+                                                                            </button>
+                                                                            </Tooltip>
+                                                                        )}
+                                                                        <Tooltip placement="bottom" title="Eliminar" aria-label="delete">
+                                                                        <button type="button" size="small"
+                                                                                className="btn btn-sm text-primary"
+                                                                                onClick={() => onDelete(permission.id, false, permission.alias)}>
+                                                                            <i className="uil uil-trash font-size-18"> </i>
+                                                                        </button>
+                                                                        </Tooltip>
                                                                 </div>
                                                             </div>
                                                         </li>
