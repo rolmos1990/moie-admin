@@ -147,7 +147,7 @@ const SecurityAuthorizations = (props) => {
                                                                             <button type="button" size="small"
                                                                                     className="btn btn-sm text-primary"
                                                                                     onClick={() => onChange(permission.id, false, permission.alias)}>
-                                                                                <i className="uil uil-disabled font-size-18"> </i>
+                                                                                <i className="uil uil-lock font-size-18"> </i>
                                                                             </button>
                                                                             </Tooltip>
                                                                         )}
