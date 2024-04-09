@@ -9,6 +9,7 @@ import {
     getReportDashbordSuccess
 } from "./actions";
 import {
+    customerReportApi,
     billReportApi,
     conciliationReportApi,
     officeReportApi,
@@ -17,8 +18,10 @@ import {
 } from "../../helpers/backend_helper";
 import {REPORT_TYPES} from "../../common/constants";
 import {showResponseMessage} from "../../helpers/service";
+import Conditionals from "../../common/conditionals";
 
 const apiMap = {}
+apiMap[REPORT_TYPES.CUSTOMER] = customerReportApi;
 apiMap[REPORT_TYPES.BILLS] = billReportApi;
 apiMap[REPORT_TYPES.CONCILIATION] = conciliationReportApi;
 apiMap[REPORT_TYPES.POST_SALE] = postSaleReportApi;
@@ -28,10 +31,23 @@ const STAT_DASHBOARD = statsDashboardApi;
 
 function* generateReport({reportType, data}) {
     try {
+        console.log('data: ', data);
         if (!apiMap[reportType]) {
             showResponseMessage({status: 500}, "Reporte no valido");
         }
-        const blob = yield call(apiMap[reportType], new URLSearchParams(data));
+
+        let blob;
+        if(data.conditional) {
+            const cond = Conditionals.getConditionalFormat(data.conditional);
+            console.log('cond: ', cond);
+            const query = Conditionals.buildHttpGetQuery(cond, data.limit, data.offset);
+            console.log('query run: ', query);
+            blob = yield call(apiMap[reportType], query);
+        } else {
+            blob = yield call(apiMap[reportType], new URLSearchParams(data));
+        }
+
+
         const _url = window.URL.createObjectURL(b64toBlob(blob.data));
         const a = document.createElement('a');
         a.style.display = 'none';

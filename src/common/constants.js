@@ -139,6 +139,7 @@ export const REPORT_TYPES = {
     CONCILIATION: 'CONCILIATION',
     POST_SALE: 'POST_SALE',
     OFFICE: 'OFFICE',
+    CUSTOMER: 'CUSTOMER'
 };
 
 export const BILL_STATUS = {

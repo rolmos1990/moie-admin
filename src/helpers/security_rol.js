@@ -16,6 +16,7 @@ export const PERMISSIONS = {
     CUSTOMER_SHOW: 'customer.show',
     CUSTOMER_LIST: 'customer.list',
     CUSTOMER_DELETE: 'customer.delete',
+    CUSTOMER_EXPORT: 'customer.export',
     CUSTOMER_PRINT_EDIT: 'customer.printEdit',
     CUSTOMER_PHONE: 'customer.phone',
     CUSTOMER_WHATSAPP: 'customer.whatsapp',

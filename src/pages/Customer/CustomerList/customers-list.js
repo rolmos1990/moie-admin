@@ -22,9 +22,13 @@ import CountUp from "react-countup";
 import {PERMISSIONS} from "../../../helpers/security_rol";
 import HasPermissions from "../../../components/HasPermissions";
 import {clearTableConditions, saveTableConditions} from "../../../store/layout/actions";
+import {generateReport} from "../../../store/reports/actions";
+import {REPORT_TYPES} from "../../../common/constants";
+import {formatDateToServer, formatDateToServerEndOfDay} from "../../../common/utils";
+import Conditionals from "../../../common/conditionals";
 
 const CustomersList = props => {
-    const {customers, meta, onGetCustomers, onResetCustomers, onDeleteCustomer, onGetCustomerRegistereds, refresh, countCustomersByStatus, registereds, onSaveTableConditions, onClearTableConditions, conditionType, conditions, offset} = props;
+    const {customers, meta, onGetCustomers, onResetCustomers, onDeleteCustomer, onGetCustomerRegistereds, refresh, countCustomersByStatus, registereds, onSaveTableConditions, onClearTableConditions, conditionType, conditions, offset, onGenerateReport} = props;
     const [customerList, setCustomerList] = useState([])
     const [filter, setFilter] = useState(false);
     const [conditional, setConditional] = useState(null);
@@ -93,6 +97,15 @@ const CustomersList = props => {
             description: 'Usted está eliminado este cliente, una vez eliminado no podrá ser recuperado.',
             id: '_clienteModal',
             onConfirm: () => onConfirmDelete(id)
+        });
+    };
+
+    const onDownload = () => {
+        console.log('payload: ', conditional);
+        onGenerateReport({
+            conditional,
+            limit: 100,
+            offset: 0
         });
     };
 
@@ -165,6 +178,13 @@ const CustomersList = props => {
                                                                     <i className={"mdi mdi-filter"}></i>
                                                                 </Button>
                                                             </Tooltip>
+                                                            <HasPermissions permission={PERMISSIONS.CUSTOMER_EXPORT}>
+                                                                <Tooltip placement="bottom" title="Descargar Clientes" aria-label="add">
+                                                                <button onClick={() => onDownload()}  className="btn btn-secondary waves-effect waves-light text-light mr-5">
+                                                                    <i className="mdi mdi-file"></i>
+                                                                </button>
+                                                                </Tooltip>
+                                                            </HasPermissions>
                                                             <HasPermissions permission={PERMISSIONS.CUSTOMER_CREATE}>
                                                                 <Link to={"/customer"} className="btn btn-primary waves-effect waves-light text-light">
                                                                     <i className="mdi mdi-plus"></i> Nuevo Cliente
@@ -230,7 +250,8 @@ const mapDispatchToProps = dispatch => ({
     onGetCustomers: (conditional = null, limit = DEFAULT_PAGE_LIMIT, page) => dispatch(getCustomers(conditional, limit, page)),
     onDeleteCustomer: (id) => dispatch(deleteCustomer(id)),
     onSaveTableConditions: (conditions, offset, conditionType) => dispatch(saveTableConditions(conditions, offset, conditionType)),
-    onClearTableConditions: () => dispatch(clearTableConditions())
+    onClearTableConditions: () => dispatch(clearTableConditions()),
+    onGenerateReport: (data) => dispatch(generateReport(REPORT_TYPES.CUSTOMER, data)),
 })
 
 export default connect(

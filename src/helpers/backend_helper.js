@@ -214,7 +214,7 @@ const registerVCardApi = data => post(`${url.VCARD}/createVCard`, data);
 
 const fileVCardContacts = (filename) => file(filename, `${url.VCARD}/g/generateVCard`, {header: 'content-type: text/x-vcard'});
 
-
+const customerReportApi = (params) => get(`${url.CUSTOMER}/gen/customerReport`, {header: 'content-type: application/pdf'}, params);
 
 export {
     fetchDataApi,
@@ -399,5 +399,7 @@ export {
 
     registerVCardApi,
 
-    fileVCardContacts
+    fileVCardContacts,
+
+    customerReportApi
 }
