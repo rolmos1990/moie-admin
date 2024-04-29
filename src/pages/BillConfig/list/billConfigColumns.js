@@ -61,7 +61,7 @@ const billConfigColumns = (onDelete = false) => [
         filter: true,
         filterType: "dateRange",
         formatter: (cellContent, item) => (
-            <div>{formatDate(item.createdAt, DATE_FORMAT.ONLY_DATE)}</div>
+            <div>{formatDate(item.resolutionDate, DATE_FORMAT.ONLY_DATE)}</div>
         ),
     },
     {

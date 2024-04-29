@@ -66,7 +66,7 @@ const BillConfigForm = (props) => {
                                         <Col>
                                             <FieldSwitch
                                                 id={"_status"}
-                                                defaultValue={billConfigData._status}
+                                                defaultValue={billConfigData.status}
                                                 name={"_status"}
                                             />
                                         </Col>
@@ -128,7 +128,7 @@ const BillConfigForm = (props) => {
                                     <FieldDate
                                         name={"resolutionDate"}
                                         mode={DATE_MODES.SINGLE}
-                                        defaultValue={billConfigData.createdAt}
+                                        defaultValue={billConfigData.resolutionDate}
                                     />
                                 </div>
                             </Col>
