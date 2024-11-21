@@ -7,3 +7,4 @@ ENTRYPOINT ["nginx","-g","daemon off;"]
 
 #docker build -t rolmos/moie-admin .
 #docker run -d -p 80:80 rolmos/moie-admin
+# test
