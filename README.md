@@ -70,7 +70,7 @@ This section has mov````ed here: [https://facebook.github.io/create-react-app/do
 This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
 
 
-## DOCKER UPLOAD
+## DOCKER UPLOAD (Docker)
 
     npm run build
     docker build -t rolmos/moie-admin .
