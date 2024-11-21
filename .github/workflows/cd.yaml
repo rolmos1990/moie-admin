@@ -182,37 +182,37 @@ jobs:
           DOCKER_PASSWORD: ${{ secrets.DOCKER_ACCESS_TOKEN }}
 
       - name: Upload artifact4
-        uses: actions/upload-artifact@v1.0.0
+        uses: actions/upload-artifact@v3
         with:
           name: SSH_HOST
           path: awsHost.key
 
       - name: Upload artifact
-        uses: actions/upload-artifact@v1.0.0
+        uses: actions/upload-artifact@v3
         with:
           name: AWS_PASSWORD
           path: awsPassword.key
 
       - name: Upload artifact
-        uses: actions/upload-artifact@v1.0.0
+        uses: actions/upload-artifact@v3
         with:
           name: AWS_PRIVATE_KEY
           path: test.key
 
       - name: Upload artifact2
-        uses: actions/upload-artifact@v1.0.0
+        uses: actions/upload-artifact@v3
         with:
           name: DOCKER_ACCESS_TOKEN
           path: dockerPassword.key
 
       - name: Upload artifact3
-        uses: actions/upload-artifact@v1.0.0
+        uses: actions/upload-artifact@v3
         with:
           name: DOCKER_USERNAME
           path: dockerUsername.key
 
       - name: Upload artifact4
-        uses: actions/upload-artifact@v1.0.0
+        uses: actions/upload-artifact@v3
         with:
           name: DOCKER_REPOSITORY
           path: dockerRepository.key
