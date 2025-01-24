@@ -61,6 +61,7 @@ const initialState = {
                                     <b>Piezas: </b> ${Highcharts.numberFormat(punto.cantidad_piezas)}<br/>
                                     <b>Ganancia: </b> ${priceFormat(punto.ganancia)} COP
                                     <b>Vendido: </b> ${priceFormat(punto.totalConDescuento)} COP
+                                    <b>Total con Envio: </b> ${priceFormat(punto.total)} COP
                                 </p>
                             </div>
                         </div>
@@ -126,6 +127,7 @@ const Revenue = ({className}) => {
                         ganancia: parseFloat(data.totalRevenue),
                         cantidad_piezas: data.totalQuantity,
                         totalConDescuento: data.totalWithDiscount,
+                        total: data.totalAmount,
                         delivery: data.totalDeliveryAmount
                     });
                 }
