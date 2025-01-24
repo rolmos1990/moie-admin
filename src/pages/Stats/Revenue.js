@@ -90,6 +90,12 @@ const Revenue = ({className}) => {
         }
     }, [stats.ventasGanancias.fecha]);
 
+    useEffect(() => {
+        if (stats.ventasGanancias) {
+            ventasGananciasCargar()
+        }
+    }, [stats.ventasGanancias.opciones]);
+
     const getStatsLabel = (stats, node) => {
         if(parserClientDate(stats[node].fecha.inicial) == parserClientDate(stats[node].fecha.final)){
             return parserClientDate(stats[node].fecha.inicial);
@@ -98,82 +104,6 @@ const Revenue = ({className}) => {
             return parserClientDate(stats[node].fecha.inicial) + ' a ' + parserClientDate(stats[node].fecha.final)
         }
     }
-
-    const ventasGananciasCargar_bk = () => {
-        if (valida(stats.ventasGanancias.fecha)) {
-            stats.cargando = 'Cargando estadisticas de ventas...';
-            //definir la url para la consulta a la API
-            var url = '/stats/estadistica_ventas_whatsapp';
-            url += '/' + parserServerDate(stats.ventasGanancias.fecha.inicial);
-            url += '/' + parserServerDate(stats.ventasGanancias.fecha.final);
-            //leer estadisticas de ventas
-
-            const resp = {
-                "0": {
-                    "fecha": "23-01-2025",
-                    "ganancia": 30000,
-                    "cantidad_piezas": 100
-                },
-                "1": {
-                    "fecha": "24-01-2025",
-                    "ganancia": 30000,
-                    "cantidad_piezas": 200
-                },
-                "2": {
-                    "fecha": "25-01-2025",
-                    "ganancia": 55000,
-                    "cantidad_piezas": 300
-                },
-                "3": {
-                    "fecha": "26-01-2025",
-                    "ganancia": 30000,
-                    "cantidad_piezas": 400
-                },
-                "4": {
-                    "fecha": "27-01-2025",
-                    "ganancia": 49999,
-                    "cantidad_piezas": 500
-                },
-                "5": {
-                    "fecha": "28-01-2025",
-                    "ganancia": 87998.9,
-                    "cantidad_piezas": 600
-                },
-                "6": {
-                    "fecha": "29-01-2025",
-                    "ganancia": 115998,
-                    "cantidad_piezas": 700
-                },
-                "7": {
-                    "fecha": "30-01-2025",
-                    "ganancia": 149990.09,
-                    "cantidad_piezas": 800
-                }
-            };
-
-            var fechas = [];
-            var datosVentas = [];
-            var keys = Object.keys(resp);
-            for (var i = 0; i < keys.length; i++) {
-                var data = resp[keys[i]];
-                fechas[i] = data.fecha;
-                datosVentas.push({
-                    y: parseFloat(data.ganancia), // Valor para la gráfica
-                    ganancia: parseFloat(data.ganancia),
-                    cantidad_piezas: data.cantidad_piezas,
-                    monto: data.totalAmount
-                });
-            }
-
-            const newStats = {...stats};
-            newStats.ventasGanancias.data.subtitle.text = getStatsLabel(newStats,'ventasGanancias');
-            newStats.ventasGanancias.data.xAxis.categories = fechas;
-            newStats.ventasGanancias.data.series[0].data = datosVentas;
-            newStats.cargando = '';
-            setStats(newStats);
-        }
-    }
-
     const ventasGananciasCargar = () => {
         if (valida(stats.ventasGanancias.fecha)) {
             stats.cargando = 'Cargando estadisticas de ventas...';
@@ -181,7 +111,7 @@ const Revenue = ({className}) => {
             var url = '/stats/estadistica_revenue';
             url += '/' + parserServerDate(stats.ventasGanancias.fecha.inicial);
             url += '/' + parserServerDate(stats.ventasGanancias.fecha.final);
-            url += '/' + stats.ventasGanancias.opciones.grupo;
+            url += '/' + stats.ventasGanancias.opciones.grupo.toLowerCase();
             //leer estadisticas de ventas
             statsApi(url).then(function (resp) {
 
@@ -192,7 +122,7 @@ const Revenue = ({className}) => {
                     var data = resp[keys[i]];
                     fechas[i] = data.fecha;
                     datosVentas.push({
-                        y: parseFloat(data.ganancia), // Valor para la gráfica
+                        y: parseFloat(data.totalRevenue), // Valor para la gráfica
                         ganancia: parseFloat(data.totalRevenue),
                         cantidad_piezas: data.totalQuantity,
                         totalConDescuento: data.totalWithDiscount,
