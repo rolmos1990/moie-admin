@@ -178,7 +178,7 @@ const Revenue = ({className}) => {
     const onChangeGrupo = (grupo, node) => {
         if (grupo && grupo.value) {
             const s = {...stats}
-            s[node] = {...stats[node], opciones: {...stats[node].opciones, grupo: grupo.value}}
+            s[node] = {...stats[node], opciones: {...stats[node].opciones, grupo: grupo.value.toLowerCase()}}
             setStats(s);
         }
     }
@@ -189,7 +189,7 @@ const Revenue = ({className}) => {
                 <CardBody>
                     <Row id="ventasGanancias">
                         <Col md={12}>
-                            <h4 className="card-title text-info"> Ventas por Whatsapp</h4>
+                            <h4 className="card-title text-info"> Ventas Ganancias </h4>
                         </Col>
                         <Col md={4}>
                             <div className="mb-3">
