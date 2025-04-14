@@ -15,6 +15,7 @@ const deliveryMethodsOptions = buildOptions(DELIVERY_METHODS_LIST);
 const deliveryTypeOptions = buildOptions(DELIVERY_TYPES_LIST);
 
 const orderColumns = (onSelectedOrder, showAsModal, conciliationView) => {
+    const onlyMyUser = (HasPermissionsFunc([PERMISSIONS.ORDER_PERSONAL]));
     let columns = [
         {
             text: "Pedido #",
@@ -160,10 +161,10 @@ const orderColumns = (onSelectedOrder, showAsModal, conciliationView) => {
         {
             text: "Operador",
             dataField: "user",
-            hidden: true,
+            hidden: false,
             sort: false,
             filterType: "asyncSelect",
-            filter: true,
+            filter: onlyMyUser ? false: true,
             urlStr: USER,
             hasWild: true,
             conditionalOptions: {fieldName: 'name', operator: Conditionals.OPERATORS.LIKE},

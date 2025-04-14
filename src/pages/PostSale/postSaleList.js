@@ -22,6 +22,7 @@ import {showMessage} from "../../components/MessageToast/ShowToastMessages";
 import {PERMISSIONS} from "../../helpers/security_rol";
 import HasPermissions from "../../components/HasPermissions";
 import {clearTableConditions, saveTableConditions} from "../../store/layout/actions";
+import HasPermissionsFunc from "../../components/HasPermissionsFunc";
 
 const PostSaleList = props => {
     const {orders, meta, onGetOrders, loading, refresh, customActions, onSaveTableConditions, onClearTableConditions, conditionType, conditions, offset} = props;
@@ -51,7 +52,7 @@ const PostSaleList = props => {
         if (null !== refresh) {
             if(conditionType !== 'postSale'){
                 onClearTableConditions();
-                onGetOrders(conditional, DEFAULT_PAGE_LIMIT, currentPage * DEFAULT_PAGE_LIMIT);
+                onGetOrders(props.user, conditional, DEFAULT_PAGE_LIMIT, currentPage * DEFAULT_PAGE_LIMIT);
             } else {
                 //reload the filter loaded
                 onFilterAction(conditions, offset);
@@ -60,7 +61,7 @@ const PostSaleList = props => {
             if(conditionType === 'postSale') {
                 onFilterAction(conditions, offset);
             } else {
-                onGetOrders(conditional);
+                onGetOrders(props.user, conditional);
                 onClearTableConditions();
                 if (customActions) {
                     setFilterable(false);
@@ -75,16 +76,15 @@ const PostSaleList = props => {
 
     const handleTableChange = (type, {page, searchText}) => {
         const offset = (page - 1) * DEFAULT_PAGE_LIMIT;
-        onGetOrders(conditional, DEFAULT_PAGE_LIMIT, offset);
+        onGetOrders(props.user, conditional, DEFAULT_PAGE_LIMIT, offset);
         onSaveTableConditions(conditional, offset, 'postSale');
     }
 
     const onFilterAction = (condition, offset = 0) => {
-
         const page = Math.floor(offset / DEFAULT_PAGE_LIMIT);
         setConditional(condition);
 
-        onGetOrders(condition, DEFAULT_PAGE_LIMIT, offset);
+        onGetOrders(props.user, condition, DEFAULT_PAGE_LIMIT, offset);
         setDefaultPage(page + 1);
 
         if(condition && condition.length > 0) {
@@ -96,7 +96,7 @@ const PostSaleList = props => {
 
     const handleImportFile = (reload) => {
         setOpenImportFileModal(false);
-        if(reload) onGetOrders(conditional, DEFAULT_PAGE_LIMIT, currentPage * DEFAULT_PAGE_LIMIT);
+        if(reload) onGetOrders(props.user, conditional, DEFAULT_PAGE_LIMIT, currentPage * DEFAULT_PAGE_LIMIT);
     }
 //
     const syncAllDeliveries = async () => {
@@ -105,7 +105,7 @@ const PostSaleList = props => {
             const response = await refreshAllStatusDelivery();
             showMessage.success('Se verificaron un total de ' + response.updates + ' pedidos');
             setSyncing(false);
-            onGetOrders(conditional, DEFAULT_PAGE_LIMIT, currentPage * DEFAULT_PAGE_LIMIT);
+            onGetOrders(props.user, conditional, DEFAULT_PAGE_LIMIT, currentPage * DEFAULT_PAGE_LIMIT);
         }
     }
 
@@ -157,11 +157,13 @@ const PostSaleList = props => {
                                                             </Button>
                                                         </Tooltip>
                                                         </HasPermissions>
+                                                        <HasPermissions permission={PERMISSIONS.POST_SALE_REPORT}>
                                                         <Tooltip placement="bottom" title="Generar reporte" aria-label="add">
                                                             <Button onClick={() => setOpenReportModal(true)}>
                                                                 <i className={"mdi mdi-file"}> </i>
                                                             </Button>
                                                         </Tooltip>
+                                                        </HasPermissions>
                                                         <HasPermissions permission={PERMISSIONS.POSTSALE_SYNC}>
                                                         <Tooltip placement="bottom" title="Sincronizar todas" aria-label="add">
                                                             <Button onClick={() => syncAllDeliveries()}>
@@ -221,17 +223,29 @@ PostSaleList.propTypes = {
 const mapStateToProps = state => {
     const {orders, loading, meta, refresh} = state.Order
     const {conditionType, conditions, offset} = state.Layout;
-    return {orders, loading, meta, refresh, conditionType, conditions, offset}
+    const {user} = state.Login;
+    return {orders, loading, meta, refresh, conditionType, conditions, offset, user}
 }
 
 const mapDispatchToProps = dispatch => ({
     onImportFile: (data) => dispatch(importFile(data)),
-    onGetOrders: (conditional = null, limit = DEFAULT_PAGE_LIMIT, page) => {
+    onGetOrders: (user, conditional = null, limit = DEFAULT_PAGE_LIMIT, page) => {
         if(!conditional) conditional = [];
         if(conditional && conditional.filter(_item => _item.field === 'postSaleDate').length > 0){
 
         } else {
             conditional.push({field: 'postSaleDate', value: '', operator: Conditionals.OPERATORS.NOT_NULL});
+        }
+
+        const isOnlyMyUser = (HasPermissionsFunc([PERMISSIONS.ORDER_PERSONAL]));
+        if (isOnlyMyUser) {
+            const index = conditional.findIndex(c => c.field === 'user');
+            var added = {field: 'user', value: (user?.id || -1), operator: Conditionals.OPERATORS.EQUAL};
+            if (index !== -1) {
+                conditional[index] = added;
+            } else {
+                conditional.push(added);
+            }
         }
         //conditional.push({field:'orderDelivery.deliveryMethod', value: [1,3,4,5].join("::"), operator: Conditionals.OPERATORS.IN})
         const orderFields = {field:'postSaleDate',type: 'DESC'};

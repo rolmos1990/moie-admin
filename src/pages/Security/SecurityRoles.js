@@ -61,7 +61,7 @@ const SecurityRoles = ({reloadPermissions}) => {
     };
 
     const getPermissions = () => {
-        fetchDataApi(url.SECURITY_PERMISSIONS).then(resp => {
+        fetchDataApi(url.SECURITY_PERMISSIONS + '?limit=250').then(resp => {
             setPermissions(sortList(resp.data, 'permission'));
         })
     };

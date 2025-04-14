@@ -16,6 +16,8 @@ import HasPermissionsFunc from "../../../components/HasPermissionsFunc";
 const badgeStyles = {minWidth: '30px', margin: '2px'}
 
 const productColumns = (onDelete = false, onToogleActivate = false) => {
+    const canViewCost = (HasPermissionsFunc([PERMISSIONS.PRODUCT_COST]));
+
     let columns = [
         {
             text: "Código",
@@ -86,7 +88,8 @@ const productColumns = (onDelete = false, onToogleActivate = false) => {
             text: "Costo",
             dataField: "cost",
             sort: true,
-            filter: true,
+            hidden: !canViewCost ? true : false,
+            filter: !canViewCost ? false : true,
             headerStyle: (colum, colIndex) => {
                 return {textAlign: 'right'};
             },

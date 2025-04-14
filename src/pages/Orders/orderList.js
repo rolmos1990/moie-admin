@@ -29,6 +29,7 @@ import HasPermissions from "../../components/HasPermissions";
 import OutsideClickHandler from "../../components/OutsideClickHandler";
 import {changePreloader} from "../../store/layout/actions";
 import {showMessage} from "../../components/MessageToast/ShowToastMessages";
+import HasPermissionsFunc from "../../components/HasPermissionsFunc";
 
 const OrderList = props => {
     const {orders, meta, onGetOrders, onResetOrders, refresh, customActions, conditionals, showAsModal, conciliation, onChangePreloader, externalView, reset, orderLimit} = props;
@@ -45,6 +46,7 @@ const OrderList = props => {
     const [columns, setColumns] = useState(orderColumns(setOrderSelected, showAsModal, false));
     const [selectAll, setSelectAll] = useState(false);
     const [defaultPage, setDefaultPage] = useState(1);
+    const isOnlyMyUser = HasPermissionsFunc([PERMISSIONS.ORDER_PERSONAL]);
 
     const pageOptions = {
         sizePerPage: DEFAULT_PAGE_LIMIT,
@@ -105,6 +107,17 @@ const OrderList = props => {
 
     const onFilterAction = (condition) => {
         let conditionals = condition || [];
+
+        if (isOnlyMyUser) {
+            const index = conditionals.findIndex(c => c.field === 'user');
+            var added = {field: 'user', value: (props.user?.id || -1), operator: Conditionals.OPERATORS.EQUAL};
+            if (index !== -1) {
+                conditionals[index] = added;
+            } else {
+                conditionals.push(added);
+            }
+        }
+
         handleConciliateStatus(conditionals);
         setConditional(conditionals);
         onGetOrders(conditionals, DEFAULT_PAGE_LIMIT, 0);
@@ -167,7 +180,20 @@ const OrderList = props => {
 
     const getConditionals = () => {
         const cond = conditional || [];
-        const extConditions = conditionals || [];
+        let extConditions = conditionals || [];
+
+        //filtro por usuario
+        if (isOnlyMyUser) {
+            const index = extConditions.findIndex(c => c.field === 'user');
+            var added = {field: 'user', value: (props.user?.id || -1), operator: Conditionals.OPERATORS.EQUAL};
+            if (index !== -1) {
+                extConditions[index] = added;
+            } else {
+                extConditions.push(added);
+            }
+        }
+        //filtro por usuario
+
         return [...cond, ...extConditions];
     }
 
@@ -273,12 +299,16 @@ const OrderList = props => {
                                                                 )}
                                                                 {!conciliationView && !externalView && (
                                                                     <>
+                                                                    <HasPermissions permission={PERMISSIONS.ORDER_PRINT}>
                                                                         <Tooltip placement="bottom" title="Impresión multiple" aria-label="add">
                                                                             <Button color="primary" onClick={() => printOrders()}
                                                                                     disabled={(ordersSelected.length === 0 && !selectAll) && (!conditional || conditional.length === 0)}>
                                                                                 <i className="mdi mdi-printer"> </i>
                                                                             </Button>
                                                                         </Tooltip>
+                                                                    </HasPermissions>
+
+                                                                    <HasPermissions permission={PERMISSIONS.ORDER_PRINT}>
                                                                         <Tooltip placement="bottom" title="Confirmar Conciliados" aria-label="add">
                                                                             <Button color="primary" onClick={() => setOpenConfirmConciliationModal(true)}>
                                                                                 <i className="mdi mdi-check"> </i>
@@ -289,6 +319,7 @@ const OrderList = props => {
                                                                                 <i className={"mdi mdi-file"}> </i>
                                                                             </Button>
                                                                         </Tooltip>
+                                                                    </HasPermissions>
                                                                         <HasPermissions permission={PERMISSIONS.ORDER_CREATE}>
                                                                             <Link to={"/orders/create"} className="btn btn-primary waves-effect waves-light text-light">
                                                                                 <i className="mdi mdi-plus"> </i> Crear pedido
@@ -396,6 +427,7 @@ OrderList.propTypes = {
 const mapStateToProps = state => {
     const {orders, loading, meta, refresh, conciliation, reset} = state.Order
     const {isPreloader} = state.Layout;
+    const {user} = state.Login;
     return {
         orders,
         loading,
@@ -403,7 +435,8 @@ const mapStateToProps = state => {
         refresh,
         conciliation,
         isPreloader,
-        reset
+        reset,
+        user
     }
 }
 

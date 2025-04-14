@@ -104,7 +104,9 @@ const ProductDetail = (props) => {
                                         <ul style={{listStyle: 'none'}}>
                                             <li><b>Description:</b> <small>{productData.name}</small></li>
                                             <li><b>Tipo:</b> {productData.description}</li>
+                                            <HasPermissions permission={PERMISSIONS.PRODUCT_COST}>
                                             <li><b>Costo:</b> {priceFormat(productData.cost, "", true)}</li>
+                                            </HasPermissions>
                                             <li><b>Precio:</b> {priceFormat(productData.price, "", true)}</li>
                                         </ul>
                                     </Col>

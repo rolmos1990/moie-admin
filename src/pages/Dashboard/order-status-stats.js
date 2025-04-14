@@ -13,6 +13,7 @@ import CountUp from "react-countup";
 import {PERMISSIONS} from "../../helpers/security_rol";
 import HasPermissions from "../../components/HasPermissions";
 import {STATUS_COLORS} from "../../components/StatusField";
+import HasPermissionsFunc from "../../components/HasPermissionsFunc";
 
 const OrderStatusStats = (props) => {
     const {onGetUsers} = props;
@@ -90,7 +91,6 @@ const OrderStatusStats = (props) => {
             </CardBody>
         </Card>
     }
-
 
     return (
         <React.Fragment>

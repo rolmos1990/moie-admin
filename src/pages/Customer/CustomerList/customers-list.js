@@ -26,6 +26,7 @@ import {generateReport} from "../../../store/reports/actions";
 import {REPORT_TYPES} from "../../../common/constants";
 import {formatDateToServer, formatDateToServerEndOfDay} from "../../../common/utils";
 import Conditionals from "../../../common/conditionals";
+import NoAccess from "../../../components/Common/NoAccess";
 
 const CustomersList = props => {
     const {customers, meta, onGetCustomers, onResetCustomers, onDeleteCustomer, onGetCustomerRegistereds, refresh, countCustomersByStatus, registereds, onSaveTableConditions, onClearTableConditions, conditionType, conditions, offset, onGenerateReport} = props;
@@ -113,7 +114,8 @@ const CustomersList = props => {
 
     return (
         <>
-            <Row className="text-center">
+            <HasPermissions permission={PERMISSIONS.CUSTOMER_REPORT} renderNoAccess={() => ""}>
+                <Row className="text-center">
                 <Col md={4}>
                     <StatsStatusCard title="Clientes" getData={countCustomersByStatus}/>
                 </Col>
@@ -140,6 +142,7 @@ const CustomersList = props => {
                     </Card>
                 </Col>
             </Row>
+            </HasPermissions>
             <Row>
                 <TableFilter
                     onPressDisabled={() => setFilter(false)}

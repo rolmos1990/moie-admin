@@ -26,6 +26,7 @@ import HasPermissions from "../../components/HasPermissions";
 import {getTemplatesCatalog} from "../../store/template/actions";
 import Images from "../../components/Common/Image";
 import {HtmlTooltip} from "../../components/Common/HtmlTooltip";
+import HasPermissionsFunc from "../../components/HasPermissionsFunc";
 
 const ProductEdit = (props) => {
 
@@ -396,6 +397,7 @@ const ProductEdit = (props) => {
                                                             />
                                                         </div>
                                                     </Col>
+                                                    <HasPermissions permission={PERMISSIONS.PRODUCT_COST}>
                                                     <Col md="4">
                                                         <div className="mb-3">
                                                             <Label htmlFor="cost">Costo <span className="text-danger">*</span></Label>
@@ -406,6 +408,7 @@ const ProductEdit = (props) => {
                                                                 required/>
                                                         </div>
                                                     </Col>
+                                                    </HasPermissions>
                                                     <Col md="4">
                                                         <div className="mb-3">
                                                             <Label htmlFor="price">Precio <span className="text-danger">*</span></Label>

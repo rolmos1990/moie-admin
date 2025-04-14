@@ -10,6 +10,9 @@ import {connect} from "react-redux";
 import {getReportDashbord} from "../../store/reports/actions";
 import OrderStatusStats from "./order-status-stats";
 import EventItems from "./eventItems";
+import HasPermissions from "../../components/HasPermissions";
+import {PERMISSIONS} from "../../helpers/security_rol";
+import NoAccess from "../../components/Common/NoAccess";
 
 const series1 = [{
     data: [25, 66, 41, 89, 63, 25, 44, 20, 36, 40, 54]
@@ -266,11 +269,13 @@ const Dashboard = (props) => {
       <div className="page-content">
         <Container fluid>
             <Breadcrumbs title="Lucy Moie" item="Dashboard" />
+            <HasPermissions permissions={[PERMISSIONS.BILL_LIST]} renderNoAccess={() => ""}>
             <Row>
                 {reports && reports.length > 0 && (
                     <MiniWidget reports={reports} />
                 )}
             </Row>
+            </HasPermissions>
             <Row>
                 <Col xl={4}>
                 <Inventory/>

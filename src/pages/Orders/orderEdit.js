@@ -59,8 +59,6 @@ import {changePreloader} from "../../store/layout/actions";
 import ButtonLoading from "../../components/Common/ButtonLoading";
 import HasPermissionsFunc from "../../components/HasPermissionsFunc";
 
-// import {toPng, toJpeg, toBlob, toPixelData, toSvg} from 'html-to-image';
-
 
 const OrderEdit = (props) => {
 
@@ -325,6 +323,8 @@ const OrderEdit = (props) => {
     }
 
     const takePhoto = () => {
+        if(!isAllowedOrder()){return false;}
+
         setDownloadingPhoto(true);
         htmlToImage.toPng(productSummaryRef.current)
             .then(function (dataUrl) {
@@ -344,6 +344,7 @@ const OrderEdit = (props) => {
 
     //Permite cancelar la orden
     const canCancel = () => {
+        if(!isAllowedOrder()){return false;}
         const isPrevPayment = order?.orderDelivery && ([1, 2].includes(order?.orderDelivery.deliveryType));
         const canCancelPreviewPayment = [ORDERS_ENUM.PENDING].includes(parseInt(order.status)) && isPrevPayment;
         const canCancelChargeOnDelivery = [ORDERS_ENUM.PENDING, ORDERS_ENUM.CONFIRMED, ORDERS_ENUM.PRINTED, ORDERS_ENUM.SENT].includes(parseInt(order.status)) && !isPrevPayment;
@@ -359,6 +360,7 @@ const OrderEdit = (props) => {
 
     //Permite confirmar la orden
     const canConfirm = () => {
+        if(!isAllowedOrder()){return false;}
         if (order && order.status === ORDERS_ENUM.PENDING && order?.orderDelivery && ![1].includes(order?.orderDelivery.deliveryType)) {
             return true;
         } else {
@@ -366,8 +368,23 @@ const OrderEdit = (props) => {
         }
     }
 
+    const isAllowedOrder = () => {
+        const isOnlyMyUser = HasPermissionsFunc([PERMISSIONS.ORDER_PERSONAL]);
+        if(isOnlyMyUser) {
+            if (order.user != props.user?.id) {
+                return false;
+            }
+            return true;
+        } else {
+            return true;
+        }
+    }
+
     const canEdit = () => {
         if (order) {
+            if(!isAllowedOrder()){
+                return false;
+            }
             const isPrevPayment = order?.orderDelivery && ([1, 2].includes(order?.orderDelivery.deliveryType));
             const canEditPreviewPayment = [ORDERS_ENUM.PENDING, ORDERS_ENUM.CONCILIED, ORDERS_ENUM.PRINTED].includes(parseInt(order.status)) && isPrevPayment;
             const canEditChargeOnDelivery = [ORDERS_ENUM.PENDING, ORDERS_ENUM.CONFIRMED, ORDERS_ENUM.PRINTED].includes(parseInt(order.status)) && !isPrevPayment;
@@ -389,6 +406,7 @@ const OrderEdit = (props) => {
     }
 
     const canUpdateTracking = () => {
+        if(!isAllowedOrder()){return false;}
         const isPrevPayment = order?.orderDelivery && order?.orderDelivery && ([1, 2].includes(order?.orderDelivery.deliveryType));
         if((order.deliveryMethod?.id === DELIVERY_METHODS_IDS.OTRO) && !isPrevPayment && order.status === 3){
             return true;
@@ -410,6 +428,7 @@ const OrderEdit = (props) => {
 
     //Permite imprimir la orden
     const canSent = () => {
+        if(!isAllowedOrder()){return false;}
         const isPrevPayment = order?.orderDelivery && ([1, 2].includes(order?.orderDelivery.deliveryType));
         if (order && order.status === ORDERS_ENUM.PRINTED && isPrevPayment && order.deliveryMethod.name == 'PAYU') {
             return true;
@@ -420,6 +439,7 @@ const OrderEdit = (props) => {
 
     //Permite imprimir la orden
     const canPrint = () => {
+        if(!isAllowedOrder()){return false;}
         const isPrevPayment = order?.orderDelivery && ([1, 2].includes(order?.orderDelivery.deliveryType));
         if (order && order.status < ORDERS_ENUM.CONCILIED) {
             return true;
@@ -441,6 +461,7 @@ const OrderEdit = (props) => {
     }
 
     const onConfirmPrintOrder = () => {
+        if(!isAllowedOrder()){return false;}
         setOpenPrintConfirmModal(false);
         onNextStatusOrder(order.id);
     }
@@ -490,28 +511,21 @@ const OrderEdit = (props) => {
                     <div className={"mb-3 float-md-end"}>
                         <HasPermissions permission={PERMISSIONS.ORDER_EDIT}>
                             <div className="button-items">
-                                {canCancel() && (
+                                {isAllowedOrder() && canCancel() && (
                                     <Tooltip placement="bottom" title="Anular" aria-label="add">
                                         <ButtonLoading loading={props.loading} type="button" color="primary" className="btn-sm btn btn-outline-danger waves-effect waves-light" onClick={() => onCanceledStatusOrder(order.id)}>
                                             <i className={"mdi mdi-delete"}> </i>
                                         </ButtonLoading>
                                     </Tooltip>
                                 )}
-                                {canConfirm() && (
+                                {isAllowedOrder() && canConfirm() && (
                                     <Tooltip placement="bottom" title="Confirmar" aria-label="add">
                                         <ButtonLoading loading={props.loading} type="button" color="primary" className="btn-sm btn btn-outline-success waves-effect waves-light" onClick={() => onNextStatusOrder(order.id)}>
                                             <i className={"mdi mdi-check"}> </i>
                                         </ButtonLoading>
                                     </Tooltip>
                                 )}
-                                {/*{(order && order.status === 3) && (
-                                    <Tooltip placement="bottom" title="Confirmar envio" aria-label="add">
-                                        <button type="button" color="primary" className="btn-sm btn btn-outline-success waves-effect waves-light" onClick={() => onNextStatusOrder(order.id)}>
-                                            <i className={"mdi mdi-check"}> </i>
-                                        </button>
-                                    </Tooltip>
-                                )}*/}
-                                {canSent() && (
+                                {isAllowedOrder() && canSent() && (
                                     <Tooltip placement="bottom" title="Enviar" aria-label="add">
                                         <ButtonLoading loading={props.loading} type="button" color="primary" className="btn-sm btn btn-outline-success waves-effect waves-light" onClick={() => onNextStatusOrder(order.id)}>
                                             <i className={"mdi mdi-share"}> </i>
@@ -519,7 +533,7 @@ const OrderEdit = (props) => {
                                     </Tooltip>
                                 )}
 
-                                {canPrint() && (
+                                {isAllowedOrder() && canPrint() && (
                                     <Tooltip placement="bottom" title="Imprimir" aria-label="add">
                                         <ButtonLoading type="button" color="primary" className="btn-sm btn btn-outline-info waves-effect waves-light" onClick={() => printOrder()}>
                                             <i className={"mdi mdi-printer"}> </i>
@@ -530,17 +544,20 @@ const OrderEdit = (props) => {
                                     </Tooltip>
 
                                 )}
-                                {canGeneratePayu() && (
+                                {isAllowedOrder() && canGeneratePayu() && (
                                 <Tooltip placement="bottom" title="Generar link de Pago" aria-label="add">
                                     <ButtonLoading type="button" color="primary" className="btn-sm btn btn-outline-info waves-effect waves-light" onClick={() => payuGenerate()}>
                                         <i className={"mdi mdi-link"}> </i>
                                     </ButtonLoading>
                                 </Tooltip>)}
-                                <Tooltip placement="bottom" title="Copiar resumen" aria-label="add">
-                                    <button type="button" color="primary" className="btn-sm btn btn-outline-info waves-effect waves-light" onClick={() => copyResume()}>
-                                        <i className={"mdi mdi-content-copy"}> </i>
-                                    </button>
-                                </Tooltip>
+                                {isAllowedOrder() && (
+                                    <Tooltip placement="bottom" title="Copiar resumen" aria-label="add">
+                                        <button type="button" color="primary" className="btn-sm btn btn-outline-info waves-effect waves-light" onClick={() => copyResume()}>
+                                            <i className={"mdi mdi-content-copy"}> </i>
+                                        </button>
+                                    </Tooltip>
+                                )}
+                                {isAllowedOrder() && (
                                 <Tooltip placement="bottom" title="Descargar foto" aria-label="add">
                                     <button type="button" color="primary" className="btn-sm btn btn-outline-info waves-effect waves-light " onClick={() => takePhoto()}>
                                         <i className={"mdi mdi-camera"}> </i> {downloadingPhoto ? 'Descargando...' : ''}
@@ -548,7 +565,7 @@ const OrderEdit = (props) => {
                                             <span className="badge bg-danger rounded-pill noti-icon">{order.photos || 0}</span>
                                         )}
                                     </button>
-                                </Tooltip>
+                                </Tooltip> )}
                             </div>
                         </HasPermissions>
                     </div>
@@ -1076,10 +1093,11 @@ const OrderEdit = (props) => {
 
 const mapStateToProps = state => {
     const {products} = state.Product;
+    const {user} = state.User
     const {error, car, order, loading, custom, refresh, historic, linkPayment} = state.Order;
     const print = custom.data && custom.data.print ? custom.data.print : null;
     const resume = custom.data && custom.data.resume ? custom.data.resume : null;
-    return {error, car, order, products, print, resume, loading, refresh, historic, linkPayment}
+    return {error, car, order, products, print, resume, loading, refresh, historic, linkPayment, user}
 }
 
 const mapDispatchToProps = dispatch => ({
