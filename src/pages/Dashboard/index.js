@@ -269,7 +269,7 @@ const Dashboard = (props) => {
       <div className="page-content">
         <Container fluid>
             <Breadcrumbs title="Lucy Moie" item="Dashboard" />
-            <HasPermissions permissions={[PERMISSIONS.BILL_LIST]} renderNoAccess={() => ""}>
+            <HasPermissions permissions={[PERMISSIONS.BILL_LIST]} renderNoAccess={() => <div></div>}>
             <Row>
                 {reports && reports.length > 0 && (
                     <MiniWidget reports={reports} />

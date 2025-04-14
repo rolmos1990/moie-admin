@@ -114,7 +114,7 @@ const CustomersList = props => {
 
     return (
         <>
-            <HasPermissions permission={PERMISSIONS.CUSTOMER_REPORT} renderNoAccess={() => ""}>
+            <HasPermissions permission={PERMISSIONS.CUSTOMER_REPORT} renderNoAccess={() => <div></div>}>
                 <Row className="text-center">
                 <Col md={4}>
                     <StatsStatusCard title="Clientes" getData={countCustomersByStatus}/>

@@ -38,7 +38,7 @@ const Inventory = (props) => {
                 <div>
                     <h4 className="mb-1 mt-1">
                         <span>
-                            <i class="text-success uil-money-bill me-2"></i> &nbsp; -
+                            <i className="text-success uil-money-bill me-2"></i> &nbsp; -
                         </span>
                     </h4>
                     <p className="text-muted mb-0">Monto</p>
@@ -47,7 +47,7 @@ const Inventory = (props) => {
                 <div>
                     <h4 className="mb-1 mt-1">
                         <span>
-                            <i class="text-warning uil-box me-2"></i> &nbsp; -
+                            <i className="text-warning uil-box me-2"></i> &nbsp; -
                         </span>
                     </h4>
                     <p className="text-muted mb-0">Cantidades</p>
@@ -66,7 +66,7 @@ const Inventory = (props) => {
                     <div>
                         <h4 className="mb-1 mt-1">
                         <span>
-                            <i class="text-success uil-money-bill me-2"></i> &nbsp; <CountUp end={price} separator="," prefix={'$'} suffix={''} decimals={2}/>
+                            <i className="text-success uil-money-bill me-2"></i> &nbsp; <CountUp end={price} separator="," prefix={'$'} suffix={''} decimals={2}/>
                         </span>
                         </h4>
                         <p className="text-muted mb-0">Monto</p>
@@ -75,7 +75,7 @@ const Inventory = (props) => {
                     <div>
                         <h4 className="mb-1 mt-1">
                         <span>
-                            <i class="text-warning uil-box me-2"></i> &nbsp; <CountUp end={qty} separator="," prefix={''} suffix={''} decimals={2}/>
+                            <i className="text-warning uil-box me-2"></i> &nbsp; <CountUp end={qty} separator="," prefix={''} suffix={''} decimals={2}/>
                         </span>
                         </h4>
                         <p className="text-muted mb-0">Cantidades</p>

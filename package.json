@@ -2,6 +2,15 @@
   "name": "minible-react",
   "version": "1.0.2",
   "private": true,
+  "resolutions": {
+    "babel-preset-react-app": "9.1.2",
+    "@babel/core": "7.12.3"
+  },
+  "overrides": {
+    "react-scripts": {
+      "babel-preset-react-app": "9.1.2"
+    }
+  },
   "dependencies": {
     "@fullcalendar/bootstrap": "^5.4.0",
     "@fullcalendar/core": "^5.4.0",

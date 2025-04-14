@@ -34,15 +34,15 @@ const colors = {
 const deliveryTimeCalc = (item) => {
     if (item.deliveryType == 1) {
         //sucursal
-        item.icon = "&nbsp;&nbsp;&nbsp;&nbsp;"+ item.timeInDays +"&nbsp;&nbsp;<i class='fa fa-building' ></i>";
+        item.icon = "&nbsp;&nbsp;&nbsp;&nbsp;"+ item.timeInDays +"&nbsp;&nbsp;<i className='fa fa-building' ></i>";
     }
     if (item.deliveryType == 2) {
         //delivery
-        item.icon = "&nbsp;&nbsp;&nbsp;&nbsp;"+ item.timeInDays +"&nbsp;&nbsp;<i class='fa fa-motorcycle' ></i>";
+        item.icon = "&nbsp;&nbsp;&nbsp;&nbsp;"+ item.timeInDays +"&nbsp;&nbsp;<i className='fa fa-motorcycle' ></i>";
     }
     if (item.deliveryType == 3) {
         //sucursal y delivery
-        item.icon = "&nbsp;&nbsp;&nbsp;&nbsp;"+ item.timeInDays +"&nbsp;&nbsp;<span><i class='fa fa-building' ></i>&nbsp;<i class='fa fa-motorcycle' ></i></span>";
+        item.icon = "&nbsp;&nbsp;&nbsp;&nbsp;"+ item.timeInDays +"&nbsp;&nbsp;<span><i className='fa fa-building' ></i>&nbsp;<i class='fa fa-motorcycle' ></i></span>";
     }
 
     return item.icon;

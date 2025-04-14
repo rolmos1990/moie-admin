@@ -47,7 +47,7 @@ const SalesByShipments = ({users, onGetUsers, className}) => {
                         var hasCosto = name.includes('Con Costo');
                         var monto = hasCosto ? this.y + ' ('+priceFormat(montoEnvio)+' COP)' : this.y + ' (0 COP)';
 
-                        let html = '<div><div><small>'+ this.point.category +'</small><br/><p><i style="color: '+color+'" class="uil-money-bill me-2"></i> '+this.series.name+' : <b>' + monto + '</b></p></div><br /></div>';
+                        let html = '<div><div><small>'+ this.point.category +'</small><br/><p><i style="color: '+color+'" className="uil-money-bill me-2"></i> '+this.series.name+' : <b>' + monto + '</b></p></div><br /></div>';
 
                         return html;
                     },

@@ -56,7 +56,7 @@ const Navbar = props => {
 
         return <div className={classname("dropdown-menu", {show: extra2})}>
             {subItems && subItems.map(item =>
-                <li className="nav-item">
+                <li className="nav-item" key={item.key}>
                     <Link to={'#'} onClick={() => copyToClipboard(_encodePhone(item.value))} className="dropdown-item">
                         <i className="uil-mobile-android-alt me-2"></i>
                         <span className="badge badge-info bg-success">{item.key}</span> - {item.value}

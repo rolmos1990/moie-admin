@@ -12,6 +12,9 @@ import {connect} from "react-redux";
 import {countUsersOrders} from "../../../helpers/service";
 import {getImagePath, priceFormat} from "../../../common/utils";
 import {Tooltip} from "@material-ui/core";
+import {PERMISSIONS} from "../../../helpers/security_rol";
+import NoAccess from "../../Common/NoAccess";
+import HasPermissions from "../../HasPermissions";
 
 const UsersSalesDropdown = ({countUsers}) => {
 
@@ -113,9 +116,11 @@ const UsersSalesDropdown = ({countUsers}) => {
                                                 <p className="mb-1">
                                                     Pedidos completados {user.sales}
                                                 </p>
-                                                <p className="mb-0">
-                                                    <i className="fa fa-dollar-sign"/>{" "} {user.amount}
-                                                </p>
+                                                <HasPermissions permissions={[PERMISSIONS.SALES_AMOUNT]} renderNoAccess={() => <div></div>}>
+                                                    <p className="mb-0">
+                                                        <i className="fa fa-dollar-sign"/>{" "} {user.amount}
+                                                    </p>
+                                                </HasPermissions>
                                             </div>
                                         </div>
                                     </div>

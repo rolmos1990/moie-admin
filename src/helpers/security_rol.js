@@ -108,6 +108,7 @@ export const PERMISSIONS = {
     VCARD_MANAGE: 'vcard.manage',
     VCARD_EXPORT: 'vcard.export',
     DASHBOARD_ALARMS: 'dashboard.alarms',
+    SALES_AMOUNT: 'sales.amount',
 };
 export const hasPermissionAccess = (roles, permission) => {
     return true;

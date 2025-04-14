@@ -47,7 +47,7 @@ const OrderStatusStats = (props) => {
                         <h5 className="mb-2 mt-1"><b>Pendientes</b></h5>
                         <h4>
                             <span>
-                            <i class={`text-${STATUS_COLORS.DANGER} uil-shopping-cart-alt me-2`}></i> &nbsp; -
+                            <i className={`text-${STATUS_COLORS.DANGER} uil-shopping-cart-alt me-2`}></i> &nbsp; -
                             </span>
                         </h4>
                     </Col>
@@ -56,7 +56,7 @@ const OrderStatusStats = (props) => {
                             <h5 className="mb-2 mt-1"><b>Confirmados</b></h5>
                             <h4>
                                 <span>
-                                <i class={`text-${STATUS_COLORS.SUCCESS} uil-shopping-cart-alt me-2`}></i> &nbsp; -
+                                <i className={`text-${STATUS_COLORS.SUCCESS} uil-shopping-cart-alt me-2`}></i> &nbsp; -
                                 </span>
                             </h4>
                         </div>
@@ -66,7 +66,7 @@ const OrderStatusStats = (props) => {
                             <h5 className="mb-2 mt-1"><b>Conciliados</b></h5>
                             <h4>
                                 <span>
-                                <i class={`text-${STATUS_COLORS.INFO} uil-shopping-cart-alt me-2`}></i> &nbsp; -
+                                <i className={`text-${STATUS_COLORS.INFO} uil-shopping-cart-alt me-2`}></i> &nbsp; -
                                 </span>
                             </h4>
                         </div>
@@ -75,7 +75,7 @@ const OrderStatusStats = (props) => {
                         <h5 className="mb-2 mt-1"><b>Impresos</b></h5>
                         <h4>
                             <span>
-                            <i class={`text-${STATUS_COLORS.WARNING} uil-shopping-cart-alt me-2`}></i> &nbsp; -
+                            <i className={`text-${STATUS_COLORS.WARNING} uil-shopping-cart-alt me-2`}></i> &nbsp; -
                             </span>
                         </h4>
                     </Col>
@@ -83,7 +83,7 @@ const OrderStatusStats = (props) => {
                         <h5 className="mb-2 mt-1"><b>Anulados</b></h5>
                         <h4>
                             <span>
-                            <i class={`text-${STATUS_COLORS.SECONDARY} uil-shopping-cart-alt me-2`}></i> &nbsp; -
+                            <i className={`text-${STATUS_COLORS.SECONDARY} uil-shopping-cart-alt me-2`}></i> &nbsp; -
                             </span>
                         </h4>
                     </Col>
@@ -103,7 +103,7 @@ const OrderStatusStats = (props) => {
                             <h5 className="mb-2 mt-1"><b>Pendientes</b></h5>
                             <h4>
                             <span>
-                            <i class={`text-${STATUS_COLORS.DANGER} uil-shopping-cart-alt me-2`}></i> &nbsp; <CountUp end={pending} separator="," prefix={''} suffix={''} decimals={0}/>
+                            <i className={`text-${STATUS_COLORS.DANGER} uil-shopping-cart-alt me-2`}></i> &nbsp; <CountUp end={pending} separator="," prefix={''} suffix={''} decimals={0}/>
                             </span>
                             </h4>
                             </Col>
@@ -112,7 +112,7 @@ const OrderStatusStats = (props) => {
                                     <h5 className="mb-2 mt-1"><b>Confirmados</b></h5>
                                     <h4>
                                 <span>
-                                <i class={`text-${STATUS_COLORS.SUCCESS} uil-shopping-cart-alt me-2`}></i> &nbsp; <CountUp end={confirmed} separator="," prefix={''} suffix={''} decimals={0}/>
+                                <i className={`text-${STATUS_COLORS.SUCCESS} uil-shopping-cart-alt me-2`}></i> &nbsp; <CountUp end={confirmed} separator="," prefix={''} suffix={''} decimals={0}/>
                                 </span>
                                     </h4>
                                 </div>
@@ -122,7 +122,7 @@ const OrderStatusStats = (props) => {
                                 <h5 className="mb-2 mt-1"><b>Conciliados</b></h5>
                                 <h4>
                                 <span>
-                                <i class={`text-${STATUS_COLORS.INFO} uil-shopping-cart-alt me-2`}></i> &nbsp; <CountUp end={reconcilied} separator="," prefix={''} suffix={''} decimals={0}/>
+                                <i className={`text-${STATUS_COLORS.INFO} uil-shopping-cart-alt me-2`}></i> &nbsp; <CountUp end={reconcilied} separator="," prefix={''} suffix={''} decimals={0}/>
                                 </span>
                                 </h4>
                                 </div>
@@ -131,7 +131,7 @@ const OrderStatusStats = (props) => {
                             <h5 className="mb-2 mt-1"><b>Impresos</b></h5>
                             <h4>
                             <span>
-                            <i class={`text-${STATUS_COLORS.WARNING} uil-shopping-cart-alt me-2`}></i> &nbsp; <CountUp end={printed} separator="," prefix={''} suffix={''} decimals={0}/>
+                            <i className={`text-${STATUS_COLORS.WARNING} uil-shopping-cart-alt me-2`}></i> &nbsp; <CountUp end={printed} separator="," prefix={''} suffix={''} decimals={0}/>
                             </span>
                             </h4>
                             </Col>
@@ -139,7 +139,7 @@ const OrderStatusStats = (props) => {
                             <h5 className="mb-2 mt-1"><b>Anulados</b></h5>
                             <h4>
                             <span>
-                            <i class={`text-${STATUS_COLORS.SECONDARY} uil-shopping-cart-alt me-2`}></i> &nbsp; <CountUp end={cancelled} separator="," prefix={''} suffix={''} decimals={0}/>
+                            <i className={`text-${STATUS_COLORS.SECONDARY} uil-shopping-cart-alt me-2`}></i> &nbsp; <CountUp end={cancelled} separator="," prefix={''} suffix={''} decimals={0}/>
                             </span>
                             </h4>
                             </Col>

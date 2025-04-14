@@ -53,11 +53,11 @@ const EventItems = (props) => {
         const medium = (limits.filter(item => item.label === type+'_MEDIUM'))[0];
 
         if(val < parseInt(down['value'])){
-            return <p class="text-danger">{value}</p>
+            return <p className="text-danger">{value}</p>
         } else if(val < parseInt(medium['value'])){
-            return <p class="text-warning">{value}</p>
+            return <p className="text-warning">{value}</p>
         } else {
-            return <p class="text-success">{value}</p>
+            return <p className="text-success">{value}</p>
         }
     }
 
@@ -70,7 +70,7 @@ const EventItems = (props) => {
                     <h5 className="mb-2 mt-1"><b>Creditos Int.</b></h5>
                     <h4>
                             <span>
-                            <i class="me-2"></i> &nbsp; { allowed ? getLimitColor('ICREDIT', interrapidisimo.amount) : ''}
+                            <i className="me-2"></i> &nbsp; { allowed ? getLimitColor('ICREDIT', interrapidisimo.amount) : ''}
                             </span>
                     </h4>
                 </Col>
@@ -79,7 +79,7 @@ const EventItems = (props) => {
                         <h5 className="mb-2 mt-1"><b>Bolsas</b></h5>
                         <h4>
                                 <span>
-                                <i class="me-2"></i> &nbsp; { allowed ? getLimitColor('BAGS', bolsas.amount) : ''}
+                                <i className="me-2"></i> &nbsp; { allowed ? getLimitColor('BAGS', bolsas.amount) : ''}
                                 </span>
                         </h4>
                     </div>
