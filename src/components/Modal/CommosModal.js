@@ -1,3 +1,4 @@
+import React from 'react';
 import PropTypes from "prop-types";
 import {Modal} from "reactstrap";
 
@@ -31,7 +32,8 @@ const CustomModal = (props) => {
             </Modal>
         )
     }catch(e){
-        console.error('error on custom modal');
+        console.log(e);
+        console.error('error on custom modal', e.message);
         return "";
     }
 };
