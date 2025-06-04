@@ -27,6 +27,7 @@ import {REPORT_TYPES} from "../../../common/constants";
 import {formatDateToServer, formatDateToServerEndOfDay} from "../../../common/utils";
 import Conditionals from "../../../common/conditionals";
 import NoAccess from "../../../components/Common/NoAccess";
+import {baseImagePath} from "../../../helpers/api_helper";
 
 const CustomersList = props => {
     const {customers, meta, onGetCustomers, onResetCustomers, onDeleteCustomer, onGetCustomerRegistereds, refresh, countCustomersByStatus, registereds, onSaveTableConditions, onClearTableConditions, conditionType, conditions, offset, onGenerateReport} = props;
@@ -110,6 +111,33 @@ const CustomersList = props => {
         });
     };
 
+    const onDownloadFull = async () => {
+        try {
+            const response = await fetch(`${baseImagePath}customer/get/customersfull`, {
+                method: 'GET',
+                headers: {
+                    'Accept': 'application/octet-stream',
+                },
+            });
+
+            if (!response.ok) throw new Error('Error al descargar el archivo');
+
+            const blob = await response.blob();
+            const url = window.URL.createObjectURL(blob);
+
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'customers_full.csv'; // Cambia el nombre según tu caso
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+            window.URL.revokeObjectURL(url);
+        } catch (error) {
+            console.error("Error al descargar archivo:", error);
+            // Mostrar notificación al usuario si es necesario
+        }
+    };
+
     const columns = customerColumn(onDelete);
 
     return (
@@ -188,6 +216,18 @@ const CustomersList = props => {
                                                                 </button>
                                                                 </Tooltip>
                                                             </HasPermissions>
+                                                            <HasPermissions permission={PERMISSIONS.CUSTOMER_EXPORT}>
+                                                                <Tooltip placement="bottom" title="Descargar Clientes Full" aria-label="add">
+                                                                <button
+                                                                    onClick={() => onDownloadFull()}
+                                                                    className="btn btn-secondary waves-effect waves-light text-light mr-5"
+                                                                    type="button"
+                                                                >
+                                                                    <i className="mdi mdi-file"></i>
+                                                                </button>
+                                                                </Tooltip>
+                                                            </HasPermissions>
+
                                                             <HasPermissions permission={PERMISSIONS.CUSTOMER_CREATE}>
                                                                 <Link to={"/customer"} className="btn btn-primary waves-effect waves-light text-light">
                                                                     <i className="mdi mdi-plus"></i> Nuevo Cliente
