@@ -36,6 +36,7 @@ const CustomersList = props => {
     const [conditional, setConditional] = useState(null);
     const [countMayorista, setCountMayorista] = useState(0);
     const [defaultPage, setDefaultPage] = useState(1);
+    const [skip, setSkip] = useState(0);
     const pageOptions = {
         sizePerPage: DEFAULT_PAGE_LIMIT,
         totalSize: meta?.totalRegisters,
@@ -111,9 +112,9 @@ const CustomersList = props => {
         });
     };
 
-    const onDownloadFull = async () => {
+    const onDownloadFull = async (skip) => {
         try {
-            const response = await fetch(`${baseImagePath}customer/get/customersfull`, {
+            const response = await fetch(`${baseImagePath}customer/get/customersfull?skip=${skip}`, {
                 method: 'GET',
                 headers: {
                     'Accept': 'application/octet-stream',
@@ -217,19 +218,33 @@ const CustomersList = props => {
                                                                 </Tooltip>
                                                             </HasPermissions>
                                                             <HasPermissions permission={PERMISSIONS.CUSTOMER_EXPORT}>
-                                                                <Tooltip placement="bottom" title="Descargar Clientes Full" aria-label="add">
+                                                              <span className="d-inline-flex align-items-center mr-2">
+                                                              <input
+                                                                  type="number"
+                                                                  value={skip}
+                                                                  onChange={(e) => setSkip(parseInt(e.target.value))}
+                                                                  placeholder="Page"
+                                                                  className="form-control form-control-sm mr-2"
+                                                                  style={{width: "70px"}}
+                                                              />
+
+                                                              <Tooltip placement="bottom"
+                                                                       title="Descargar Clientes Full"
+                                                                       aria-label="add">
                                                                 <button
-                                                                    onClick={() => onDownloadFull()}
-                                                                    className="btn btn-secondary waves-effect waves-light text-light mr-5"
+                                                                    onClick={() => onDownloadFull(skip)}
+                                                                    className="btn btn-secondary btn-sm waves-effect waves-light text-light"
                                                                     type="button"
                                                                 >
-                                                                    <i className="mdi mdi-file"></i>
+                                                                  <i className="mdi mdi-file"></i>
                                                                 </button>
-                                                                </Tooltip>
+                                                              </Tooltip>
+                                                            </span>&nbsp;
                                                             </HasPermissions>
 
                                                             <HasPermissions permission={PERMISSIONS.CUSTOMER_CREATE}>
-                                                                <Link to={"/customer"} className="btn btn-primary waves-effect waves-light text-light">
+                                                                <Link to={"/customer"}
+                                                                      className="btn btn-primary waves-effect waves-light text-light">
                                                                     <i className="mdi mdi-plus"></i> Nuevo Cliente
                                                                 </Link>
                                                             </HasPermissions>
