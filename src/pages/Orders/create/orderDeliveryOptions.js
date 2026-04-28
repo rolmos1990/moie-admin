@@ -106,7 +106,7 @@ const OrderDeliveryOptions = (props) => {
                 }
                 return item;
             }).filter(me => me.deliveryMethodId === DELIVERY_METHODS_IDS[deliveryMethod]) || [];
-            setDeliveryLocalitiesList([getEmptyOptions(), ...arrayToOptions(list, deliveryMethod === "SERVIENTREGA")]);
+            setDeliveryLocalitiesList([getEmptyOptions(), ...arrayToOptions(list)]);
         }
     }, [deliveryLocalities, deliveryMethod]);
 
