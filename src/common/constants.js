@@ -72,7 +72,8 @@ export const DELIVERY_METHODS = {
     MENSAJERO: 'MENSAJERO',
     OTRO: 'OTRO',
     SERVIENTREGA: 'SERVIENTREGA',
-    PAYU: 'PAYU'
+    PAYU: 'PAYU',
+    DANE: 'DANE'
 };
 export const DELIVERY_METHODS_LIST = Object.keys(DELIVERY_METHODS).map((k,i) => ({label: DELIVERY_METHODS[k], value: i+1}));
 

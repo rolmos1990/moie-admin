@@ -200,7 +200,8 @@ const OrderDeliveryOptions = (props) => {
         };
 
         //Se agrega validacion si es mensajero, previo pago o previo pago cod no tiene direccion de envio
-        setHasAddress(!(deliveryMethod === "MENSAJERO" || [1,2].includes(deliveryType)) || deliveryMethod === "PAYU");
+        const validDeliveryMethods = [DELIVERY_METHODS.MENSAJERO, DELIVERY_METHODS.PAYU, DELIVERY_METHODS.DANE];
+        setHasAddress(!(validDeliveryMethods.includes(deliveryMethod)) || [1,2].includes(deliveryType));
 
         if(tracking && tracking !== ''){
             deliveryOps.tracking = tracking;
