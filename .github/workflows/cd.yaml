@@ -14,7 +14,7 @@ jobs:
     if: github.ref == 'refs/heads/master'
     strategy:
       matrix:
-        node-version: [14.x]
+        node-version: [12.x]
 
     env:
       SOURCE_DIR: "build/"
@@ -124,7 +124,7 @@ jobs:
     if: github.ref == 'refs/heads/qa'
     strategy:
       matrix:
-        node-version: [14.x]
+        node-version: [12.x]
 
     env:
       SOURCE_DIR: "build/"
