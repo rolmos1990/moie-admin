@@ -63,7 +63,8 @@ export const DELIVERY_METHODS_IDS = {
     MENSAJERO: 2,
     OTRO: 3,
     SERVIENTREGA: 4,
-    PAYU: 5
+    PAYU: 5,
+    DANE: 6
 };
 
 export const DELIVERY_METHODS = {
