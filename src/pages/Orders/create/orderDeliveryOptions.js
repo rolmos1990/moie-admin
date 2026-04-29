@@ -88,7 +88,7 @@ const OrderDeliveryOptions = (props) => {
     }, [fieldOptions]);
 
     useEffect(() => {
-        if(deliveryMethod === "INTERRAPIDISIMO" || deliveryMethod === "SERVIENTREGA" || deliveryMethod === "DANE") {
+        if(deliveryMethod === "INTERRAPIDISIMO" || deliveryMethod === "SERVIENTREGA") {
             const list = deliveryLocalities.map(item => {
                 if(deliveryMethod === 'SERVIENTREGA') {
                     if (item.deliveryType == 1) {
