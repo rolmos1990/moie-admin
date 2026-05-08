@@ -145,6 +145,19 @@ const BillList = props => {
         setOpenOrdersModal(true);
     };
 
+        const addOrdersDane = () => {
+        const conditions = new Conditionals.Condition;
+        conditions.add('bill.id', '', Conditionals.OPERATORS.NULL);
+        conditions.add('office', '', Conditionals.OPERATORS.NOT_NULL);
+        conditions.add('createdAt', '2023-05-20T00:00:00.000Z', Conditionals.OPERATORS.GREATER_THAN_OR_EQUAL);
+        conditions.add('deliveryMethod', DELIVERY_METHODS_IDS.DANE, Conditionals.OPERATORS.EQUAL);
+        //conditions.add('orderDelivery.deliveryType', CHARGE_ON_DELIVERY, Conditionals.OPERATORS.EQUAL);
+        conditions.add('status', [ORDERS_ENUM.SENT, ORDERS_ENUM.FINISHED].join("::"), Conditionals.OPERATORS.IN);
+
+        setOrderListConditions(conditions.condition);
+        setOpenOrdersModal(true);
+    };
+
     const onCloseModal = () => {
         setOpenOrdersModal(false);
     };
@@ -229,6 +242,14 @@ const BillList = props => {
                                                             <HasPermissions permission={PERMISSIONS.BILL_CREATE}>
                                                                 <Tooltip placement="bottom" title="Generar Factura (Servientrega)" aria-label="add">
                                                                     <Button color="primary" className="btn btn-rounded waves-effect waves-effect" onClick={addOrdersServiEntrega}>
+                                                                        <i className="uil-bill me-2"> </i>
+                                                                    </Button>
+                                                                </Tooltip>
+                                                            </HasPermissions>
+
+                                                            <HasPermissions permission={PERMISSIONS.BILL_CREATE}>
+                                                                <Tooltip placement="bottom" title="Generar Factura (Dane)" aria-label="add">
+                                                                    <Button color="primary" className="btn btn-rounded waves-effect waves-effect" onClick={addOrdersDane}>
                                                                         <i className="uil-bill me-2"> </i>
                                                                     </Button>
                                                                 </Tooltip>
