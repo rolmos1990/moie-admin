@@ -9,7 +9,7 @@ import {FieldDate, FieldSelect} from "../../components/Fields";
 import {DATE_MODES} from "../../components/Fields/InputDate";
 import ButtonSubmit from "../../components/Common/ButtonSubmit";
 import {formatDateToServer} from "../../common/utils";
-import {DELIVERY_METHODS, ORDER_STATUS_LIST, ORDER_STATUS_LIST_POST_SALE, REPORT_TYPES} from "../../common/constants";
+import {DELIVERY_METHODS, ORDER_STATUS_LIST_POST_SALE, REPORT_TYPES} from "../../common/constants";
 import {getEmptyOptions} from "../../common/converters";
 import {getDeliveryMethods} from "../../store/order/actions";
 import {generateReport, generateReportRestart} from "../../store/reports/actions";
@@ -36,7 +36,7 @@ const PostSaleReportForm = ({onCloseModal, deliveryMethods, onGetDeliveryMethods
         if (deliveryMethods && deliveryMethods.length > 0) {
             setDeliveryMethod(deliveryMethods.find(op => op.name === DELIVERY_METHODS.INTERRAPIDISIMO).code);
             setDeliveryMethodList([getEmptyOptions(),
-                ...deliveryMethods.filter(op => [DELIVERY_METHODS.INTERRAPIDISIMO, DELIVERY_METHODS.SERVIENTREGA].includes(op.name)).map(op => ({label: op.name, value: op.id}))]
+                ...deliveryMethods.filter(op => [DELIVERY_METHODS.INTERRAPIDISIMO, DELIVERY_METHODS.SERVIENTREGA, DELIVERY_METHODS.DANE].includes(op.name)).map(op => ({label: op.name, value: op.id}))]
             );
         }
     }, [deliveryMethods]);
